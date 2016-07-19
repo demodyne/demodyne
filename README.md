@@ -87,9 +87,9 @@ Get extra funding for your measures directly from the DEMODYNE community (featur
 DEMODYNE is operated globally by a non-profit association, the Direct Governance Initiative (DirGovIn) based in France near Strasbourg.
 The DirGovIn receives the global funding and pays a small team to work on the general strategy, find national/local partnerships and develop the code and database of the platform.
 The core team currently consists of:
-Quentin DESVIGNE: creator of DEMODYNE, strategic director
-Dragos DOBRE: lead developer PHP & Database
-Alex NICULITA: lead designer, interface and user experience
+- Quentin DESVIGNE: creator of DEMODYNE, strategic director
+- Dragos DOBRE: lead developer PHP & Database, server management
+- Alex NICULITA: lead designer, interface and user experience
 
 In each country, one or several National Operators are identified to operate the platform on the national territory.They're listed in the National Forums.
 They receive national/local funding and have their own teams to promote the platform on their geographic territory.
