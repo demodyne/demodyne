@@ -1,0 +1,45 @@
+<!-- inbox/new-message-success -->
+
+<div id="inbox-new-message-success">
+
+	<div class="row">
+		<div class="col-md-12">
+		
+           <?= $this->translate('Your message has been sent.')?><br>
+           
+           
+			</div>
+			<!-- /12 -->
+			
+	</div>
+		<!-- end row -->
+
+    <div class="row">
+    	<div class="col-xs-12">
+    		<hr />
+		</div>
+	</div>
+    
+    <div class="row">
+    	<div class="col-xs-12 text-right">
+			<button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i> <?= $this->translate('Close')?></button>
+		</div>
+    </div><!-- /r -->
+
+<script type="text/javascript">
+		$(function () {
+
+			setTimeout(function() {
+				$('.modal').modal('hide');}, 
+				2000);
+
+			
+		});
+	</script>
+	
+</div>
+
+<!-- /inbox/new-message-success -->
+	
+	
+	

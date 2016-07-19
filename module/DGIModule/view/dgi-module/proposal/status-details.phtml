@@ -1,0 +1,56 @@
+<!-- proposal/status-details -->
+
+<?php if ($proposal->isMeasure()): // Measure?>
+
+<div class="row">
+  <div class="col-md-12 col-xs-12">
+    <?= $this->voteSection ?>
+    <span class=""><?= count($proposal->getVotes()) ?> <?= $this->translate('Votes')?></span>
+  </div>
+</div>
+<?php else:?>
+<?php if ($proposal->getPropStatus()==$status['draft'] || !$proposal->getPropPublished()): // Draft?>
+<br>
+<?= $this->translate('Proposal status: Draft')?>
+<?php elseif ($proposal->getPropStatus()==$status['debate']): // Debate?>
+
+<?= sprintf($this->translate('Discussions ends in %d days'), $proposal->getPropDebatePeriod() - (new \DateTime())->diff($proposal->getPropPublishedDate())->days)?>
+<?php elseif ($proposal->getPropStatus()==$status['vote']): // Vote?>
+<div class="row">
+  <div class="col-md-12 col-xs-12">
+    <?= $this->voteSection ?>
+    <span class=""><?= count($proposal->getVotes()) ?> <?= $this->translate('Votes')?></span>
+  </div>
+</div>
+<?php elseif ($proposal->getPropStatus()==$status['plan']): // Plan?>
+<div class="row">
+  <div class="col-md-12 col-xs-12">
+    <?= $this->voteSection ?>
+    <?= count($proposal->getVotes()) ?>
+    <?= $this->translate('Votes')?>
+  </div>
+</div>
+<?= $this->translate('Implementation, Planning step')?>
+<?php elseif ($proposal->getPropStatus()==$status['execute']): // Execute?>
+<div class="row">
+  <div class="col-md-12 col-xs-12">
+    <?= $this->voteSection ?>
+    <?= count($proposal->getVotes()) ?>
+    <?= $this->translate('Votes')?>
+  </div>
+</div>
+<?= $this->translate('Implementation, Execution step')?>
+<?php elseif ($proposal->getPropStatus()==$status['followup']): // Followup?>
+<div class="row">
+  <div class="col-md-12 col-xs-12">
+    <?= $this->voteSection ?>
+    <?= count($proposal->getVotes()) ?>
+    <?= $this->translate('Votes')?>
+  </div>
+</div>
+<?= $this->translate('Implementation, Proposal Completed')?>
+<?php endif;?>
+<?php endif;?>
+
+<!-- /proposal/status-details -->
+

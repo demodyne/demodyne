@@ -1,0 +1,13 @@
+<!-- banner/my-banners --><div id="banner-my-banners">	<div class="row">		<div class="col-md-6">			<button type="button"				data-href="<?= $this->url('administration/banner', array('action'=>'add-banner')); ?>"				class="btn btn-orange" id="banner-my-banners-add-banner"				data-dialog-title="<?= $this->translate('Add New Banner')?>">				<i class="fa fa-plus-circle"></i> <?= $this->translate('Add New Banner')?></button> 
+	<?= $this->translate('(You can have max. 5 Banners)')?>
+</div>		<div class="col-md-6 text-right top10">			<i class="fa fa-arrows"></i> <?= $this->translate('You can drag & drop to change banner\'s order')?></div>	</div>	<hr>	<div>
+<?=$this->activeBannersSection?>
+</div>	<br>	<div>
+<?=$this->inactiveBannersSection?>
+</div>	<script type="text/javascript">
+
+$(function() {
+	bannerMyBannersHandlers();
+});
+
+</script></div><!-- /banner/my-banners -->

@@ -1,0 +1,52 @@
+<!-- user-registration/activate-administration-account -->
+
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+
+  <span class="big" id="modal-dialog-title"><a href="/"><img src="<?=$this->basePath('/img/logo30.png')?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> - <strong><?= $this->translate('Administration account activation')?></strong></span>
+</div>
+
+
+
+<div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;" id="">
+
+<div id="user-registration-activate-administration-account">
+	<?php if (!isset($validated)):?>
+	<div class="row">
+		<div class="col-md-12">
+      <?= $this->translate('Do you want to activate administration account ')?>
+      '
+      <?= $admin->getUsrName()?>
+      ' ?<br>
+			
+		</div>
+		<!-- /12 -->
+	</div>
+	<form method="post" action="<?= $this->url('home/user-register', array('action'=>'activate-administration-account', 'id' => $admin->getUsrUUID())); ?>">
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<button type="submit" class="btn btn-orange">
+				<i class="fa fa-thumbs-o-up"></i> <?= $this->translate('Activate')?></button>
+			<button type="button" class="btn"><i class="fa fa-thumbs-o-down"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+	</form>
+	<?php else:?>
+    	<div class="row">
+    		<div class="col-md-12">
+          <?= $this->translate('Administration Account ')?>
+          '
+          <?= $admin->getUsrName()?>
+          ' <?=$this->translate('has been validated.')?> <br>
+    			
+    		</div>
+    		<!-- /12 -->
+    	</div>
+	<?php endif;?>
+</div>
+
+	
+	</div><!--/j-->  
+
+	<!-- /user-registration/activate-administration-account -->
+	

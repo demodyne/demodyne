@@ -1,0 +1,111 @@
+<!-- program/view-program -->
+
+<?php 
+
+$levels = $this->configItem('demodyne.level');
+$levelName = '';
+if (array_search($program->getProgLevel(), $levels)=='city') {
+    $levelName = $program->getCity()->getFullCity()?$program->getCity()->getFullCity()->getCityName():$program->getCity()->getCityName();
+}
+elseif (array_search($program->getProgLevel(), $levels)=='region') {
+    $levelName = $program->getCity()->getRegion()->getRegionName();
+}
+elseif (array_search($program->getProgLevel(), $levels)=='country') {
+    $levelName = $program->getCity()->getCountry()->getCountryName();
+}
+
+
+?>
+
+
+
+<div class="modal-header-soft round5top ui-draggable-handle">
+	<a class="close" href="<?= $this->url($_SESSION['level']['level']);?>"><i
+		class="fa fa-home w"></i></a>
+	<button type="button" class="close" onclick="parent.history.back();">
+		<i class="fa fa-arrow-circle-left w right10"></i>
+	</button>
+	&nbsp; <span class="big" id="modal-dialog-title"><strong><?= sprintf($this->translate('View Program for %s'), $levelName)?>
+  </strong></span>
+</div>
+
+<div class="jumbotron"
+	style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+    data-url="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
+	id="program-view-program">
+	<div class="row equal">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="bigblack bot10"><?= $program->getProgName() ?></div>
+							<p><div class="desc"><?= $program->getProgDescription() ?></div></p>
+							<hr>
+							<div class="row">
+								<div class="col-md-7">
+<?= $this->translate('Published by')?> <a
+										href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$program->getUsr()->getUsrUUID()));?>"
+										id="viewProfile"><span class="badge"><?= $program->getUsr()->getUsrName() ?></span></a>
+									<i class="fa fa-clock-o"></i> <?= $program->getProgCreatedDate()->format('d/m/Y') ?>
+</div>
+								<div class="col-md-5 text-right">
+									<a
+										href="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'program','id'=>$program->getProgUUID()));?>"
+										id="program-view-program-report"
+										data-dialog-title="<?=$this->translate('Report scenario')?>"
+										title="<?= $this->translate('Report Scenario as inapropiate')?>"><i
+										class="fa fa-exclamation-triangle"></i> <?= $this->translate('Report')?></a>
+								</div>
+							</div>
+                            <hr>
+							<?php if ($user==$program->getUsr()):?>
+							<div class="row">
+								<div class="col-md-12">
+									<button type="button"
+										class="btn btn-orange"
+										id="program-view-program-edit"
+										data-url="<?= $this->url('program', array('action' => 'edit-program', 'id'=>$program->getProgUUID()));?>"
+										data-dialog-title="<?=sprintf($this->translate('Edit my Program for %s'), $levelName)?>"><i class="fa fa-floppy-o"></i> <?=$this->translate('Edit')?></button>
+									<button type="button" class="btn btn-danger"
+                    					id="program-view-program-delete"
+                    					data-dialog-title="<?=sprintf($this->translate('Delete my Program for %s'), $levelName)?>"
+                    					data-url="<?= $this->url('program', array('action'=>'delete-program', 'id'=>$program->getProgUUID()));?>">
+                    					<i class="fa fa-trash"></i> <?= $this->translate('Delete')?></button>
+								</div>
+							</div>
+							<?php endif;?>
+							<!--/r-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/panel-->
+		</div>
+		<!-- /6 -->
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+<?= $this->proposalsSection?>
+ </div>
+			</div>
+			<!--/panel-->
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- row -->
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+      <?= $this->commentsSection;?>
+    </div>
+	</div>
+	<!--/r-->
+</div>
+<!-- /j -->
+<script>
+	$(function () {
+		programViewProgramHandlers();
+	});
+</script>
+
+<!-- /program/view-program -->

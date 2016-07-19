@@ -1,0 +1,69 @@
+<!-- banner/active-banners -->
+<?php 
+if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.city')) {
+    $levelName = ($user->getAdmin()->getAdminCity()->getFullCity()?$user->getAdmin()->getAdminCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getAdmin()->getAdminCity()->getDistrictName().'</i></span>':$user->getAdmin()->getAdminCity()->getCityName());
+}
+elseif ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.region')) {
+    $levelName = $user->getAdmin()->getAdminRegion()->getRegionName();
+}
+elseif ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.country')) {
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="25" height="17" alt="'. $user->getCountry()->getCountryName() .'"> '.$user->getCountry()->getCountryName();
+} 
+?>
+<div id="banner-active-banners"
+	data-url="<?=$this->url('administration/banner', array('action'=>'active-banners'))?>">
+	<span class="big"> <!--<?=$bannersCount?>--> <?= sprintf($this->translate('Active Banners for %s'), $levelName)?></span>
+	<form method="post" name="active-banners"
+		action="<?=$this->url('administration/banner', array('action'=>'sort-active-banners'))?>"
+		id="banner-active-banners-sort-form">
+		<table class="table table-condensed table-hover"
+			id="banner-active-banners-table">
+			<colgroup>
+				<col width="5%" />
+				<col width="10%" />
+				<col width="20%" />
+				<col width="50%" />
+				<col width="15%" />
+			</colgroup>
+			
+			<tbody>
+<?php if ($bannersCount):?>
+<?php foreach ($activeBanners as $banner):?>
+			<tr style="background-color: #e1f7e5;">
+					<input type="hidden" name="banners[]"
+						value="<?=$banner->getBannerUUID()?>">
+					<td><span class="dayofmonth priority">1</span></td>
+					<td valign="top"><img
+						src="<?=$this->basepath($banner->getBannerImage())?>" width="100%" height="40"></td>
+					<td><a
+						href="<?=$this->url('administration/banner', array('action'=>'edit-banner', 'id'=>$banner->getBannerUUID()))?>"
+						id="banner-active-banners-edit" data-dialog-title="<?=$this->translate('Edit Banner')?>"><?=$banner->getBannerName()?></a></td>
+					<td><?=$this->escapehtml($banner->getBannerDescription())?></td>
+					<td><a
+						href="<?= $this->url('administration/banner', array('action'=>'publish-banner', 'id' => $banner->getBannerUUID() ));?>"
+						id="banner-active-banners-publish" data-dialog-title="<?=$this->translate('Withdraw Banner')?>"> <i
+							class="fa fa-pause-circle-o"></i> <?= $this->translate('Set inactive')?></a><br>
+						<a
+						href="<?= $this->url('administration/banner', array('action'=>'delete-banner', 'id' => $banner->getBannerUUID() ));?>"
+						id="banner-active-banners-delete" data-dialog-title="<?=$this->translate('Delete Banner')?>"><i class="fa fa-times-circle"></i> <?= $this->translate('Delete banner')?></a>
+				</td>
+				</tr>
+<?php endforeach;?>
+<?php else:?>
+			<tr style="background-color: #e1f7e5;">
+					<td colspan="5"><?= $this->translate('There are no active banners')?>.</td>
+				</tr>
+<?php endif;?>
+
+		</tbody>
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+
+$(function() {
+	bannerActiveBannersHandlers();
+});
+
+</script>
+<!-- /banner/active-banners -->

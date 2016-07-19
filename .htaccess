@@ -1,0 +1,2 @@
+SetEnv "APP_ENV" "development"
+

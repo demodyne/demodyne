@@ -1,0 +1,83 @@
+<!-- program/user-programs -->
+
+<div id="program-user-programs">
+	<div class="row">
+					<div class="col-md-3"></div>
+					<div class="col-md-6">
+						<h2 class="text-center">
+							<i class="fa fa-object-group"></i> <?= sprintf($this->translate('%s\'s Programs'), $user->getUsrName())?></h2>
+					</div>
+					<!-- /6 -->
+					<div class="col-md-3"></div>
+				</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-12">
+			<span class="big"><strong><?= sprintf($this->translate('%s has <strong>%d</strong> Programs'), $user->getUsrName(), count($programs))?></strong></span>
+		</div>
+		
+	</div>
+	<hr>
+<?php if ($programs):?>
+<?php $levels = $this->configItem('demodyne.level');?>
+	<?php foreach ($programs as $program):?>
+	<div class="table-layout">
+		
+		<?php $index = $program->getProgLevel();?>
+		<div class="table-cell">
+			<div class="row">
+			<?php
+                $levelName = '';
+                $level = '';$levelNameFlag=null;
+                if (array_search($program->getProgLevel(), $levels)=='city') {
+                    $levelName = $program->getCity()->getCityName();
+                    $level='city';
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='region') {
+                    $levelName = $program->getCity()->getRegion()->getRegionName();
+                    $level='region';
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='country') {
+                    $levelName = $program->getCity()->getCountry()->getCountryName();
+                    $levelNameFlag = '<img src="/img/flags/'.str_replace(' ', '-', $levelName).'.png" style="margin-bottom: 4px;" width="25" height="17"> '.$levelName;
+                    $level='country';
+                }
+                
+           
+                $programDescription = $program->getProgDescription(); 
+                $programDescription = (strlen($programDescription) > 150) ? substr($programDescription, 0, 150) . '...' : $programDescription
+           
+                ?>
+				<div class="col-md-6 col-xs-12">
+					<span class="big"><a
+						href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
+						id="program-user-programs-item"
+						title="<?= $programDescription ?>"><?= $program->getProgName(); ?></a></span><br>
+						
+				<?= sprintf($this->translate('Program for %s: %s'), $level, $levelNameFlag?$levelNameFlag:$levelName)?><br>
+				<div class="top5"><?= $this->translate('Published')?> <i class="fa fa-clock-o"></i> <?= $program->getProgCreatedDate()->format("d/m/Y") ?></div>
+            
+            </div>
+				<div class="col-md-6 col-xs-12"><?= $this->{"categories-$index"}?></div>
+			</div>
+		</div>
+		<div class="table-cell fixed-width-150 text-right">
+			<a target="_parent"
+				href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
+				title="<?= $this->translate('Linked Proposals')?>"><?= sprintf($this->translate('<span title="Linked Proposals / Official Measures">%d Linked Items</span>'), count($program->getProposals()))?></a>
+			<br /> 
+			<a
+				href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
+				title="<?= $this->translate('Comments')?>"><i class="fa fa-comments"></i> <?= sprintf($this->translate('%s Comments'), count($program->getComments()))?></a>
+		</div>
+		
+	</div>
+	<hr>
+	<div class="bot10"></div>
+	<?php endforeach;?>
+            <?php else:?>
+                <?= $this->translate('No program created yet')?>.
+                <?php endif;?>
+</div>
+
+<!-- /program/user-programs -->

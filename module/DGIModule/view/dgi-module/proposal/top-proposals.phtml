@@ -1,0 +1,43 @@
+<!-- proposal/top-proposals -->
+
+<div class="panel panel-default">
+<div class="panel-body">
+
+<span class="big"><?= $this->translate('Top Proposals & Measures')?></span>
+<hr>
+
+<?php if (count($topProposals)):?>
+<?php foreach ($topProposals as $index => $proposal): ?>
+<?php if ($index==5) break;$proposal = $proposal['proposal'];?>
+
+<div class="row">
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="media">
+  <div class="media-left media-top">
+<img src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage()?>" height="36" width="36" title="<?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName() ?>">
+  </div>
+  <div class="media-body">
+<span class="bigsmall"><a href="<?= $this->url('proposal', array('id'=>$proposal->getPropUUID()));?>" style="text-decoration:none !important;" id="city-top-proposal-list-item" data-id="<?= $proposal->getPropUUID()?>"> <?= $proposal->getPropName() ?></a></span><br>
+<?= $this->{"vote-$index"}?><hr>
+  </div>
+</div>
+</div><!--/12-->
+</div><!--/r-->
+
+
+<?php endforeach;?>
+
+<?php else:?>
+<div class="row">
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<?=$this->translate('There are no proposals in top.')?>
+</div><!--/12-->
+</div><!--/r-->
+
+<?php endif;?>
+
+</div></div><!-- end panel -->
+
+<!-- /proposal/top-proposals -->

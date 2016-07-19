@@ -1,0 +1,72 @@
+<!-- category/add -->
+
+<div class="jumbotron">
+<?php if ($parentCategory):?>
+<h2><?= $this->translate('Add subcategory for')?> <?=$parentCategory->getCatName(); ?></h2>
+<?php else:?>
+<h2><?= $this->translate('Add main category')?></h2>
+<?php endif;?>
+
+<?php
+$form->prepare();
+$form->setAttribute('action', $this->url('home/category', array('action' => 'add', 'id' => ($parentCategory)?$parentCategory->getCatId():0, 'country' => $countryId)));
+$form->setAttribute('method', 'post');
+
+echo $this->form()->openTag($form);?>
+
+<div class="element element_name">
+<?= $this->formRow($form->get('catName'));?> 
+</div>
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catDescription'));?> 
+</div>
+
+<?php if (!$parentCategory):?>
+<div class="element element_image">
+<?= $this->formRow($form->get('catImage'));?> 
+</div>
+<?php endif;?>
+
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catCity'));?> 
+</div>
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catRegion'));?> 
+</div>
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catCountry'));?> 
+</div>
+
+<div class="element element_submit">
+<?=  $this->formSubmit($form->get('submit'));?> 
+</div>
+
+<?=$this->form()->closeTag();?> 
+</div>
+
+
+<script>
+
+	$(function() {
+
+		$('#catCity').click(function() {
+			$(this).val(this.checked ? 1 : 0);
+		});
+
+		$('#catRegion').click(function() {
+			$(this).val(this.checked ? 1 : 0);
+		});
+
+		$('#catCountry').click(function() {
+			$(this).val(this.checked ? 1 : 0);
+		});
+		
+	});
+
+</script>
+
+<!-- /category/add -->

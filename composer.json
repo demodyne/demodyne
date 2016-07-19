@@ -1,0 +1,14 @@
+{
+  "name" : "demodyne",
+  "description" : "Demodyne",
+  "require" : {
+    "php" : ">=5.3.3",
+    "zendframework/zendframework" : ">=2.3.0",
+    "doctrine/doctrine-orm-module" : "0.8.*",
+    "beberlei/DoctrineExtensions" : ">=v1.0.1",
+    "zendframework/zend-developer-tools": "dev-master" 
+  },
+  "keywords" : [ "demodyne", "zf2" ],
+  "license" : "GNU AFFERO 3",
+  "homepage" : "https://www.demodyne.org"
+}

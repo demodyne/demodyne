@@ -1,0 +1,61 @@
+<!-- user-profile/change-picture -->
+
+<div id="user-profile-change-picture">
+
+<h2 class="text-center"><i class="fa fa-camera"></i> <?= $this->translate('Picture')?></h2>
+
+<hr />
+
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('user/profile', array('lang'=>$this->params()->fromRoute('lang'), 'action' => 'change-picture')));
+$form->prepare();
+?>
+
+<?= $this->form()->openTag($form);?>
+
+
+<div class="text-center">
+
+<img src="<?=$this->basePath($user->getUsrPicture()) ?>" valign="middle" width="300" height="300" alt="<?= $user->getUsrName() ?>" 
+	  title="<?= $user->getUsrName() ?>" class="img-thumbnail" id="user-profile-change-picture-picture"/><br />
+
+<span class="small"><?= $this->translate('Your picture should be square ratio (min. 200 x 200 px)')?><br /><?= $this->translate('max. 64 kb')?></span>
+
+<p>&nbsp;</p>
+
+<span class="big"><strong><?= $this->translate('Change Photo:')?></strong></span><br>
+
+<p align="center"><hr style="width:50%; min-width:200px;" /></p>
+
+<p align="center"><?= $this->formElement($form->get('picture-file'));?> <br />
+<span class="text-danger"><?= $this->formElementErrors($form->get('picture-file'));?></span></p> 
+
+<p align="center"><hr style="width:50%; min-width:200px;" /></p>
+
+<button type="button" class="btn btn-default" id="cancelEditContact"><i class="fa fa-undo"  id="cancelEditContactIcon"></i> <?= $this->translate('Cancel')?></button>
+
+<button type="submit" class="btn btn-orange" id="user-profile-change-picture-save-button"><i class="fa fa-floppy-o"></i> <?= $this->translate('Save Photo')?></button>
+
+</p>
+
+</div><!-- /center -->
+
+<?=  $this->form()->closeTag();?>
+
+</div>
+
+
+	<script type="text/javascript">
+
+		$(function () {
+
+			userProfileChangePictureHandlers();
+
+
+		});
+
+	</script>
+
+
+<!-- /user-profile/change-picture -->

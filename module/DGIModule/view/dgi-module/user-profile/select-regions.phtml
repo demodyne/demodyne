@@ -1,0 +1,146 @@
+<div id="user-profile-partner-select-regions">
+
+<div class="row">
+
+<div class="col-md-4 bot20"><?= $this->translate('Departments of')?> <img src="<?= $this->basePath('img/flags/France.png') ?>" valign="middle" width="25" height="17" alt="France"> <?= $user->getCountry()->getCountryName();?></div><!-- /5 -->
+
+<div class="col-md-4 text-center"><i class="fa fa-arrow-left"></i> <i class="fa fa-arrow-right"></i></div><!-- /2 -->
+
+<div class="col-md-4 bot20"><?= $this->translate('Partner Covered Areas')?></div><!-- /5 -->
+
+</div><!-- end row -->
+
+
+
+<form method="post" action="<?=$this->url('user/profile', array('action'=> 'select-regions')); ?>" id="user-profile-partner-select-regions-form"> 
+
+
+
+<div class="row">
+
+<div class="col-md-4">
+
+    
+
+    <select name="departments" id="user-profile-partner-select-regions-from-departments" size=20 MULTIPLE class="form-control big">
+
+    <?php $partner_regions=$user->getPartner()->getDepartments();?>
+
+    <?php foreach ($regionsList as $region):?>
+
+         <optgroup label="<?= $region->getRegionName(); ?>" style="padding: 5px 0 10px 0;border-top: #dedede 1px solid;" >
+
+        <?php $departments = $region->getDepartments();?>
+
+        <?php foreach ($departments as $department):?>
+
+            <?php if (!$partner_regions->contains($department)):?>
+
+            <option value="<?= $department->getDepId() ?>" >
+
+                <?= $department->getDepName() ?> - <?= $department->getDepCode() ?>
+
+            </option>
+
+            <?php endif;?>
+
+        <?php endforeach;?>
+
+        </optgroup>
+
+    <?php endforeach;?>
+
+    </select>
+
+</div><!-- /5 -->
+
+
+
+<div class="col-md-4 text-center">
+
+<p>&nbsp;</p>
+
+<ul class="pagination top10">
+
+  <li id="user-profile-partner-select-regions-remove-all-departments"><a href="#" class="degrade"><i class="fa fa-2x fa-angle-double-left" id="removeAllIcon"></i></a></li>
+
+  <li id="user-profile-partner-select-regions-remove-departments"><a href="#" class="degrade"><i class="fa fa-2x fa-angle-left" id="removeIcon"></i></a></li>
+
+  <li id="user-profile-partner-select-regions-add-departments"><a href="#" class="degrade"><i class="fa fa-2x fa-angle-right" id="addIcon"></i></a></li>
+
+  <li id="user-profile-partner-select-regions-add-all-departments"><a href="#" class="degrade"><i class="fa fa-2x fa-angle-double-right" id="addAllIcon"></i></a></li>
+
+</ul>
+
+<p><?= $this->translate('Please select departments and use above buttons to assign them as "Covered Areas"')?>. </p>
+<p>&nbsp;</p>
+<button type="submit" class="btn btn-orange" id="user-profile-partner-select-regions-save"><i class="fa fa-floppy-o"></i> <?= $this->translate('Save')?></button>
+
+</div><!-- /2 -->
+
+
+
+<div class="col-md-4"> 
+
+
+
+ <select name="partner_departments[]" id="user-profile-partner-select-regions-to-departments" MULTIPLE size=20 class="form-control big">
+
+    
+
+    <?php foreach ($partDep as $label => $partOpt):?>
+
+         <optgroup label="<?= $label; ?>"  style="padding: 5px 0 10px 0;border-top: #dedede 1px solid;" >
+
+        <?php foreach ($partOpt as $department):?>
+
+            <option value="<?= $department->getDepId() ?>" >
+
+                <?= $department->getDepName() ?> - <?= $department->getDepCode() ?>
+
+        </option>
+
+        <?php endforeach;?>
+
+       </optgroup>
+
+    <?php endforeach;?>
+
+    </select>
+
+</div>
+
+</div><!-- end row -->
+
+
+
+
+
+
+
+</form>
+
+
+
+
+
+</div>
+
+
+
+<script type="text/javascript">
+
+
+
+$(function(){
+
+	userProfilePartnerSelectDepartmentsHandlers();
+
+});
+
+
+
+
+
+</script>
+

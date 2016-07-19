@@ -1,0 +1,93 @@
+<!-- pages/about -->
+
+<?php if ($user = $this->identity()) { 
+echo '
+<div class="modal-header-soft round5top ui-draggable-handle">
+<button type="button" class="close" href="/city" id="history-home"><i class="fa fa-home w"></i></button>
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title"><strong>About us</strong></span>
+  </div>';
+    } else {
+echo '
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+<button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title"><a href="../"><img src="../img/logo30.png" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> - <strong>About us</strong></span></div>';
+    }
+?>
+
+
+<?php if ($user = $this->identity()) { 
+echo '<div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">';
+    } else {
+       echo '<div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">';
+    }
+?>
+
+
+
+
+<div class="row">
+
+<div class="col-md-12">
+
+
+
+    <p><span class="big"><strong>What is DEMODYNE ?</strong></span></p>
+    
+    <p>DEMODYNE is a non-profit, online platform designed to transform the way we decide and act together as a community.<br>
+      It is intended to be an "all-in-one" tool to implement participative democracy in every city, region, state and country.</p>
+<p><span class="big"><strong>Why is DEMODYNE an important step towards true democracy ?</strong></span></p>
+<p>Currently, what we call democracy still works in a quite primitive way, not so different from what it was already in ancient Greece or Rome.<br>
+      Once every 4 or 5 year, people delegate full authority to a person or a group to make all decisions regarding the management of their city, state or country.<br>
+      Most of the times, this boils down to a binary choice between two pre-constructed political programs, without any possibility to vote on each measure.<br>
+      The elected representatives report back infrequently, budgetary transparency is incomplete, there is no overview of needs, skills available, opportunities.<br>
+      <br>
+      This could be somehow justified as long as technology did not allow to collect and aggregate efficiently the citizen's input on each topic.</span><br>
+      Today this is no longer the case.</span><br>
+      With DEMODYNE, citizens can finally express themselves everyday, on all aspects of the political program to be implemented.<br>
+      They can act at various scales from local to national, make their own proposals, express agreement or disagreement with official measures and other citizens' proposals alike.<br>
+      They can get in touch directly with Partners able to implement the proposals: entrepreneurs, businesses, nonprofit associations.<br>
+      They can track how their tax money is spent and send a clear message on where to spend more and where to spend less.<br>
+      ... and much more.</p>
+
+
+<p><span class="big"><strong>In short, DEMODYNE puts the Citizens back at the center of all decisions and strategies, where they belong.</strong></span></p>
+
+
+<p>      This will also be a tremendous opportunity for the politicians in charge:<br>
+      No more guessing to interpret voting results - now each voting action provides a clear signal on a specific topic.<br>
+      No more blanket hit or miss communication - now they can send targeted newsletters to groups of citizens based on their interests or skills.<br>
+      Public opinion is more than ever a constructive force with which a structured and continuous dialogue is possible.<br>
+    Furthermore, public administrations can now coordinate voluntary work in their community through the Demodyne Community Service (DCS) feature.</p>
+
+
+<p><span class="big"><strong>Who is behind DEMODYNE ?</strong></span></p>
+
+<p>  DEMODYNE is operated globally by a non-profit association, the Direct Governance Initiative (DirGovIn)</span> based in France near Strasbourg.<br>
+  The DirGovIn receives the global funding and pays a small team to work on the general strategy, find national/local partnerships and develop the code and database of the platform.</p>
+  
+<p><span class="big"><strong>The core team currently consists of:</strong></span></p>
+
+<p>  Quentin DESVIGNE: creator of DEMODYNE, strategic director<br>
+  Dragos DOBRE: lead developer PHP &amp; Database<br>
+  Alex NICULITA: lead Designer, Interface and User Experience
+  </p>
+
+<p>  In each country, one or several National Operators are identified to operate the platform on the national territory.They're listed in the National Forums.<br>
+  They receive national/local funding and have their own teams to promote the platform on their geographic territory.<br>
+  Although each National Operator is basically independent and autonomous, it must be a signatory of the DEMODYNE Charter, owned by the community.</p>
+  Our philosophy is that DEMODYNE belongs primarily to its community of users.<br>
+  In other words, the evolution of the platform, its strategy, its growth, its features, will be determined through consultation and community votes.<br>
+  Besides, you will be given a transparent overview of the resources we have and how they are utilized (see 2016 Objectives and Annual Budget).</p>
+
+  </div>
+
+
+
+</div><!-- end row -->
+
+
+</div><!-- end jumbotron -->
+
+<!-- /pages/about -->
+

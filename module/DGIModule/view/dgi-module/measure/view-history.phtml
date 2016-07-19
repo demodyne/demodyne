@@ -1,0 +1,105 @@
+<!-- measure/view-history -->
+
+
+<div id="measure-view-history">
+	
+	<?php $historyList = array_reverse($proposal->getMeasure()->getHistory()->toArray());?>
+	
+	<?php foreach ($historyList as $index => $history):?>
+
+	<div class="row">
+		<?php if ($history->getHisType() == 2):?>
+		<div class="col-md-12">
+		
+		<strong><?= $this->translate('On')?> <i class="fa fa-calendar"></i> <?=$history->getHisCreatedDate()->format('d/m/Y')?>,</strong> 
+		<a
+			href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$history->getUsr()->getUsrUUID()));?>"
+			data-title="<?= $history->getUsr()->getUsrName() ?>'s mini profile"
+			data-id="<?=$history->getUsr()->getUsrUUID()?>"
+			id="measure-view-history-view-profile">
+			<span class="badge"><?=$history->getUsr()->getUsrName() ?></span>
+		</a>
+		<?= $this->translate('claims this measure')?>. 
+	
+		</div>
+		<?php else:?>
+		<div class="col-md-12">
+
+		<strong><?= $this->translate('On')?> <i class="fa fa-calendar"></i> <?=$history->getHisCreatedDate()->format('d/m/Y')?>,</strong> 
+		<a
+			href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$history->getUsr()->getUsrUUID()));?>"
+			data-title="<?= $history->getUsr()->getUsrName() ?>'s mini profile"
+			data-id="<?=$history->getUsr()->getUsrUUID()?>"
+			id="measure-view-history-view-profile">
+			<span class="badge"><?=$history->getUsr()->getUsrName() ?></span>
+		</a>
+			 <?= ($history->getHisType() == 0)?$this->translate('adds'):$this->translate('modifies') ?> : 
+			 
+<br>
+
+
+			<?php if ($history->getHisName()):?>
+			<history>- <?= $this->translate('Name')?>: <?= $history->getHisName()?> <br></history>
+			<?php endif;?>
+			
+			<?php if ($history->getHisDescription()):?>
+			<history>- <?= $this->translate('Description')?>: <?= $history->getHisDescription()?> <br></history>
+			<?php endif;?>
+			
+			<?php if ($history->getCategory()):?>
+			<history>- <?= $this->translate('Category')?>: <img src="<?= $this->basePath()?>/files/<?= $history->getCategory()->getCatImage() ?>" height="16" width="16" alt="<?= $history->getCategory()->getCatCat()->getCatName() ?>"> 
+				<?= $history->getCategory()->getCatCat()->getCatName()?>/<?= $history->getCategory()->getCatName()?> <br></history>
+			<?php endif;?>
+			
+			<?php if ($history->getHisStartDate()):?>
+			<history>- <?= $this->translate('Start Date')?>: <?= $history->getHisStartDate()->format('d/m/Y')?> <br></history>
+			<?php endif;?>
+			
+			<?php if ($history->getHisEndDate()):?>
+			<history>- <?= $this->translate('End Date')?>: <?= $history->getHisEndDate()->format('d/m/Y')?> <br></history>
+			<?php endif;?>
+			
+			<?php if ($history->getHisCost()):?>
+			<history>- <?= $this->translate('Cost')?>: <?= $history->getHisCost()?> <?=$proposal->getCity()->getCountry()->getCountryCurrency()?><br></history>
+			<?php endif;?>
+			
+			<?php if (count($history->getFullLinks())):?>
+			<history>- <?= $this->translate('Links')?>:  <br></history>
+				<?php foreach ($history->getFullLinks() as $link):?>
+					<history><span style="margin-left: 45px;"><?=($link->getLinkAdded())?'+ '.$this->translate('Added'):'- '.$this->translate('Removed')?>: <a href="<?=$link->getLinkUrl()?>" target="_blanc"><?= $link->getLinkUrl()?></a></span></history><br>	
+				<?php endforeach;?>
+			<?php endif;?>
+
+
+</history>
+
+
+
+
+
+			</div>
+
+			<?php endif;?>
+
+		</div><!-- end row -->
+        
+        <hr>
+        
+        
+	<?php endforeach;?>
+
+
+
+<div class="row">
+<div class="col-xs-12 text-right">
+<button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-ban"></i> <?= $this->translate('Close')?></button></div>
+</div><!-- /r -->
+</div>
+
+<script type="text/javascript">
+    $(function () {
+    	measureViewHistoryHandlers();
+    });
+</script>
+
+<!-- /measure/view-history -->

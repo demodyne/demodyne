@@ -1,0 +1,27 @@
+<?php
+/**
+ * @link      https://github.com/demodyne/demodyne
+ * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
+ */
+
+return array(   
+    'doctrine' => array(
+        'connection' => array(
+            'orm_default' => array(
+                'driverClass' => 'Doctrine\DBAL\Driver\PDOMySql\Driver',
+                'params' => array(
+                    'host'     => 'hostname',
+                    'port'     => '3306', 
+                    'user'     => 'username',
+                    'password' => 'password',
+                    'dbname'   => 'databasename',
+					'charset' => 'utf8', 
+					'driverOptions' => array(
+							1002=>'SET NAMES utf8'
+					)
+                )
+            )
+        )
+    ),
+);

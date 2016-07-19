@@ -1,0 +1,31 @@
+<?php
+/**
+ * @link      https://github.com/demodyne/demodyne
+ * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
+ */
+
+/**
+ * Local Configuration Override
+ *
+ * This configuration override file is for overriding environment-specific and
+ * security-sensitive configuration information. Copy this file without the
+ * .dist extension at the end and populate values as needed.
+ *
+ * @NOTE: This file is ignored from Git by default with the .gitignore included
+ * in ZendSkeletonApplication. This is a good practice, as it prevents sensitive
+ * credentials from accidentally being committed into version control.
+ */
+
+return array(
+
+    // configuration for error log 
+    'db' => array(
+        'dsn'      => 'mysql:dbname=database_name;host=localhost',        
+        'username' => 'username',
+        'password' => 'password',
+        'driver' => 'Pdo',
+    ),
+    
+    
+);

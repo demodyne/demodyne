@@ -1,0 +1,67 @@
+<!-- user-profile/get-user-scores -->
+
+<h2 class="text-center">
+	<?php if ($me!=$user):?>
+					<i class="fa fa-star-half-o"></i> <?= sprintf($this->translate('%s\'s Ratings'), $user->getUsrName())?><br />
+	<?php else:?>
+	<i class="fa fa-star-half-o"></i> <?= $this->translate('Ratings')?><br />
+<span class="small"><?= $this->translate('Demodyne Community Appreciations')?></span>
+	<?php endif;?>
+					
+					
+				</h2>
+				<hr />
+				<div class="row">
+					<div class="col-md-6 col-xs-6 text-center">
+						<h4>
+							<strong><?= $this->translate('Commitment Score')?></strong>
+						</h4>
+						<?php for ($i=0;$i<5;$i++):?>
+	<?php $commitment--?>
+   <?php if ($commitment>=0):?>
+	<span class="star-icon full">☆</span>
+	<?php elseif ($commitment==-0.5):?>
+	<span class="star-icon half">☆</span>
+	<?php else:?>
+	<span class="star-icon">☆</span>
+	<?php endif;?>
+<?php endfor;?>	
+							<br /> <span
+							class="badge size2em"><?=round($commitmentTotal)?></span><br><?= $this->translate('max is')?> 200
+<hr>
+						<div style="text-align: left !important;">
+							<strong><?= $this->translate('Reflects the time and energy invested by the User in the Demodyne community. Derived from')?>:</strong><br>
+- <?= $this->translate('Proposals made in the last 90 days')?><br>
+- <?= $this->translate('Comments made in the last 30 days')?><br>
+- <?= $this->translate('Hours executed for Demodyne Community Service (DCS) in the last 90 days')?>
+</div>
+					</div>
+					<div class="col-md-6 col-xs-6 text-center">
+						<h4>
+							<strong><?= $this->translate('Relevance Score')?></strong>
+						</h4>
+						<?php for ($i=0;$i<5;$i++):?>
+<?php $relevance--?>
+   <?php if ($relevance>=0):?>
+	<span class="star-icon full">☆</span>
+	<?php elseif ($relevance==-0.5):?>
+	<span class="star-icon half">☆</span>
+	<?php else:?>
+	<span class="star-icon">☆</span>
+	<?php endif;?>
+<?php endfor;?>
+<br /> <span
+							class="badge size2em"><?=round($relevanceTotal)?></span><br><?= $this->translate('max is 200')?>
+<hr>
+						<div style="text-align: left !important;">
+							<strong><?= $this->translate('Reflects the quality of the User input and work for the Demodyne community. Derived from')?>:</strong><br>
+- <?= $this->translate('Number of "thumbs up" vs "thumbs down"')?><br>
+- <?= $this->translate('Average score of proposals made by the user')?><br>
+- <?= $this->translate('Average rating of DCS work completed')?>
+</div>
+					</div>
+				</div>
+
+<!-- /user-profile/get-user-scores -->
+
+

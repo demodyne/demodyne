@@ -1,0 +1,143 @@
+<!-- event/view-attendees -->
+
+  <?php $paging = $this->sortingDivPaginationHelper($pagedUsers, $page, $this->url('event', array('action'=>'view-attendees', 'id' => $event->getEventUUID())), 'view-attendees', $limit, $sort, $order); ?>
+  
+<div id="event-view-attendees"
+	data-attend="<?= $this->translate('Attend Event')?>"
+	data-decline="<?= $this->translate('Cancel attendance')?>"
+	data-url="<?=$this->url('event', array('action'=>'view-attendees', 'id' => $event->getEventUUID()))?>">
+
+	<?php if ($user && $user!=$event->getUsr()):?>
+	<button type="button" class="btn btn-orange" 
+		id="event-view-attendees-attend"
+		data-url="<?= $this->url('event', array('action'=>'attend-event', 'id' => $event->getEventUUID()));?>">
+		<?php if (!$event->hasAttendee($user)):?>
+
+              <i class="fa fa-check-circle-o"></i>
+
+              <?= $this->translate('Attend Event')?>
+
+              <?php else:?>
+
+              <i class="fa fa-times-circle-o"></i>
+
+              <?= $this->translate('Cancel attendance')?>	
+
+              <?php endif;?>
+	</button><br>
+	<hr>
+	<?php endif;?>
+	
+	<?php if (!$user):?>
+	<button type="button" class="btn btn-orange"
+				data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
+				data-dialog-title="<?=$this->translate('Please register')?>"
+				id="please-register-button">
+				<i class="fa fa-check-circle-o"></i> <?= $this->translate('Attend Event')?></button>
+	<br>
+	<hr>
+	<?php endif;?>
+	
+	<?php if ($event->getAttendees()->count()):?>
+	<div class="row">
+		<div class="col-md-6 col-xs-12">
+			<span class="big"><?=$event->getAttendees()->count()?> <?= $this->translate('Event Attendees')?></span>
+		</div>
+		<div class="col-md-6 col-xs-12">
+		<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-down"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-view-attendees"
+								href="<?= $this->url('city/event', array('action'=>'view-attendees', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Name')?></a></li>
+							<li><a id="page-view-attendees"
+								href="<?= $this->url('city/event', array('action'=>'view-attendees', 'sort'=>'type', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Type')?></a></li>
+							
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-up"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-view-attendees"
+								href="<?= $this->url('city/event', array('action'=>'view-attendees', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Name')?></a></li>
+							<li><a id="page-view-attendees"
+								href="<?= $this->url('city/event', array('action'=>'view-attendees', 'sort'=>'type', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Type')?></a></li>
+							
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr right10 top5"><?= $this->translate('Sorted by')?> <?=$this->translate(ucfirst($sort))?> 
+                    <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
+		</div>
+	</div>
+	<hr>
+	
+	
+	
+	
+	<?php foreach ($pagedUsers as $index => $user):?>
+    
+    
+	
+	<div class="row">
+		<div class="col-md-1 col-xs-2">
+        <img src="<?=$this->basePath($user->getUsrPicture())  ?>" valign="middle" width="36" height="36" title="<?= $user->getUsrName() ?>" class="round5"/>
+
+		</div>
+		<div class="col-md-3 col-xs-10">
+        			<a
+				href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$user->getUsrUUID()));?>"
+				data-title="<?= $user->getUsrName() ?>'s <?= $this->translate('mini profile')?>"
+				data-id="<?=$user->getUsrUUID()?>"
+				id="event-view-attendees-view-profile">  <?=$user->getUsrName() ?>
+			</a><br>
+        <span class="badge"><?=$user->isAdministration()?'Administrator':($user->isPartner()?'Partner':'Citizen')?></span>
+        </div>
+		<div class="col-md-8 col-xs-10">
+        <?= $this->{"notes-$index"}?>
+        </div>
+	</div><!-- /r -->
+	<hr>
+        
+        
+	<?php endforeach;?>
+    
+    
+    
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+        <?= $paging; ?>
+        </div>
+        </div><!-- /r -->
+        
+        
+        
+	<?php else:?>
+	<div class="row">
+		<div class="col-md-6 col-xs-12">
+			<span class="big"><?=$event->getAttendees()->count()?> <?= $this->translate('Attendees for the Event ')?></span>
+		</div>
+	</div>
+	<?php endif;?>	
+
+    
+    
+</div>
+
+
+
+<script type="text/javascript">
+    $(function () {
+    	eventViewAttendeesHandlers();
+    });
+</script>
+
+<!-- /event/view-attendees -->

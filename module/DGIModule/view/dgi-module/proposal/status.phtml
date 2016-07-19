@@ -1,0 +1,27 @@
+<!-- proposal/status -->
+
+<?php $status = $this->configItem('demodyne.proposal.status.type'); ?>
+
+<?php if ($proposal->getPropPublished() && $proposal->getPropStatus()!=$status['unvalidated']):?>
+
+	<?php if (!$proposal->isMeasure()):?>
+	<span class="label <?= ($proposal->getPropStatus()==$status['debate'])?'label-success':'label-default'?>" title="<?= $this->translate('Debate step, NO implementation yet')?>"><?= ($proposal->getPropStatus()==$status['debate'])?'&nbsp;<i class="fa fa-caret-right"></i>':''?>&nbsp;D&nbsp;</span>
+
+	<span class="label <?= ($proposal->getPropStatus()==$status['vote'])?'label-success':'label-default'?>" title="<?= $this->translate('Voting step, NO implementation yet')?>"><?= ($proposal->getPropStatus()==$status['vote'])?'&nbsp;<i class="fa fa-caret-right"></i>':''?>&nbsp;V&nbsp;</span>
+	<?php endif;?>
+	<span class="label <?= ($proposal->getPropStatus()==$status['plan'])?'label-success':'label-default'?>" title="<?= $this->translate('Implementation, Planning step')?>">&nbsp;<?= ($proposal->getPropStatus()==$status['plan'])?'&nbsp;<i class="fa fa-caret-right"></i>':''?>&nbsp;P&nbsp;</span>
+
+	<span class="label <?= ($proposal->getPropStatus()==$status['execute'])?'label-success':'label-default'?>" title="<?= $this->translate('Implementation, Execution step')?>"><?= ($proposal->getPropStatus()==$status['execute'])?'&nbsp;<i class="fa fa-caret-right"></i>':''?>&nbsp;E&nbsp;</span>
+
+	<span class="label <?= ($proposal->getPropStatus()==$status['followup'])?'label-success':'label-default'?>" title="<?= $this->translate('Implementation, Proposal Completed')?>"><?= ($proposal->getPropStatus()==$status['followup'])?'&nbsp;<i class="fa fa-caret-right"></i>':''?>&nbsp;C&nbsp;</span>
+
+<?php else:?>
+
+	<?php if ($proposal->getPropStatus()==$status['unvalidated']):?>
+		<span class="label label-danger"><?= $this->translate('Not validated')?></span>
+	<?php else:?>
+		<span class="label label-danger"><?= $this->translate('Draft')?></span>
+	<?php endif;?>
+<?php endif;?>
+
+<!-- /proposal/status -->

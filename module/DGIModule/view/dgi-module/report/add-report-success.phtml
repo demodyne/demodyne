@@ -1,0 +1,45 @@
+<!-- report/add-report-success -->
+
+<div id="report-add-report-success">
+
+
+
+
+	<div class="row">
+		<div class="col-md-12">
+		
+		<?php if ($type=='comment'):?>
+		
+		<?=$this->translate('Thank you for reporting this Comment')?>
+		<?php elseif ($type=='program'):?>
+		 <?=$this->translate('Thank you for reporting this Program')?>
+		<?php elseif ($type=='proposal'):?>
+		 <?=$this->translate('Thank you for reporting this Proposal')?>
+		 
+		<?php endif;?>
+		
+         
+           
+			</div>
+			<!-- /12 -->
+			
+	</div>
+		<!-- end row -->
+
+    <div class="row">
+    	<div class="col-xs-12">
+    		<hr />
+		</div>
+	</div>
+    
+    <div class="row">
+    	<div class="col-xs-12 text-right">
+            <button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i> <?= $this->translate('Close')?></button>
+		</div>
+    </div><!-- /r -->
+
+
+</div>
+
+<!-- /report/add-report-success -->
+

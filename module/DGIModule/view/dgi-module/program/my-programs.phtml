@@ -1,0 +1,134 @@
+<!-- program/my-programs -->
+
+<div id="program-my-programs"
+	data-url="<?= $this->url('program', array('action'=>'my-programs'));?>">
+    
+    
+			<div class="row"><div class="col-md-12">
+            <div class="big"><?= $this->translate('My Programs for City / Region / Country')?></div>
+            </div>
+            </div>
+
+    
+    
+	
+	<hr>
+	<?php $levels = $this->configItem('demodyne.level');?>
+	<?php foreach ($myPrograms as $level => $program):?>
+	<div class="table-layout">
+		<?php if ($program):?>
+		<?php $index = $program->getProgLevel();?>
+		<div class="table-cell">
+			<div class="row">
+			<?php
+                $levelName = '';
+                $level = '';$levelNameFlag=null;
+                if (array_search($program->getProgLevel(), $levels)=='city') {
+                    $levelName = $program->getCity()->getCityName();
+                    $level='city';
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='region') {
+                    $levelName = $program->getCity()->getRegion()->getRegionName();
+                    $level='region';
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='country') {
+                    $levelName = $program->getCity()->getCountry()->getCountryName();
+                    $levelNameFlag = '<img src="/img/flags/'.str_replace(' ', '-', $levelName).'.png" style="margin-bottom: 4px;" width="18" height="12"> '.$levelName;
+                    $level='country';
+                }
+                
+           
+                $programDescription = $program->getProgDescription(); 
+                $programDescription = (strlen($programDescription) > 150) ? substr($programDescription, 0, 150) . '...' : $programDescription
+           
+                ?>
+				<div class="col-md-6 col-xs-12">
+					<span class="big"><a
+						href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
+						id="program-my-programs-item"
+						title="<?= $programDescription ?>"><?= $program->getProgName(); ?></a></span><br>
+					<?php if ($level=='city'):?>
+					<?= sprintf($this->translate('Program for city %s'), $levelName)?><br>
+					<?php elseif ($level=='region'):?>
+					<?= sprintf($this->translate('Program for region %s'), $levelName)?><br>
+					<?php elseif ($level=='country'):?>
+					<?= sprintf($this->translate('Program for country %s'), $levelNameFlag?$levelNameFlag:$levelName)?><br>
+					<?php endif;?>
+					
+				<div class="top5"><?= $this->translate('Published')?> <i class="fa fa-clock-o"></i> <?= $program->getProgCreatedDate()->format("d/m/Y") ?></div>
+            
+            </div>
+				<div class="col-md-6 col-xs-12"><?= $this->{"categories-$index"}?></div>
+			</div>
+		</div>
+		<div class="table-cell fixed-width-150 text-right">
+			<a target="_parent"
+				href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"><?= sprintf($this->translate('<span title="Linked Proposals / Official Measures">%d Linked Items</span>'), count($program->getProposals()))?></a>
+			<br /> 
+			
+			
+			
+			<a
+				href="<?= $this->url('program', array('action'=>'add-proposals-from-city', 'id' => $program->getProgUUID()));?>"
+				id="program-my-programs-add-remove-proposals"
+				title="<?=sprintf($this->translate('Add/Remove Proposals and Measures in your Program'), $levelName)?>"
+				data-dialog-title="<?=sprintf($this->translate('Add/Remove Proposals/Measures in your Program for %s'), $levelName)?>"><i
+				class="fa fa-plus-circle"></i> <?= $this->translate('Add Items')?></a>
+			<br /> <a
+				href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>#comment-list"
+				title="<?= $this->translate('Comments')?>"><i class="fa fa-comments"></i> <?= sprintf($this->translate('%d Comments'), count($program->getComments()))?></a>
+		</div>
+		<?php else:?>
+		
+		<?php
+                $levelName = $level;
+                if ($user) {
+                    if ($level=='city') {
+                        $levelName = $user->getCity()->getCityName();
+                    }
+                    elseif ($level=='region') {
+                        $levelName = $user->getCity()->getRegion()->getRegionName();
+                    }
+                    elseif ($level=='country') {
+                        $levelName = $user->getCity()->getCountry()->getCountryName();
+                    }
+                }
+         ?>
+		
+
+
+
+
+
+		<div class="table-cell">
+			<div class="row">
+				<div class="col-md-12">
+                <?php if ($user):?>
+    			<button type="button" class="btn btn-orange"
+    				id="program-my-programs-add-new-program" data-url="<?=$this->url('program', array('action'=>'add-program', 'level' => $level))?>" 
+    				data-dialog-title="<?=sprintf($this->translate('Create my Program for my %s, %s'), ucfirst($this->translate($level)), $levelName)?>">
+    				<i class="fa fa-plus-circle"></i> <?= sprintf($this->translate('Create my Program for %s'), $levelName)?></button>
+    			<?php else:?>
+    			<button type="button" class="btn btn-orange"
+    				data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
+    				data-dialog-title="<?=$this->translate('Please register')?>"
+    				id="please-register-button">
+    				<i class="fa fa-plus-circle"></i> <?= sprintf($this->translate('Create my Program for %s'), ucfirst($this->translate($levelName)))?></button>
+				<?php endif;?>
+				</div>
+			</div>
+		</div>
+		<?php endif;?>
+	</div>
+	<hr>
+	<div class="bot10"></div>
+	<?php endforeach;?>
+	
+</div>
+<script type="text/javascript">
+  $(function(){
+	  programMyProgramsHandlers();
+	  });
+</script>
+
+<!-- /program/my-programs -->

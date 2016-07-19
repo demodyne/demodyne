@@ -1,0 +1,42 @@
+<!-- pages/terms-fr -->
+
+<?php if ($user = $this->identity()):?>
+<div class="modal-header-soft round5top ui-draggable-handle">
+<button type="button" class="close">
+        <?php if ($_SESSION['level']['level']=='city'):?>
+        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
+        <?php elseif ($_SESSION['level']['level']=='country'):?>
+        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
+        <?php endif;?>
+    </button>
+	<button type="button" class="close" id="history-back">
+		<i class="fa fa-arrow-circle-left w right10"></i>
+	</button>
+	<span class="big" id="modal-dialog-title"><strong><?= $this->translate('Terms & Conditions')?></strong></span>
+</div>
+<?php else:?>
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+	<button type="button" class="close" id="history-back">
+		<i class="fa fa-arrow-circle-left w right10"></i>
+	</button>
+	<span class="big" id="modal-dialog-title">
+<!--
+    <a href="../"><img
+			src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30"
+			alt="DEMODYNE - Shape your Society" /></a> -
+-->
+      <strong><?= $this->translate('Terms & Conditions')?></strong></span>
+</div>
+<?php endif;?>
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<img src="<?= $this->basePath('img/uc.png') ?>">
+			<p>La page <span class="orange big">DEMODYNE / <?= $this->translate('Terms & Conditions')?></span> <?= $this->translate('is under construction')?>.<br />
+<?= $this->translate('Please come back later. Thank you')?>!</p>
+			<p>&nbsp;</p>
+		</div>
+	</div>
+</div><!-- end jumbotron -->
+
+<!-- /pages/terms-fr -->

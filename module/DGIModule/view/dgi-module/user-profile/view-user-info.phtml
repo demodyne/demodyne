@@ -1,0 +1,78 @@
+<!-- user-profile/view-user-info -->
+
+<h2 class="text-center">
+	<i class="fa fa-info-circle"></i> <?= sprintf($this->translate('%s\'s General Info'),  $user->getUsrName())?></h2>
+<hr class="bot20" />
+				<div class="row">
+					<div class="col-md-4 col-md-offset-2">
+						<strong><?= $this->translate('City')?>:</strong> <?=$user->getCity()->getCityName()?><br> <strong><?= $this->translate('County')?>:</strong>
+						<?=$user->getCity()->getStateName()?><br> <strong><?= $this->translate('Country')?>:</strong>
+						<?=$user->getCountry()->getCountryName()?> <img
+							src="<?= $this->basePath('img/flags/'.$user->getCountry()->getCountryName().'.png') ?>"
+							valign="middle" width="25" height="17" alt="<?=$user->getCountry()->getCountryName()?>" />
+						<hr>
+						<p>
+							<strong><?= $this->translate('Username')?>:</strong> <span
+								class="orange"><?= $user->getUsrName() ?></span>
+						</p>
+						<p>
+							<strong><?= sprintf($this->translate("About %s:"), $user->getUsrName())?></strong><br>
+
+							<?= $user->getusrPresentation() ?>
+						</p>
+						
+					
+							
+					</div>
+					<!--/6-->
+					<div class="col-md-4">
+						<span class="badge"><?=$totalProp?></span> <?= $this->translate('Proposals Published:')?><br>
+						<span class="label label-success"
+							title="<?= $this->translate('Debate step, NO implementation yet')?>">&nbsp;D&nbsp;</span> <?= isset($propNo['debate'])?$propNo['debate']:0?> <?= $this->translate('in Debate phase')?><br>
+						<span class="label label-success"
+							title="<?= $this->translate('Voting step, NO implementation yet')?>">&nbsp;V&nbsp;</span> <?= isset($propNo['vote'])?$propNo['vote']:0?> <?= $this->translate('in Voting phase')?><br>
+                    
+                    	<span class="label label-success" title="<?= $this->translate('Implementation, Planning step')?>">&nbsp;P&nbsp;</span> <?= isset($propNo['plan'])?$propNo['plan']:0?> <?= $this->translate('in Planning phase')?><br>
+                    
+                    	<span class="label label-success" title="<?= $this->translate('Implementation, Execution step')?>">&nbsp;E&nbsp;</span> <?= isset($propNo['execute'])?$propNo['execute']:0?> <?= $this->translate('in Execution phase')?><br>
+                    
+                    	<span class="label label-success" title="<?= $this->translate('Implementation, Proposal Completed')?>">&nbsp;C&nbsp;</span> <?= isset($propNo['followup'])?$propNo['followup']:0?> <?= $this->translate('completed')?><br>
+						
+<!-- 						<hr> -->
+
+
+<!-- 
+<?= $this->translate('Champion for')?> <span class="badge">x</span> <?= $this->translate('Proposals')?>
+
+
+
+<hr>
+
+
+<!-- 
+<?= $this->translate('Top 3 Categories of interest')?>: 
+
+<img src="<?php echo $this->basePath('img/environnement100x100.png') ?>" valign="middle" width="24" height="24" class="round5"> 
+<img src="<?php echo $this->basePath('img/famille100x100.png') ?>" valign="middle" width="24" height="24" class="round5"> 
+<img src="<?php echo $this->basePath('files/catImage1426170306.jpg') ?>" valign="middle" width="24" height="24" class="round5">
+ -->
+
+
+</div>
+					<!--/6-->
+				</div>
+				<!--/r-->
+				<hr />
+				<div class="row">
+					<div class="col-md-4 col-md-offset-2">
+						<button type="submit" class="btn btn-orange">
+							<i class="fa fa-envelope-o" id=""></i> <?= $this->translate('Send message')?></button>
+					</div>
+					<div class="col-md-4">
+						<button type="submit" class="btn btn-orange">
+							<i class="fa fa-plus-circle"></i> <?= $this->translate('Add to Contacts')?></button>
+					</div>
+				</div>
+			
+
+<!-- /user-profile/view-user-info -->

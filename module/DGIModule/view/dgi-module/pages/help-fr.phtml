@@ -1,0 +1,87 @@
+<!-- pages/help-fr -->
+<?php $user = $this->identity(); ?>
+<?php if ($user): ?>
+<div class="modal-header-soft round5top ui-draggable-handle">
+<button type="button" class="close">
+        <?php if ($_SESSION['level']['level']=='city'):?>
+        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
+        <?php elseif ($_SESSION['level']['level']=='country'):?>
+        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
+        <?php endif;?>
+    </button>
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title"><strong><?= $this->translate('Guide de l\'Utilisateur DEMODYNE - Aide & Astuces')?></strong></span>
+  </div>
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+<?php else:?>
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title">
+<!--
+    <img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> -
+-->
+    <strong><?= $this->translate('Guide de l\'Utilisateur DEMODYNE - Aide & Astuces')?></strong></span>
+  </div>
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+<?php endif;?>
+<div class="row">
+<div class="col-md-3">
+<span style="bot10"><strong>S'inscrire sur DEMODYNE</strong></span>
+<ul>
+<li><a href="#citizen-registration">Inscription comme Citoyen</a></li>
+<li><a href="#administration-registration">Inscription comme Administration</a></li>
+<li><a href="#partner-registration">Inscription comme Partenaire</a></li>
+</ul>
+<span style="bot10"><strong>Page d'Accueil</strong></span>
+<ul>
+<li><a href="#citizen-landing-page">Page d'Accueil Citoyen</a></li>
+</ul>
+</ul>
+</div><!--/3-->
+<div class="col-md-9">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="bot50" id="citizen-registration">
+<span class="big"><strong>Inscription comme Citoyen</strong></span>
+<hr>
+<p>Bienvenue  sur DEMODYNE!</p>
+<p>Ce  portail web a été conçu pour fournir aux citoyens tous les outils  dont ils ont besoin pour leur vie civique, en un seul endroit.</p>
+<p>Insistons  d'emblée sur le fait que <strong>vos  données personnelles ne seront JAMAIS divulguées à des tiers</strong>,  sauf si vous violez la loi ou les conditions d'utilisations. Tout  ce que vous postez sera lié à un nom d'utilisateur que vous  choisissez et vous n'êtes pas obligé(e) d'utiliser une photo de  vous comme avatar.</p>
+<p>Pour  vous inscrire, vous devez entrer vos <strong>nom  et prénom réels</strong>.  Ceux-ci seront gardés <strong>confidentiels</strong> sauf si vous choisissez de les rendre publics sur votre page de  profil.</p>
+<p>Nous  ferons des audits, notamment en recoupant nos listings d'utilisateurs  avec des données publiques, juste pour nous assurer que Batman,  Cendrillon ou autres identités inventées ne bénéficient pas des  même privilèges citoyens que vous&nbsp;!</p>
+<p>Votre <strong>année de naissance </strong>et votre <strong>sexe</strong> sont aussi confidentiels et seulement utilisés pour bien distinguer  les comptes en cas d'homonymie (personnes différents avec les  mêmes noms et prénoms) ou pour des statistiques.</p>
+<p>Votre <strong>email</strong> est nécessaire pour valider votre compte et vous envoyer des  informations importantes. Nous ne vous enverrons pas d'office des  myriades d'informations par mail, à vous de souscrire à notre  newsletter si vous le souhaitez. Nous ne donnerons ou vendrons jamais  votre email à des tiers&nbsp;!</p>
+<p>Votre <strong>téléphone</strong> est optionnel, mais nous vous encourageons à le préciser, il nous  permettra de vous contacter rapidement en cas d'activité anormale  ou suspecte sur votre compte. Là encore, confidentialité complète.</p>
+<p>Votre <strong>nom d'utilisateur</strong> est unique et sera le seul identifiant visible (avec votre image de  profil) pour vos propositions citoyennes, commentaires, scénarios  etc.</p>
+<p>Soyez  attentif si vous choisissez un nom d'utilisateur que vous employez  déjà sur d'autres sites, cela peut permettre de recouper votre  identité.</p>
+<p>Votre <strong>mot de passe</strong> doit être une combinaison de lettres et de chiffres, au moins 8  caractères. Il tient compte des majuscules. Ne le partagez avec  personne&nbsp;!</p>
+<p>Sélectionnez  votre <strong>pays</strong>,  entrez votre <strong>code  postal</strong>, puis  sélectionnez la <strong>ville</strong> parmi les choix proposés. Cette étape est très importante car  DEMODYNE vous permet de contribuer pour la ville, la région et le  pays correspondant à ces informations.</p>
+<p>Recopier le texte de  la capture, cliquer Enregistrer. Si le formulaire est complet, vous  allez recevoir un email de validation pour activer le compte.</p>
+</div>
+<div class="bot50" id="administration-registration">
+<span class="big"><strong>Inscription comme Administration</strong></span>
+<hr>
+<p>Les comptes  Administration <strong>sont strictement réservés</strong> aux administrations  officielles en charge d'une ville, d'une région ou d'un pays  (ex&nbsp;: Mairie, Conseil Régional, Secrétariat Général du  Gouvernement).</p>
+<p>Nous vérifierons  toutes les demandes  directement auprès des administrations  concernées avant d'activer le compte, cela peut prendre quelques  jours.</p>
+</div>
+<div class="bot50" id="partner-registration">
+<span class="big"><strong>Inscription comme Partenaire</strong></span>
+<hr>
+<p>En cours de construction. Revenez jeter un oeil plus tard… Merci!</p>
+</div>
+<div class="bot50" id="citizen-landing-page">
+<span class="big"><strong>Page d'Accueil Citoyen</strong></span>
+<hr>
+<p>Notez d'abord la  barre de menu en haut de l'écran, qui reste accessible tout au  long de la navigation sur DEMODYNE.</p>
+<p>Partie gauche&nbsp;:</p>
+<p><img src="<?php echo $this->basePath('img/help1.png') ?>" class="img-responsive"></p>
+<p>Partie droite:</p>
+<p><img src="<?php echo $this->basePath('img/help2.png') ?>" class="img-responsive"></p>
+<p>Si vous ne vous êtes  pas encore familiarisé avec les tableaux de bord pour votre ville,  votre région et le pays, laissez vous guider en répondant  simplement au questions au centre de l'écran d'accueil&nbsp;:  quelques clics vous amènerons là où vous voulez aller&nbsp;!</p>
+<p><img src="<?php echo $this->basePath('img/help3.png') ?>" class="img-responsive"></p>
+</div>
+</div></div><!--/panel-->
+</div><!--/9-->
+</div><!-- end row -->
+</div><!-- end jumbotron -->
+<!-- /pages/help-fr -->

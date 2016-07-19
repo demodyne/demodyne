@@ -1,0 +1,78 @@
+<!-- index/loggedin -->
+
+<div class="jumbotron round5top" id="logged-in">
+
+<div class="row">
+<div class="col-md-12  col-xs-12 ">
+
+<?php if ($user->isAdministration()):?>
+<?= $this->partial('administration-steps.phtml', array('user' => $user)); ?>
+<?php else:?>
+<?= $this->partial('user-steps.phtml', array('user' => $user)); ?>
+<?php endif;?>			
+					
+					
+					
+					<!-- ------------------------------------------------------------------ -->
+					<!-- ------------------------------------------------------------------ -->
+					<!-- ------------------------------------------------------------------ -->
+					<!-- ------------------------------------------------------------------ -->
+					<!-- ------------------------------------------------------------------ -->
+					<!-- ------------------------------------------------------------------ -->
+					<!-- ------------------------------------------------------------------ -->
+					<div class="row top20">
+						<div class="col-md-12 text-center">
+							<hr />
+						</div>
+						<!-- /12 -->
+					</div>
+					<!-- /row -->
+					<div class="row">
+						<div class="col-xs-3 text-center">
+							<a href="http://forum.demodyne.org/showthread.php?tid=6" class="gray" target="_blank"><i
+								class="fa fa-info-circle fa-3x"></i>
+								<h5 class="big"><?= $this->translate('About us')?></h5></a>
+						</div>
+						<div class="col-xs-3 text-center">
+							<a
+								href="https://www.vimeo.com/demodyne"
+								target="_blank" class="gray"><i class="fa fa-film s38"></i>
+								<h5 class="big"><?= $this->translate('Videos & Tutorials')?></h5></a>
+						</div>
+						<div class="col-xs-3 text-center">
+							<a href="http://forum.demodyne.org" target="_blank" class="gray" target="_blank"><i
+								class="fa fa-comments-o fa-3x"></i>
+								<h5 class="big"><?= $this->translate('Forum')?></h5></a>
+						</div>
+						<div class="col-xs-3 text-center">
+							<a href="http://forum.demodyne.org/forumdisplay.php?fid=11" class="gray" target="_blank"><i
+								class="fa fa-rocket fa-3x"></i>
+								<h5 class="big"><?= $this->translate('Support us')?>!</h5></a>
+						</div>
+					</div>
+					<!-- /row -->
+</div><!--/col-->
+
+
+
+				
+
+
+			</div>
+			<!-- end row -->
+
+</div><!-- /j -->
+
+
+<script type="text/javascript">
+
+
+$(function(){
+
+	homeLoggedinHandlers();
+		
+});
+
+</script>
+
+<!-- /index/loggedin -->

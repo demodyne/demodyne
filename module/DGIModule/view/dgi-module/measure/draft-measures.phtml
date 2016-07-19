@@ -1,0 +1,138 @@
+<!-- measure/draft-measures -->
+
+<?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('measure', array('action'=>'draft-measures')), 'draft-measures', $limit, $sort, $order); ?>
+<div id="administration-dashboard-draft-measures"
+	data-url="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit));?>"
+	data-edit-measure="<?=$this->translate('Edit Official Measure')?>">
+	<div class="row">
+		<div class="col-md-6">
+			<button
+				data-url="<?= $this->url('measure', array('action'=>'add-measure')); ?>"
+				class="btn btn-orange"
+				id="administration-dashboard-draft-measures-add-new-measure"
+				data-dialog-title="<?=$this->translate('New Official Measure')?>"><i
+				class="fa fa-plus-circle"></i> <?= $this->translate('Create a new measure')?></button> <?= $this->translate('You have')?> <span
+				class="badge"><?=$measureCount?></span> <?= $this->translate('Draft Measures')?>
+		</div>
+		<!-- /6 -->
+		<div class="col-md-6">
+			
+			<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-down"></i> </span>
+							<!--  by <span class="caret"></span> -->
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-draft-proposals"
+								href="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>'created-date', 'order'=>'desc'));?>"><?= $this->translate('Created date')?></a></li>
+							<li><a id="page-draft-proposals"
+								href="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>'name', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('Name')?></a></li>
+							<li><a id="page-draft-proposals"
+								href="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>'category', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('Category')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-up"></i> </span>
+							<!-- by <span class="caret"></span> -->
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-draft-proposals"
+								href="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>'created-date', 'order'=>'asc'));?>"><?= $this->translate('Created date')?></a></li>
+							<li><a id="page-draft-proposals"
+								href="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>'name', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Name')?></a></li>
+							<li><a id="page-draft-proposals"
+								href="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>'category', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Category')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr right10 top5"><?= $this->translate('Sorted by')?> <?php if ($sort=='created-date'):?><?= $this->translate('Created date')?><?php else:?><?=ucfirst($sort)?><?php endif;?> 
+                    <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
+		</div>
+		<!--/6-->
+	</div>
+	<!-- /row -->
+	<hr>
+
+
+
+
+            <?php if(count($pagedProposals)>0):?>
+
+                <?php foreach($pagedProposals as $index => $proposal): ?>
+
+
+
+
+
+<div class="table-layout">
+		<div class="table-cell fixed-width-60">
+			<img
+				src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
+				height="42" width="42"
+				title="<?= $proposal->getCat()->getCatCat()->getCatName() ?>">
+		</div>
+		<div class="table-cell">
+			<div class="row">
+				<div class="col-md-6 col-xs-12">
+
+<?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName()?><br />
+
+<?php $proposalDescription = $this->escapeHtml($proposal->getPropDescription()); 
+      $proposalDescription = (strlen($proposalDescription) > 150) ? substr($proposalDescription, 0, 150) . '...' : $proposalDescription;?>
+
+<a
+						href="<?= $this->url('measure', array('action'=>'edit-measure', 'id'=>$proposal->getPropUUID()));?>"
+						title="<?= $proposalDescription ?>"
+						id="administration-dashboard-draft-measures-edit-draft"
+						data-id="<?= $proposal->getPropUUID()?>"><span class="big"><?= $this->escapeHtml($proposal->getPropSavedName()) ?></span></a>
+				</div>
+				<div class="col-md-3 col-xs-6">
+					<?= $this->translate('Created')?> <br> <i class="fa fa-clock-o"></i> <?= $proposal->getPropCreatedDate()->format('d/m/Y') ?>
+
+</div>
+				<div class="col-md-3 col-xs-6">
+					<?= $this->translate('Last updated')?> <br> <i class="fa fa-clock-o"></i> <?= $proposal->getPropSavedDate()->format('d/m/Y')?> 
+
+</div>
+			</div>
+		</div>
+		<div class="table-cell fixed-width-150">
+
+<?php $measure = $proposal->getMeasure();?>
+
+<?= $this->translate('Start')?>: <?=$measure->getMesStartDate()?$measure->getMesStartDate()->format('d/m/Y'):'Undefined'?> <br>
+<?= $this->translate('Cost')?>: <?=$measure->getMesCost()?$measure->getMesCost().' '.$proposal->getCity()->getCountry()->getCountryCurrency():'Undefined'?>
+
+    </div>
+	</div>
+	<hr />
+
+                        <?php endforeach; ?>
+
+                    <?php else:?>
+
+                        <div class="row"><div class="col-md-12"><?= $this->translate('There are no draft official measures in your city.')?></div></div>
+
+                    <?php endif;?>
+
+<?= $paging; ?>
+
+
+        </div>
+<!-- /jumbotron -->
+
+<script type="text/javascript">
+    $(function () {
+    
+    	mesureDraftMeasuresHandlers();
+    
+    });
+</script>
+
+<!-- /measure/draft-measures -->

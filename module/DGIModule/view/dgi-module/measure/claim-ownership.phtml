@@ -1,0 +1,40 @@
+<!-- measure/claim-ownership -->
+
+<div id="measure-claim-ownership">
+	<form method="post" id="measure-claim-ownership-form"
+		action="<?= $this->url('measure', array('action' => 'claim-ownership', 'id'=>$proposal->getPropUUID()));?>">
+		<div class="row">
+			<div class="col-md-12">
+	            <?= $this->translate('You are about to claim ownership of the Official Measure')?> '<strong><?= $proposal->getPropName() ?></strong>'.<br>
+				<?= $this->translate('This will validate the Measure and signal to Citizens that the information is now maintained by the Administration')?>.<br> <?= $this->translate('You can make any necessary updates to the Measure at a later time. Citizens will no longer be able to edit content')?>.<br>
+			</div>
+			<!-- /12 -->
+		</div>
+		<!-- end row -->
+		<div class="row">
+			<div class="col-xs-12">
+				<hr />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<button type="submit" class="btn btn-orange"
+					id="measure-claim-ownership-submit">
+					<i class="fa fa-certificate"></i> <?= $this->translate('Proceed')?>
+				</button>
+				<button type="button" class="btn" data-dismiss="modal">
+					<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?>
+				</button>
+			</div>
+		</div>
+		<!-- /r -->
+	</form>
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			measureClaimOwnershipHandlers();
+			
+		});
+	</script>
+</div>
+<!-- /measure/claim-ownership -->

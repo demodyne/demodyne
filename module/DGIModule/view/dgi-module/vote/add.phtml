@@ -1,0 +1,70 @@
+<!-- vote/add -->
+
+<?php if ($proposal->getPropStatus()>= $this->configItem('demodyne.proposal.status.type.vote') || $proposal->isMeasure()):?>
+<div id="add-change-vote-div">
+<?php if ((!$owner || $proposal->isMeasure()) && (!$user || (!$user->isPartner() && !$user->isAdministration()))): ?>
+    <?php $voteForm->prepare();?>
+    <?php $voteForm->setAttribute('action', $this->url('vote', array('action'=>'add', 'id'=>$proposal->getPropUUID())));?>
+    <?php $voteForm->setAttribute('method', 'post');?>
+    <?=  $this->form()->openTag($voteForm);?>
+    <div class="row">
+    <div class="col-md-12">
+    	<div class="form-group">
+    		<label for="voteVote" class="col-md-3 control-label big"><?= $this->translate('My vote:')?></label>
+    		<div class="col-md-4">
+    			<?= $this->formElement($voteForm->get('voteVote'));?>
+    		</div>
+    		<div class="col-md-5">
+    			<?php if ($user):?>    	
+    				<?php if (($proposal->getPropLevel()==$this->configItem('demodyne.proposal.level.city') && ( $proposal->getCity()==$user->getCity() || $proposal->getCity()==$user->getCity()->getFullCity() || ($proposal->getCity()->getDistrictCode()==$user->getCity()->getDistrictCode() && $proposal->getCity()->getFullCity()==$user->getCity()->getFullCity()) || ($proposal->getPropFullCity() && $proposal->getCity()->getFullCity()==$user->getCity()->getFullCity())) || 
+    				          ($proposal->getPropLevel()==$this->configItem('demodyne.proposal.level.region') && $proposal->getCity()->getRegion()==$user->getCity()->getRegion()) ||
+    			               $proposal->getPropLevel()==$this->configItem('demodyne.proposal.level.country') && $proposal->getCity()->getCountry()==$user->getCountry()  )):?>	
+            			<?php if (!$voted):?>
+            				<button type="submit" class="btn btn-orange"><i class="fa fa-sticky-note-o" id="add-change-vote-div-icon"></i> <?= $this->translate('Vote!')?></button>
+            			<?php else:?>
+            				<button type="submit" class="btn btn-orange" disabled="disabled" id="changeVoteBtn"><i class="fa fa-sticky-note-o" id="add-change-vote-div-icon"></i> <?=$this->translate('Change my vote!');?></button>
+            			<?php endif;?>
+        			<?php else:?>
+    				<button type="button" class="btn btn-orange" data-url="<?=$this->url('home/error', array('action'=>'error', 'dialog' => true,'message'=>'You cannot vote in other city, region or country other than yours'))?>" data-dialog-title="<?=$this->translate('Viewing mode')?>" id="viewing-mode"><i class="fa fa-sticky-note-o"></i> <?= $this->translate('Vote!')?></button>
+    				<?php endif;?>
+				<?php else:?>
+    				<button type="button" class="btn btn-orange" data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>" data-dialog-title="<?=$this->translate('Please register')?>" id="please-register-button"><i class="fa fa-sticky-note-o" id="add-change-vote-div-icon"></i> <?= $this->translate('Vote!')?></button>    			
+    			<?php endif;?>
+    				<br />
+    				<span class="text-danger"><?= $this->formElementErrors($voteForm->get('voteVote'));?></span></div>
+    	</div>
+        </div>
+    </div><!-- /row -->
+    <?=$this->form()->closeTag();?>
+<?php else:?>
+			<span for="voteVote" class="big"><?= $this->translate('My vote:')?></span>
+			<?php if ($user->getCity()==$proposal->getCity()):?>
+				<?php if ($owner && !$proposal->isMeasure()): ?>
+					<?=$this->translate('You cannot vote for this proposal as it is one of yours.');?>
+				<?php elseif ($user->isPartner()):?>
+					<?=$this->translate('As partner you cannot vote a proposal/measure.');?>
+				<?php elseif ($user->isAdministration()):?>
+					<?=$this->translate('As administration you cannot vote a proposal/measure.');?>
+				<?php endif;?>
+			<?php else:?>
+				<?=$this->translate('You cannot vote for a proposal for another city than yours.');?>
+			<?php endif;?>
+<?php endif;?>
+	<hr />
+	<div class="row bot10">
+		<div class="col-md-5 big"><?= $this->translate('Community vote:')?></div>
+        <div class="col-md-7 top5"><?= $this->voteViewSection ?></div>
+	</div>
+	<!-- /row -->
+</div>
+<script type="text/javascript">
+$(function () {
+	voteAddHandlers(<?= $vote->getVoteVote()?>);
+});
+</script>
+<?php else: ?>
+  	<div>
+	<span class="big"><?= $this->translate('Vote section')?>:</span> <?= sprintf($this->translate('Please wait for the discussion step to end in %d  days'), $proposal->getPropDebatePeriod() - (new \DateTime())->diff($proposal->getPropPublishedDate())->days)?>.</div>
+<?php endif; ?>
+
+<!-- /vote/add -->

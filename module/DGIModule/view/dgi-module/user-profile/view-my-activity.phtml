@@ -1,0 +1,83 @@
+<!-- user-profile/view-my-activity -->
+
+<h2 class="text-center"><i class="fa fa-paper-plane-o"></i> <?= $this->translate('Activity')?><br />
+<span class="small"><?= $this->translate('Your Demodyne Activity')?></span></h2> 
+
+<hr class="bot20" />
+
+
+<div class="row">
+
+<div class="col-md-2 col-xs-0"></div>
+
+<div class="animated flipInY col-md-4 col-xs-12 text-center">
+<h4><strong><?= $this->translate('Proposals')?></strong></h4>
+<span class="s32"><strong><?=$totalProp?></strong></span>
+<div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['debate'])?$propNo['debate']:0?></span> <?= $this->translate('in Debate')?></button></div>
+<div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['vote'])?$propNo['vote']:0?></span> <?= $this->translate('in Vote')?></button></div>
+<div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['plan'])?$propNo['plan']:0?></span> <?= $this->translate('in Planning')?></button></div>
+<div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['execute'])?$propNo['execute']:0?></span> <?= $this->translate('in Execution')?></button></div>
+<div class="bot5"><button type="button" class="btn btn-success" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['followup'])?$propNo['followup']:0?></span> <?= $this->translate('Completed')?></button></div>
+<a href="<?= $this->url($_SESSION['level']['level'])?>#myprop2" class="btn btn-orange"><i class="fa fa-eye"></i> <?= $this->translate('View All')?></a>
+</div>
+
+<div class="animated flipInY col-md-4 col-xs-12 text-center">
+<h4><strong><?= $this->translate('Programs')?></strong></h4>
+<span class="s32"><strong><?=count($user->getPrograms())?></strong></span>
+<hr>
+<?php 
+    $programs = [];
+    foreach ($myPrograms as $program) {
+        $programs[$program->getProgLevel()] = $program;    
+    }
+    ksort($programs);
+    $levels = $this->configItem('demodyne.level');
+    ?>
+    
+    <?php foreach ($programs as $program):?>
+    <?php
+                $levelName = '';
+                $level = '';
+                if (array_search($program->getProgLevel(), $levels)=='city') {
+                    $levelName = $program->getCity()->getCityName();
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='region') {
+                    $levelName = $program->getCity()->getRegion()->getRegionName();
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='country') {
+                    $levelName = $program->getCity()->getCountry()->getCountryName();
+                    $level='country';
+                }
+                
+           
+                $programDescription = $program->getProgDescription(); 
+                $programDescription = (strlen($programDescription) > 150) ? substr($programDescription, 0, 150) . '...' : $programDescription
+           
+                ?>
+    
+    
+    <span class="big">
+    <?php if ($level=='country'):?>
+						<img src="/img/flags/<?= str_replace(' ', '-', $levelName)?>.png" style="margin-bottom: 4px;" width="25" height="17">
+						<?php endif;?>
+    <strong><?= $levelName?></strong></span>
+	<p><a href="<?= $this->url('program', array('action' =>'view-program', 'id'=>$program->getProgUUID()));?>"><span class="big"><?=$program->getProgName()?></span></a></p>
+    
+    
+    <?php endforeach;?>
+<a href="<?= $this->url($_SESSION['level']['level'])?>#myscn" class="btn btn-orange"><i class="fa fa-eye"></i> <?= $this->translate('View All')?></a>
+</div>
+
+<div class="col-md-2 col-xs-0"></div>
+
+</div><!--/r-->
+
+
+
+
+
+
+<hr style="width:75%;" />
+
+
+<!-- /user-profile/view-my-activity -->

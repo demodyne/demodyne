@@ -1,0 +1,52 @@
+<!-- inbox/my-inbox -->
+
+<div id="inbox-my-inbox">
+
+<div class="row">
+
+	<div class="col-md-6">
+
+<div>
+
+<?= $this->partial('dgi-module/inbox/inbox-partial-menu.phtml', true); ?>
+
+</div>
+
+<div id="inbox-my-inbox-list">
+
+<?= $this->listReceivedSection;     ?>
+
+
+
+</div>
+
+	</div>
+
+	<div class="col-md-6" id="inbox-view-div" >
+	
+	<?php if ($viewReceived):?>
+		<?= $this->viewReceivedSection?>
+	<?php else:?>
+			<div class="panel panel-default" id="inbox-view-message">
+				<div class="panel-body"
+					style="min-height: 450px !important; text-align: center; vertical-align: middle;">
+					<div class="row">
+						<div class="col-md-12 col-xs-12"><?= $this->translate('Please select a message to view.')?>
+						</div>
+					</div>
+				</div>
+				<!--/panel-body-->
+			</div>
+			<!-- end panel -->
+<?php endif;?>
+
+
+	</div>
+
+</div>
+
+</div>
+
+<!-- /inbox/my-inbox -->
+
+

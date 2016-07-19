@@ -1,0 +1,47 @@
+<!-- program/add-proposal-success -->
+
+<div id="program-add-proposal-success">
+
+	<div class="row">
+		<div class="col-md-12">
+		
+           <?= sprintf($this->translate('The Proposal <strong>%s</strong> has been added to Program <strong>%s</strong>'), $proposal->getPropName(), $program->getProgName())?><br>
+           
+           
+			</div>
+			<!-- /12 -->
+			
+	</div>
+		<!-- end row -->
+
+    <div class="row">
+    	<div class="col-xs-12">
+    		<hr />
+		</div>
+	</div>
+    
+    <div class="row">
+    	<div class="col-xs-12 text-right">
+            <a href="<?= $this->url('program', array('action' => 'view-program','id'=>$program->getProgUUID()));?>" class="btn btn-orange" id="program-add-proposal-success-goto-program"><i class="fa fa-object-group" id="add-proposal-goto-scenario-icon"></i> <?= $this->translate('Go to Program')?></a>  
+			<button type="button" class="btn" 
+				id="program-add-proposal-success-close"
+				data-url="<?= $this->url('program', array( 'action'=>'add-remove-proposal', 'proposal'=>$proposal->getPropUUID(), 'id'=> $program->getProgUUID()));?>"
+				data-remove-from-my-program="<?=$this->translate('Remove from my Program')?>"
+				data-id="<?=$proposal->getPropUUID()?>"
+			><i class="fa fa-ban"></i> <?= $this->translate('Close')?></button>
+		</div>
+    </div><!-- /r -->
+
+</div>
+
+	
+	
+<script type="text/javascript">
+	$(document).ready(function () {
+		programAddProposalSuccessHandlers();
+	});
+</script>
+
+<!-- /program/add-proposal-success -->
+	
+	

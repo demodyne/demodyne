@@ -1,0 +1,35 @@
+<?php if ($this->identity()): ?>
+
+<div class="modal-header-soft round5top ui-draggable-handle">
+<button type="button" class="close">
+        <?php if ($_SESSION['level']['level']=='city'):?>
+        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
+        <?php elseif ($_SESSION['level']['level']=='country'):?>
+        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
+        <?php endif;?>
+    </button>
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title"><strong><?= $this->translate('403 error')?></strong></span>
+  </div>
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+
+<?php else:?>
+
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title"><img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> - <strong><?= $this->translate('403 error')?></strong></span>
+  </div>
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+
+<?php endif;?>
+
+
+
+<h3><?php echo $this->translate('Access denied to this ressource') ?></h3>
+<hr />
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+
+</div>

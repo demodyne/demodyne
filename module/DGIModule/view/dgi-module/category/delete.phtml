@@ -1,0 +1,31 @@
+<!-- category/delete -->
+
+<?php
+$title = 'Delete category';
+$this->headTitle($title);
+?>
+
+
+ 
+ <h1><?php echo $this->escapeHtml($title); ?></h1>
+ 
+ <?php if ($category->getCatCat()):?>
+ <p><?= $this->translate('Are you sure that you want to delete the subcategory')?>
+   '<?= $this->escapeHtml($category->getCatName()); ?>' ?
+ </p>
+ <?php else:?>
+ <p><?= $this->translate('Are you sure that you want to delete the category')?>
+   '<?= $this->escapeHtml($category->getCatName()); ?>' ?
+   <?= $this->translate('All subcategory will also be deleted !!!')?>
+ </p>
+ <?php endif;?>
+
+ <form action="<?= $this->url('home/category', array('action' => 'delete', 'id'=>$category->getCatId())); ?>" method="post">
+ <div>
+   <input type="submit" name="del" value="Yes" />
+   <input type="submit" name="del" value="No" />
+ </div>
+ </form>
+ 
+ <!-- /category/delete -->
+ 

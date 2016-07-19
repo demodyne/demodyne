@@ -1,0 +1,95 @@
+<!-- pages/help-en -->
+<?php $user = $this->identity(); ?>
+<?php if ($user): ?>
+<div class="modal-header-soft round5top ui-draggable-handle">
+<button type="button" class="close">
+        <?php if ($_SESSION['level']['level']=='city'):?>
+        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
+        <?php elseif ($_SESSION['level']['level']=='country'):?>
+        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
+        <?php endif;?>
+    </button>
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title"><strong><?= $this->translate('The DEMODYNE User Guide - Help & Tips')?></strong></span>
+  </div>
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+<?php else:?>
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  <span class="big" id="modal-dialog-title">
+<!--
+    <a href="../"><img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> -
+-->
+    <strong><?= $this->translate('The DEMODYNE User Guide - Help & Tips')?></strong></span>
+  </div>
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+<?php endif;?>
+<div class="row">
+<div class="col-md-3">
+<span style="bot10"><strong>Registering with DEMODYNE</strong></span>
+<ul>
+<li><a href="#citizen-registration">Citizen Registration</a></li>
+<li><a href="#administration-registration">Administration Registration</a></li>
+<li><a href="#partner-registration">Partner Registration</a></li>
+</ul>
+<span style="bot10"><strong>LANDING PAGE</strong></span>
+<ul>
+<li><a href="#citizen-landing-page">Citizen Landing Page</a></li>
+</ul>
+</ul>
+</div><!--/3-->
+<div class="col-md-9">
+<div class="panel panel-default">
+<div class="panel-body">
+<div class="bot50" id="citizen-registration">
+<span class="big"><strong>Citizen Registration</strong></span>
+<hr>
+<p>Welcome to DEMODYNE!</p>
+<p>This web portal has been designed to provide citizens with all the tools they need for their civic life, in one place.</p>
+<p>We want to emphasize upfront that <strong>NONE of your personal data will be disclosed to anyone</strong>, unless you violate the law or the terms of use. Everything you post will be linked to a username of your choice, and you don't have to put your face on your profile if you don't want to.</p>
+<p>To register, you first need to provide your <strong><u>real</u> first name and last name</strong>.</p>
+<p>These will be kept <strong>confidential</strong>, unless you set them to publicly appear in your profile.</p>
+<p>We will conduct audits, such as cross checking the list of registered users with lists of registered voters in a given city… just to make sure Batman, Cinderella or John/Jane Doe don't get the same civic rights as real people J</p>
+<p>Your <strong>birth year</strong> and <strong>gender</strong> are also kept confidential and only used to distinguish accounts of different people with the same name, or for our general stats.</p>
+<p>Your <strong>email</strong> address will be used to validate your account and send you important information. We won't force-feed you with unwanted updates, subscribing to our newsletters is up to you. We'll never give or sell your email to third parties!</p>
+<p>Your <strong>phone</strong> is optional, however we strongly recommend providing it, as it will allow us to get in touch quickly with you if we notice any abnormal activity or issue with your account. Again, remains completely confidential.</p>
+<p>Your <strong>username</strong> is unique and will be the only identifier that appears publicly on your proposals, comments, scenarios etc. You may want to avoid usernames you already use on other websites that can be easily linked with your identity.</p>
+<p>Your <strong>password</strong> should be a combination of letters and numbers, at least 8 characters. It is case sensitive. DO NOT SHARE your password with anyone.</p>
+<p>Select your <strong>country</strong>, enter your <strong>postcode</strong> then select the <strong>city</strong> among the choices proposed. This step is essential, as DEMODYNE will assign you to a specific city, state and country for which you can contribute.</p>
+<p>Lastly, enter the text you see in the Capture to prove you are not a bot, and Submit. You will receive a validation email to activate your account if the registration was successful.</p>
+</div>
+<div class="bot50" id="administration-registration">
+<span class="big"><strong>Administration Registration</strong></span>
+<hr>
+<p>Administration accounts are <strong>strictly reserved </strong>for the official administrations in charge of cities, states or countries (e.g. government of Boston City or California State).</p>
+<p>Only officials can claim these accounts, we will check all requests directly with the concerned administration before activating the account (it may take a couple of days).</p>
+<p>On the form, specify the full official <strong>name</strong> of the administration, the <strong>country</strong> and the <strong>level</strong> at which the administration governs: city, state or country.</p>
+<p>Depending on the level concerned, provide the additional information required to identify the city or state.</p>
+<p>Then add a short <strong>presentation</strong> of the administration (e.g. scope of responsibilities) and a link to its official <strong>website</strong>.</p>
+<p>The <strong>username</strong> should be a short, commonly understandable name referring to the administration (<u><strong>not</strong></u> the person in charge of managing the account) – for example, "Texas_Gov".</p>
+<p>The <strong>password</strong> should be a combination of letters and numbers, at least 8 characters. It is case sensitive. The password should be shared ONLY with employees formally authorized by the Administration to manage the account on its behalf.</p>
+<p><strong>Full details of the primary contact person</strong> (main account manager) should be provided, including direct telephone line and direct email.</p>
+<p>Enter the text from the Capture to indicate you are not an automated bot, and <strong>Submit</strong>. If the form was complete, an email will be sent to the primary contact to validate the email address.</p>
+<p>Then, the request will be transferred to our support team which who will contact the administration directly to crosscheck information provided before activating the account (a notification will be sent to the primary contact email).</p>
+</div>
+<div class="bot50" id="partner-registration">
+<span class="big"><strong>Partner Registration</strong></span>
+<hr>
+<p>Under contsruction. Please come back later. Thank you!</p>
+</div>
+<div class="bot50" id="citizen-landing-page">
+<span class="big"><strong>Citizen Landing Page</strong></span>
+<hr>
+<p>Notice first the menu bar at the top of the screen. It remains accessible wherever you are on DEMODYNE.</p>
+<p>Left part:</p>
+<p><img src="<?php echo $this->basePath('img/help1.png') ?>" class="img-responsive"></p>
+<p>Right part:</p>
+<p><img src="<?php echo $this->basePath('img/help2.png') ?>" class="img-responsive"></p>
+<p>If you are not yet familiar with the City, State and Country Dashboards, simply use the navigation guide at the center of the landing page: a few clicks will take you where you want to go!</p>
+<p><img src="<?php echo $this->basePath('img/help3.png') ?>" class="img-responsive"></p>
+</div>
+</div></div><!--/panel-->
+</div><!--/9-->
+</div><!-- end row -->
+</div><!-- end jumbotron -->
+<!-- /pages/help-en -->

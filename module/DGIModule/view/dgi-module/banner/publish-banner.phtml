@@ -1,0 +1,66 @@
+<!-- banner/publish-banners -->
+
+<div id="banner-publish-banner"
+	data-url="<?= $this->url('administration/banner', array('action'=>'publish-banner', 'id' => $banner->getBannerUUID() ));?>">
+	<?php if (count($banner->getAdmin()->getActiveBanners())<5):?>
+	
+	<div class="row">
+		<div class="col-md-12">
+           <?= $this->translate('Your banner')?> '<?= $banner->getBannerName()?>' <?= $this->translate('will be published on the news page')?>.<br>
+			<?= $this->translate('Are you sure')?>?
+		</div>
+		<!-- /12 -->
+	</div>
+	
+	<!-- end row -->
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn btn-orange"
+				id="publish-banner-yes-button">
+				<i class="fa fa-floppy-o"></i>
+				<?= $this->translate('Yes')?>
+			</button>
+			<button type="button" class="btn"
+				data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('No')?>
+			</button>
+		</div>
+	</div>
+	<!-- /r -->
+	<?php else:?>
+	<div class="row">
+		<div class="col-md-12">
+           <?= $this->translate('You already have 5 active banners. Please withdraw at least one active banner before publishing another one')?>.
+		</div>
+		<!-- /12 -->
+	</div>
+	<!-- end row -->
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn"
+				data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('Close')?>
+			</button>
+		</div>
+	</div>
+	<!-- /r -->
+	<?php endif;?>
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+		bannerPublishBannerHandlers();
+	});
+</script>
+
+<!-- /banner/publish-banners -->
+	

@@ -1,0 +1,81 @@
+<!-- account-workspace/user-workspace -->
+<div class="jumbotron">
+        <div class="row">
+          <div class="col-md-2  col-xs-4 tabbable tabs-left">
+            <ul class="nav nav-tabs">
+              <div class="text-center bot20"> 
+                <script type="text/javascript">
+                                        <!--
+                                        var currentDate = new Date()
+                                        var day = currentDate.getDate()
+                                        var month = currentDate.getMonth() + 1
+                                        var year = currentDate.getFullYear()
+                                        document.write("<strong>" + day + "/" + month + "/" + year + "</strong>")
+                                            //-->
+                                    </script> 
+                <br />
+                <script type="text/javascript">
+                                        <!--
+                                        var currentTime = new Date()
+                                        var hours = currentTime.getHours()
+                                        var minutes = currentTime.getMinutes()
+                                        if (minutes < 10)
+                                            minutes = "0" + minutes
+                                        document.write("<span style=\"font-size:28px;\">" + hours + ":" + minutes + " " + "</span>")
+                                            //-->
+                                    </script> 
+              </div>
+              <li class="active"><a href="#inbox" data-toggle="tab"><i class="fa fa-envelope-o size15em"></i><span class="badge badge-info up small" id="inbox-unread-messages-count">0</span> My Inbox</a></li>
+              <li><a href="#mycontacts" data-toggle="tab"><i class="fa fa-book size15em"></i>
+                <?= $this->translate('My Contacts')?>
+                </a></li>
+              <li><a href="#favorites" data-toggle="tab"><i class="fa fa-heart-o size15em"></i>
+                <?= $this->translate('My Favorites')?>
+                </a></li>
+              <li><a href="#myprop2" data-toggle="tab"><i class="fa fa-bullhorn size15em"></i>
+                <?= $this->translate('My Proposals')?>
+                </a></li>
+              <li><a href="#myscn" data-toggle="tab"><i class="fa fa-object-group size15em"></i>
+                <?= $this->translate('My Programs')?>
+                </a></li>
+              <!-- <li><a href="#impl" data-toggle="tab"><i class="fa fa-tasks size15em"></i> Champion Tasks</a></li> 
+                                <li><a href="#hours" data-toggle="tab"><i class="fa fa-clock-o size15em"></i> My DCS Hours</a></li>
+                                <li><a href="#fundings" data-toggle="tab"><i class="fa fa-credit-card size15em"></i> My Fundings</a></li> -->
+              <li class="bot20"></li>
+            </ul>
+          </div>
+          <!--/2-->
+          <div class="col-md-10  col-xs-8 tab-content"> 
+            <!-- INBOX -->
+            <div class="tab-pane active" id="inbox">
+              <?= $this->inboxSection ?>
+            </div>
+            <!-- end INBOX --> 
+            <!-- CONTACTS -->
+            <div class="tab-pane" id="mycontacts">
+              <?= $this->contactsSection; ?>
+            </div>
+            <!-- end CONTACTS --> 
+            <!-- FAVORITES -->
+            <div class="tab-pane" id="favorites">
+              <?= $this->favoritesSection ?>
+            </div>
+            <!-- end FAVORITES --> 
+            <!-- MY PROPOSALS -->
+            <div class="tab-pane" id="myprop2">
+              <?= $this->myProposalsSection ?>
+            </div>
+            <!-- end PROPOSALS --> 
+            <!-- MY PROGRAMS-->
+            <div class="tab-pane" id="myscn">
+              <?= $this->myProgramsSection ?>
+            </div>
+            <!-- end PROGRAMS --> 
+          </div>
+          <!-- /10 --> 
+        </div>
+        <!-- end row --> 
+      </div>
+      <!-- /j --> 
+<!-- /account-workspace/user-workspace -->
+  

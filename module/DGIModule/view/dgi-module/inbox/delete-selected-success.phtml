@@ -1,0 +1,45 @@
+<!-- inbox/delete-selected-success -->
+
+<div id="inbox-delete-selected-success">
+
+	<div class="row">
+		<div class="col-md-12">
+		
+           <?= $this->translate('Your messages have been deleted.')?><br>
+           
+           
+			</div>
+			<!-- /12 -->
+			
+	</div>
+		<!-- end row -->
+
+    <div class="row">
+    	<div class="col-xs-12">
+    		<hr />
+		</div>
+	</div>
+    
+    <div class="row">
+    	<div class="col-xs-12 text-right">
+			<button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i> <?= $this->translate('Close')?></button>
+		</div>
+    </div><!-- /r -->
+
+<script type="text/javascript">
+		$(function () {
+
+			// update lists 
+			var type = '<?=$type?>';
+
+			updateInboxLists(type);
+			
+		});
+	</script>
+	
+</div>
+
+<!-- /inbox/delete-selected-success -->
+	
+	
+	

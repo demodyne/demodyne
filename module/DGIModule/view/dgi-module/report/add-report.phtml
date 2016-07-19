@@ -1,0 +1,117 @@
+<!-- report/add-report -->
+
+<div id="report-add-report">
+<?php if ($alreadyReported):?>
+<div class="row">
+		<div class="col-md-12 col-xs-12"><?= $this->translate('Hi')?> <strong><?=$user->getUsrName()?></strong>! 
+			<?php if ($type=='proposal' && $proposal):?>
+				<?php if ($proposal->isMeasure()):?>
+					<?= sprintf($this->translate('The Measure <strong>%s</strong> has already been reported.'), $proposal->getPropName())?>
+				<?php else:?>
+					<?= sprintf($this->translate('The Proposal <strong>%s</strong> has already been reported.'), $proposal->getPropName())?>
+				<?php endif;?>
+			<?php elseif ($type=='program' && $program):?>
+			<?= sprintf($this->translate('The Program <strong>%s</strong> has already been reported.'), $program->getProgName())?>
+			<?php elseif ($type=='comment' && $comment):?>
+			<?= sprintf($this->translate('The Comment below has already been reported.<br><blockquote>%s</blockquote>'), $comment->getComText())?>
+			<?php elseif ($type=='inbox' && $inbox):?>
+			<?= sprintf($this->translate('The Message below has already been reported.<br><blockquote>%s</blockquote>'), $inbox->getIbxText())?>
+			<?php endif;?>
+		</div>
+	</div>
+<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			
+
+<button type="button" class="btn btn-default" data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('Close')?></button>
+		</div>
+	</div>
+<?php else:?>
+	<div class="row">
+		<div class="col-md-12 col-xs-12"><?= sprintf($this->translate('Hi <strong>%s</strong> !'),$user->getUsrName())?> 
+			<?php if ($type=='proposal' && $proposal):?>
+				<?php if ($proposal->isMeasure()):?>
+					<?= sprintf($this->translate('You want to report Measure <strong>%s</strong> ?'), $proposal->getPropName())?>
+				<?php else:?>
+					<?= sprintf($this->translate('You want to report Proposal <strong>%s</strong> ?'), $proposal->getPropName())?>
+				<?php endif;?>
+			<?php elseif ($type=='program' && $program):?>
+				<?= sprintf($this->translate('You want to report Program <strong>%s</strong> ?'), $program->getProgName())?>
+			<?php elseif ($type=='comment' && $comment):?>
+    			<?= sprintf($this->translate('You want to report the Comment below? <br><blockquote>%s</blockquote>'), $comment->getComText())?>
+    		<?php elseif ($type=='inbox' && $inbox):?>
+    			<?= sprintf($this->translate('You want to report the message below? <br><blockquote>%s</blockquote>'), $inbox->getIbxText())?>
+    			
+			<?php endif;?>
+		</div>
+	</div>
+    <hr>
+<?php $form->prepare(); ?>
+<?php $form->setAttribute('method', 'post'); ?>
+<?php $form->setAttribute('id', 'report-add-report-form'); ?>
+<?= $this->form()->openTag($form);?>
+<div class="row">
+<div class="col-md-2 top10"><?= $this->translate('Reason')?>:</div>
+<div class="col-md-10 bot10">
+<?= $this->formElement($form->get('repReason'));?>
+			<?php if ($form->get('repReason')->getMessages()):?>
+            	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('repReason'));?></span>
+            <?php endif;?>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-2"></div>
+<div class="col-md-10 bot10">
+<?= $this->translate('Please enter any details that will help us address your concern')?>.
+</div>
+</div>
+
+<div class="row">      
+<div class="col-md-2"><div style="padding-top:45px;"><?= $this->translate('Details')?>:</div></div>
+<div class="col-md-10">
+<?= $this->formElement($form->get('repDescription'));?>
+			<?php if ($form->get('repDescription')->getMessages()):?>
+            	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('repDescription'));?></span>
+            <?php endif;?>
+</div>
+
+</div><!-- end row -->
+
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="submit" class="btn btn-orange"
+				id="report-add-report-submit-button">
+				<i class="fa fa-exclamation-triangle"></i> <?= $this->translate('Report')?></button> 
+
+<button type="button" class="btn btn-default" data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+	<?=$this->form()->closeTag();?>
+	
+<?php endif;?>
+	
+</div>
+<!-- /r -->
+
+<script type="text/javascript">
+	$(function () {
+		reportAddReportHandlers();
+	});
+</script>
+
+<!-- /report/add-report -->

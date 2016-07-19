@@ -1,0 +1,40 @@
+<!-- banner/delete-banner -->
+
+<div id="banner-delete-banner">
+	<div class="row">
+		<div class="col-md-12">
+      <?= $this->translate('Your banner')?>
+      '
+      <?= $banner->getBannerName()?>
+      '
+      <?= $this->translate('will be deleted')?>.<br>
+			<h1>
+        <?= $this->translate('Are you sure?')?>
+      </h1>
+		</div>
+		<!-- /12 -->
+	</div>
+	<!-- end row -->
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn btn-orange"
+				id="banner-delete-banner-yes"
+				data-href="<?= $this->url('administration/banner', array('action'=>'delete-banner', 'id' => $banner->getBannerUUID()));?>">
+				<i class="fa fa-trash"></i> <?= $this->translate('Delete')?></button>
+			<button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+</div>
+<script type="text/javascript">
+	$(function () {
+		bannerDeleteBannerHandlers();
+	});
+</script> 
+	
+<!-- /banner/delete-banner -->

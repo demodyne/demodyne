@@ -1,0 +1,35 @@
+<!-- user-profile/delete -->
+
+<div id="user-profile-delete"
+	data-url="<?= $this->url('user/profile', array('action' => 'delete')); ?>">
+	<div class="row">
+		<div class="col-md-12">
+			<p><?= $this->translate('Are you sure that you want to delete the account')?>
+   '<?= $this->escapeHtml($user->getUsrName()); ?>' ?</p>
+			<p>
+				<span class="text-danger"><i class="fa fa-exclamation-triangle"></i> <?= $this->translate('All Scenario and Proposals published will not be deleted !!!')?></span>
+			</p>
+		</div>
+		<!-- /12 -->
+	</div>
+	<!-- end row -->
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn btn-orange"
+				id="user-profile-delete-yes">
+				<i class="fa fa-trash-o"></i> <?= $this->translate('Yes')?></button>
+			<button type="button" class="btn" 
+				data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('No')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+</div>
+<script type="text/javascript">	$(document).ready(function () {		userProfileDeleteHandlers();	});</script>
+
+<!-- /user-profile/delete -->

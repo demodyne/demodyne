@@ -1,0 +1,9 @@
+<!-- program/get-categories-count -->
+
+<?php foreach($categories as $index => $category):?>
+<div style="padding:2px;" class="fltl">
+<span class="nobr"><img src="<?= $this->basePath()?>/files/<?= $category->getCatImage() ?>" valign="middle" width="25" height="25" title="<?= $category->getCatName() ?>" class="round5"> <?= $counts[$index] ?> &nbsp;</span>
+</div>
+<?php endforeach;?>
+
+<!-- /program/get-categories-count -->

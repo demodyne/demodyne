@@ -1,0 +1,247 @@
+<!-- measure/add-measure -->
+
+<div id="measure-add-measure">
+
+<?php if ($showDisclaimer):?>
+
+<span class="red"><strong><i class="fa fa-exclamation-triangle"></i> <?= $this->translate('Warning')?>:</strong></span>
+
+<?= $this->translate('You are now editing an official measure that has not been posted or validated by the Administration')?>.<br>
+<?= $this->translate('The objective is to share with the Demodyne Community the')?> <strong><?= $this->translate('relevant public facts')?></strong> <?= $this->translate('on this measure, based on official communications')?>.<br>
+<?= $this->translate('You should')?> <strong><?= $this->translate('always cite your sources')?></strong>. <?= $this->translate('Your personal opinions on the measure should be posted as comments in the Discussion section')?>.
+<hr>
+<?php endif;?>
+
+
+
+
+<?php $form->prepare(); ?>
+<?php $form->setAttribute('method', 'post'); ?>
+<?php $form->setAttribute('id', 'measure-add-measure-form'); ?>
+<?php $measure=  $form->get('measure');?>
+<?= $this->form()->openTag($form);?>
+
+<div class="row">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12"><?= $this->translate('Name')?>:
+
+            			<?= $this->formElement($form->get('propSavedName'));?>
+
+            				<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('propSavedName'));?></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12"><?= $this->translate('Description')?>:
+    			<div class="bot5">
+    				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-bold"
+					onclick="document.execCommand('bold');">
+					<strong><?=$this->translate('Bold')?></strong>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-italic"
+					onclick="document.execCommand('italic');">
+					<i><?=$this->translate('Italic')?></i>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-underline"
+					onclick="document.execCommand('underline');">
+					<u><?=$this->translate('Underline')?></u>
+				</button>
+    			</div>
+    			<div class="form-control desc" contenteditable="true"  data-placeholder="Enter your comment"
+    				id="measure-add-measure-textbox"
+    				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$propDescription?$propDescription:($proposal?$proposal->getPropDescription():'')?></div>
+            			<?= $this->formElement($form->get('propDescription'));?>
+
+            				<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('propDescription'));?></span>
+				</div>
+			</div>
+			<?php if ($level=='city' && !$user->isAdministration() && $user->getCity()->getFullCity()):?>
+				<div class="row">
+					<div class="col-md-12">
+                        <?= $this->translate('This Measure applies to:')?><br>
+                        <input type="radio" name="propCity" value="0" <?=$propCity?'':'checked="checked"'?>> <?=$user->getCity()->getFullCity()->getCityName()?> <?=$user->getCity()->getDistrictName()?> only   <br />
+                        <input type="radio" name="propCity" value="1" <?=$propCity?'checked="checked"':''?>> <?=$user->getCity()->getFullCity()->getCityName()?> as a whole<br />
+
+                    </div>
+				</div>
+				<?php endif;?>
+			<div class="row">
+				<div class="col-md-12 bot5"><?= $this->translate('Execution Start / Planned Completion Date')?>
+
+					<div class="input-daterange input-group" id="datepicker">
+						<div style="width: 120px; float: left;"><?= $this->formElement($measure->get('mesStartDate'));?></div>
+						<div style="width: 20px; float: left;">
+							<span class="input-group-addon">to</span>
+						</div>
+						<div style="width: 120px; float: left;"><?= $this->formElement($measure->get('mesEndDate'));?></div>
+					</div>
+					<span class="text-danger"><?= $this->formElementErrors($measure->get('mesEndDate'));?><?= $this->formElementErrors($measure->get('mesStartDate'));?></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12"><?= $this->translate('Cost')?> (k&euro;)
+
+            			<?= $this->formElement($measure->get('mesCost'));?>
+
+					<span class="text-danger"><?= $this->formElementErrors($measure->get('mesCost'));?></span>
+				</div>
+			</div>
+			<div class="row bot5 top10">
+				<div class="col-md-12">
+                    <?= $this->translate('Add Sources (external links)')?>
+                    <div id="measure-add-measure-links">
+                        <?php if ($links):?>
+                            <?php foreach ($links as $link):?>
+        					<div class="bot5" id="measure-add-measure-link-row">
+        							<div style="width: 250px; float: left;" class="bot5">
+        								<input type="url" name="links[]"
+        									class="form-control col-md-11 text-change" value="<?= $link ?>">
+        							</div>
+        							<div style="width: 20px; float: left; padding: 10px 0 0 5px;">
+        								<a href="" id="measure-add-measure-remove-link"><i
+        									class="fa fa-times-circle darkgray"></i></a>
+        							</div>
+        						</div>
+        					<?php endforeach;?>
+    					<?php endif;?>
+                	</div>
+                    <?php if ($linksError && !$user->isAdministration()):?>
+                    	<br /> <span class="text-danger"><?= $this->translate('You must provide at least one source (URL)')?></span><br />
+                    <?php endif;?>
+                
+                </div>
+			</div>
+			<button type="button" class="btn btn-orange"
+				id="measure-add-measure-new-link">
+				<i class="fa fa-external-link"></i> <?= $this->translate('Add source')?></button>
+		</div>
+		<!-- /6 -->
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<!-- <i class="fa fa-bars"></i>-->
+					<span class="big"><strong><?= $this->translate('Select Proposal Category')?></strong></span>
+					<hr>
+					<fieldset>
+						<div class="row bot20">
+							<div class="col-md-12">
+								<select name="main_category" id="main_category" size=6
+									class="form-control">
+
+									<?php foreach ($categoryList['mainCategories'] as $category):?>
+
+										<option value="<?= $category->getCatId() ?>"
+												style="background: url(<?=$this->basePath().'/files/'. $category->getCatImage() ?>) no-repeat; background-size: 32px 32px;  padding-left: 35px; padding-top:10px; height:35px;"
+												<?=( $categoryList[ 'selectedCategory']===$category)?"selected":""?>
+										>
+
+											&nbsp;&nbsp;<?= $category->getCatName() ?>
+
+										</option>
+
+										<?php endforeach;?>
+
+								</select>
+							</div>
+							<!--/6-->
+						</div>
+						<!-- end row -->
+						<div class="row" top10>
+							<div class="col-md-12">
+								<span class="big"><strong><?= $this->translate('Select Proposal SubCategory')?></strong></span>
+								&nbsp;
+								<!--<label for="propSavedDescription" class="col-md-2 control-label">Subcategory:</label> -->
+							</div>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-hover table-condensed">
+								<tr>
+									<td style="max-width: 50px; width: 50px; border: none;"
+										id="add-proposal-category-image"><img width="32px"
+										height="32px"
+										src="<?=$this->basePath().'/files/'. $categoryList[ 'selectedCategory']->getCatImage()?>"></td>
+									<td style="border: none;"><select name="sub_category"
+										id="sub_category" class="form-control">
+
+									<?php foreach ($categoryList['subCategories'] as $category):?>
+
+
+
+										<option value="<?= $category->getCatId() ?>"
+												<?=( $categoryList[ 'selectedSubCategory']===$category)?"selected":""?>>
+
+											<?= $category->getCatName() ?>
+
+										</option>
+
+										<?php endforeach;?>
+
+								</select></td>
+								</tr>
+							</table>
+
+					</fieldset>
+				</div>
+				<!--/panel-body-->
+			</div>
+		</div>
+		<!--6-->
+	</div>
+	<!-- end row -->
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+
+<?php if (!$proposal):?>
+    <?php if ($user->isAdministration()):?>
+    <button type="submit" class="btn btn-orange"
+    				id="measure-add-measure-save">
+    				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save as Draft')?></button>
+    <?php endif;?>
+	<button type="button" class="btn btn-success"
+				id="measure-add-measure-publish">
+				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save & Publish')?></button>
+<?php else:?>
+	<?php if ($user->isAdministration() && !$proposal->getPropPublished()):?>
+    <button type="submit" class="btn btn-orange"
+    				id="measure-add-measure-save">
+    				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save as Draft')?></button>
+	<button type="button" class="btn btn-success"
+				id="measure-add-measure-publish">
+				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save & Publish')?></button>
+    <?php else:?>
+    <button type="submit" class="btn btn-orange"
+    				id="measure-add-measure-save">
+    				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save')?></button>
+    <?php endif;?>
+<?php endif;?>
+
+
+			<button type="button" class="btn btn-default"
+				id="add-new-proposal-cancel" data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+<?=$this->form()->closeTag();?>
+
+
+
+</div>
+<script type="text/javascript">
+	$(function () {
+		measureAddMeasureHandlers('<?= $this->url('home/category', array('action'=>'get-subcategories', 'level'=>$level)); ?>', <?=$user->isAdministration()?>);
+	});
+</script>
+
+<!-- /measure/add-measure -->
+	

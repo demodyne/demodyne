@@ -1,0 +1,143 @@
+<!-- dashboard/region-dashboard -->
+
+<div id="user-dashboard-div">
+  <ul class="nav nav-tabsj" style="padding-left:20px;">
+    <li class="active"><a href="#news" data-toggle="tab">
+      <?=$this->translate('News')?>
+      </a></li>
+    <li><a href="#myspace" data-toggle="tab">
+      <?=$this->translate('My Workspace')?>
+      </a></li>
+    <li><a href="#allprop" data-toggle="tab">
+      <?=$this->translate('Citizen Proposals')?>
+      </a></li>
+    <li><a href="#citizenp" data-toggle="tab">
+      <?=$this->translate('Citizen Programs')?>
+      </a></li>
+      
+      <li><a href="#countryProg" data-toggle="tab">
+      <?=$this->translate('Official Measures')?>
+      </a></li>
+      
+    <li><a href="#all-events" data-toggle="tab">
+      <?=$this->translate('Events')?>
+      </a></li>
+  </ul>
+  <div id="myTabContent" class="tab-content panelforblack">
+
+    <!-- tab news -->
+
+    <div class="tab-pane fade active in" id="news">
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-md-7 col-xs-12">
+
+            <!--CAROUSEL-->
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <?= $this->carouselBannersSection ?>
+              </div>
+            </div>
+            <!-- /.carousel -->
+
+            <!--NEWS-->
+            <div class="row">
+              <div class="col-md-12 col-xs-12">
+                <?= $this->newsSection ?>
+              </div>
+            </div>
+            <!--/NEWS-->
+
+          </div>
+          <div class="col-md-5 col-xs-12">
+
+            <!--EVENTS-->
+            <div>
+              	<?= $this->upcomingEventsSection?>
+            </div>
+            <!--/EVENTS-->
+
+            <!--TOP PROPOSALS-->
+         	<div>
+            <?= $this->topProposalsSection ?>
+            </div>
+            <!--/TOP PROPOSALS-->
+
+          </div>
+          <!--/5-->
+        </div>
+        <!--/r-->
+
+      </div>
+      <!--/j-->
+    </div>
+    <!--/TAB NEWS -->
+
+    <!-- tab content myspace -->
+
+    <div class="tab-pane fade" id="myspace">
+      <?= $this->workspaceSection?>
+
+    </div><!-- end tab content myspace -->
+
+
+
+
+
+
+    <!-- tab content CITIZEN PROGRAMME -->
+    <div class="tab-pane fade" id="citizenp">
+
+		<?=$this->allProgramsSection?>
+</div>
+    <!-- end tab content officialp -->
+
+
+
+
+    <!-- tab content CITIZEN PROGRAMME -->
+    <div class="tab-pane fade" id="countryProg">
+
+		<?=$this->allMeasuresSection?>
+</div>
+    <!-- end tab content officialp -->
+
+
+
+
+    <!-- tab content allprop -->
+    <div class="tab-pane fade" id="allprop">
+
+      <?= $this->allProposalsSection ?>
+    </div>
+    <!-- end tab content allprop -->
+
+
+
+
+
+    <!-- tab content City Events -->
+
+    <div class="tab-pane fade" id="all-events">
+      <?= $this->allEventsSection?>
+    </div>
+
+    <!-- end tab content all-events -->
+
+
+  </div><!-- end tab section -->
+
+</div><!-- end user-dashboard-div section -->
+
+<script>
+
+$(function(){
+
+});
+
+
+
+    </script>
+
+<!-- /dashboard/region-dashboard -->
+    

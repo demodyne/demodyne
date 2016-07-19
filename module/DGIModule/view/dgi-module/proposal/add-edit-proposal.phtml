@@ -1,0 +1,242 @@
+<!-- proposal/add-edit-proposal -->
+
+<div id="proposal-add-edit-proposal"
+	data-get-categories-url="<?= $this->url('home/category', array('action'=>'get-categories')); ?>"
+	data-get-subcategories-url="<?= $this->url('home/category', array('action'=>'get-subcategories')); ?>"
+	data-error-image-type="<?=$this->translate('Please chose an image file (png, jpg, jpeg, gif, bmp, tiff)')?>"
+	data-error-image-size="<?=$this->translate('You cannot add more than 3 images')?>">
+  <?php $form->prepare(); ?>
+  <?php $form->setAttribute('method', 'post'); ?>
+  <?php $form->setAttribute('id', 'proposal-add-edit-proposal-form'); ?>
+  <?= $this->form()->openTag($form);?>
+  <div class="row">
+		<div class="col-md-6">
+			<fieldset>
+				<div class="row">
+					<div class="col-md-12">
+					<?php if (!$this->params()->fromRoute('level')):?>
+						<div class="bot20">
+						<?=$this->translate('Choose level for New Proposal:')?><br>
+						<label class="radio-inline"><input type="radio" name="level" value="city" <?=$level=='city'?'checked="checked"':''?>> <?=$this->translate('City')?></label>
+						<label class="radio-inline"><input type="radio" name="level" value="region" <?=$level=='region'?'checked="checked"':''?>> <?=$this->translate('Region')?></label>
+						<label class="radio-inline"><input type="radio" name="level" value="country" <?=$level=='country'?'checked="checked"':''?>> <?=$this->translate('Country')?></label>
+					</div>
+					<?php else:?>
+					<input type="hidden" name="level" value="<?=$this->params()->fromRoute('level')?>">
+					<?php endif;?>	
+                        <?= $this->translate('Name')?>:
+                        <?= $this->formElement($form->get('propSavedName'));?> <br />
+                        <?php if ($form->get('propSavedName')->getMessages()):?>
+                            <span class="text-danger">
+                            <?= $this->formElementErrors($form->get('propSavedName'));?>
+                            </span>
+                     	<?php endif;?>
+                    </div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+					<?= $this->translate('Description')?>:
+                        <div class="bot5">
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-bold"
+					onclick="document.execCommand('bold');">
+					<strong><?=$this->translate('Bold')?></strong>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-italic"
+					onclick="document.execCommand('italic');">
+					<i><?=$this->translate('Italic')?></i>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-underline"
+					onclick="document.execCommand('underline');">
+					<u><?=$this->translate('Underline')?></u>
+				</button>
+			</div>
+<div class="form-control" contenteditable="true"  data-placeholder=""
+				id="proposal-add-edit-proposal-textbox"
+				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$propDescription?$propDescription:($proposal?$proposal->getPropDescription():'')?></div>
+                        <?= $this->formElement($form->get('propDescription'));?> <br />
+                        <?php if ($form->get('propDescription')->getMessages()):?>
+                            <span class="text-danger">
+                            <?= $this->formElementErrors($form->get('propDescription'));?>
+                            </span>
+                         <?php endif;?>
+                    </div>
+				</div>
+
+				<?php if ($level=='city' && $user->getCity()->getFullCity()):?>
+				<div class="row">
+					<div class="col-md-12">
+                        <?= $this->translate('This Proposal applies to:')?><br>
+                        <input type="radio" name="propCity" value="0" <?=$propCity?'':'checked="checked"'?>> <?=$user->getCity()->getFullCity()->getCityName()?> <?=$user->getCity()->getDistrictName()?> only   <br />
+                        <input type="radio" name="propCity" value="1" <?=$propCity?'checked="checked"':''?>> <?=$user->getCity()->getFullCity()->getCityName()?> as a whole<br />
+
+                    </div>
+				</div>
+				<?php endif;?>
+
+				<div class="row">
+					<div class="col-md-12">
+                        <?= $this->translate('You can chose up to 3 image files')?>:
+                        <input type="file" name="imageFile" accept="image/*" id="imageFile"><br />
+                         <span class="red"></span>
+                    </div>
+				</div>
+
+
+
+	<div class="row">
+
+
+
+
+		<div class="col-md-3 col-xs-3" <?= $proposal && $proposal->getPropImage1()?'':'style="display: none;"'?> id="proposal-add-edit-proposal-image-1">
+            <a href="" title="<?=$this->translate('Remove image')?>" id="proposal-add-edit-proposal-remove-image">
+            <img class="closeButton" src="<?= $this->basePath('img/close-button.png') ?>" width="27" height="27" title="<?=$this->translate('Remove image')?>" />
+            </a>
+			<canvas id="propImage1Canvas" class="img33" <?= !$proposal || !$proposal->getPropImage1()?'':'data-image="'.$this->basePath($proposal->getPropImage1()).'"'?>></canvas>
+			<?= $this->formElement($form->get('propHiddenImage1'));?>
+    	</div>
+
+
+		<div class="col-md-3 col-xs-3" <?= $proposal && $proposal->getPropImage2()?'':'style="display: none;"'?>  id="proposal-add-edit-proposal-image-2">
+			<a href="" title="<?=$this->translate('Remove image')?>" id="proposal-add-edit-proposal-remove-image">
+            <img class="closeButton" src="<?= $this->basePath('img/close-button.png') ?>" width="27" height="27" title="<?=$this->translate('Remove image')?>" />
+            </a>
+			<canvas id="propImage2Canvas" class="img33" <?= !$proposal || !$proposal->getPropImage2()?'':'data-image="'.$this->basePath($proposal->getPropImage2()).'"'?>></canvas>
+			<?= $this->formElement($form->get('propHiddenImage2'));?>
+		</div>
+		<div class="col-md-3 col-xs-3" <?= $proposal && $proposal->getPropImage3()?'':'style="display: none;"'?>  id="proposal-add-edit-proposal-image-3">
+			<a href="" title="<?=$this->translate('Remove image')?>" id="proposal-add-edit-proposal-remove-image">
+            <img class="closeButton" src="<?= $this->basePath('img/close-button.png') ?>" width="27" height="27" title="<?=$this->translate('Remove image')?>" />
+            </a>
+			<canvas id="propImage3Canvas" class="img33" <?= !$proposal || !$proposal->getPropImage3()?'':'data-image="'.$this->basePath($proposal->getPropImage3()).'"'?>></canvas>
+			<?= $this->formElement($form->get('propHiddenImage3'));?>
+		</div>
+		<div class="col-md-3 col-xs-3"></div>
+	</div>
+
+
+				<!--
+        <div class="row">
+          <div class="col-md-12">
+            <div class="checkbox" style="padding-top: 1px !important;">
+              <label>
+                <input type="checkbox">
+                <?= $this->translate('Relevant to Region')?>
+              </label>
+            </div>
+          </div>
+        </div>
+        -->
+			</fieldset>
+		</div>
+		<!-- /6 -->
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+          <span class="big"><?= $this->translate('Select Proposal Category')?></span>
+
+					<fieldset>
+						<div class="row bot20">
+							<div class="col-md-12">
+								<select name="main_category" id="main_category" class="form-control" size="6">
+                  <?php foreach ($categoryList['list1'] as $index => $category):?>
+                  <option value="<?= $category->getCatId() ?>" style="background: url(<?=$this->basePath().'/files/'. $category->getCatImage() ?>) no-repeat; background-size: 32px 32px;  padding-left: 35px; padding-top:10px; height:35px;" <?=( $categoryList[ 'selected']==$category)?"selected":""?>> &nbsp;&nbsp;
+                  <?= $category->getCatName() ?>
+                  </option>
+                  <?php endforeach;?>
+                </select>
+							</div>
+							<!--/6-->
+						</div>
+						<!-- end row -->
+						<div class="row" top10>
+							<div class="col-md-12">
+                <span class="big"><?= $this->translate('Select Proposal SubCategory')?></span>
+                &nbsp;
+
+							</div>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-hover table-condensed">
+								<tr>
+									<td style="max-width: 50px; width: 50px; border: none;"
+										id="add-proposal-category-image"><img width="32px"
+										height="32px" src="<?=$this->basePath().'/files/'. $categoryList[ 'selected']->getCatImage()?>"></td>
+									<td style="border: none;"><?= $this->formElement($form->get('sub_category'));?></td>
+								</tr>
+							</table>
+
+					</fieldset>
+				</div>
+			</div>
+			<!--/panel-body-->
+		</div>
+		<!--6-->
+	</div>
+	<!-- end row -->
+
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<?php if (!$proposal || !$proposal->getPropPublished()):?>
+			<button type="button" class="btn btn-orange"
+				id="proposal-add-edit-proposal-save-button">
+				<i class="fa fa-floppy-o"></i>
+      			<span><?= $this->translate('Save as Draft')?></span>
+      		</button>
+      		<button type="button" class="btn btn-success"
+				id="proposal-add-edit-proposal-publish-button">
+				<i class="fa fa-share-square-o"
+					id="proposal-add-edit-proposal-publish-button-icon"></i>
+              <?= $this->translate('Publish')?>
+            </button>
+			<?php else:?>
+      		<button type="button" class="btn btn-orange"
+				id="proposal-add-edit-proposal-save-button">
+				<i class="fa fa-floppy-o"></i>
+      			<span><?= $this->translate('Save')?></span>
+      		</button>
+      		<?php endif;?>
+      		<button type="button" class="btn btn-default"
+				data-dismiss="modal">
+				<i class="fa fa-ban"></i>
+              <?= $this->translate('Cancel')?>
+            </button>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+	<?php if ($proposal && $proposal->getPropPublished()):?>
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+
+	<?=$this->translate('Discussion')?>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<?= $this->commentListSection?>
+		</div>
+	</div>
+	<?php endif;?>
+
+  <?=$this->form()->closeTag();?>
+</div>
+
+
+
+
+<script type="text/javascript">	$(document).ready(function () {		proposalAddEditProposalHandlers();	});</script>
+<!-- /proposal/add-edit-proposal -->

@@ -1,0 +1,98 @@
+<!-- program/sort-proposals -->
+
+<div id="sort-proposals-content">
+	<div class="row">
+		<div class="col-md-12 bot20 big">
+<?= $this->translate('Use the mouse drag&drop to sort the')?> <?=count($program->getProposals())?> <?= $this->translate('Proposals by your priorities')?>.
+</div>
+		<!-- /12 -->
+	</div>
+	<!-- /row -->
+	<form
+		action="<?= $this->url('program', array('action' => 'sort-proposals'), true)?>"
+		method="post" name="sortProposalsForm" class="form-horizontal"
+		id="sort-proposals-form">
+		<div class="row">
+			<div class="col-md-12">
+<?php if (count($proposals)>0):?>
+
+
+                        <div
+					class="table-responsive scroll-fixed-dialog"
+					style="overflow-x: hidden;">
+					<table class="table table-hover table-striped"
+						id="sort-proposals-table">
+						<tbody>
+                        	<?php foreach ($proposals as $index => $proposal): ?>
+                        	
+                        	<?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription()); 
+
+      $proposalDescription = (strlen($proposalDescription) > 200) ? substr($proposalDescription, 0, 200) . '...' : $proposalDescription;?>
+      
+                        		<tr
+								title="<?= $proposalDescription ?>">
+								<td style="max-width: 20px; width: 20px; border-top: none;" class="priority"><?=$index+1?></td>
+								<td style="max-width: 40px; width: 40px; border-top: none;"><img
+									src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatCat()->getCatImage() ?>"
+									height="35" width="35"
+									title="<?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName();?>">
+								</td>
+								<td style="border-top: none;" class="nobr"><span class="big"><?=$proposal->getPropSavedName() ?></span>
+									<input type="hidden" name="sort-proposals[]"
+									value="<?=$proposal->getPropUUID()?>"> <br>
+<?= $this->translate('Published by')?> <a
+									href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
+									id="viewProfile"><span class="badge"><?= $proposal->getUsr()->getUsrName() ?></span></a>
+									<i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()->format('d/m/Y') ?>
+                                </td>
+							</tr>
+                        	<?php endforeach;?>
+                        </tbody>
+					</table>
+					<hr>
+				</div>
+                    <?php else:?>
+                    	<?= $this->translate('This scenario is empty. Fill it with Citizen Proposals and Official Measures.')?>
+                    <?php endif;?>
+</div>
+			<!-- /12 -->
+		</div>
+		<!-- /row -->
+	</form>
+	<div class="row">
+		<div class="col-xs-12 top20 text-right">
+			<button type="button" class="btn btn-orange"
+				id="sort-proposals-save-button">
+				<i class="fa fa-floppy-o" id="sort-proposals-save-button-icon"></i> <?= $this->translate('Save')?></button>
+			<button type="button" class="btn" id="sort-proposals-cancel"
+				data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+</div>
+<!-- /jumbotron -->
+<style>
+<!--
+.ui-sortable tr {
+    cursor:pointer;
+	display:block;
+}    
+.ui-sortable tr:hover {
+    background:rgba(244,251,17,0.45); 
+}
+.scroll-fixed-dialog {
+    overflow: scroll;
+    max-height: 500px;
+}
+-->
+</style>
+<script>
+$(function() {
+	programSortProposalsHandlers();
+});
+</script>
+
+<!-- /program/sort-proposals -->
+
+

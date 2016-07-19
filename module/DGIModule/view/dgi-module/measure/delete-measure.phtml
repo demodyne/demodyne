@@ -1,0 +1,149 @@
+<!-- measure/delete-measure -->
+
+<div id="delete-measure-content">
+  <?php if (!$error):?>
+  <div class="row">
+    <div class="col-md-12">
+      <?= $this->translate('Your measure')?>
+      '
+      <?= $proposal->getPropSavedName()?>
+      '
+      <?= $this->translate('will be deleted')?>
+      .<br>
+      <h1>
+        <?= $this->translate('Are you sure')?>
+        ?</h1>
+    </div>
+    
+    <!-- /12 --> 
+    
+  </div>
+  
+  <!-- end row -->
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-right"> <a href="<?= $this->url('measure', array('action'=>'delete-measure', 'id' => $proposal->getPropUUID() ), true);?>" class="btn btn-orange" id="delete-measure-yes-button" ><i class="fa fa-trash" id="delete-measure-yes-button-icon"></i>
+      <?= $this->translate('Yes')?>
+      </a>
+      <button type="button" class="btn" id="delete-measure-no-button" data-dismiss="modal"><i class="fa fa-ban"></i>
+      <?= $this->translate('No')?>
+      </button>
+    </div>
+  </div>
+  <!-- /r -->
+  
+  <?php else:?>
+  <div class="row">
+    <div class="col-md-12">
+      <?= $this->translate('You can no longer delete measure')?>
+      '
+      <?= $proposal->getPropSavedName()?>
+      '.<br>
+      <span class="text-danger">
+      <?= $this->translate('Error message')?>
+      :
+      <?=$error ?>
+      </span> </div>
+    
+    <!-- /12 --> 
+    
+  </div>
+  
+  <!-- end row -->
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-right">
+      <button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i>
+      <?= $this->translate('Cancel')?>
+      </button>
+    </div>
+  </div>
+  <!-- /r -->
+  
+  <?php endif;?>
+</div>
+<script type="text/javascript">
+
+		$(document).ready(function () {
+
+
+
+			$('#delete-measure-yes-button').click(function () {
+
+				
+
+				$('#delete-measure-yes-button').prop('disabled', 'disabled');
+
+				$('#delete-measure-yes-button-icon').removeClass("fa-trash").addClass('fa-spinner').addClass('fa-pulse');
+
+
+
+				$.ajax({ // create an AJAX call...
+
+			        type: 'POST', // GET or POST
+
+			        url: $(this).attr('href'), 
+
+			        success: function(response) { // on success..
+
+			        	//console.log(response);
+
+			        	if (typeof response ==  'object') {
+
+				        	
+
+			        		$("#city-proposals-list").parent().load(cityProposalUrl);
+
+			        		$("#my-favorites-pagination-div").parent().load(myFavoritesUrl);
+
+			        		$("#city-news-list").parent().load(cityNewsUrl);
+
+			        	    $("#my-proposals-pagination-div").parent().load(myProposalsUrl, function() {
+
+			        	    	$('#user-dashboard-div').show();
+
+			    				$('#view-proposal-div').hide();
+
+				        	});
+
+			        	    $('#delete-proposal-dialog').modal('hide');
+
+			        	    //$('#add-new-proposal-dialog').remove();
+
+			        	} 
+
+			        	else {
+
+			        	    // its not json
+
+			        		$('#delete-proposal-content').parent().html(response); // update the DIV
+
+			        	}
+
+			        	
+
+			        	
+
+			        },
+
+			    });
+
+			    return false; // cancel original event to prevent form submitting
+
+			});
+
+			
+
+		});
+
+	</script> 

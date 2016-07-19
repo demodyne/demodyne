@@ -1,0 +1,64 @@
+<!-- program/add-success -->
+
+<div id="add-new-program-success-content">
+
+	<div class="row">
+		<div class="col-md-12">
+		
+		<?= sprintf($this->translate('Your program <strong>%s</strong> has been successfully created. It is visible to other users, but still empty. Do you want to add Proposals and Measures now?'), $program->getProgName())?> 
+		
+           <br>
+           
+           
+			</div>
+			<!-- /12 -->
+			
+	</div>
+		<!-- end row -->
+
+    <div class="row">
+    	<div class="col-xs-12">
+    		<hr />
+		</div>
+	</div>
+    
+    <div class="row">
+    	<div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-orange" id="add-new-program-success-add-proposals"><i class="fa fa-object-group"></i> <?= $this->translate('Yes')?></button>  
+			<button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i> <?= $this->translate('Later')?></button>
+		</div>
+    </div><!-- /r -->
+
+
+</div>
+
+<?php
+    $levelName = '';
+    $levels = $this->configItem('demodyne.level');
+    if (array_search($program->getProgLevel(), $levels)=='city') {
+        $levelName = $program->getCity()->getFullCity()?$program->getCity()->getFullCity()->getCityName():$program->getCity()->getCityName();
+    }
+    elseif (array_search($program->getProgLevel(), $levels)=='region') {
+        $levelName = $program->getCity()->getRegion()->getRegionName();
+    }
+    elseif (array_search($program->getProgLevel(), $levels)=='country') {
+        $levelName = $program->getCity()->getCountry()->getCountryName();
+    }
+    
+    ?>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			$('#add-new-program-success-add-proposals').click(function () {
+				$('.modal').modal('hide');
+				modalDialog('add-remove-proposals-dialog', "<?=sprintf($this->translate('Add/Remove Proposals or Measures in your Program for %s'), $levelName)?>", '<?= $this->url('program', array('action'=>'add-proposals-from-city', 'id' => $program->getProgUUID())) ?>');
+			});
+
+
+			
+		});
+	</script>
+	
+<!-- /program/add-success -->
+	

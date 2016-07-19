@@ -1,0 +1,93 @@
+<!-- comment/add-comment -->
+
+<div id="comment-add-comment">
+<?php if ($user):?>
+<div class="row">
+<div class="col-md-12">
+<?php $commentForm->prepare();?>
+  <?php $commentForm->setAttribute('action', $this->url('comment', array('action'=>'add-comment', 'type' => $type, 'id' => $id))); ?>
+  <?php $commentForm->setAttribute('method', 'post');?>
+  <?php $commentForm->setAttribute('id', 'comment-form');?>
+  
+<?= $this->form()->openTag($commentForm);?>
+
+<div class="form-group">
+<i class="fa fa-plus-circle"></i>&nbsp;<?= $this->translate('Add new comment')?>:
+<div class="bot5">
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-bold"
+					onclick="document.execCommand('bold');">
+					<strong><?=$this->translate('Bold')?></strong>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-italic"
+					onclick="document.execCommand('italic');">
+					<i><?=$this->translate('Italic')?></i>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-underline"
+					onclick="document.execCommand('underline');">
+					<u><?=$this->translate('Underline')?></u>
+				</button>
+			</div>
+<div class="form-control" contenteditable="true"  data-placeholder="<?=$this->translate('Enter your comment')?>"
+				id="comment-add-comment-textbox"
+				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$comText?$comText:''?></div>
+<?= $this->formElement($commentForm->get('comText'));?> <br />
+<span class="text-danger"><?= $this->formElementErrors($commentForm->get('comText'));?></span>
+</div>
+
+<div class="form-group bot20">
+<button type="submit" class="btn btn-orange" id="comment-add-comment-submit" disabled="disabled"><i class="fa fa-comment-o" id="addCommentIcon"></i> <?= $this->translate('Submit Comment')?></button>
+</div>
+
+<?=$this->form()->closeTag();?>
+
+
+
+</div><!-- /12 -->
+</div><!-- /r -->
+<?php else:?>
+	<div class="row bot20">
+		<div class="col-md-12 text-center">
+            <?php if ($type=='proposal' && $proposal->isMeasure()):?>
+            	<?= $this->translate('Please register to comment this measure.')?>
+            <?php elseif ($type=='proposal' && !$proposal->isMeasure()):?>
+            	<?= $this->translate('Please register to comment this proposal.')?>
+            <?php elseif ($type=='program'):?>
+            	<?= $this->translate('Please register to comment this program.')?>
+            <?php endif;?>
+   			<button type="button" class="btn btn-sm btn-orange"
+				data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
+				data-dialog-title="<?=$this->translate('Please register')?>"
+				id="please-register-button">
+				<i class="fa fa-pencil-square-o" id="add-change-vote-div-icon"></i> <?= $this->translate('Register')?></button>
+
+		</div>
+	</div>
+	<?php endif;?>
+<div id="allcom">
+<?= $this->commentListSection;?>
+</div>
+
+</div>
+
+<style>
+[contenteditable=true] {
+/*     border: solid 1px; /* Just to show what the area is. */ */
+/*     min-height: 1.2em; */
+}
+[contenteditable=true]:empty:before {
+    content: attr(data-placeholder);
+    color: darkgrey;
+}
+</style>
+<?php if ($user):?>
+<script type="text/javascript">
+$(function(){  
+	commentAddCommentHandlers();
+});
+</script>
+<?php endif;?>
+
+<!-- /comment/add-comment -->

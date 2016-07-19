@@ -1,0 +1,96 @@
+<!-- category/index -->
+
+<?php 
+$title = 'Category list - Admin';
+$this->headTitle($title);
+$this->headLink()->prependStylesheet($this->basePath() . '/css/font-awesome-4.3.0/css/font-awesome.min.css');
+$this->headLink()->prependStylesheet($this->basePath() . '/jqueryUI/themes/smoothness/jquery-ui.css');
+$this->headScript()->appendFile($this->basePath() . '/jqueryUI/jquery-ui.min.js');
+?>
+<form method="post" id="category-list-form">
+<div class="jumbotron">
+<?= $this->translate('Country')?>: 
+<select name="country" required class="form-control text-change" id="country">
+<?php foreach ($countries as $country):?>
+<option value="<?= $this->url('home/category', array('country'=>$country->getCountryId())) ?>" <?= ($country==$selectedCountry)?'selected="selected"':'' ?>><?= $country->getCountryName() ?></option>
+<?php endforeach;?>
+</select>
+
+<h1><?= $this->translate('Categories')?></h1>
+
+<p><a href="<?= $this->url('home/category', array('action'=>'add', 'country' => $selectedCountry->getCountryId()));?>"><?= $this->translate('Add new main category')?></a></p>
+
+<div class="category">
+<ul>
+ <?php foreach ($categories as $main_category): ?>
+    <li >
+        
+         <img src="<?= $this->basePath()?>/files/<?= $main_category->getCatImage() ?>" height="42" width="42">
+         <a href="<?= $this->url('home/category', array('action'=>'edit', 'id'=>$main_category->getCatId()));?>" title="Edit <?= $main_category->getCatDescription() ?>" style="font-size: 18px;"><?= $main_category->getCatName() ?>
+         </a>
+         <a href="<?= $this->url('home/category', array('action'=>'delete', 'id'=>$main_category->getCatId()));?>" title="Delete <?= $main_category->getCatDescription() ?>" style="font-size: 24px;"><i class="fa fa-trash fa-1x"></i></a>
+         
+         City <input type="checkbox" <?= $main_category->getCatCity()?'value="1" checked="checked"':'value="0"'?> name="city[<?=$main_category->getCatId()?>]"> 
+                Region <input type="checkbox" <?= $main_category->getCatRegion()?'value="1" checked="checked"':'value="0"'?> name="region[<?=$main_category->getCatId()?>]"> 
+                Country <input type="checkbox" <?= $main_category->getCatCountry()?'value="1" checked="checked"':'value="0"'?> name="country[<?=$main_category->getCatId()?>]">
+         
+        <ul>
+        <?php $subcategories = $main_category->getSubCategories(); //var_dump($subcategories);?>
+         <?php foreach ($subcategories as $category): ?>
+            <li >
+                 
+                 <a href="<?= $this->url('home/category', array('action'=>'edit', 'id'=>$category->getCatId()));?>" title="Edit <?= $category->getCatDescription() ?>"><?= $category->getCatName() ?>
+                  </a>
+                 <a href="<?= $this->url('home/category', array('action'=>'delete', 'id'=>$category->getCatId()));?>" title="Delete <?= $category->getCatDescription() ?>" style="font-size: 18px;"><i class="fa fa-trash fa-1x"></i></a>
+                City <input type="checkbox" <?= $category->getCatCity()?'value="1" checked="checked"':'value="0"'?> name="city[<?=$category->getCatId()?>]"> 
+                Region <input type="checkbox" <?= $category->getCatRegion()?'value="1" checked="checked"':'value="0"'?> name="region[<?=$category->getCatId()?>]"> 
+                Country <input type="checkbox" <?= $category->getCatCountry()?'value="1" checked="checked"':'value="0"'?> name="country[<?=$category->getCatId()?>]"> 
+            </li>
+         <?php endforeach;?>
+            <li >
+                 <a href="<?= $this->url('home/category', array('action'=>'add', 'id'=>$main_category->getCatId()));?>" title="Add new subcategory to '<?= $main_category->getCatName() ?>' category"><?= $this->translate('Add new subcategory')?></a>
+                
+            </li>
+        </ul>
+    </li>
+  <?php endforeach;?>
+</ul>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<button type="submit" class="btn btn-orange">Save View Settings</button>
+</div>
+</div>
+
+</div>
+
+</form>
+
+<script>
+  $(function() {
+    $( document ).tooltip({
+        position: {
+            my: "center top",
+            at: "center bottom+5",
+          },
+          show: {
+            duration: "fast"
+          },
+          hide: {
+            effect: "hide"
+          }
+        });
+
+    $('#country').on('change', function () {
+        var url = $(this).val(); // get selected value
+        if (url) { // require a URL
+            window.location = url; // redirect
+        }
+        return false;
+    });
+  });
+  </script>
+  
+  <!-- /category/index -->
+  

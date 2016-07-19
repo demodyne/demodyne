@@ -1,0 +1,76 @@
+<!-- category/edit -->
+
+<div class="jumbotron">
+<h2><?= $this->translate('Edit category')?> <?=$category->getCatName(); ?></h2>
+
+
+<?php
+$form->prepare();
+// Assuming the "contact/process" route exists...
+$form->setAttribute('action', $this->url('home/category', array('action' => 'edit', 'id' => $category->getCatId()))); //'contact/process'));
+// Set the method attribute for the form
+$form->setAttribute('method', 'post');
+
+echo $this->form()->openTag($form);?>
+
+<div class="element element_name">
+<?= $this->formRow($form->get('catName'));?> 
+</div>
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catDescription'));?> 
+</div>
+
+<?php if ($category->getCatCat()):?>
+<div class="element element_image">
+<?= $this->formhidden($form->get('catImage'));?> 
+</div>
+<?php else:?>
+<div class="element element_image">
+<?= $this->formRow($form->get('catImage'));?> 
+</div>
+<?php endif;?>
+
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catCity'));?> 
+</div>
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catRegion'));?> 
+</div>
+
+<div class="element element_description">
+<?= $this->formRow($form->get('catCountry'));?> 
+</div>
+
+
+<div class="element element_submit">
+<?=  $this->formSubmit($form->get('submit'));?> 
+</div>
+
+<?=$this->form()->closeTag();?> 
+
+</div>
+
+<script>
+
+	$(function() {
+
+		$('#catCity').click(function() {
+			$(this).val(this.checked ? 1 : 0);
+		});
+
+		$('#catRegion').click(function() {
+			$(this).val(this.checked ? 1 : 0);
+		});
+
+		$('#catCountry').click(function() {
+			$(this).val(this.checked ? 1 : 0);
+		});
+		
+	});
+
+</script>
+
+<!-- /category/edit -->

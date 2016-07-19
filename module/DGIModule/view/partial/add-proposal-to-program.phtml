@@ -1,0 +1,36 @@
+<!-- Add proposal to program partial -->
+
+<?php 
+     $showAddToProgram = false;
+     $me = $this->identity();
+     if ($me) {
+         if ($proposal->getPropLevel()==$this->configItem('demodyne.level.city') && ( $proposal->getCity()==$me->getCity() || $proposal->getCity()==$me->getCity()->getFullCity() || ($proposal->getCity()->getDistrictCode()==$me->getCity()->getDistrictCode() && $proposal->getCity()->getFullCity()==$me->getCity()->getFullCity()) || ($proposal->getPropFullCity() && $proposal->getCity()->getFullCity()==$me->getCity()->getFullCity()))) {
+	         $showAddToProgram = true;
+	     }
+	     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.region') && $me->getCity()->getRegion()==$proposal->getCity()->getRegion()) {
+	         $showAddToProgram = true;
+	     }
+	     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.country') && $me->getCountry()==$proposal->getCity()->getCountry()) {
+	         $showAddToProgram = true;
+	     }
+     }
+?>
+<?php if ($showAddToProgram && $me && !$me->isAdministration()):?>			
+	
+    <?php $program = $me->getProgramForLevel($proposal->getPropLevel())?>
+    
+    <?php if (!$program || !$program->hasProposal($proposal)):?>
+    	<a
+    				href="<?= $this->url('program', array( 'action'=>'add-proposal', 'id'=>$proposal->getPropUUID()));?>"
+    				data-id="<?= $proposal->getPropUUID()?>" id="add-to-program"><i
+    				class="fa fa-link"></i> <?= $this->translate('Add to my Program')?></a><br />
+    <?php else:?>
+    	<a
+    				href="<?= $this->url('program', array( 'action'=>'add-remove-proposal', 'id'=>$proposal->getPropUUID()));?>"
+    				data-id="<?= $proposal->getPropUUID()?>"
+    				id="remove-from-program"><i class="fa fa-unlink"></i> <?= $this->translate('Remove from my Program')?></a><br /> 
+    <?php endif;?>
+
+<?php endif;?>
+
+<!-- /Add proposal to program partial -->

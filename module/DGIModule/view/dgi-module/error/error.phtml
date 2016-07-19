@@ -1,0 +1,36 @@
+<!-- error/error -->
+
+<div class="modal-header-soft round5top ui-draggable-handle">
+
+<button type="button" class="close">
+        <?php if ($_SESSION['level']['level']=='city'):?>
+        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
+        <?php elseif ($_SESSION['level']['level']=='country'):?>
+        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
+        <?php endif;?>
+    </button>
+
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  &nbsp; <span class="big" id="modal-dialog-title"><strong>
+  <?= $this->translate('Error')?>
+  </strong></span>
+</div>
+
+
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
+<div class="row">
+<div class="col-md-12">
+
+    <p><span class="red"><strong><i class="fa fa-exclamation-triangle"></i></strong></span> <?= $message?></p>
+  </div>
+
+</div><!-- end row -->
+
+
+
+</div><!-- end jumbotron -->
+
+<!-- /error/error -->

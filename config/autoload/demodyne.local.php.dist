@@ -1,0 +1,26 @@
+<?php
+/**
+ * @link      https://github.com/demodyne/demodyne
+ * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
+ */
+
+/**
+ * Global variables for DEMODYNE application
+ */
+return [
+    'demodyne' => [
+        'registration' => [
+            'password_static_salt' => '1234567891234567890'
+        ],
+        'cron' => [
+            'ip' => '127.0.0.1',
+            'check_proposals_id' => '12345678-1234-1234-1234-123456789012',
+            'update_counters_id' => '12345678-1234-1234-1234-123456789012',
+            'activation_remainder' => '12345678-1234-1234-1234-123456789012'
+        ],
+        'email' => [
+            'validation' => 'validation@demodyne.org'
+        ]
+    ]
+];

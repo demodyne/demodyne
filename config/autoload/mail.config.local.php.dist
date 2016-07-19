@@ -1,0 +1,25 @@
+<?php
+/**
+ * @link      https://github.com/demodyne/demodyne
+ * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
+ */
+
+return array(
+	'mail' => array(
+		'transport' => array(
+			'options' => array(
+				'host'              => 'host',
+				'port'              => 25, 
+				'connection_class'  => 'login',
+				'connection_config' => array(
+					'username' => 'user_name',
+					'password' => 'password', 
+// 					'ssl' => 'ssl' 
+				),
+			),  
+		),
+	),
+);    
+ 
+ 

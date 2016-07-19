@@ -1,0 +1,65 @@
+<!-- user-profile/get-scores -->
+
+<?php if ($list):?>
+<div class="col-md-6 col-xs-6">
+        <?= $this->translate('Commitment Score')?>: 
+        
+        <div >
+<?php for ($i=0;$i<5;$i++):?>
+	<?php $commitment--?>
+   <?php if ($commitment>=0):?>
+	<span class="star-icon-small full">☆</span>
+	<?php elseif ($commitment==-0.5):?>
+	<span class="star-icon-small half">☆</span>
+	<?php else:?>
+	<span class="star-icon-small">☆</span>
+	<?php endif;?>
+<?php endfor;?>
+</div>
+        </div>
+		<div class="col-md-6 col-xs-6">
+        <?= $this->translate('Relevance Score')?>: 
+        <div class="stars">
+<?php for ($i=0;$i<5;$i++):?>
+<?php $relevance--?>
+   <?php if ($relevance>=0):?>
+	<span class="star-icon-small full">☆</span>
+	<?php elseif ($relevance==-0.5):?>
+	<span class="star-icon-small half">☆</span>
+	<?php else:?>
+	<span class="star-icon-small">☆</span>
+	<?php endif;?>
+<?php endfor;?>
+</div>
+        </div>
+<?php else:?>
+
+<strong><?= $this->translate('Commitment')?>:</strong>
+<div >
+<?php for ($i=0;$i<5;$i++):?>
+	<?php $commitment--?>
+   <?php if ($commitment>=0):?>
+	<span class="star-icon full">☆</span>
+	<?php elseif ($commitment==-0.5):?>
+	<span class="star-icon half">☆</span>
+	<?php else:?>
+	<span class="star-icon">☆</span>
+	<?php endif;?>
+<?php endfor;?>
+</div>
+<strong><?= $this->translate('Relevance')?>:</strong>
+<div class="stars">
+<?php for ($i=0;$i<5;$i++):?>
+<?php $relevance--?>
+   <?php if ($relevance>=0):?>
+	<span class="star-icon full">☆</span>
+	<?php elseif ($relevance==-0.5):?>
+	<span class="star-icon half">☆</span>
+	<?php else:?>
+	<span class="star-icon">☆</span>
+	<?php endif;?>
+<?php endfor;?>
+</div>
+<?php endif;?>
+
+<!-- /user-profile/get-scores -->

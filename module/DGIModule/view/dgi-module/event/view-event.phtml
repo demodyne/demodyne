@@ -1,0 +1,55 @@
+<!-- event/view-event -->
+
+<div class="modal-header-soft round5top ui-draggable-handle">
+
+<button type="button" class="close">
+        <?php if ($_SESSION['level']['level']=='city'):?>
+        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
+        <?php elseif ($_SESSION['level']['level']=='country'):?>
+        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
+        <?php endif;?>
+    </button>
+
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+  &nbsp; <span class="big" id="modal-dialog-title"><strong>
+  <?= $this->translate('View Event')?>
+  </strong></span>
+</div>
+
+<div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;" id="event-view-event">
+
+<div class="row">
+<div class="col-md-6">
+
+<div class="panel panel-default">
+<div class="panel-body">
+
+<p><span class="bigblack"><?=$this->escapeHtml($event->getEventName())?></span></p>
+<p><div class="desc"><?=$event->getEventDescription()?></div></p>
+<p><i class="fa fa-globe size15em"></i> <a href="<?=$this->escapeHtml($event->getEventLink())?>" target="_blank"><?=$this->escapeHtml($event->getEventLink())?></a></p>
+<hr>
+<span class="glyphicon glyphicon-calendar"></span> <?= $this->translate('Start Date')?>: <?=$event->getEventStartDate()->format('d/m/Y H:i')?><br>
+<span class="glyphicon glyphicon-calendar"></span> <?= $this->translate('End Date')?>: <?=$event->getEventEndDate()->format('d/m/Y H:i')?>
+<hr>
+<img class="img-thumbnail" id="event-view-event-preview" src="<?=$event->getEventImage()?$this->basePath($event->getEventImage()):$this->basePath('/img/events/noimage.png')?>" valign="middle" title="<?= $this->translate('Event Image')?>" style="max-width:300px !important;">
+
+
+
+</div></div><!--/panel -->
+
+
+
+</div><!-- /6 -->
+<div class="col-md-6">
+
+<?=$this->attendees?>
+
+</div><!-- /6 -->
+</div><!-- /row -->
+
+
+</div><!-- /j -->
+
+<script type="text/javascript">	$(function () {		eventViewEventHandlers();	});</script>
+
+<!-- /event/view-event -->

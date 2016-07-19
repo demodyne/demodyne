@@ -1,0 +1,95 @@
+<!-- program/add-edit-program -->
+
+<?php if (!$error):?>
+<div id="program-add-program">
+<?php
+    $form->prepare();
+    $form->setAttribute('id', 'program-add-program-form');
+    $form->setAttribute('method', 'post');
+    ?>
+<?= $this->form()->openTag($form);?>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-12"><?= $this->translate('Name')?>:
+<?= $this->formElement($form->get('progName'));?> <br /> <span
+						class="text-danger"><?= $this->formElementErrors($form->get('progName'));?></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12"><?= $this->translate('Description')?>:
+				<div class="bot5">
+    				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-bold"
+					onclick="document.execCommand('bold');">
+					<strong><?=$this->translate('Bold')?></strong>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-italic"
+					onclick="document.execCommand('italic');">
+					<i><?=$this->translate('Italic')?></i>
+				</button>
+				<button class="btn btn-mini" type="button"
+					id="inbox-new-message-textbox-underline"
+					onclick="document.execCommand('underline');">
+					<u><?=$this->translate('Underline')?></u>
+				</button>
+    			</div>
+    			<div class="form-control desc" contenteditable="true"  data-placeholder="Enter your comment"
+    				id="program-add-program-textbox"
+    				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$progDescription?$progDescription:($program?$program->getProgDescription():'')?></div>
+            			<?= $this->formElement($form->get('progDescription'));?>
+
+            				<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('progDescription'));?></span>
+				</div>
+				</div>
+			
+		</div>
+		<!--/6-->
+	</div>
+	<!-- /r -->
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="submit" class="btn btn-orange"
+				id="program-add-program-save"
+				<?php if ($proposal):?>
+					data-url="<?= $this->url('program', array( 'action'=>'add-proposal', 'id'=>$proposal->getPropUUID()));?>"
+					data-dialog-title="<?=$this->translate('Add Proposal to Program')?>"
+				<?php endif;?>
+				>
+					<i class="fa fa-floppy-o"></i> <?= $this->translate('Save')?></button>  
+               
+                <button type="button" class="btn" id="add-new-program-cancel"
+					data-dismiss="modal">
+					<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+				
+</div>
+	<!-- /r -->
+<?=$this->form()->closeTag();?> 
+</div>
+<script type="text/javascript">
+		$(document).ready(function () {
+			programAddEditProgramHandlers();
+		});
+	</script>
+<?php else:?>
+<div class="row">
+	<div class="col-md-12">
+		<?php if ($error=='errorProgramExists'):?>
+			<?php if ($level=='city'):?>
+           		<?= $this->translate('You already have a program for city level.')?>
+			<?php elseif ($level=='region'):?>
+           		<?= $this->translate('You already have a program for region level.')?>
+			<?php elseif ($level=='country'):?>
+           		<?= $this->translate('You already have a program for country level.')?>
+			<?php endif;?>
+       <?php endif;?>
+           </div>
+	<!-- /12 -->
+</div>
+<!-- end row -->
+
+<?php endif;?>
+
+<!-- /program/add-edit-program -->

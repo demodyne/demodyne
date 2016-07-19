@@ -1,0 +1,219 @@
+<!-- program/view-aggregated-program -->
+
+<?php 
+
+    $level = $_SESSION['level']['level'];
+    if ($level=='city') {
+        $levelName = ($user->getCity()->getFullCity()?$user->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getCity()->getDistrictName().'</i></span>':$user->getCity()->getCityName());
+    }
+    else if ($level=='region') {
+        $levelName = $user->getCity()->getRegion()->getRegionName();
+    }
+    else if ($level=='country') {
+        $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$user->getCountry()->getCountryName() .'</span>';
+    }
+    
+?>
+
+<?php if (!$limit):?>
+<div class="modal-header-soft round5top ui-draggable-handle">
+	<a class="close" href="<?= $this->url($_SESSION['level']['level']);?>"><i
+		class="fa fa-home w"></i></a>
+	<button type="button" class="close" onclick="parent.history.back();">
+		<i class="fa fa-arrow-circle-left w right10"></i>
+	</button>
+	&nbsp; <span class="big" id="modal-dialog-title"><strong><?= sprintf($this->translate('View Aggregated Program for %s'), $levelName)?>
+  </strong></span>
+</div>
+<?php endif;?>
+
+<div <?= $limit?'class="panel panel-default panel-body parent orangebackground"':'class="jumbotron parent" style="border-top-left-radius: 0px; border-top-right-radius: 0px;"' ?>
+	id="program-view-aggregated-program"
+	data-url="<?= $this->url('program', array('action'=>'view-aggregated-program', 'ajax' => true));?>"
+	data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
+	data-add-favorite="<?=$this->translate('Add Favorite')?>"
+	data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
+
+<?php if ($limit):?>
+<div class="bigblack"><strong><?= $this->translate('Aggregated Program')?></strong></div><hr style="border-top: 1px solid #cccccc;">
+<?php else:?>
+<div class="panel panel-default panel-body orangebackground">
+
+<?=sprintf($this->translate('This program for %s is aggregated based on three major elements:'), $levelName)?><br>
+<ul>
+<li> 
+	<?=$this->translate('The number and value of <strong>Votes</strong> for each citizen proposal or official measure (<i>Acceptance</i> criterion)')?>
+</li>
+<li> 
+	<?=$this->translate('The number of times a proposal/measure has been <strong>included</strong> by a Citizen in her/his <strong>ideal program</strong>. (<i>Prevalence</i> criterion)')?>
+</li>
+<li> 
+<?=$this->translate('The mean <strong>Priority rank</strong> allocated by the Citizens to a proposal/measure in their individual program (<i>Importance</i> criterion)')?>
+</li>
+</ul>
+<?=$this->translate('With the aggregated program, a transparent and concrete expression of the citizen’s will is available to elaborate policies.')?>
+
+</div>
+<?php endif;?>
+
+<?php if(count($aggregatedProposals)>0):?>
+
+                <?php foreach($aggregatedProposals as $index => $proposal): ?>
+
+	<div class="table-layout">
+		<div class="table-cell fixed-width-20">
+			<span class="big"><?=$index+1?></span>
+			
+		</div>
+		
+		<div class="table-cell fixed-width-40">
+			<img
+				src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
+				height="34" width="34"
+				title="<?= $proposal->getCat()->getCatCat()->getCatName() ?>"><br>
+			<?php if ($proposal->getMeasure()):?>
+			<span style="font-size: 1.2em;line-height: 2em;"
+				title="<?= $this->translate('Measure')?>"><i
+				class="fa fa-university size15em"></i></span>
+			<?php else:?>
+			<span style="font-size: 1.2em;line-height: 2em;"
+				title="<?= $this->translate('Proposal')?>"><i
+				class="fa fa-bullhorn size15em"></i></span>
+			<?php endif;?>
+		</div>
+		
+		<div class="table-cell">
+			<div class="row">
+				<div class="col-md-5 col-xs-12">
+
+
+
+<?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription()); 
+
+      $proposalDescription = (strlen($proposalDescription) > 200) ? substr($proposalDescription, 0, 200) . '...' : $proposalDescription;?>
+
+
+
+<a
+						href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>"
+						title="<?= $proposalDescription ?>" id="country-proposal-item"
+						data-id="<?= $proposal->getPropUUID()?>"><span class="big"><?= $proposal->getPropSavedName() ?></span></a> 
+					<br>
+
+<?= $this->translate('in')?> <?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName()?>
+
+					<br />
+					<!-- user -->
+
+					<?= $this->translate('by')?> <a
+						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
+						data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
+						data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
+						id="view-profile"> <span class="badge"><?= $proposal->getUsr()->getUsrName() ?></span></a>
+					<i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()->format('d/m/Y') ?>
+					<br /> <?= $this->translate('Last updated')?> <i
+						class="fa fa-clock-o"></i> <?= $proposal->getPropSavedDate()->format('d/m/Y')?> 
+
+</div>
+				
+				<div class="col-md-2 col-xs-12">
+					<?= sprintf($this->translate('Included by <strong>%d Citizens</strong> in their ideal program'), count($proposal->getProposalPrograms()))?><br /> 
+					
+				</div>
+				
+				<div class="col-md-2 col-xs-12">
+					<?= sprintf($this->translate('Mean Priority rank: %d'), round($proposal->getMeanPriority()))?>
+				</div>
+				
+				
+				<div class="col-md-3 col-xs-12">        
+
+<?= $this->{"status-details-$index"}?>
+</div>
+			</div>
+		</div>
+		<div class="table-cell fixed-width-150 text-right">
+			<?php if ($user->getUsrId()):?>
+			<a
+				href="<?= $this->url('proposal', array('action'=>'favorite', 'id'=>$proposal->getPropUUID()));?>"
+				alt="Favorite Proposal" id="favorite"
+				data-favorite="<?= $proposal->getPropUUID()?>"><?php if (in_array($user, $proposal->getUsers())):?><i class="fa fa-heart"
+    				title="<?= $this->translate('Remove Favorite')?>"></i> <?= $this->translate('Remove Favorite')?><?php else:?><i
+    				class="fa fa-heart-o" title="<?= $this->translate('Add Favorite')?>"></i> <?= $this->translate('Add Favorite')?><?php endif;?></a><br /> 
+			
+			<?php 
+			     $showAddToProgram = false;
+			     $me = $this->identity();
+			     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.city') && $me->getCity()==$proposal->getCity()) {
+			         $showAddToProgram = true;
+			     }
+			     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.region') && $me->getCity()->getRegion()==$proposal->getCity()->getRegion()) {
+			         $showAddToProgram = true;
+			     }
+			     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.country') && $me->getCountry()==$proposal->getCity()->getCountry()) {
+			         $showAddToProgram = true;
+			     }
+			
+			?>
+    		<?php if ($showAddToProgram):?>			
+    				
+        		<?php $program = $user->getProgramForLevel($proposal->getPropLevel())?>
+        		<?php if (!$program || !$program->hasProposal($proposal)):?>
+        			<a
+        				href="<?= $this->url('program', array( 'action'=>'add-proposal', 'id'=>$proposal->getPropUUID()));?>"
+        				data-id="<?= $proposal->getPropUUID()?>"
+        				id="add-to-program"><i class="fa fa-link"></i> <?= $this->translate('Add to my Program')?></a><br />
+        		<?php else:?>
+        			<a
+        				href="<?= $this->url('program', array( 'action'=>'add-remove-proposal', 'id'=>$proposal->getPropUUID()));?>"
+        				data-id="<?= $proposal->getPropUUID()?>"
+        				id="remove-from-program"><i class="fa fa-unlink"></i> <?= $this->translate('Remove from my Program')?></a><br /> 
+        		<?php endif;?>
+		
+			<?php endif;?>
+				
+		<?php endif;?>
+			<a target="_parent"
+				href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>#comment-list"
+				title="<?= $this->translate('Comments')?>"><i class="fa fa-comments"></i> <?= sprintf($this->translate('%d Comments'), count($proposal->getComments()))?></a>
+		
+		</div>
+	</div>
+	<hr style="border-top: 1px solid #cccccc;">
+
+
+
+                        <?php endforeach; ?>
+
+                    <?php else:?>
+
+<div class="row">
+		<div class="col-md-12">
+				<?= sprintf($this->translate('There are no proposals in the aggregated program for %s.'), $levelName)?> <?= $user->isAdministration()?'':$this->translate('Be the first to create a program and to populate it with proposals and official measures')?>.
+			</div>
+		<!--/12-->
+	</div>
+	<!-- /row -->
+
+                        
+
+
+
+                    <?php endif;?>
+
+
+<?php if ($limit):?>
+<div class="row">
+<div class="col-md-12 text-right">
+				<a href="<?= $this->url('program', array( 'action'=>'view-aggregated-program'));?>" class="btn btn-orange"> <i
+					class="fa fa-eye"></i> <?= $this->translate('View All')?></a>
+				
+			</div>
+</div> 
+<?php endif;?>
+</div>
+
+
+<script type="text/javascript">    $(function () {    	programViewAggregatedProgramHandlers();    });</script>
+
+<!-- /program/view-aggregated-program -->

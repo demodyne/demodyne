@@ -1,0 +1,68 @@
+<!-- proposal/delete -->
+
+<div id="delete-proposal-content">
+  <?php if (!$error):?>
+  <div class="row">
+    <div class="col-md-12">
+      <?= sprintf($this->translate('Your proposal \'%s\' will be deleted.'), $proposal->getPropSavedName())?><br>
+      <h1>
+        <?= $this->translate('Are you sure?')?>
+      </h1>
+    </div>
+    
+    <!-- /12 --> 
+    
+  </div>
+  
+  <!-- end row -->
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-right"> <a href="<?= $this->url('proposal', array('action'=>'delete', 'id' => $proposal->getPropUUID() ), true);?>" class="btn btn-orange" id="delete-proposal-yes-button" ><i class="fa fa-trash" id="delete-proposal-yes-button-icon"></i>
+      <?= $this->translate('Yes')?>
+      </a>
+      <button type="button" class="btn" id="delete-proposal-no-button" data-dismiss="modal"><i class="fa fa-ban"></i>
+      <?= $this->translate('No')?>
+      </button>
+    </div>
+  </div>
+  <!-- /r -->
+  
+  <?php else:?>
+  <div class="row">
+    <div class="col-md-12">
+      <?= sprintf($this->translate('You can no longer delete proposal \'%s\'.'), $proposal->getPropSavedName())?>
+      <br>
+      <span class="text-danger">
+      <?= sprintf($this->translate('Error message: %s'), $error) ?>
+      </span> </div>
+    
+    <!-- /12 --> 
+    
+  </div>
+  
+  <!-- end row -->
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-right">
+      <button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i>
+      <?= $this->translate('Cancel')?>
+      </button>
+    </div>
+  </div>
+  <!-- /r -->
+  
+  <?php endif;?>
+</div>
+<script type="text/javascript">	$(function () {		proposalDeleteHandlers();	});</script> 
+
+<!-- /proposal/delete -->

@@ -1,0 +1,80 @@
+<!-- report/submit-bug -->
+
+<div id="report-submit-bug">
+	<p align="center">
+		<strong><?= $this->translate('This form is to report TECHNICAL issues on the site.')?></strong><br>
+<?= $this->translate('If you have other types of suggestions or ideas, please share with the community on the')?> <br>
+		<span class="big"> <a href="http://forum.demodyne.org" target="_blank"><i
+				class="fa fa-comments-o"></i> <?= $this->translate('forums')?></a>!
+		</span>
+	</p>
+	<hr>
+	<?php $form->prepare(); ?>
+<?php $form->setAttribute('method', 'post'); ?>
+<?php $form->setAttribute('id', 'report-submit-bug-form'); ?>
+<?= $this->form()->openTag($form);?>
+	<div class="row">
+		<div class="col-md-2"><?= $this->translate('Subject')?>*</div>
+		<div class="col-md-10 bot10">
+			<?= $this->formElement($form->get('bugTitle'));?>
+			<?php if ($form->get('bugTitle')->getMessages()):?>
+            	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('bugTitle'));?></span>
+            <?php endif;?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+			<div style="padding-top: 45px;"><?= $this->translate('Bug Description')?>*</div>
+		</div>
+		<div class="col-md-10">
+			<?= $this->formElement($form->get('bugDescription'));?>
+			<?php if ($form->get('bugDescription')->getMessages()):?>
+            	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('bugDescription'));?></span>
+            <?php endif;?>
+		</div>
+	</div>
+	<!-- end row -->
+	<div class="row top10">
+		<div class="col-md-2"></div>
+		<div class="col-md-10 bot10">
+			<strong><?= $this->translate('Upload Print Screen file below')?></strong><br>
+(<?= $this->translate('Following file types are supported: jpg,jpeg,gif,png,pdf - maximum file size limit is 1 MB')?>)
+</div>
+	</div>
+	<div class="row top10">
+		<div class="col-md-2"><?= $this->translate('File upload')?>:</div>
+		<div class="col-md-10 bot10">
+			<?= $this->formElement($form->get('bugImage'));?>
+			<?php if ($form->get('bugImage')->getMessages()):?>
+            	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('bugImage'));?></span>
+            <?php endif;?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-xs-12">
+			<?=$this->translate('*mandatory')?>
+		</div>
+		<div class="col-md-6 col-xs-12 text-right">
+			<button type="submit" class="btn btn-orange">
+				<i class="fa fa-bug" id="report-submit-bug-submit-icon"></i> Submit
+			</button>
+			<button type="button" class="btn btn-default" data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+	<?=$this->form()->closeTag();?>
+</div>
+<!-- /r -->
+
+<script type="text/javascript">
+	$(function () {
+		reportSubmitBugHandlers();
+	});
+</script>
+
+<!-- /report/submit-bug -->
