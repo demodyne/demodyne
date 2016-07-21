@@ -44,7 +44,7 @@ class Program
     /**
      * @var string
      *
-     * @ORM\Column(name="prog_description", type="string", length=2000, nullable=true)
+     * @ORM\Column(name="prog_description", type="text", length=65535, nullable=true)
      */
     private $progDescription;
 

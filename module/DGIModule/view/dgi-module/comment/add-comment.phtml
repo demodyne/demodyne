@@ -18,7 +18,7 @@
 					id="inbox-new-message-textbox-bold"
 					onclick="document.execCommand('bold');">
 					<strong><?=$this->translate('Bold')?></strong>
-				</button>
+				</buttons>
 				<button class="btn btn-mini" type="button"
 					id="inbox-new-message-textbox-italic"
 					onclick="document.execCommand('italic');">
@@ -31,8 +31,10 @@
 				</button>
 			</div>
 <div class="form-control" contenteditable="true"  data-placeholder="<?=$this->translate('Enter your comment')?>"
+				maxlength="1000" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
 				id="comment-add-comment-textbox"
 				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$comText?$comText:''?></div>
+<div id="comment-add-comment-textbox-count"></div>
 <?= $this->formElement($commentForm->get('comText'));?> <br />
 <span class="text-danger"><?= $this->formElementErrors($commentForm->get('comText'));?></span>
 </div>

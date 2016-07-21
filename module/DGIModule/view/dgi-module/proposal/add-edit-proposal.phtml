@@ -53,10 +53,14 @@
 					<u><?=$this->translate('Underline')?></u>
 				</button>
 			</div>
-<div class="form-control" contenteditable="true"  data-placeholder=""
-				id="proposal-add-edit-proposal-textbox"
-				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$propDescription?$propDescription:($proposal?$proposal->getPropDescription():'')?></div>
-                        <?= $this->formElement($form->get('propDescription'));?> <br />
+						<div class="form-control" contenteditable="true"
+							data-placeholder="" maxlength="1000"
+							over-text="<?=$this->translate('<span>0</span> characters in excess')?>"
+							below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
+							id="proposal-add-edit-proposal-textbox"
+							style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$propDescription?$propDescription:($proposal?$proposal->getPropDescription():'')?></div>
+						<div id="proposal-add-edit-proposal-textbox-count"></div>
+						<?= $this->formElement($form->get('propDescription'));?> <br />
                         <?php if ($form->get('propDescription')->getMessages()):?>
                             <span class="text-danger">
                             <?= $this->formElementErrors($form->get('propDescription'));?>

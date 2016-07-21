@@ -546,14 +546,47 @@ $(document).ajaxError(function(event, request, settings) {
 			});
 	    }
 	    
+	    function contentEditableTextLimit(content, count, buttons) {
+	    	var maxCharacters = parseInt(content.attr('maxlength'));
+			var characters = content.text().length;
+	
+		    if (characters > (maxCharacters)) {
+		    	count.html(content.attr('over-text'));
+		        count.find('span').addClass('label label-danger'); 
+		        buttons.forEach(function(item, index) {
+		        	if (item.length) {
+		        		item.prop('disabled', true);
+		        	}
+		        });
+		        count.find('span').text(-(maxCharacters - characters));
+		    } else {
+		    	count.html(content.attr('below-text'));
+		        count.find('span').removeClass('label label-danger');
+		        buttons.forEach(function(item, index) {
+		        	if (item.length) {
+		        		item.prop('disabled', false);
+		        	}
+		        });
+		        count.find('span').text(maxCharacters - characters);
+		    }
+		    
+	    	
+	    }
+	    
 	    function commentAddCommentHandlers() {
 	    	
-	    	$('#comment-add-comment-textbox').on('change propertychange click keyup input paste focus', function () {
-				if ($('#comment-add-comment-textbox').html() == '' ) {
+	    	contentEditableTextLimit($('#comment-add-comment-textbox'), $('#comment-add-comment-textbox-count'), [$('#comment-add-comment-submit')]);
+		    
+	    	
+	    	$('#comment-add-comment-textbox').on('change propertychange click keyup input paste focus', function (event) {
+				if ($('#comment-add-comment-textbox').text() == '' ) {
 					$('#comment-add-comment-submit').prop('disabled', true);
 				} else {
 					$('#comment-add-comment-submit').prop('disabled', false);
 				}
+				
+				contentEditableTextLimit($('#comment-add-comment-textbox'), $('#comment-add-comment-textbox-count'), [$('#comment-add-comment-submit')]);
+			    
 			});
 	    	
 	    	$('#comment-form').submit(function() { // catch the form's submit event
@@ -641,6 +674,16 @@ $(document).ajaxError(function(event, request, settings) {
 	    
 	    
 	    function eventAddEventHandlers() {
+	    	
+	    	
+	    	contentEditableTextLimit($('#event-add-event-textbox'), $('#event-add-event-textbox-count'), [$('#event-add-event-save-button'), $('#event-add-event-publish-button')]);
+		    
+	    	
+	    	$('#event-add-event-textbox').on('change propertychange click keyup input paste focus', function (event) {
+				contentEditableTextLimit($('#event-add-event-textbox'), $('#event-add-event-textbox-count'), [$('#event-add-event-save-button'), $('#event-add-event-publish-button')]);
+			});
+	    	
+	    	
 	    	 $('#eventStartDateGroup').datetimepicker({
 	             format: 'DD/MM/YYYY HH:mm',
 //            	 autoclose: true,
@@ -1450,6 +1493,14 @@ $(document).ajaxError(function(event, request, settings) {
 	     *  Handlers for the InboxController -> newMessageAction
 	     */
 	    function inboxNewMessageHandlers(getContactsURL) {
+	    	
+	    	contentEditableTextLimit($('#inbox-new-message-textbox'), $('#inbox-new-message-textbox-count'), [$('#inbox-new-message-send-message')]);
+		    
+	    	
+	    	$('#inbox-new-message-textbox').on('change propertychange click keyup input paste focus', function (event) {
+				contentEditableTextLimit($('#inbox-new-message-textbox'), $('#inbox-new-message-textbox-count'), [$('#inbox-new-message-send-message')]);
+			});
+	    	
 	    	/**
 	    	 * Start Autocomplete functions
 	    	 * */
@@ -1713,6 +1764,14 @@ $(document).ajaxError(function(event, request, settings) {
 	     *  Handlers for the ProposalController -> addAction
 	     */
 	    function measureAddMeasureHandlers(getSubCategoriesURL, admin) {
+	    	
+	    	contentEditableTextLimit($('#measure-add-measure-textbox'), $('#measure-add-measure-textbox-count'), [$('#measure-add-measure-save'), $('#measure-add-measure-publish')]);
+		    
+	    	
+	    	$('#measure-add-measure-textbox').on('change propertychange click keyup input paste focus', function (event) {
+				contentEditableTextLimit($('#measure-add-measure-textbox'), $('#measure-add-measure-textbox-count'), [$('#measure-add-measure-save'), $('#measure-add-measure-publish')]);
+			});
+	    	
 //	    	getSubCategoriesUrl = getSubCategoriesURL;
 	    	// configuration options
     		$('.input-daterange').datepicker({
@@ -2201,6 +2260,13 @@ $(document).ajaxError(function(event, request, settings) {
 	     *  Handlers for the ProposalController -> addProposalAction + editProposalAction
 	     */
 	    function proposalAddEditProposalHandlers() {
+	    	
+	    	contentEditableTextLimit($('#proposal-add-edit-proposal-textbox'), $('#proposal-add-edit-proposal-textbox-count'), [$('#proposal-add-edit-proposal-save-button'), $('#proposal-add-edit-proposal-publish-button')]);
+		    
+	    	$('#proposal-add-edit-proposal-textbox').on('change propertychange click keyup input paste focus', function (event) {
+				contentEditableTextLimit($('#proposal-add-edit-proposal-textbox'), $('#proposal-add-edit-proposal-textbox-count'), [$('#proposal-add-edit-proposal-save-button'), $('#proposal-add-edit-proposal-publish-button')]);
+			});
+	    	
 	    	
 	    	$('canvas').each(function() {
 	    		if (typeof $(this).data('image') !== 'undefined') {
@@ -3234,6 +3300,13 @@ $(document).ajaxError(function(event, request, settings) {
 	     *  Handlers for the ProgramController -> addProgramAction
 	     */
 	    function programAddEditProgramHandlers() {
+	    	
+	    	contentEditableTextLimit($('#program-add-program-textbox'), $('#program-add-program-textbox-count'), [$('#program-add-program-save')]);
+		    
+	    	
+	    	$('#program-add-program-textbox').on('change propertychange click keyup input paste focus', function (event) {
+				contentEditableTextLimit($('#program-add-program-textbox'), $('#program-add-program-textbox-count'), [$('#program-add-program-save')]);
+			});
 	    	
 			$('#program-add-program-form').submit(function() { // catch the form's submit event
 				$('#progDescription').html($('#program-add-program-textbox').html());

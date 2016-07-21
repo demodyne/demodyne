@@ -1,6 +1,6 @@
--- MySQL dump 10.13  Distrib 5.6.30, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.30, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: demodyne_prod
+-- Host: demodyne.org    Database: demodyne_prod
 -- ------------------------------------------------------
 -- Server version	5.6.30
 
@@ -80,7 +80,7 @@ CREATE TABLE `dgi_banners` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_banners_BEFORE_INSERT` BEFORE INSERT ON `dgi_banners` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_banners_BEFORE_INSERT` BEFORE INSERT ON `dgi_banners` FOR EACH ROW
     SET new.banner_created_date = now(), new.banner_uuid = uuid() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -116,7 +116,7 @@ CREATE TABLE `dgi_bugs` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_bugs_BEFORE_INSERT` BEFORE INSERT ON `dgi_bugs` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_bugs_BEFORE_INSERT` BEFORE INSERT ON `dgi_bugs` FOR EACH ROW
         SET new.bug_created_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -157,7 +157,7 @@ CREATE TABLE `dgi_categories` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_categories_BEFORE_INSERT` BEFORE INSERT ON `dgi_categories` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_categories_BEFORE_INSERT` BEFORE INSERT ON `dgi_categories` FOR EACH ROW
     BEGIN
         IF NEW.cat_id_cat = '0' THEN
             SET NEW.cat_id_cat = NULL;
@@ -195,6 +195,7 @@ CREATE TABLE `dgi_cities` (
   `district_name` varchar(100) DEFAULT ' ',
   `district_code` int(11) DEFAULT '0',
   `full_city_id` int(11) DEFAULT NULL,
+  `country` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`city_id`),
   KEY `city_country_fk_idx` (`country_id`),
   KEY `city_full_city_idx` (`full_city_id`),
@@ -235,7 +236,7 @@ DROP TABLE IF EXISTS `dgi_comments`;
 CREATE TABLE `dgi_comments` (
   `com_id` int(11) NOT NULL AUTO_INCREMENT,
   `com_usr` int(11) NOT NULL,
-  `com_text` varchar(1000) NOT NULL,
+  `com_text` text NOT NULL,
   `com_created_date` datetime DEFAULT NULL,
   `com_com` int(11) DEFAULT NULL,
   `prop_id` int(11) DEFAULT NULL,
@@ -261,7 +262,7 @@ CREATE TABLE `dgi_comments` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_comments_BEFORE_INSERT` BEFORE INSERT ON `dgi_comments` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_comments_BEFORE_INSERT` BEFORE INSERT ON `dgi_comments` FOR EACH ROW
     SET new.com_uuid=uuid(), new.com_created_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -284,7 +285,7 @@ CREATE TABLE `dgi_counters` (
   `cnt_vote` int(11) DEFAULT '0',
   `cnt_com` int(11) DEFAULT '0',
   PRIMARY KEY (`cnt_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=255 DEFAULT CHARSET=utf8 COMMENT='Used to manage user counters';
+) ENGINE=InnoDB AUTO_INCREMENT=256 DEFAULT CHARSET=utf8 COMMENT='Used to manage user counters';
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -295,7 +296,7 @@ CREATE TABLE `dgi_counters` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_counters_BEFORE_INSERT` BEFORE INSERT ON `dgi_counters` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_counters_BEFORE_INSERT` BEFORE INSERT ON `dgi_counters` FOR EACH ROW
     SET new.cnt_updated_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -365,7 +366,7 @@ CREATE TABLE `dgi_error_log` (
   `ip` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `session_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2957 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2982 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,7 +383,7 @@ CREATE TABLE `dgi_events` (
   `region_id` int(11) DEFAULT NULL,
   `country_id` int(11) DEFAULT NULL,
   `event_name` varchar(200) NOT NULL,
-  `event_description` varchar(5000) NOT NULL,
+  `event_description` text NOT NULL,
   `event_link` varchar(2000) DEFAULT NULL,
   `event_image` varchar(100) DEFAULT NULL,
   `event_start_date` datetime NOT NULL,
@@ -416,7 +417,7 @@ CREATE TABLE `dgi_events` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_events_BEFORE_INSERT` BEFORE INSERT ON `dgi_events` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_events_BEFORE_INSERT` BEFORE INSERT ON `dgi_events` FOR EACH ROW
     SET new.event_uuid=uuid(), new.event_created_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -471,7 +472,7 @@ CREATE TABLE `dgi_favorites` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_favorites_BEFORE_INSERT` BEFORE INSERT ON `dgi_favorites` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_favorites_BEFORE_INSERT` BEFORE INSERT ON `dgi_favorites` FOR EACH ROW
     SET new.last_check_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -513,7 +514,7 @@ CREATE TABLE `dgi_history` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_history_BEFORE_INSERT` BEFORE INSERT ON `dgi_history` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_history_BEFORE_INSERT` BEFORE INSERT ON `dgi_history` FOR EACH ROW
     SET new.his_created_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -557,7 +558,7 @@ CREATE TABLE `dgi_inbox` (
   `com_id` int(11) DEFAULT NULL,
   `nl_id` int(11) DEFAULT NULL,
   `ibx_title` varchar(50) DEFAULT '',
-  `ibx_text` varchar(10000) DEFAULT NULL,
+  `ibx_text` mediumtext,
   `ibx_created_date` datetime DEFAULT NULL,
   `ibx_viewed` int(11) DEFAULT '0',
   `ibx_uuid` varchar(36) DEFAULT NULL,
@@ -590,7 +591,7 @@ CREATE TABLE `dgi_inbox` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_inbox_BEFORE_INSERT` BEFORE INSERT ON `dgi_inbox` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_inbox_BEFORE_INSERT` BEFORE INSERT ON `dgi_inbox` FOR EACH ROW
     SET new.ibx_uuid=uuid(), new.ibx_created_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -716,7 +717,7 @@ CREATE TABLE `dgi_news` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_news_BEFORE_INSERT` BEFORE INSERT ON `dgi_news` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_news_BEFORE_INSERT` BEFORE INSERT ON `dgi_news` FOR EACH ROW
     SET new.news_created_date=now(), new.news_uuid=uuid() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -770,7 +771,7 @@ CREATE TABLE `dgi_newsletters` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_newsletters_BEFORE_INSERT` BEFORE INSERT ON `dgi_newsletters` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_newsletters_BEFORE_INSERT` BEFORE INSERT ON `dgi_newsletters` FOR EACH ROW
     SET new.nl_created_date=now(), new.nl_uuid=uuid() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -872,7 +873,7 @@ CREATE TABLE `dgi_programs` (
   `city_id` int(11) NOT NULL,
   `prog_level` int(11) NOT NULL,
   `prog_name` varchar(50) DEFAULT NULL,
-  `prog_description` varchar(2000) DEFAULT NULL,
+  `prog_description` text,
   `prog_created_date` datetime NOT NULL,
   `prog_uuid` varchar(36) DEFAULT NULL,
   `prog_saved` int(11) DEFAULT '1',
@@ -896,7 +897,7 @@ CREATE TABLE `dgi_programs` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`213.169.174.117`*/ /*!50003 TRIGGER `dgi_programs_BINS` BEFORE INSERT ON `dgi_programs` FOR EACH ROW
+/*!50003 CREATE TRIGGER `dgi_programs_BINS` BEFORE INSERT ON `dgi_programs` FOR EACH ROW
 SET new.prog_uuid=uuid() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -918,7 +919,7 @@ CREATE TABLE `dgi_proposals` (
   `city_id` int(11) NOT NULL,
   `prop_published` int(11) DEFAULT '0',
   `prop_name` varchar(100) DEFAULT '',
-  `prop_description` varchar(5000) DEFAULT '',
+  `prop_description` text,
   `prop_published_date` datetime DEFAULT NULL,
   `prop_priority` int(11) DEFAULT '0',
   `prop_uuid` varchar(36) DEFAULT NULL,
@@ -962,7 +963,7 @@ CREATE TABLE `dgi_proposals` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_proposals_BEFORE_INSERT` BEFORE INSERT ON `dgi_proposals` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_proposals_BEFORE_INSERT` BEFORE INSERT ON `dgi_proposals` FOR EACH ROW
     SET new.prop_uuid = uuid(), new.prop_created_date=now(), new.prop_name=new.prop_uuid, new.prop_saved_date=new.prop_created_date */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1095,8 +1096,54 @@ CREATE TABLE `dgi_report` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_report_BEFORE_INSERT` BEFORE INSERT ON `dgi_report` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_report_BEFORE_INSERT` BEFORE INSERT ON `dgi_report` FOR EACH ROW
     SET new.rep_created_date=now() */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+
+--
+-- Table structure for table `dgi_scenarios`
+--
+
+DROP TABLE IF EXISTS `dgi_scenarios`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dgi_scenarios` (
+  `scn_id` int(11) NOT NULL AUTO_INCREMENT,
+  `usr_id` int(11) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `scn_name` varchar(50) DEFAULT NULL,
+  `scn_description` varchar(2000) DEFAULT NULL,
+  `scn_created_date` datetime NOT NULL,
+  `scn_uuid` varchar(36) DEFAULT NULL,
+  `scn_main` int(11) DEFAULT '0',
+  `scn_saved` int(11) DEFAULT '1',
+  `scn_saved_name` varchar(50) DEFAULT NULL,
+  `scn_saved_date` datetime NOT NULL,
+  `scn_deleted_date` datetime DEFAULT NULL,
+  `scn_deleted_usr` int(11) DEFAULT NULL,
+  PRIMARY KEY (`scn_id`),
+  UNIQUE KEY `scenario_unique` (`scn_name`,`city_id`),
+  KEY `id_user_idx` (`usr_id`),
+  KEY `id_city_idx` (`city_id`),
+  CONSTRAINT `id_city` FOREIGN KEY (`city_id`) REFERENCES `dgi_cities` (`city_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `id_user` FOREIGN KEY (`usr_id`) REFERENCES `dgi_users` (`usr_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_scenarios_BEFORE_INSERT` BEFORE INSERT ON `dgi_scenarios` FOR EACH ROW
+     SET new.scn_uuid=uuid(), new.scn_created_date=now(), new.scn_saved_date=new.scn_created_date */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
@@ -1167,7 +1214,7 @@ CREATE TABLE `dgi_steps` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_steps_BEFORE_INSERT` BEFORE INSERT ON `dgi_steps` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_steps_BEFORE_INSERT` BEFORE INSERT ON `dgi_steps` FOR EACH ROW
     SET new.step_uuid = uuid(), new.step_created_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1231,7 +1278,7 @@ CREATE TABLE `dgi_users` (
   CONSTRAINT `usr_cnt_fk` FOREIGN KEY (`cnt_id`) REFERENCES `dgi_counters` (`cnt_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `usr_lang_fk` FOREIGN KEY (`lang_id`) REFERENCES `dgi_languages` (`lang_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `usr_part_id` FOREIGN KEY (`part_id`) REFERENCES `dgi_partners` (`part_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=320 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=321 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -1242,7 +1289,7 @@ CREATE TABLE `dgi_users` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_users_BEFORE_INSERT` BEFORE INSERT ON `dgi_users` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_users_BEFORE_INSERT` BEFORE INSERT ON `dgi_users` FOR EACH ROW
     SET new.usr_uuid=uuid() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1301,14 +1348,21 @@ CREATE TABLE `dgi_votes` (
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`demodyne_prd_rot`@`31.32.254.107`*/ /*!50003 TRIGGER `demodyne_prod`.`dgi_votes_BEFORE_INSERT` BEFORE INSERT ON `dgi_votes` FOR EACH ROW
+/*!50003 CREATE TRIGGER `demodyne_prod`.`dgi_votes_BEFORE_INSERT` BEFORE INSERT ON `dgi_votes` FOR EACH ROW
     SET new.vote_uuid = uuid(), new.vote_created_date=now() */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-
--- Dump completed on 2016-07-19 14:32:07
+-- Dump completed on 2016-07-21 15:46:19

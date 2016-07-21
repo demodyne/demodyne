@@ -34,7 +34,7 @@ class Comment
     /**
      * @var string
      *
-     * @ORM\Column(name="com_text", type="string", length=1000, nullable=false)
+     * @ORM\Column(name="com_text", type="text", length=65535, nullable=false)
      */
     private $comText;
 

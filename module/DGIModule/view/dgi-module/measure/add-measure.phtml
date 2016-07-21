@@ -51,8 +51,10 @@
 				</button>
     			</div>
     			<div class="form-control desc" contenteditable="true"  data-placeholder="Enter your comment"
-    				id="measure-add-measure-textbox"
+    				maxlength="1000" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
+				 	id="measure-add-measure-textbox"
     				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$propDescription?$propDescription:($proposal?$proposal->getPropDescription():'')?></div>
+            			<div id="measure-add-measure-textbox-count"></div>
             			<?= $this->formElement($form->get('propDescription'));?>
 
             				<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('propDescription'));?></span>

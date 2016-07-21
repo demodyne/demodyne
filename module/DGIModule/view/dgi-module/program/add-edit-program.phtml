@@ -36,8 +36,10 @@
 				</button>
     			</div>
     			<div class="form-control desc" contenteditable="true"  data-placeholder="Enter your comment"
-    				id="program-add-program-textbox"
+    				maxlength="1000" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
+					id="program-add-program-textbox"
     				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$progDescription?$progDescription:($program?$program->getProgDescription():'')?></div>
+            			<div id="program-add-program-textbox-count"></div>
             			<?= $this->formElement($form->get('progDescription'));?>
 
             				<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('progDescription'));?></span>
