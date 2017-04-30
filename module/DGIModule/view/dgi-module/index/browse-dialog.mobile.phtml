@@ -1,0 +1,144 @@
+<div id="index-browse-dialog"
+     data-get-regions="<?= $this->url('location', array('action'=>'get-regions')); ?>">
+
+    <?php /** @var \DGIModule\Entity\User $user */
+    if ($user && $user->getCity()):?>
+        <div class="row">
+            <div class="col-md-12">
+                <?=$this->translate('My dashboards:')?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="<?=$this->url('browse', ['country' => $user->getCountry()->getCountryName()])?>"><img
+                                    src="/img/flags/<?=str_replace(' ', '-', $user->getCountry()->getCountryName())?>.png" style="margin-bottom: 4px;"
+                                    width="25" height="17"> <?=$user->getCountry()->getCountryName()?>&nbsp;&nbsp;&nbsp;
+                            &gt;</a></li>
+                    <li><a href="<?=$this->url('browse', ['country' => $user->getCountry()->getCountryName(),
+                            'region'=>$user->getCity()->getRegion()->getRegionName()])?>"><?=$user->getCity()->getRegion()->getRegionName()?>&nbsp;&nbsp;&nbsp; &gt;</a></li>
+                    <li><a href="<?=$this->url('browse', ['country' => $user->getCountry()->getCountryName(),
+                            'region'=>$user->getCity()->getRegion()->getRegionName(),
+                            'postalcode' => $user->getCity()->getCityPostalcode(), 'cityname' => $user->getCity()->getCityName()])?>"><?=$user->getCity()->getFullCity()?$user->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getCity()->getDistrictName().'</i></span>':$user->getCity()->getCityName()?></a></li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+
+
+
+
+    <?php endif;?>
+
+    <div class="row bot20">
+        <div class="col-md-12">mmm
+            <i class="fa fa-search fa-2x" aria-hidden="true"></i> <?=$this->translate('Browse other Countries / Regions / Cities on Demodyne  online platform:')?>
+        </div>
+    </div>
+
+
+    <?php
+    /** @var \Zend\Form\Form $form */
+    $form->prepare();
+    $form->setAttribute('method', 'post');
+    $form->setAttribute('action', $this->url('location', array('action'=>'search-cities'))); ?>
+
+    <?=$this->form()->openTag($form);?>
+
+    <fieldset>
+        <div class="row bot10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-md-3 control-label text-right"><?= $this->translate('Country:'); ?></label>
+                    <div class="col-md-5 bot5"><?= $this->formElement($form->get('country'));?>
+                        <span class="text-danger"><?= $this->formElementErrors($form->get('country'));?></span>
+                    </div>
+                    <div class="col-md-4"><button type="button" class="btn btn-orange" id="view-country-level"
+                                                  data-url="<?=$this->url('browse', ['country' => '$country$'])?>"><?=$this->translate('View Country Level')?></button>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- /6 -->
+        </div>
+        <!-- end row -->
+        <div class="row bot10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-md-3 control-label text-right"><?= $this->translate('Region:'); ?></label>
+                    <div class="col-md-5 bot5"><?= $this->formElement($form->get('region'));?>
+                        <span class="text-danger"><?= $this->formElementErrors($form->get('region'));?></span>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-orange" id="view-region-level"
+                                data-url="<?=$this->url('browse', [
+                                    'country' => '$country$',
+                                    'region'=> '$region$'])?>"><?=$this->translate('View Region Level')?></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row bot10">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="col-md-3 control-label text-right"><?= $this->translate('City or postal code:'); ?></label>
+                    <div class="col-md-5 bot5"><?= $this->formElement($form->get('search'));?>
+                        <span class="text-danger"><?= $this->formElementErrors($form->get('search'));?></span>
+
+                    </div>
+                    <div class="col-md-4"><i class="fa s18 fa-spinner fa-pulse" id="browse-cityLoad"
+                                             style="display: none"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </fieldset>
+
+
+    <?=  $this->form()->closeTag();?>
+
+    <div id="browse-dialog-city-list">
+
+
+    </div>
+
+
+
+
+
+    <div class="row">
+        <div class="col-xs-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 text-right">
+            <button type="button" class="btn btn-default"
+                    data-dismiss="modal">
+                <i class="fa fa-ban"></i>
+                <?= $this->translate('Cancel')?>
+            </button>
+        </div>
+    </div>
+    <!-- /r -->
+
+
+
+</div>
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        browseDialogHandlers();
+
+    });
+
+</script>
+

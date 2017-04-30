@@ -1,12 +1,13 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Country;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -41,15 +42,29 @@ class Region
     private $regionCode;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="region_sub", type="string", length=500, nullable=false)
+     */
+    private $regionSub;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="region_population", type="integer", nullable=true)
      */
     private $regionPopulation = 0;
     
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="region_timezone", type="string", length=45, nullable=true)
+     */
+    private $regionTimezone = 'UTC';
+    
 
     /**
-     * @var \DGIModule\Entity\Country
+     * @var Country
      *
      * @ORM\ManyToOne(targetEntity="\DGIModule\Entity\Country")
      * @ORM\JoinColumns({
@@ -87,10 +102,50 @@ class Region
     /**
      * Get regionName
      *
-     * @return string 
+     * @return string
      */
     public function getRegionName()
     {
+
+        return $this->regionName;
+    }
+
+    /**
+     * Get regionName
+     *
+     * @return string
+     */
+    public function getRegionNameWithState()
+    {
+
+        return $this->country->getRegionName()?$this->country->getRegionName().' '.$this->regionName:$this->regionName;
+    }
+
+    /**
+     * Set regionName
+     *
+     * @param string $regionSub
+     * @return Region
+     */
+    public function setRegionSub($regionSub)
+    {
+        $this->regionSub = $regionSub;
+    
+        return $this;
+    }
+    
+    /**
+     * Get regionName
+     *
+     * @return string
+     */
+    public function getRegionSub()
+    {
+    
+        return $this->regionSub;
+    }
+    
+    public function getRegionNameSolo() {
         return $this->regionName;
     }
     
@@ -145,10 +200,10 @@ class Region
     /**
      * Set country
      *
-     * @param \DGIModule\Entity\Country $country
+     * @param Country $country
      * @return Region
      */
-    public function setCountry(\DGIModule\Entity\Country $country = null)
+    public function setCountry(Country $country = null)
     {
         $this->country = $country;
 
@@ -158,7 +213,7 @@ class Region
     /**
      * Get country
      *
-     * @return \DGIModule\Entity\Country 
+     * @return Country
      */
     public function getCountry()
     {
@@ -168,4 +223,12 @@ class Region
     public function getDepartments() {
         return $this->departments;
     }
+    /**
+     * @return string $regionTimezone
+     */
+    public function getRegionTimezone()
+    {
+        return $this->regionTimezone;
+    }
+
 }

@@ -1,0 +1,108 @@
+<!-- PROFILE -->
+<div id="user-profile-presentation"
+     data-getcities="<?= $this->url('location', array('action'=>'get-cities')); ?>"
+     data-write-postal-code="<?=$this->translate('Please write a postalcode first!')?>"
+     data-no-cities="<?=$this->translate('No cities for this postal code!')?>">
+
+<div class="title-mobile"><?= $this->translate('Profile for')?> <?= $user->getUsrName() ?></div>
+
+    <?php if ($refresh):?>
+        <span class="text-center" id="user-profile-presentation-refresh"><?= $this->translate('Loading new city. Please wait...')?></span>
+    <?php endif;?>
+    <hr />
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('user/profile', array('action' => 'user-presentation')));
+    $form->prepare();
+    ?>
+    <?= $this->form()->openTag($form);?>
+    <fieldset>
+
+
+
+<div class="form-group">
+	<?= $this->translate('First name')?><br>
+	<?= $this->formElement($form->get('usrFirstname'));?>
+                            <?php if ($form->get('usrFirstname')->getMessages()):?>
+                                <br />
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('usrFirstname'));?></span>
+                            <?php endif;?>
+</div>
+<div class="form-group">
+	<?= $this->translate('Last name')?><br>
+	<?= $this->formElement($form->get('usrLastname'));?>
+                            <?php if ($form->get('usrLastname')->getMessages()):?>
+                                <br />
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('usrLastname'));?></span>
+                            <?php endif;?>
+</div>
+<div class="form-group">
+	<?= $this->translate('About me')?><br>
+<?= $this->formElement($form->get('usrPresentation'));?>
+                            <?php if ($form->get('usrPresentation')->getMessages()):?>
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('usrPresentation'));?></span>
+                            <?php endif;?>
+</div>
+<div class="form-group">
+	<?= $this->translate('Birth year')?><br>
+<div style="width: 45%"><?= $this->formElement($form->get('usrBirthday'));?>
+                                <?php if ($form->get('usrBirthday')->getMessages()):?>
+                                    <br />
+                                    <span class="text-danger"><?= $this->formElementErrors($form->get('usrBirthday'));?></span>
+                                <?php endif;?></div>
+</div>
+<div class="form-group">
+	<?= $this->translate('Phone')?><br>
+<?= $this->formElement($form->get('usrPhone'));?>
+                            <?php if ($form->get('usrPhone')->getMessages()):?>
+                                <br />
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('usrPhone'));?></span>
+                            <?php endif;?>
+</div>
+                    <div class="form-group">
+                        <?= $this->translate('Country')?><br>
+                        <?= $this->formElement($form->get('country'));?>
+                            <?php if ($form->get('country')->getMessages()):?>
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('country'));?></span>
+                            <?php endif;?>
+                    </div>
+                    <div class="form-group">
+                        <?= $this->translate('Postal code')?><br>
+                        <?= $this->formElement($form->get('usrPostalcode'));?>
+                            <?php if ($form->get('usrPostalcode')->getMessages()):?>
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('usrPostalcode'));?></span>
+                            <?php endif;?>
+                        </div>
+                    <div class="form-group">
+                        <?= $this->translate('City')?><br>
+                        <?= $this->formElement($form->get('city'));?>
+                            <?php if ($form->get('city')->getMessages()):?>
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('city'));?></span>
+                            <?php endif;?>
+                    </div>
+                    <div class="form-group">
+                        <?= $this->translate('Gender')?><br>
+                        <div style="width: 75%"><?= $this->formElement($form->get('usrGendre'));?>
+                                <?php if ($form->get('usrGendre')->getMessages()):?>
+                                <span class="text-danger"><?= $this->formElementErrors($form->get('usrGendre'));?></span>
+                            </div>
+                            <?php endif;?>
+                    </div>
+                    <div class="form-group top10">
+                        <button type="submit" class="btn btn-orange" id="user-profile-presentation-save">
+                                <i class="fa fa-floppy-o"></i> <?= $this->translate('Save Profile')?></button>
+                            <button type="reset" class="btn btn-default"
+                                    id="cancelEditContact">
+                                <i class="fa fa-undo" id="cancelEditContactIcon"></i> <?= $this->translate('Cancel')?></button>
+                        </div>
+
+
+    </fieldset>
+    <?=  $this->form()->closeTag();?>
+</div>
+<!-- /PROFILE -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        userProfileUserPresentationHandlers();
+    });
+</script>

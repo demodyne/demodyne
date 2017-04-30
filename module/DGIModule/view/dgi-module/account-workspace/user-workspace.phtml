@@ -1,81 +1,276 @@
-<!-- account-workspace/user-workspace -->
 <div class="jumbotron">
+       
+       
+<!-- mobile view -->
+   
+       
         <div class="row">
-          <div class="col-md-2  col-xs-4 tabbable tabs-left">
+          <div class="col-md-2  col-xs-3 tabbable tabs-left">
             <ul class="nav nav-tabs">
-              <div class="text-center bot20"> 
+              <div class="text-center bot20 hidden-xs"> 
                 <script type="text/javascript">
+
                                         <!--
+
                                         var currentDate = new Date()
+
                                         var day = currentDate.getDate()
+
                                         var month = currentDate.getMonth() + 1
+
                                         var year = currentDate.getFullYear()
+
                                         document.write("<strong>" + day + "/" + month + "/" + year + "</strong>")
+
                                             //-->
+
                                     </script> 
                 <br />
                 <script type="text/javascript">
+
                                         <!--
+
                                         var currentTime = new Date()
+
                                         var hours = currentTime.getHours()
+
                                         var minutes = currentTime.getMinutes()
+
+
+
                                         if (minutes < 10)
+
                                             minutes = "0" + minutes
+
+
+
                                         document.write("<span style=\"font-size:28px;\">" + hours + ":" + minutes + " " + "</span>")
+
                                             //-->
+
                                     </script> 
               </div>
-              <li class="active"><a href="#inbox" data-toggle="tab"><i class="fa fa-envelope-o size15em"></i><span class="badge badge-info up small" id="inbox-unread-messages-count">0</span> My Inbox</a></li>
-              <li><a href="#mycontacts" data-toggle="tab"><i class="fa fa-book size15em"></i>
-                <?= $this->translate('My Contacts')?>
-                </a></li>
-              <li><a href="#favorites" data-toggle="tab"><i class="fa fa-heart-o size15em"></i>
-                <?= $this->translate('My Favorites')?>
-                </a></li>
-              <li><a href="#myprop2" data-toggle="tab"><i class="fa fa-bullhorn size15em"></i>
-                <?= $this->translate('My Proposals')?>
-                </a></li>
-              <li><a href="#myscn" data-toggle="tab"><i class="fa fa-object-group size15em"></i>
-                <?= $this->translate('My Programs')?>
-                </a></li>
+              
+              
+
+              
+<li class="active">
+<a href="#inbox" data-toggle="tab">
+<span class="hidden-xs"><i class="fa fa-envelope-o size15em"></i><span class="badge badge-info up small" id="inbox-unread-messages-count">0</span> </span>
+<span class="visible-xs text-xs-center"><i class="fa fa-envelope-o size17em"></i><span class="badge badge-info up small" id="inbox-unread-messages-count">0</span> </span>
+<span class="hidden-xs"><?= $this->translate('My Inbox')?></span></a>
+</li>
+
+<li>
+<a href="#mycontacts" data-toggle="tab">
+<span class="hidden-xs"><i class="fa fa-book size15em"></i> </span>
+<span class="visible-xs text-xs-center"><i class="fa fa-book size17em" title="<?= $this->translate('My Contacts')?>"></i> </span>
+<span class="hidden-xs"><?= $this->translate('My Contacts')?></span></a>
+</li>
+
+<li>
+<a href="#favorites" data-toggle="tab">
+<span class="hidden-xs"><i class="fa fa-heart-o size15em"></i> </span>
+<span class="visible-xs text-xs-center"><i class="fa fa-heart-o size17em" title="<?= $this->translate('My Favorites')?>"></i> </span>
+<span class="hidden-xs"><?= $this->translate('My Favorites')?></span></a>
+</li>         
+              
+<li>
+<a href="#myprop2" data-toggle="tab">
+<span class="hidden-xs"><i class="fa fa-bullhorn size15em"></i> </span>
+<span class="visible-xs text-xs-center"><i class="fa fa-bullhorn size17em" title="<?= $this->translate('My Proposals')?>"></i> </span>
+<span class="hidden-xs"><?= $this->translate('My Proposals')?></span></a>
+</li>
+             
+ <li>
+<a href="#myscn" data-toggle="tab">
+<span class="hidden-xs"><img src="/img/icon-programme-33.svg" width="20"> </span>
+<span class="visible-xs text-xs-center"><img src="/img/icon-programme-33.svg" width="23" title="<?= $this->translate('My Programs')?>"> </span>
+<span class="hidden-xs"><?= $this->translate('My Programs')?></span></a>
+</li>            
+
+<li>
+<a href="#my-sessions" data-toggle="tab">
+<span class="hidden-xs"><i class="fa fa-users size15em"></i> </span>
+<span class="visible-xs text-xs-center"><i class="fa fa-users size17em" title="<?= $this->translate('My Sessions')?>"></i> </span>
+<span class="hidden-xs"><?= $this->translate('My Sessions')?></span></a>
+</li>             
+
+
               <!-- <li><a href="#impl" data-toggle="tab"><i class="fa fa-tasks size15em"></i> Champion Tasks</a></li> 
+
                                 <li><a href="#hours" data-toggle="tab"><i class="fa fa-clock-o size15em"></i> My DCS Hours</a></li>
+
                                 <li><a href="#fundings" data-toggle="tab"><i class="fa fa-credit-card size15em"></i> My Fundings</a></li> -->
+              
               <li class="bot20"></li>
             </ul>
           </div>
+          
           <!--/2-->
-          <div class="col-md-10  col-xs-8 tab-content"> 
+          
+          <div class="col-md-10  col-xs-9 tab-content"> 
+            
             <!-- INBOX -->
+            
             <div class="tab-pane active" id="inbox">
               <?= $this->inboxSection ?>
             </div>
+            
             <!-- end INBOX --> 
-            <!-- CONTACTS -->
+            
+            <!-- CONTACTS -->            
             <div class="tab-pane" id="mycontacts">
               <?= $this->contactsSection; ?>
-            </div>
+            </div>            
             <!-- end CONTACTS --> 
-            <!-- FAVORITES -->
+            
+            <!-- FAVORITES -->            
             <div class="tab-pane" id="favorites">
               <?= $this->favoritesSection ?>
-            </div>
+            </div>            
             <!-- end FAVORITES --> 
-            <!-- MY PROPOSALS -->
+            
+            <!-- MY PROPOSALS -->            
             <div class="tab-pane" id="myprop2">
               <?= $this->myProposalsSection ?>
-            </div>
+            </div>            
             <!-- end PROPOSALS --> 
-            <!-- MY PROGRAMS-->
+            
+            <!-- MY PROGRAMS-->            
             <div class="tab-pane" id="myscn">
               <?= $this->myProgramsSection ?>
-            </div>
+            </div>            
             <!-- end PROGRAMS --> 
+            
+            <!-- MY SESSIONS-->            
+            <div class="tab-pane" id="my-sessions">
+              <?= $this->mySessionsSection ?>
+            </div>            
+            <!-- end SESSIONS --> 
+            
+            <!-- MY IMPLEMENTATION -->
+            
+            <div class="tab-pane" id="impl">
+              <div class="row">
+                <div class="col-md-6 top10">
+                  <?= $this->translate('You are Champion for')?>
+                  <span class="badge">XX</span>
+                  <?= $this->translate('Proposals')?>
+                </div>
+                <div class="col-md-6">
+                  <div class="fltr">
+                    <ul class="nav top10">
+                      <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"> <span class="label label-default"><i class="fa fa-caret-up"></i> </span> </a>
+                        <ul class="dropdown-menu">
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Name')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Category')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Scenario')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published / Draft')?>
+                            </a></li>
+                          <li class="divider"></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published date')?>
+                            </a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="fltr">
+                    <ul class="nav top10">
+                      <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"> <span class="label label-default"><i class="fa fa-caret-down"></i> </span> </a>
+                        <ul class="dropdown-menu">
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Name')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Category')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Scenario')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published / Draft')?>
+                            </a></li>
+                          <li class="divider"></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published date')?>
+                            </a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="fltr top10 right10">
+                    <?= $this->translate('Sort')?>
+                  </div>
+                </div>
+                <!-- /6 --> 
+                
+              </div>
+              <!-- /row -->
+              
+              <hr />
+              <div class="table-layout">
+                <div class="table-cell fixed-width-60"> <img src="/files/catImage14261703010.jpg" valign="middle" width="45" height="45" title="User Name" class="round5"/> </div>
+                <div class="table-cell">
+                  <div class="row">
+                    <div class="col-md-6 col-xs-12"> category title<br />
+                      <a target="_parent" href="" title=""><span class="big">Proposal name from database</span> </a><br />
+                      <?= $this->translate('Published')?>: <i class="fa fa-clock-o"></i> d/m/Y H:i from database </div>
+                    <div class="col-md-6 col-xs-12">
+                      <?= $this->translate('Current Status')?>
+                      :<br />
+                      <span class="label label-default" title="Debate step, NO implementation yet">&nbsp;D&nbsp;</span> <span class="label label-default" title="Voting step, NO implementation yet">&nbsp;V&nbsp;</span> <span class="label label-success" title="Implementation, Planning step">&nbsp;<i class="fa fa-caret-right"></i> P&nbsp;</span> <span class="label label-default" title="Implementation, Execution step">&nbsp;E&nbsp;</span> <span class="label label-default" title="Implementation, Proposal Completed">&nbsp;C&nbsp;</span> </div>
+                  </div>
+                </div>
+                <div class="table-cell fixed-width-150 text-right"> <a href="" title="Tasks Pending">X
+                  <?= $this->translate('Tasks Pending')?>
+                  </a> <br />
+                  <a href="" title="Tasks Completed">X
+                  <?= $this->translate('Tasks Completed')?>
+                  </a> </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-md-12"> Pagination here please </div>
+                <!--/12--> 
+                
+              </div>
+              <!-- /row --> 
+              
+            </div>
+            
+            <!-- end IMPLEMENTATION --> 
+            
+            <!-- MY DCS HOURS -->
+            
+            <div class="tab-pane" id="hours"> My DCS Hours detailed </div>
+            
+            <!-- end MY DCS HOURS --> 
+            
+            <!-- MY FUNDINGS -->
+            
+            <div class="tab-pane" id="fundings"> My Fundings, detailed
+              <p>&nbsp;</p>
+              <p>&nbsp;</p>
+              <p>&nbsp;</p>
+            </div>
+            
+            <!-- end FUNDINGS --> 
+            
           </div>
+          
           <!-- /10 --> 
+          
         </div>
+        
         <!-- end row --> 
-      </div>
-      <!-- /j --> 
-<!-- /account-workspace/user-workspace -->
-  
+        
+      </div><!-- /j --> 

@@ -1,0 +1,142 @@
+<div style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+	id="user-name">
+
+	
+	<div class="row">
+		<div class="col-md-4 center">
+				<img
+						src="<?=$this->basePath($user->getUsrPicture()) ?>" width="100"
+						alt="<?= $user->getUsrName() ?>"
+						title="<?= $user->getUsrName() ?>" class="round5"
+						id="" />
+			
+		</div>
+	
+		<div class="col-md-8">
+			<p><?=$this->translate('Demodyne is a serious platform for local and national democracy.')?></p>
+			<p><?=$this->translate('To prevent fake accounts, citizens are required to provide their first name, last name and year of birth.')?></p>
+			<p><?=$this->translate('These will remain confidential and will only be used for the purposes of auditing the lists of accounts.')?></p>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	
+	
+	
+	<?php
+    $form->prepare();
+    $form->setAttribute('method', 'post'); 
+    $form->setAttribute('action', $this->url('home/user-register', ['action'=>'user-name'])); ?>
+      
+    <?=$this->form()->openTag($form);?>
+	<fieldset>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Firstname'); ?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrFirstname'));?>
+						<span class="text-danger"><?= $this->formElementErrors($form->get('usrFirstname'));?></span>
+					</div>
+				</div>
+				
+				
+			</div>
+			<!-- /6 -->
+		</div>
+		<!-- end row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Lastname'); ?></label>
+					<div class="col-md-8 bot5">
+						<?= $this->formElement($form->get('usrLastname'));?>
+						 <span class="text-danger"><?= $this->formElementErrors($form->get('usrLastname'));?></span></div>
+							
+							
+					<!-- /8 -->
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Birth year'); ?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrBirthday'));?>
+						<span class="text-danger"><?= $this->formElementErrors($form->get('usrBirthday'));?></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"> </label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('agreeterms'));?> 
+					<?php 
+					   switch ($_SESSION['language']['language']) {
+					       case 'en' : 
+					           $termsURL = 'https://forum.demodyne.org/showthread.php?tid=4';
+					           break;
+					       case 'fr' :
+					           $termsURL = 'https://forum.demodyne.org/showthread.php?tid=8';
+					           break;
+				           case 'ro' :
+				               $termsURL = 'https://forum.demodyne.org/showthread.php?tid=26';
+				               break;
+					   }
+					
+					?>
+					
+					<?=sprintf($this->translate('I agree to all <a href="%s" target="_blanc" style="color: #DF7C00">terms and conditions</a>'), $termsURL)?>
+                    <?php if ($form->get('agreeterms')->getMessages()):?>
+                    <span class="text-danger"><?= $this->formElementErrors($form->get('agreeterms'));?></span>
+                    <?php endif;?>
+                    
+               
+                    
+                    </div>
+				</div>
+			</div>
+		</div>
+		
+
+	</fieldset>
+
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+			
+			<button type="submit" class="btn btn-orange"
+				id="user-name-submit">
+				<i class="fa fa-save" aria-hidden="true"></i> <?= $this->translate('Save')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+	<?=  $this->form()->closeTag();?> 
+</div>
+
+
+
+<script type="text/javascript">
+
+$(function() {
+	userRegistrationUserNameHandlers();
+});    
+
+</script>

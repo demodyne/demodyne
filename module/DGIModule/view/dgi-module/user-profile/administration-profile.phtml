@@ -1,0 +1,57 @@
+<?= $this->partial('partial/page-header.phtml', ['title' => '<i class="fa fa-user size15em"></i> '.$this->translate('Profile & Settings')])?>
+
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;" id="user-profile-edit">
+
+    <div class="row">
+        <div class="col-md-2 col-xs-4 tabbable tabs-left">
+            <ul class="nav nav-tabs">
+                <div class="bot10">
+
+                    <img src="<?=$this->basePath().$user->getUsrPicture() ?>" valign="middle" width="100%" alt="<?= $user->getUsrName() ?>"
+
+                         title="<?= $user->getUsrName() ?>" class="img-thumbnail" id="user-profile-edit-picture" style="max-width:200px !important;" />
+
+                </div>
+                <li class="active"><a href="#profile" data-toggle="tab"><i class="fa fa-user"></i> <?= $this->translate('Profile')?></a></li>
+                <li><a href="#photo" data-toggle="tab"><i class="fa fa-camera"></i> <?= $this->translate('Picture')?></a></li>
+                <li><a href="#account" data-toggle="tab"><i class="fa fa-cog"></i> <?= $this->translate('Account Settings')?></a></li>
+             <!--   <li><a href="#ratings" data-toggle="tab"><i class="fa fa-star-half-o"></i> <?= $this->translate('Ratings')?></a></li>
+                <li><a href="#activity" data-toggle="tab"><i class="fa fa-paper-plane-o"></i> <?= $this->translate('Activity')?></a></li>
+-->
+
+                <li><br /></li>
+            </ul>
+        </div><!--/2-->
+
+        <div class="col-md-10 col-xs-8 tab-content">
+            <!-- PROFILE -->
+            <div class="tab-pane active" id="profile" >
+                <?= $this->administrationPresentatinSection;?>
+            </div>
+            <!-- /PROFILE -->
+
+            <!-- PHOTO -->
+            <div class="tab-pane" id="photo">
+                <?= $this->pictureSection?>
+            </div><!-- /PHOTO -->
+
+            <!-- SETTINGS -->
+            <div class="tab-pane" id="account">
+                <?= $this->settingsSection?>
+            </div><!-- /SETTINGS -->
+
+            <!-- RATINGS -->
+            <div class="tab-pane" id="ratings">
+                <?=$this->userNotesSection?>
+            </div><!-- /ratings -->
+
+            <!-- ACTIVITY -->
+            <div class="tab-pane" id="activity">
+                <?=$this->myActivitySection?>
+            </div><!-- /ACTIVITY -->
+
+        </div><!--/10-->
+
+    </div><!-- /row -->
+
+</div><!-- /j -->

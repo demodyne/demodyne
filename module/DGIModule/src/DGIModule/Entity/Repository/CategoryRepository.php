@@ -1,12 +1,13 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity\Repository;
 
+use DGIModule\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 class CategoryRepository extends EntityRepository
@@ -20,7 +21,7 @@ class CategoryRepository extends EntityRepository
         return $q->getQuery()->getResult();
     }
     
-    public function getMainCategories($user, $level='city')
+    public function getMainCategories(User $user, $level='city')
     {
         $q = $this->createQueryBuilder('c')
                     ->where('c.catCat IS NULL')
@@ -43,7 +44,6 @@ class CategoryRepository extends EntityRepository
     
     public function getSubCategories($mainCategoryId, $level='City')
     {
-        $mainCategory = $this->findOneBy(array('catId' => $mainCategoryId));
         $q = $this->createQueryBuilder('c')
                 ->where('c.catCat = :mainCategory')
                 ->andWhere('c.cat'.ucfirst($level).'=1')
@@ -54,24 +54,31 @@ class CategoryRepository extends EntityRepository
     
     public function getSubCategoriesArray($mainCategoryId)
     {
-        $mainCategory = $this->findOneBy(array('catId' => $mainCategoryId));
         $q = $this->createQueryBuilder('c')
             ->where('c.catCat = :mainCategory')
             ->addOrderBy('c.catName')
             ->setParameter('mainCategory', $mainCategoryId);
         $categories = $q->getQuery()->getResult();
         $catList = array();
-        
+
+        /** @var \DGIModule\Entity\Category $category */
         foreach ($categories as $category) {
             $catList["name"][] = $category->getCatName();
             $catList["id"][] = $category->getCatId();
         
         }
-        
+
         return $catList;
     }
-    
-    
-    
+
+
+    public function getCategoriesByArrayId($ids)
+    {
+        $q = $this->createQueryBuilder('c')
+            ->where('c.catCat IS NULL')
+            ->andWhere('FindInSet(c.catId, :ids)>0')
+            ->setParameter('ids', implode(',',$ids));
+        return $q->getQuery()->getResult();
+    }
     
 }

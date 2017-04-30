@@ -1,0 +1,247 @@
+
+<?php
+/** @var \DGIModule\Entity\User $user */
+$user = $this->identity();
+
+
+?>
+
+
+
+
+
+<?php if ($this->currentRequest()->get('controller')!='DGIModule\Controller\UserRegistration'):?>
+
+
+
+<nav class="navbar navbar-default ">
+    <!--  navbar-fixed-top -->
+    <div class="container">
+        <div class="navbar-header" style="padding-bottom: 5px;">
+
+				<span class="hidden-xs"><a class="navbar-brand" href="<?= $this->url('home') ?>"><img
+                                src="<?= $this->basePath('img/logo30.png') ?>" title="DEMODYNE - <?= $this->translate('Shape your Society') ?>"
+                                alt="DEMODYNE - <?= $this->translate('Shape your Society') ?>" />&nbsp;</a></span>
+        </div>
+        <div class="collapse navbar-collapse"
+             id="bs-example-navbar-collapse-1">
+            <?php
+            $city = null;
+            if (isset($_SESSION['level']) && isset($_SESSION['level']['city'])) {
+                $city = $this->getHelperPluginManager()->getServiceLocator()->get('doctrine.entitymanager.orm_default')->getRepository('DGIModule\Entity\City')->findOneBy(['cityId'=>$_SESSION['level']['city']]);
+            }
+            ?>
+            <?php if ($city):?>
+                <ul class="nav navbar-nav">
+                    <li <?=isset($_SESSION['level'])&&$_SESSION['level']['level']=='country'?'class="active"':''?>>
+                        <a href="<?=$this->url('browse', ['country'=> $city->getCountry()->getCountryName()])?>"><img src="/img/flags/<?=str_replace(' ', '-', ucfirst($city->getCountry()->getCountryName()))?>.png" style="margin-bottom: 4px;" width="25" height="17"> <?=$city->getCountry()->getCountryName()?></a>
+                    </li>
+                    <?php if (isset($_SESSION['level'])&&$_SESSION['level']['levelValue']<=$this->configItem('demodyne.level.region') ||
+                        ($user && !$user->isAdministration() && $city->getRegion()  == $user->getCity()->getRegion()) ||
+                        ($user && $user->isAdministration() && ($city===$user->getAdmin()->getAdminCity() || $city->getRegion()===$user->getAdmin()->getAdminRegion()))):?>
+                        <li <?=isset($_SESSION['level'])&&$_SESSION['level']['level']=='region'?'class="active"':''?>>
+                            <a href="<?=$this->url('browse', ['country'=> $city->getCountry()->getCountryName(), 'region' => $city->getRegion()->getRegionName()])?>"> <?=$city->getRegion()->getRegionName()?></a>
+                        </li>
+                        <?php if (isset($_SESSION['level'])&&$_SESSION['level']['levelValue']<=$this->configItem('demodyne.level.city') ||
+                            ($user && !$user->isAdministration() && $city === $user->getCity()) ||
+                            ($user && $user->isAdministration() && ($city===$user->getAdmin()->getAdminCity()))):?>
+                            <li <?=isset($_SESSION['level'])&&$_SESSION['level']['level']=='city'?'class="active"':''?>>
+                                <a href="<?=$this->url('browse', ['country'=> $city->getCountry()->getCountryName(),
+                                    'region' => $city->getRegion()->getRegionName(),
+                                    'postalcode' => $city->getCityPostalcode(),
+                                    'cityname' => $city->getCityName()
+                                ])?>">
+                                    <?=$city->getCityName()?></a>
+                            </li>
+                        <?php endif;?>
+                        <?php if ($user && $user->getUsrlId() == $this->configItem('demodyne.account.type.partner')):?>
+                        <li><a class="nav navbar-nav navbar-default gray"
+                           style="padding: 20px 20px 0 20px; text-transform: uppercase; font-size: 15px;"
+                           href="<?= $this->url('partner/dashboard') ?>">
+                            <?= $this->translate('Dashboard');?>
+                        </a></li>
+                        <?php endif;?>
+                    <?php endif;?>
+                </ul>
+            <?php endif;?>
+
+            <!-- BROWSE-->
+            <a class="nav navbar-nav navbar-default gray"
+               style="padding: 20px 20px 0 20px; text-transform: uppercase; font-size: 15px;"
+               href="<?=$this->url('browse', ['action'=> 'browse-dialog'])?>"
+               data-dialog-title="<?=$this->translate('Browse Demodyne')?>"
+               id="layout-browse">
+                <!-- <?= $this->translate('Browse');?>-->
+                <i class="fa fa-globe size15em" aria-hidden="true" title="<?= $this->translate('Browse');?>"></i>
+            </a>
+
+            <?php if ($user):?>
+            <!-- dropdown MORE -->
+            <ul class="nav navbar-nav navbar-right hidden-xs">
+
+                <li class="dropdown top15"><a href="#user" class="dropdown-toggle"
+                                              data-toggle="dropdown" role="button" aria-expanded="false"> <i class="fa fa-bars"></i> <span style="text-transform: none"><?= $this->translate('Menu'); ?></span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <!-- <li class="divider"></li> -->
+                     <!--   <li><a href="<?= $this->url('home/pages', array('page'=>'academy'))?>"><i class="fa fa-graduation-cap"></i> <?= $this->translate('Demodyne Academy'); ?></a></li>-->
+                        <li><a href="<?=$this->url('blog')?>"><i class="fa fa-coffee"></i> <?= $this->translate('Blog'); ?></a></li>
+                        <li><a href="https://forum.demodyne.org"><i class="fa fa-comments-o"></i> <?= $this->translate('Forum'); ?></a></li>
+                        <li><a href="<?= $this->url('home/pages', array('page'=>'about'))?>"><i class="fa fa-info-circle"></i> <?= $this->translate('About us'); ?></a></li>
+                        <li><a href="<?= $this->url('home/pages', array('page'=>'support'))?>"><i class="fa fa-rocket"></i> <?= $this->translate('Support us'); ?></a></li>
+                        <li class="hidden-xs"><a
+                                    href="<?= $this->url('home/report', ['action'=>'submit-bug']);?>"
+                                    id="submit-bug" title="<?= $this->translate('Submit Bug')?>"
+                                    data-dialog-title="<?= $this->translate('Submit Bug')?>"><i
+                                        class="fa fa-bug size15em"></i> <?= $this->translate('Submit Bug')?></a></li>
+
+                        <? if ($user->getUsrlId()==$this->configItem('demodyne.account.type.admin')):?>
+                            <li style="border-top: 1px solid #e7e7e7; background-color: #f4eee6;"><a href="<?= $this->url('admin',  ['action'=>'admin-digest']);?>"><?= $this->translate('Admin digest'); ?></a>
+                            </li>
+                            <li style="background-color: #f4eee6;"><a href="<?= $this->url('home/category');?>"><?= $this->translate('Categories'); ?></a>
+                            </li>
+                            <li style="background-color: #f4eee6;"><a href="<?= $this->url('email');?>"><?= $this->translate('Email templates'); ?></a>
+                            </li>
+                        <?endif;?>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <!-- user -->
+            <ul class="nav navbar-nav navbar-right hidden-xs">
+                <li><a
+                            href="<?= $user->isPartner()?$this->url('partner/dashboard'):$this->url('city') ?>#inbox"
+                            id="layout-goto-inbox"><i class="fa fa-envelope-o size15em"></i><span
+                                class="badge badge-info up size07em"
+                                id="inbox-unread-messages-count">0</span></a></li>
+                <li style="padding: 13px 0 0 10px;"><img
+                            src="<?=$this->basePath(). $user->getUsrPicture() ?>" width="30"
+                            height="30" alt="<?= $user->getUsrName() ?>"
+                            title="<?= $user->getUsrName() ?>" class="round5"
+                            id="layout-picture" /></li>
+                <li class="dropdown top15"><a href="#user" class="dropdown-toggle"
+                                              data-toggle="dropdown" role="button" aria-expanded="false"> <span style="text-transform: initial;"><?=$this->escapeHtml($user->getUsrName());?>
+                      	</span> <span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li style="border-bottom: 1px solid #e7e7e7"><a
+                                    href="<?= $this->url('user/profile',  ['action'=>'user-profile']);?>"><i
+                                        class="fa fa-pencil-square-o"></i>
+                                <?= $this->translate('Profile & Settings'); ?></a>
+                        </li>
+
+                        <li style="border-top: 1px solid #e7e7e7"><a
+                                    href="<?= $this->url('home/login', array( 'action' => 'logout'));?>"><i
+                                        class="fa fa-sign-out"></i> <?= $this->translate('Logout'); ?></a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+
+                <?php if (!$user->getCity() && $this->currentRequest()->get('controller')!='DGIModule\Controller\Pages'):?>
+                    <script type="text/javascript">
+                        $(function() {
+                            modalDialog('user-add-city', '<?=$this->translate('Please select your city')?>', '<?= $this->url('home/user-register', ['action'=>'user-city']);?>', false, false);
+                        });
+                    </script>
+                <?php elseif (!$user->getUsrFirstname()):?>
+                    <script type="text/javascript">
+                        $(function() {
+                            modalDialog('user-add-name', '<?=$this->translate('Personal data')?>', '<?= $this->url('home/user-register', ['action'=>'user-name']);?>', false, false);
+                        });
+                    </script>
+                <?php endif;?>
+
+
+            <?else: ?>
+                <ul class="nav navbar-nav navbar-right-guest">
+                    <li class="dropdown top15"><a href="#user" class="dropdown-toggle"
+                                                  data-toggle="dropdown" role="button" aria-expanded="false">
+                            <img src="/img/flags/<?= $_SESSION['language']['language']?>.png" width="25" height="17" style="margin-top: -5px;"> <?= $_SESSION['language']['language']?>
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu" style="max-width: 89px; min-width: 89px;">
+                            <li><a href="?lang=en"><img src="/img/flags/United-Kingdom.png" width="25" height="17" title="EN" style="margin-top: -5px;"> EN</a>
+                            </li>
+                            <li><a href="?lang=fr"><img src="/img/flags/France.png" width="25" height="17" title="FR" style="margin-top: -5px;"> FR</a>
+                            </li>
+                            <li><a href="?lang=ro"><img src="/img/flags/Romania.png" valign="top" width="25" height="17" title="RO" style="margin-top: -5px;"> RO</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right-guest">
+
+                    <li class="dropdown top15"><a href="#" class="dropdown-toggle"
+                                                  data-toggle="dropdown" role="button" aria-expanded="false"> <i class="fa fa-bars"></i> <span style="text-transform: none"><?= $this->translate('Menu'); ?></span> <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <!-- <li class="divider"></li> -->
+                            <li><a href="<?=$this->url('blog')?>"><i class="fa fa-coffee"></i> <?= $this->translate('Blog'); ?></a></li>
+                            <li><a href="https://forum.demodyne.org"><i class="fa fa-comments-o"></i> <?= $this->translate('Forum'); ?></a></li>
+                            <li><a href="<?= $this->url('home/pages', array('page'=>'support'))?>"><i class="fa fa-rocket"></i> <?= $this->translate('Support us'); ?></a></li>
+                            <li><a href="<?= $this->url('home/pages', array('page'=>'about'))?>"><i class="fa fa-info-circle"></i> <?= $this->translate('About us'); ?></a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right-guest">
+                    <li class="dropdown" style="padding: 13px 0 0 10px;"><img
+                                src="<?=$this->basePath('/img/avatar/avatar.png')?>" width="30"
+                                height="30" alt="Guest"
+                                title="Guest" class="round5"
+                                id="layout-picture" /></li>
+                    <li class="dropdown top15"><a href="#user" class="dropdown-toggle"
+                                                  data-toggle="dropdown" role="button" aria-expanded="false"><?= $this->translate('Guest mode'); ?>
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a id="homepage-user-registration"
+                                   href="<?= $this->url('home/user-register');?>"
+                                   data-dialog-title="<?=$this->translate('Register as Citizen on Demodyne')?>"><i
+                                            class="fa fa-pencil-square-o"></i>
+                                    <?= $this->translate('Register'); ?></a>
+                            </li>
+                            <li class="divider"></li>
+                            <li><a href="<?= $this->url('home/login', [], ['query'=>['redirect'=>$_SERVER["REQUEST_URI"]]]);?>"><i class="fa fa-sign-in"></i> <?= $this->translate('Login'); ?></a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            <?endif?>
+            <ul class="nav navbar-nav <?=$user?'navbar-right':'navbar-right-guest'?>">
+                <li class="dropdown top15"><a href="#search" class="dropdown-toggle"
+                                              data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-search" title="<?=$this->translate('Search Demodyne')?>"></i>  <span class="caret"></span></a>
+
+                    <ul class="dropdown-menu" role="menu" style="min-width: 300px; max-width: 300px; width: 300px; padding: 10px 10px!important;">
+                        <li>
+                            <form action="<?=$this->url('search', array('action'=>'reset-search'))?>" id="layout-search-form" method="post">
+
+                                <div class="input-group">
+                                    <input type="text" class="form-control" aria-label="" name="searchKeywords"  id="layout-search-keywords" required="required" placeholder="<?= $this->translate('Search by keywords')?>" style="max-height: 35px!important; opacity: inherit!important;">
+                                    <div class="input-group-btn">
+                                        <button type="submit" class="btn btn-orange" style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;max-height: inherit!important;">
+                                            <i class="fa fa-search"></i></button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </li>
+                        <li><a href="<?=$this->url('search', array('action'=>'reset-search'))?>" id="layout-advanced-search"  data-dialog-title="Advanced Search"><?= $this->translate('Advanced search'); ?></a></li>
+                    </ul>
+
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<?endif;?>
+
+<script>
+    $(function () {
+        userLayoutHandlers();
+    });
+</script>

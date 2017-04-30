@@ -1,0 +1,122 @@
+<div class="modal-header-soft round5top ui-draggable-handle">
+
+    <a href="<?= $this->url('home');?>" class="close"><i class="fa fa-home w"></i></a>
+
+    <button type="button" class="close" id="history-back">
+        <i class="fa fa-arrow-circle-left w right10"></i>
+    </button>
+
+    <span class="big" id="modal-dialog-title"><strong><?= $this->translate('Admin Digest')?></strong></span>
+
+</div>
+
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
+    <div class="row bot20">
+        <div class="col-md-4">
+            <div class="btn-group fltl right10" role="group" aria-label="...">
+
+                <a type="button" class="btn btn-sm btn-success" data-url="" id=""><?= $this->translate('All Time')?></a>
+                <a type="button" class="btn btn-sm btn-default" data-url="" id=""><?= $this->translate('Last Day')?></a>
+                <a type="button" class="btn btn-sm btn-default" data-url="" id=""><?= $this->translate('Last Month')?></a>
+                <a type="button" class="btn btn-sm btn-default" data-url="" id=""><?= $this->translate('Last Year')?></a>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" class="form-control" placeholder="Start Date" value="<?=$from->format('m/d/Y')?>" title="month/day/year">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="input-group date" data-provide="datepicker">
+                <input type="text" class="form-control" placeholder="End Date"  value="<?=$to->format('m/d/Y')?>" title="month/day/year">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </div>
+            </div>
+        </div>
+        <form action="" method="post" id="event-all-events-search-form">
+            <div class="col-md-4 text-right">
+                <div class="form-group input-group">
+                    <input type="text" class="form-control" placeholder="Search" required="required" name="searchTerms">
+                    <span class="input-group-addon" style="background-image: linear-gradient(to bottom, #fa9c18 0%, #fa9c18 100%); background-color: #fa9c18!important; border-color: #da8105!important; color: #000!important; text-shadow: none!important;"><a href="" style="color: #000!important;"><i class="fa fa-search fa-fw"></i> Search</a></span>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+
+
+
+    <ul class="nav nav-tabsb">
+        <li class="active"><a href="#new-users" data-toggle="tab">
+                <?=sprintf($this->translate('%d Users'), $usersCount)?>
+            </a>
+        </li>
+        <li><a href="#proposals" data-toggle="tab">
+                <?=sprintf($this->translate('%d Proposals'), $proposalCount)?>
+            </a>
+        </li>
+        <li><a href="#new-om" data-toggle="tab">
+                <?=sprintf($this->translate('%d Official Measures'), $measuresCount)?>
+            </a>
+        </li>
+        <li><a href="#new-events" data-toggle="tab">
+                <?=sprintf($this->translate('%d Events'), $eventsCount)?>
+            </a>
+        </li>
+        <li><a href="#new-sessions" data-toggle="tab">
+                <?=sprintf($this->translate('%d Sessions'), $sessionsCount)?>
+            </a>
+        </li>
+
+    </ul>
+    <div style="width:100%; height:5px!important; background-color:#D0BFAD;"></div>
+
+
+
+    <div class="tab-content tab-active">
+
+        <div class="tab-pane fade active in" id="new-users">
+            <?=$this->users?>
+        </div>
+        <div class="tab-pane fade" id="proposals">
+            <?=$this->proposals?>
+        </div>
+        <div class="tab-pane fade" id="new-om">
+            <?=$this->measures?>
+        </div>
+        <div class="tab-pane fade" id="new-events">
+            <?=$this->events?>
+        </div>
+        <div class="tab-pane fade" id="new-sessions">
+            <?=$this->sessions?>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+        $(function(){
+            adminDigestHandlers();
+        });
+    </script>
+
+
+
+
+
+</div><!-- end jumbotron -->

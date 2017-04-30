@@ -1,0 +1,41 @@
+
+<?php
+
+$adminLevel = $user->getAdmin()->getAdminLevel();
+$adminLevelConfig = $this->configItem('demodyne.level');
+
+
+?>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("Welcome to DEMODYNE!")?></h1>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;text-align:center;">
+
+        <?=$this->translate("Your Administration account")?> 
+        <a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()), array('force_canonical' => true));?>"><strong><?=$user->getUsrName()?></strong></a> <?=$this->translate("for")?> 
+        <?=($adminLevel == $adminLevelConfig['country']?'Country '.$user->getCountry()->getCountryName():
+            ($adminLevel == $adminLevelConfig['region']?'Region '.$user->getAdmin()->getAdminRegion()->getRegionName():
+                'City '.($user->getAdmin()->getAdminCity()?$user->getAdmin()->getAdminCity()->getCityName():'No city')))?>
+        <?=$this->translate("has been validated!")?><br>
+<?=$this->translate("You can login now")?>:
+</div>
+
+<? $confirmUrl = $this->url('home', array(), array('force_canonical' => true))?>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <div style="Margin-bottom:20px;text-align:center;">
+        <center><a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$confirmUrl?>">Login</a>
+        </center>
+    </div>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px; text-align: center;">
+        <?=$this->translate("Thank you,<br>The Demodyne Team")?>
+    </p></div>
+
+
+

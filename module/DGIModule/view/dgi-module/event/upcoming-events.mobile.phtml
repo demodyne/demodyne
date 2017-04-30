@@ -1,0 +1,68 @@
+
+<div class="panel panel-default" id="event-upcoming-events"
+	data-url="<?=$this->url('event', array('action'=>'upcoming-events'))?>">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-12">
+				<span class="big"><?= $this->translate('Upcoming Events')?></span> <span
+					class="fltr bot10"><button type="button" class="btn btn-orange"
+						id="event-upcoming-events-see-all">
+						<i class="fa fa-eye"></i> <?= $this->translate('See all')?></button></span>
+				<div class="agenda top10">
+					<table class="table table-condensed table-hover table-striped">
+						<colgroup>
+							<col width="25%" />
+							<col width="75%" />
+						</colgroup>
+						<tbody>
+                <?php if (count($events)):?>
+ 					<?php foreach ($events as $event):?>
+ 					<?php 
+ 					
+ 					  $now = new \DateTime();
+ 					  $eventDate = $event->getEventStartDate() < $now ? $now : $event->getEventStartDate();
+ 					  
+				    ?>
+                    <tr>
+								<td class="agenda-date">
+									<div class="dayofweek fltl" style="min-width: 30px;">
+										<strong><?=strtoupper($eventDate->format('M'))?><br><?=$eventDate->format('Y')?></strong>
+									</div>
+									<div class="dayofmonth fltl left5" style="min-width: 30px;"><?=$eventDate->format('d')?></div>
+								</td>
+								<td class="agenda-events">
+									<div class="agenda-event">
+                            <?php $eventDescription = preg_replace('/<[^>]*>/', ' ', $event->getEventDescription()); 
+      $eventDescription = (strlen($eventDescription) > 150) ? substr($eventDescription, 0, 150) . '...' : $eventDescription;?>
+                            <a href="<?= $this->url($event->getEventSession()?'session':'event', array( 'id'=> $event->getEventUUID()));?>"
+											title="<?=$eventDescription?>"><span class="big"><?=$event->getEventName()?></span></a><?php if ($event->getEventStartDate()<$now && $event->getEventEndDate()>$now):?>
+                                            <span class="right5">
+								<span class="green"><i class="fa fa-circle size15em" title="<?= $this->translate('Ongoing')?>"></i>
+								</span>
+							</span>
+                                        <?php endif;?>
+									</div>
+								</td>
+							</tr>
+					<?php endforeach;?>
+                <?php else:?>
+                    
+                     <tr>
+								<td colspan="2"><?= $this->translate('No upcoming events')?>.</td>
+							</tr>
+                <?php endif;?>
+                    </tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!--/panel-->
+	</div>
+</div>
+<script type="text/javascript">
+
+$(function() {
+	eventUpcomingEventsHandlers();
+});
+
+</script>

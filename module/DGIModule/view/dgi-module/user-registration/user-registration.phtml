@@ -1,213 +1,170 @@
-<!-- user-registration/user-registration -->
-
-<?php 
-$title = 'User registration';
-$this->headTitle($title);
-?>
 
 
-
-
-<div class="modal-header-soft round5top ui-draggable-handle topm20">
-<a class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></a>
-<a class="close" href="pages/help#citizen-registration" id="citizen-registration"><i class="fa fa-question-circle w right10"></i></a>&nbsp;
-  <span class="big" id="modal-dialog-title"><a href="/"><img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> - <strong><?= $this->translate('Citizen Registration')?></strong></span>
-</div>
-
-
-
-<div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;" id="user-registration"
-		data-getcities="<?= $this->url('location', array('action'=>'get-cities')); ?>">
-        
-        
-        
-
-
-
-<?php
+	
+	<?php
 $form->prepare();
-$form->setAttribute('method', 'post'); ?>
-
+$form->setAttribute('method', 'post'); 
+$form->setAttribute('action', $this->url('home/user-register')); ?>
+  
 <?=$this->form()->openTag($form);?>
 	<fieldset>
 		<div class="row">
-			<div class="col-md-6">
-				<div class="form-group bot10">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Select language'); ?></label>
-					<div class="col-md-8">
+			<div class="col-md-12">
+				
 
-          
-
-          <ul class="nav navbar-left">
-							<li class="dropdown"><a href="#" class="dropdown-toggle"
-								data-toggle="dropdown" role="button" aria-expanded="false"><img
-									src="<?= $this->basePath('img/flags/'.$currentLanguage->getLangFlag().'.png') ?>"
-									style="margin-bottom: 4px;" width="25" height="17" alt="<?=$currentLanguage->getLangFlag()?>" /> <?= $currentLanguage->getLangName()?> <span
-									class="caret"></span></a>
-								<ul class="dropdown-menu" role="menu">
-								
-								<?php foreach ($languages as $language):?>
-									<li><a
-										href="<?= $this->url($this->route, [], ['query' => array( 'lang' => $language->getLangId())]); ?>">
-											<img
-    											src="<?= $this->basePath('img/flags/'.$language->getLangFlag().'.png') ?>"
-    											valign="middle" width="25" height="17" alt="<?=$language->getLangFlag()?>" />
-											<?=$language->getLangName()?>
-									</a></li>
-								<?php endforeach;?>
-									
-								</ul></li>
-						</ul>
-					<hr></div>
-				</div>
-                
-				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('First name'); ?></label>
-					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrFirstname'));?>
-						<span class="text-danger"><?= $this->formElementErrors($form->get('usrFirstname'));?></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Last name'); ?></label>
-					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrLastname'));?>
-						<span class="text-danger"><?= $this->formElementErrors($form->get('usrLastname'));?></span>
-					</div>
-				</div>
+				
 				<div class="form-group">
 					<label class="col-md-4 control-label text-right"><?= $this->translate('E-mail'); ?></label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrEmail'));?>
 						<span class="text-danger"><?= $this->formElementErrors($form->get('usrEmail'));?></span>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Phone'); ?></label>
-					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPhone'));?>
-						<span class="text-danger"><?= $this->formElementErrors($form->get('usrPhone'));?></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Country'); ?></label>
-					<div class="col-md-8 bot5"><?= $this->formElement($form->get('country'));?>
-						<span class="text-danger"><?= $this->formElementErrors($form->get('country'));?></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Postal code'); ?></label>
-					<div class="col-md-8 bot5">
-						<div class="row">
-							<div class="col-md-6"><?= $this->formElement($form->get('usrPostalcode'));?></div>
-							<div class="col-md-6 top10">
-								<i class="fa s18 fa-spinner fa-pulse" id="cityLoad"
-									style="display: none"></i>
-							</div>
-							<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('usrPostalcode'));?></span>
-						</div>
-						<!-- /r -->
-					</div>
-					<!-- /8 -->
-				</div>
-				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('City'); ?></label>
-					<div class="col-md-8 bot5"><?= $this->formElement($form->get('city'));?>
-						<span class="text-danger"><?= $this->formElementErrors($form->get('city'));?></span>
-					</div>
-				</div>
-
-			</div>
-			<!--/6-->
-			<div class="col-md-6">
-				<div class="form-group top30">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Birth year'); ?></label>
-					<div class="col-md-8 bot5">
-						<div style="width: 65%"><?= $this->formSelect($form->get('usrBirthday'));?></div>
-						 <span class="text-danger"><?= $this->formElementErrors($form->get('usrBirthday'));?></span>
-					</div>
-				</div>
-				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Gender'); ?></label>
-					<div class="col-md-8 bot5">
-						<div style="width: 65%"><?= $this->formElement($form->get('usrGendre'));?></div>
-						 <span class="text-danger"><?= $this->formElementErrors($form->get('usrGendre'));?></span>
-					</div>
-				</div>
-
 			</div>
 			<!-- /6 -->
 		</div>
 		<!-- end row -->
-	</fieldset>
-
-
-
-<hr>
-
-
-
-	<div class="row">
-		<div class="col-md-6">
+		<div class="row">
+			<div class="col-md-12">
 				<div class="form-group">
 					<label class="col-md-4 control-label text-right"><?= $this->translate('Username'); ?></label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrName'));?>
 						<span class="text-danger"><?= $this->formElementErrors($form->get('usrName'));?></span>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
 				<div class="form-group">
 					<label class="col-md-4 control-label text-right"><?= $this->translate('Password'); ?></label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPassword'));?>
 						<span class="text-danger"><?= $this->formElementErrors($form->get('usrPassword'));?></span>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
 				<div class="form-group">
 					<label class="col-md-4 control-label text-right"><?= $this->translate('Confirm password'); ?></label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPasswordConfirm'));?>
 						<span class="text-danger"><?= $this->formElementErrors($form->get('usrPasswordConfirm'));?></span>
 					</div>
 				</div>
+			</div>
 		</div>
-		<!-- /6 -->
-		<div class="col-md-6">
-			<div class="form-group">
-				<label class="col-md-4 control-label text-right"> </label>
-				<div class="col-md-8 bot5"><?= $this->formElement($form->get('captcha'));?> 
-<?php if ($form->get('captcha')->getMessages()):?>
-<span class="text-danger"><?= $this->formElementErrors($form->get('captcha'));?></span>
-<?php endif;?>
-</div>
-			</div>
-			<div class="form-group">
-				<label class="col-md-4 control-label text-right"> </label>
-				<div class="col-md-8">
-					<button type="reset" class="btn btn-default"><?= $this->translate('Cancel')?></button>
-					<button type="submit" class="btn btn-orange"><?= $this->translate('Submit')?></button>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-md-4 control-label text-right"> </label>
-				<div class="col-md-8"><?= $this->formHidden($form->get('userCSRF'));?> <br />
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?=$this->translate('Retype the characters displayed in the image')?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('captcha'));?> 
+                    <?php if ($form->get('captcha')->getMessages()):?>
+                    <span class="text-danger"><?= $this->formElementErrors($form->get('captcha'));?></span>
+                    <?php endif;?>
+                    </div>
 				</div>
 			</div>
 		</div>
-		<!-- /6 -->
-		</fieldset>
+		
+		<div class="row">
+			<div class="col-md-12">
+		<hr>
+		</div>
+		</div>     
+		<div class="row" style="text-align: center;">
+			<div class="col-md-12 top10 bot10">
+			   <a href="<?=$this->url('home/user-register', ['action' => 'facebook-registration'])?>" id="user-registration-facebook" 
+		data-dialog-title="<?=$this->translate('Register with Facebook')?>">
+			<img alt="<?=$this->translate('Register with Facebook')?>" src="<?=$this->basePath('/img/register-facebook-'.$_SESSION['language']['language'].'.png')?>"></a>
+			  
+              </div>
+		</div>      
+		<?= $this->formHidden($form->get('userCSRF'));?>
+
+	</fieldset>
+
+
+
+
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
 	</div>
-	<!-- end row -->
+	<div class="row">
+		<div class="col-md-12 text-right">
+			<button type="button" class="btn btn-default"
+				data-dismiss="modal">
+				<i class="fa fa-ban"></i>
+              <?= $this->translate('Cancel')?>
+              
+            </button>
+            <button type="submit" class="btn btn-orange" id="user-registration-submit">
+<i class="fa fa-sign-in" aria-hidden="true"></i> <?= $this->translate('Register')?></button>
+		</div>
+	</div>
+	<!-- /r -->
 
 
-<?=  $this->form()->closeTag();?> 
-
-
-
+	<?=  $this->form()->closeTag();?> 
 </div>
-<!-- end jumbotron -->
+
+
 
 <script type="text/javascript">
 
 $(function() {
 	userRegistrationUserRegistrationHandlers();
+
+	$('#user-registration-facebook').click(function() {
+		
+		FB.login(function(response){
+			if (response.status === 'connected') {
+				testAPI();
+			    	modalDialog('facebook-registration-dialog', $('#user-registration-facebook').data("dialog-title"), $('#user-registration-facebook').attr("href"), false);
+		    } else if (response.status === 'not_authorized') {
+
+		    } else {
+
+		    }
+		}, {scope: 'public_profile,email,user_location,user_birthday'});
+		return false;
+	});
+	
 });    
 
 </script>
 
-<!-- /user-registration/user-registration -->
+<script>
+  
+  window.fbAsyncInit = function() {
+      FB.init({
+        appId      : '220020655059875',
+        cookie     : true,  
+        status     : true,      
+        xfbml      : true, 
+        version    : 'v2.7' 
+      });
 
+    };
+
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+  function testAPI() {
+    FB.api('/me?fields=id,name,email,first_name,last_name,age_range,link,gender,locale,picture,timezone,updated_time,verified,location,birthday', function(response) {
+        console.log(response);
+      	console.log('Successful login for: ' + response.name);
+    });
+  }
+  
+</script>
 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="bootstrap admin template">
+    <meta name="author" content="">
+    <?= $this->headTitle($this->translate('Demodyne'))->setSeparator(' - ')->setAutoEscape(false) ?>
+
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+</head>
+<body>
+
+
+
+
+<div style="Margin:0 auto;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+    <div style="border-collapse:collapse;display:table;width:100%;max-width:601px;font-size:24px;line-height:23px;font-family:Roboto,sans-serif;Margin-top:20px;Margin-bottom:20px;">
+        <a href="<?=$this->url('home', [], array('force_canonical' => true))?>"><center><img src="https://www.demodyne.org<?=$this->basepath('img/demodyne-email.png')?>" alt="Demodyne"></center></a>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div style="Margin:0 auto;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+    <div style="border-collapse:collapse;display:table;width:100%;background-color:#f4eee6;max-width:601px;">
+
+        <div style="text-align:left;color:#60666d;font-size:14px;font-family:Roboto,sans-serif;max-width:600px;min-width:320px;width:320px;width:calc(28000% - 167400px)">
+
+            <?= $this->content; ?>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<div style="Margin:0 auto;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+    <div style="border-collapse:collapse;display:table;width:100%;max-width:601px;font-size:13px;line-height:16px;font-family:Roboto,sans-serif;color: #7E7E7E;">
+        <center>
+            <p>&copy;2015-<?= date('Y') ?> <a href="<?=$this->url('home', [], array('force_canonical' => true))?>">Demodyne</a> | <?=$this->translate('All Rights Reserved')?>.<br>
+                <a href="<?=$this->url('home/pages', ['page' => 'terms'], array('force_canonical' => true))?>"><?=$this->translate('Privacy Policy')?></a> | <a href="<?=$this->url('home/pages', ['page' => 'terms'], array('force_canonical' => true))?>"><?=$this->translate('Terms and Conditions')?></a></p>
+        </center>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>
+

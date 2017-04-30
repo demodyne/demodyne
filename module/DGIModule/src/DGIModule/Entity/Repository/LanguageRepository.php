@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -15,8 +15,8 @@ class LanguageRepository extends EntityRepository
         $q = $this->createQueryBuilder('l')
                     ->orderBy('l.langName');
         $languages = $q->getQuery()->getResult();
-        
+
         return $languages;
     }
-    
+
 }

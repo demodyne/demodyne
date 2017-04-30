@@ -1,0 +1,20 @@
+<div id="location-search-cities">
+	<div class="row">
+		<div class="col-md-3 text-right"><?=$this->translate('Select City:')?>
+        </div>
+		<div class="col-md-9" style="padding-left: 28px; max-height: 250px !important; overflow-y: scroll; overflow-x: hidden;">
+		
+    		<?php foreach ($cities as $city):?>
+    			<a href="<?=$this->url('browse', [
+    			    'country' => $city->getCountry()->getCountryName(), 
+    			    'region'=> $city->getRegion()->getRegionNameSolo(), 
+    			    'postalcode' => $city->getCityPostalcode(), 
+    			    'cityname' => $city->getCityName()])?>">
+					<span style="color:#0017A0 !important;">
+					<?=$city->getCityName()?> (<?=$city->getCityPostalcode()?>)
+                    </span>
+                    </a><br>
+    		<?php endforeach;?>
+		
+		</div>
+	</div>

@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -15,28 +15,44 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DGIModule\Entity\Comment;
 use DGIModule\Form\AddCommentForm;
 
+use Ramsey\Uuid\Uuid;
+use Doctrine\ORM\EntityManager;
+use Zend\Mvc\I18n\Translator;
+
+
 class CommentController extends AbstractActionController
 {
+    protected $entityManager;
+    protected $translator;
+    protected $config;
+
+    public function __construct(
+        array $config,
+        EntityManager $entityManager,
+        Translator $translator
+    )
+    {
+        $this->config = $config;
+        $this->entityManager = $entityManager;
+        $this->translator = $translator;
+    }
     
     public function addCommentAction()
     {
         $user = $this->identity();
         
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
         $type = $this->params()->fromRoute('type');
         $UUID = $this->params()->fromRoute('id', 0);
         $ajax = $this->params()->fromRoute('ajax', true);
-        
+
         $proposal = null;
         if ($type=='proposal') {
-            $proposal = $entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(['propUUID'=>$UUID]);
+            $proposal = $this->entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(['propUUID'=>$UUID]);
         }
-        
+
         $form       = new AddCommentForm();
-        $form->setHydrator(new DoctrineHydrator($entityManager,'DGIModule\Entity\Comment'));
-        
-        
+        $form->setHydrator(new DoctrineHydrator($this->entityManager,'DGIModule\Entity\Comment'));
+
         $comText = $this->params()->fromPost('comText');
         
         $request = $this->getRequest();
@@ -49,47 +65,60 @@ class CommentController extends AbstractActionController
             
             if ($form->isValid()){
                 // prepare data
-                $config = $this->getServiceLocator()->get('Config');
-                
-                
                 switch ($type) {
                     case 'program': 
-                        $program = $entityManager->getRepository('DGIModule\Entity\Program')->findOneBy(['progUUID'=>$UUID]);
+                        $program = $this->entityManager->getRepository('DGIModule\Entity\Program')->findOneBy(['progUUID'=>$UUID]);
                         $comment->setProgram($program); 
-                        $to = $program->getUsr()->getUsrName();
+                        $to = $program->getUsr();
                         break;
                     case 'proposal': 
-                        $proposal = $entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(['propUUID'=>$UUID]);
+                        $proposal = $this->entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(['propUUID'=>$UUID]);
                         $comment->setProp($proposal); 
-                        $to = $proposal->getUsr()->getUsrName();
+                        $to = $proposal->getUsr();
+                        break;
+                    case 'article':
+                        $article = $this->entityManager->getRepository('DGIModule\Entity\Article')->findOneBy(['articleUUID'=>$UUID]);
+                        $comment->setArticle($article);
+                        $to = $article->getUsr();
                         break;
                 }
                 
-                $comment->setUsr($user);
+                $comment->setUsr($user)
+                        ->setComCreatedDate(new \DateTime())
+                        ->setComUUID(Uuid::uuid4())
+                ;
                 
-                $entityManager->persist($comment);
+                $this->entityManager->persist($comment);
                 
                 $counters = $user->getCounters();
                 if ($counters->getCntCom()<5) {
                     $counters->setCntTotal($counters->getCntTotal()+2)
                              ->setCntCom($counters->getCntCom()+1);
-                    $entityManager->merge($counters);
+                    $this->entityManager->merge($counters);
                 }
                 
-                $entityManager->flush();
-                $entityManager->refresh($comment);
+                $this->entityManager->flush();
+                $this->entityManager->refresh($comment);
                 
-                $this->forward()->dispatch('DGIModule\Controller\Inbox', array(
+                $this->forward()->dispatch('DGIModule\Controller\Inbox', [
                             'action' => 'create-message',
-                            'to' => $to,
-                            'type' => $config['demodyne']['inbox']['type']['new_comment'],
+                            'to' => $to->getUsrName(),
+                            'type' => $this->config['demodyne']['inbox']['type']['new_comment'],
                             'uuid' => $comment->getComUUID(),
-                        ));
-                
+                ]);
+
+                if ($to->getDigest()->getDigestAlertComments()==$this->config['demodyne']['email']['alert']['instant']) {
+                    $this->forward()->dispatch('DGIModule\Controller\Email', [
+                        'action' => 'new-comment',
+                        'id' => $comment->getComUUID(),
+                        'email' => true
+                    ]);
+                }
+
                 $comText = '';
             }
         }
-        $commentListSection = $this->forward()->dispatch('DGIModule\Controller\Comment', array('action' => 'list', 'type' =>$type,  'id' => $UUID, 'ajax'=>false));
+        $commentListSection = $this->forward()->dispatch('DGIModule\Controller\Comment', ['action' => 'list', 'type' =>$type,  'id' => $UUID, 'ajax'=>false]);
         $viewModel = new ViewModel();
         $viewModel->addChild($commentListSection, 'commentListSection');
         
@@ -114,41 +143,46 @@ class CommentController extends AbstractActionController
     {
         $user = $this->identity();
     
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-    
         $type = $this->params()->fromRoute('type');
         $UUID = $this->params()->fromRoute('id', 0);
         $com = $this->params()->fromRoute('com', '');
-        
-        var_dump($com);
-        
-        $config = $this->getServiceLocator()->get('Config');
-        
+
         $comment = new Comment();
-         
+
         if ($type=='program') {
-            $program = $entityManager->getRepository('DGIModule\Entity\Program')->findOneBy(['progUUID'=>$UUID]); 
+            $program = $this->entityManager->getRepository('DGIModule\Entity\Program')->findOneBy(['progUUID'=>$UUID]); 
             $comment->setScn($program);   
-            $to = $program->getUsr()->getUsrName();
+            $to = $program->getUsr();
         }
         elseif ($type=='proposal') {
-            $proposal = $entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(['propUUID'=>$UUID]); 
+            $proposal = $this->entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(['propUUID'=>$UUID]); 
             $comment->setProp($proposal);
-            $to = $proposal->getUsr()->getUsrName();
+            $to = $proposal->getUsr();
         }
     
-        $comment->setUsr($user)->setComText($com);
+        $comment->setUsr($user)
+                ->setComText($com)
+                ->setComCreatedDate(new \DateTime())
+                ->setComUUID(Uuid::uuid4());
         
-        $entityManager->persist($comment);
-        $entityManager->flush();
-        $entityManager->refresh($comment);
+        $this->entityManager->persist($comment);
+        $this->entityManager->flush();
+        $this->entityManager->refresh($comment);
         
         $this->forward()->dispatch('DGIModule\Controller\Inbox', array(
             'action' => 'create-message',
-            'to' => $to,
-            'type' => $config['demodyne']['inbox']['type']['new_comment'],
+            'to' => $to->getUsrName(),
+            'type' => $this->config['demodyne']['inbox']['type']['new_comment'],
             'uuid' => $comment->getComUUID(),
         ));
+
+        if ($to->getDigest()->getDigestAlertComments()==$this->config['demodyne']['email']['alert']['instant']) {
+            $this->forward()->dispatch('DGIModule\Controller\Email', array(
+                'action' => 'new-comment',
+                'id' => $comment->getComUUID(),
+                'email' => true
+            ));
+        }
     
         return true;
     }
@@ -162,13 +196,11 @@ class CommentController extends AbstractActionController
 	    
         $page = $this->params()->fromRoute('page', 1);
         $ajax = $this->params()->fromRoute('ajax', true);
-        $limit= $this->params()->fromRoute('results', 5);
-    
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $limit= $this->params()->fromRoute('results', 10);
     
         $offset = ($page == 0) ? 0 : ($page - 1) * $limit;
 
-        $pagedComments = $entityManager->getRepository('DGIModule\Entity\Comment')->getPagedComments($type, $UUID, $offset, $limit);
+        $pagedComments = $this->entityManager->getRepository('DGIModule\Entity\Comment')->getPagedComments($type, $UUID, $offset, $limit);
         
         $viewModel = new ViewModel();
         
@@ -176,10 +208,14 @@ class CommentController extends AbstractActionController
             $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
         }
         
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/comment/list.mobile.phtml');
+        }
+
         if ($actions=='false') {
             $viewModel->setTemplate('dgi-module/comment/list-no-actions.phtml');
         }
-        
+
         $viewModel->setVariables([
             'pagedComments' => $pagedComments,
             'limit' => $limit,

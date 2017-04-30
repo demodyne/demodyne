@@ -1,5 +1,3 @@
-<!-- user-profile/get-scores -->
-
 <?php if ($list):?>
 <div class="col-md-6 col-xs-6">
         <?= $this->translate('Commitment Score')?>: 
@@ -8,11 +6,11 @@
 <?php for ($i=0;$i<5;$i++):?>
 	<?php $commitment--?>
    <?php if ($commitment>=0):?>
-	<span class="star-icon-small full">☆</span>
+        <i class="fa fa-star orange size2em"></i>
 	<?php elseif ($commitment==-0.5):?>
-	<span class="star-icon-small half">☆</span>
+        <i class="fa fa-star-half-o orange size2em"></i>
 	<?php else:?>
-	<span class="star-icon-small">☆</span>
+        <i class="fa fa-star-o gri size2em"></i>
 	<?php endif;?>
 <?php endfor;?>
 </div>
@@ -23,11 +21,11 @@
 <?php for ($i=0;$i<5;$i++):?>
 <?php $relevance--?>
    <?php if ($relevance>=0):?>
-	<span class="star-icon-small full">☆</span>
+        <i class="fa fa-star orange size2em"></i>
 	<?php elseif ($relevance==-0.5):?>
-	<span class="star-icon-small half">☆</span>
+        <i class="fa fa-star-half-o orange size2em"></i>
 	<?php else:?>
-	<span class="star-icon-small">☆</span>
+        <i class="fa fa-star-o gri size2em"></i>
 	<?php endif;?>
 <?php endfor;?>
 </div>
@@ -39,11 +37,11 @@
 <?php for ($i=0;$i<5;$i++):?>
 	<?php $commitment--?>
    <?php if ($commitment>=0):?>
-	<span class="star-icon full">☆</span>
+        <i class="fa fa-star orange size2em"></i>
 	<?php elseif ($commitment==-0.5):?>
-	<span class="star-icon half">☆</span>
+        <i class="fa fa-star-half-o orange size2em"></i>
 	<?php else:?>
-	<span class="star-icon">☆</span>
+        <i class="fa fa-star-o gri size2em"></i>
 	<?php endif;?>
 <?php endfor;?>
 </div>
@@ -52,14 +50,13 @@
 <?php for ($i=0;$i<5;$i++):?>
 <?php $relevance--?>
    <?php if ($relevance>=0):?>
-	<span class="star-icon full">☆</span>
+        <i class="fa fa-star orange size2em"></i>
 	<?php elseif ($relevance==-0.5):?>
-	<span class="star-icon half">☆</span>
+        <i class="fa fa-star-half-o orange size2em"></i>
 	<?php else:?>
-	<span class="star-icon">☆</span>
+        <i class="fa fa-star-o gri size2em"></i>
 	<?php endif;?>
 <?php endfor;?>
 </div>
 <?php endif;?>
 
-<!-- /user-profile/get-scores -->

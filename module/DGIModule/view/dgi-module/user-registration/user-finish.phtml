@@ -1,0 +1,46 @@
+<div style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+	
+	<div class="row">
+		<div class="col-md-4 center">
+				<img
+						src="<?=$this->basePath($user->getUsrPicture()) ?>" width="100"
+						alt="<?= $user->getUsrName() ?>"
+						title="<?= $user->getUsrName() ?>" class="round5"
+						id="" />
+			
+		</div>
+	
+		<div class="col-md-8">
+			<p><?=$this->translate('Thank you and Congratulations!')?>
+</p>
+			<p><?=$this->translate('You are now ready to enter the debate and contribute to local and national policies.')?> </p>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	
+	
+	
+	<div class="row">
+		<div class="col-md-12 text-right">
+			
+			<button type="submit" class="btn btn-orange" data-dismiss="modal"
+				id="user-name-submit">
+				<i class="fa fa-check-square-o" aria-hidden="true"></i> <?= $this->translate('Done')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+	
+</div>
+

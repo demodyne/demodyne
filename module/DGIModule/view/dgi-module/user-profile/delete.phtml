@@ -1,4 +1,3 @@
-<!-- user-profile/delete -->
 
 <div id="user-profile-delete"
 	data-url="<?= $this->url('user/profile', array('action' => 'delete')); ?>">
@@ -7,7 +6,7 @@
 			<p><?= $this->translate('Are you sure that you want to delete the account')?>
    '<?= $this->escapeHtml($user->getUsrName()); ?>' ?</p>
 			<p>
-				<span class="text-danger"><i class="fa fa-exclamation-triangle"></i> <?= $this->translate('All Scenario and Proposals published will not be deleted !!!')?></span>
+				<span class="text-danger"><i class="fa fa-exclamation-triangle"></i> <?= $this->translate('All Programs and Proposals published will not be deleted !!!')?></span>
 			</p>
 		</div>
 		<!-- /12 -->
@@ -30,6 +29,20 @@
 	</div>
 	<!-- /r -->
 </div>
-<script type="text/javascript">	$(document).ready(function () {		userProfileDeleteHandlers();	});</script>
+<script type="text/javascript">
 
-<!-- /user-profile/delete -->
+		$(document).ready(function () {
+
+
+
+			userProfileDeleteHandlers();
+			
+
+		});
+
+	</script>
+
+
+
+
+

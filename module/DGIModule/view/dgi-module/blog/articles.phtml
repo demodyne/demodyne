@@ -1,0 +1,157 @@
+<div class="jumbotron" id="article-list" style="background-image: url('/img/header-art-blog.png'); background-repeat: no-repeat; background-attachment: top; background-position: top;">
+
+
+
+
+    <div class="row">
+        <div class="col-md-12 text-right">
+            <a class="close" href="/"><i class="fa fa-home w"></i></a>
+            <button type="button" class="close" onclick="parent.history.back();"> <i class="fa fa-arrow-circle-left w right10" title="<?= $this->translate('Back')?>"></i> </button>
+            &nbsp; <span class="big close" id="modal-dialog-title"></span>
+        </div>
+    </div>
+
+
+
+    <div class="row bot10" style="padding-top: 130px;">
+        <div class="col-md-9">
+            <div class="fltl top10 right10"><?= $this->translate('View Articles from')?>: </div>
+            <div class="fltl">
+                <select name="country" required class="form-control text-change" id="country">
+                    <?php foreach ($countries as $country):?>
+                        <option value="<?= $this->url('blog', array('action' => 'articles', 'country'=>$country->getCountryCode())) ?>" <?= ($country==$selectedCountry)?'selected="selected"':'' ?>><?= $country->getCountryName() ?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+            <!--<div class="btn-group fltl top10 right10 left10">Select Articles by Tags:</div>
+            <div class="fltl right10">
+                <select name="tags" required class="form-control text-change" id="tags">
+                    <option value="0" ><?= $this->translate('All')?></option>
+                    <option value="1" ><?= $this->translate('Features')?></option>
+                    <option value="2" ><?= $this->translate('News')?></option>
+                </select>
+            </div>-->
+
+
+
+        </div>
+        <form
+                action="<?=$this->url('blog', array('action'=>'list', 'page'=>1))?>"
+                method="post" id="article-list-search-form">
+
+            <div class="col-md-3 col-xs-12">
+                <div class="form-group input-group">
+                    <input style="max-height: 37px !important;" type="text"
+                           class="form-control"
+                           placeholder="<?= $this->translate('Search')?>" required="required"
+                           name="searchTerms" <?=$searchTerms?'value="'.$searchTerms.'"':''?>>
+                    <span class="input-group-btn">
+                        <button type="submit"
+                                class="btn <?=$searchTerms?'btn-success':'btn-default'?>">
+                            <i class="fa fa-search fa-fw"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+    <hr>
+
+
+
+
+
+    <?php if ($user && $user->getUsrId() && $user->getUsrlId()==$this->configItem('demodyne.account.type.admin')):?>
+        <div class="row">
+            <div class="col-md-9 col-xs-12">
+                <div class="btn-group fltl right10 top5" role="group" aria-label="...">
+
+                    <button type="button"
+                            class="btn btn-sm btn-success"
+                            id="article-list-see-published"><?= $this->translate('Published')?></button>
+
+                    <button type="button"
+                            class="btn btn-sm btn-default"
+                            id="article-list-see-draft"><?= $this->translate('Draft')?></button>
+
+                </div>
+
+
+            </div>
+            <div class="col-md-3 text-right">
+                <a
+                        href="<?= $this->url('blog', array('action'=>'add-article'));?>"
+                        id="add-new-article"
+                        class="btn btn-orange">
+                    <i class="fa fa-plus-circle"></i> <?= $this->translate('Create New Article')?>
+
+                </a>
+            </div>
+        </div>
+        <hr>
+
+    <?php endif;?>
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-10 wbr">
+            <div><?=$this->publishedArticles?></div>
+            <div style="display: none"><?=$this->draftArticles?></div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2 wbr">
+            <div class="top10 bot20"><span class="big"><?= $this->translate('BLOG Tags')?>:</span></div>
+            <div class="label label-violet label-arrow label-arrow-left topm10 botm10">
+                <a href="<?=$this->url('blog', array('action'=>'list', 'country'=> $countryCode, 'tag'=>'all', 'page'=>1))?>" id="articles-tag"><span class="white"><?= $this->translate('All tags')?></span></a>
+            </div>
+            <div class="label label-success label-arrow label-arrow-left topm10 botm10">
+                <a href="<?=$this->url('blog', array('action'=>'list', 'country'=> $countryCode, 'tag'=>'features', 'page'=>1))?>" id="articles-tag"><span class="white"><?= $this->translate('New Features')?></span></a>
+            </div>
+            <div class="label label-warning label-arrow label-arrow-left botm10">
+                <a href="<?=$this->url('blog', array('action'=>'list', 'country'=> $countryCode, 'tag'=>'news', 'page'=>1))?>" id="articles-tag"><span class="white"><?= $this->translate('Articles')?></span></a>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+
+        $(function() {
+
+            $('#country').on('change', function () {
+                var url = $(this).val(); // get selected value
+                if (url) { // require a URL
+                    window.location = url; // redirect
+                }
+                return false;
+            });
+
+            blogListHandlers();
+
+        });
+
+
+
+    </script>
+
+
+
+
+</div>

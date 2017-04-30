@@ -1,94 +1,104 @@
-<!-- comment/list -->
-
 <?php $paging = $this->sortingDivPaginationHelper($pagedComments, $page, $this->url('comment', array('action'=>'list', 'type' => $type, 'id'=>$UUID)), 'com', $limit); ?>
-<div id="comment-list" 
-	data-report-comment="<?=$this->translate('Report comment')?>"
-	data-reply-text="<?=$this->translate('<br><br>On %date%, %user% wrote :<br><blockquote>%text%</blockquote>')?>"
-	>
-<?php if (count($pagedComments)):?>
-	<?php foreach($pagedComments as $comment): ?>
-<div class="table-responsive">
-		<table class="table table-condensed">
-			<tr>
-				<td style="max-width: 50px; width: 60px;"><img
-					src="<?=$this->basePath(). $comment->getUsr()->getUsrPicture() ?>"
-					valign="middle" width="45" height="45"
-					title="<?= $comment->getUsr()->getUsrName() ?>" class="round5" /></td>
-				<td><a
-						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$comment->getUsr()->getUsrUUID()));?>"
-						data-title="<?= $comment->getUsr()->getUsrName() ?>'s mini profile"
-						data-id="<?=$comment->getUsr()->getUsrUUID()?>"
-						id="comment-list-profile"> <span class="badge" id="comment-list-username"><?= $comment->getUsr()->getUsrName() ?></span></a>
-					<i class="fa fa-clock-o"></i> <span id="comment-list-datetime"><?= $comment->getComCreatedDate()->format("d/m/Y H:i") ?></span>:<br />
-					<span id="comment-list-text"><?= $comment->getComText() ?></span>
-</td>
-				<td style="max-width: 100px; width: 100px;" class="text-right"> 
-					<?php if($user):?>
-					<a href="#reply"
-						title="<?= $this->translate('Reply to this comment')?>"
-						id="comment-list-reply"><i
-						class="fa fa-reply"></i> <?= $this->translate('Reply')?></a><br />
-						
-					<a
-    					href="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'comment','id'=>$comment->getComUUID()));?>"
-    					id="comment-list-report"
-    					title="<?= $this->translate('Report Proposal as inapropiate')?>"><i
-    						class="fa fa-exclamation-triangle"></i> <?= $this->translate('Report')?></a><br />
-<span><?= count($comment->getThumbsUp())?></span>&nbsp;
-<?php $owner = ($comment->getUsr()==$user); ?>
-				<?php if (!$comment->hasThumbFromUser($user) && !$owner):?>
-				<a 
-					href="<?= $this->url('comment-thumb', array('action'=>'add', 'type' => 'up', 'id'=>$comment->getComUUID())) ?>"
-					 title="<?= $this->translate('Agree comment')?>"
-					id="thumb"><i class="fa fa-thumbs-o-up"></i></a><br /> 
-					<?php else:?>
-					<i class="fa fa-thumbs-o-up" title="<?= $owner?$this->translate('You cannot agree with your own comments'):$this->translate('You have already agreed/disagreed')?>"></i><br /> 
-					<?php endif;?>
-					
-<span><?= count($comment->getThumbsDown())?></span>&nbsp;
-<?php if (!$comment->hasThumbFromUser($user)  && !$owner ):?>
-				<a 
-					href="<?= $this->url('comment-thumb', array('action'=>'add', 'type' => 'down', 'id'=>$comment->getComUUID())) ?>"
-					 title="<?= $this->translate('Disagree comment')?>"
-					id="thumb"><i class="fa fa-thumbs-o-down"></i></a>
-					<?php else:?>
-					<i class="fa fa-thumbs-o-down" title="<?= $owner?$this->translate('You cannot disagree with your own comments'):$this->translate('You have already agreed/disagreed')?>"></i>
-					<?php endif;?>
-					
-				<?php endif;?>
-					
-				</td>
-				
-			</tr>
-		</table>
-	</div>
-	<!--/table responsive-->    
-<?php endforeach; ?>
-<div class="row">
-		<div class="col-md-12">
-			<hr>
-    <?php echo $paging; ?>
-</div>
-		<!--/12-->
-	</div>
-	<!-- /row -->
-<?php else:?>
-<div class="row">
-		<div class="col-md-12 text-center">
-   <?= sprintf($this->translate('Be the first to comment this %s.'), $type)?> 
-   <?php if (!$user):?>
-   		<button type="button" class="btn btn-sm btn-orange" data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>" data-dialog-title="<?=$this->translate('Please register')?>" id="please-register-button"><i class="fa fa-pencil-square-o" id="add-change-vote-div-icon"></i> <?= $this->translate('Register')?></button>
-   <?php endif;?>
-   
-</div>
-	</div>
-	<!-- /row -->
-<?php endif;?>
+<div id="comment-list"
+     data-report-comment="<?=$this->translate('Report comment')?>"
+     data-reply-text="<?=$this->translate('<br><br>On %date%, %user% wrote :<br><blockquote>%text%</blockquote>')?>"
+>
+
+    <!-- TODO add sort by Newest First / Latest First -->
+    <?php if (count($pagedComments)):?>
+        <?php foreach($pagedComments as $comment): ?>
+
+            <div class="row" id="comment-item">
+
+                <div class="col-xs-12 col-sm-8 col-md-10">
+
+                    <div class="pull-left" style="min-width: 52px!important">
+                        <img
+                                src="<?=$this->basePath(). $comment->getUsr()->getUsrPicture() ?>"
+                                valign="middle" width="45" height="45"
+                                title="<?= $comment->getUsr()->getUsrName() ?>" class="round5" />
+                    </div>
+                    <div style="margin-left: 52px!important">
+                        <a
+                                href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$comment->getUsr()->getUsrUUID()));?>"
+                                data-title="<?= $comment->getUsr()->getUsrName() ?>'s mini profile"
+                                data-id="<?=$comment->getUsr()->getUsrUUID()?>"
+                                id="comment-list-profile"> <span class="badge" id="comment-list-username"><?= $comment->getUsr()->getUsrName() ?></span></a>
+                        <i class="fa fa-clock-o"></i> <span id="comment-list-datetime"><?= $comment->getComCreatedDate()->format("d/m/Y H:i") ?></span>:<br />
+                        <span id="comment-list-text"><?= $comment->getComText() ?></span>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-2">
+
+
+
+                    <?php if($user):?>
+                        <a href="#reply"
+                           title="<?= $this->translate('Reply to this comment')?>"
+                           id="comment-list-reply"><i
+                                    class="fa fa-reply"></i> <?= $this->translate('Reply')?></a><br />
+
+                        <a
+                                href="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'comment','id'=>$comment->getComUUID()));?>"
+                                id="comment-list-report"
+                                title="<?= $this->translate('Report Proposal as inapropiate')?>"><i
+                                    class="fa fa-exclamation-triangle"></i> <?= $this->translate('Report')?></a><br />
+                        <span><?= count($comment->getThumbsUp())?></span>&nbsp;
+                        <?php $owner = ($comment->getUsr()==$user); ?>
+                        <?php if (!$comment->hasThumbFromUser($user) && !$owner):?>
+                            <a
+                                    href="<?= $this->url('comment-thumb', array('action'=>'add', 'type' => 'up', 'id'=>$comment->getComUUID())) ?>"
+                                    title="<?= $this->translate('Agree comment')?>"
+                                    id="thumb"><i class="fa fa-thumbs-o-up"></i></a><br />
+                        <?php else:?>
+                            <i class="fa fa-thumbs-o-up" title="<?= $owner?$this->translate('You cannot agree with your own comments'):$this->translate('You have already agreed/disagreed')?>"></i><br />
+                        <?php endif;?>
+
+                        <span><?= count($comment->getThumbsDown())?></span>&nbsp;
+                        <?php if (!$comment->hasThumbFromUser($user)  && !$owner ):?>
+                            <a
+                                    href="<?= $this->url('comment-thumb', array('action'=>'add', 'type' => 'down', 'id'=>$comment->getComUUID())) ?>"
+                                    title="<?= $this->translate('Disagree comment')?>"
+                                    id="thumb"><i class="fa fa-thumbs-o-down"></i></a>
+                        <?php else:?>
+                            <i class="fa fa-thumbs-o-down" title="<?= $owner?$this->translate('You cannot disagree with your own comments'):$this->translate('You have already agreed/disagreed')?>"></i>
+                        <?php endif;?>
+
+                    <?php endif;?>
+
+                </div>
+            </div><!--/r-->
+
+
+            <hr>
+        <?php endforeach; ?>
+
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <?php echo $paging; ?>
+            </div>
+            <!--/12-->
+        </div>
+        <!-- /row -->
+    <?php else:?>
+        <div class="row bot20">
+            <div class="col-md-12 text-center">
+                <?php if ($type=='proposal'):?>
+                    <?= $this->translate('Be the first to comment this proposal.')?>
+                <?php else:?>
+                    <?= $this->translate('Be the first to comment this program.')?>
+                <?php endif;?>
+
+
+            </div>
+        </div>
+        <!-- /row -->
+    <?php endif;?>
 </div>
 <script type="text/javascript">
-$(function(){
-	commentListHandlers();
-});
+    $(function(){
+        commentListHandlers();
+    });
 </script>
-
-<!-- /comment/list -->

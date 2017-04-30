@@ -1,0 +1,84 @@
+
+<div class="jumbotron" id="inbox-view-invitation">
+
+<?php $event = $this->message->getEvent(); $user=$this->user;?>
+
+	
+	<p>	<?=sprintf($this->translate('Dear %s,'), $this->message->getToUsr()->getUsrName())?></p>
+
+<p>    <?php if ($event->isSession()):?>
+	<?=sprintf($this->translate('You have been invited by %s to a group session:'), $this->message->getFromUsr()->getUsrName())?></p>
+       
+        <div style="padding-left: 20px;">
+        <a href="<?= $this->url($event->isSession()?'session':'event', array('action'=>'view-session', 'id'=> $event->getEventUUID()))?>"><b><span class="size15em"><?=$event->getEventName()?></span></b></a>
+
+<br><br>
+	<?php if ($event->getEventLevel()==$this->configItem('demodyne.level.city')):?>
+		<i class="fa fa-bullseye"></i> <?=sprintf($this->translate('Scope: City %s'), $event->getCity()->getCityName())?>
+	<?php elseif ($event->getEventLevel()==$this->configItem('demodyne.level.region')):?>
+		<i class="fa fa-bullseye"></i> <?=sprintf($this->translate('Scope: Region %s'), $event->getCity()->getRegion()->getRegionName())?>
+	<?php elseif ($event->getEventLevel()==$this->configItem('demodyne.level.country')):?>
+		<i class="fa fa-bullseye"></i> <?=sprintf($this->translate('Scope: Country <img src="/img/flags/%s.png" style="margin-bottom: 4px;" width="18" height="12"> %s'), str_replace(' ', '-', $event->getCity()->getCountry()->getCountryName()), $event->getCity()->getCountry()->getCountryName())?>
+<?php endif;?>	
+
+<p>
+<span class="glyphicon glyphicon-calendar"></span> <?=sprintf($this->translate('Date: %s'), $event->getEventStartDate()->format('d/m/Y'))?><br>
+<i class="fa fa-clock-o"></i> <?=sprintf($this->translate('Start time: %s'), $event->getEventStartDate()->format('H:i'))?><br>
+<i class="fa fa-hourglass-half"></i> <?=sprintf($this->translate('Duration: %.2f hours'), $event->getEventEndDate()->diff($event->getEventStartDate())->h)?><br>
+
+	<i class="fa fa-map-marker size15em"></i> <?=sprintf($this->translate('Location: %s, %s, %s'), $event->getEventLocation(), $event->getCity()->getCityPostalcode(), $event->getCity()->getCityName())?></p>
+</div>
+	<p><?=$this->translate('Sessions are group discussions to capture ideas and work together on a specific topic.')?>
+	<?=$this->translate('They are usually conducted both at a physical location and online.')?></p>
+	<p><?=$this->translate('The output of sessions is saved in the system for future reference and easier follow-up actions.')?></p>
+	<p><strong><?=$this->translate('Make sure your ideas will be heard !')?></strong></p>
+
+   <hr>
+   
+    <?php else:?>
+	<?=sprintf($this->translate('You have been invited by %s to an event:'), $this->message->getFromUsr()->getUsrName())?>
+    <?php endif;?>
+
+<br>
+<br>
+<div class="text-center">
+<?php if ($user!=$this->message->getFromUsr()):?>
+<button type="button" class="btn <?=!$event->hasAttendee($this->message->getToUsr())?'btn-orange':'btn-success'?>" 
+		id="inbox-view-invitation-attend"
+		data-url="<?= $this->url('event', array('action'=>'attend-event', 'id' => $event->getEventUUID()));?>"
+		<?= $user!=$this->message->getToUsr()?'disabled="disabled"':'' ?>>
+		<?php if (!$event->hasAttendee($this->message->getToUsr())):?>
+
+              <i class="fa fa-check-circle-o"></i>
+
+              <?= $this->translate('Attend Event')?>
+
+              <?php else:?>
+
+              <i class="fa fa-times-circle size15em"></i>
+
+              <?= $this->translate('Cancel attendance')?>	
+
+              <?php endif;?>
+	</button>
+	<?php else:?>
+			<?php if ($event->hasAttendee($this->message->getToUsr())):?>
+    			<span class="label label-success"><i class="fa fa-user"></i>
+					<span class="size15em" id="userstat"><?= $this->translate('Invitation accepted')?></span></span>
+			<?php else:?>
+				<span class="label label-info"><i class="fa fa-user"></i> <span
+					class="size15em" id="userstat"><?= $this->translate('Invitation pending')?></span></span>
+			<?php endif;?>
+	<?php endif;?>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+            $(function () {
+				
+            	inboxViewInvitationHandlers();
+            	
+            });
+        </script>

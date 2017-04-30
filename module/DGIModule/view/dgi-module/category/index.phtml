@@ -1,11 +1,10 @@
-<!-- category/index -->
 
 <?php 
 $title = 'Category list - Admin';
-$this->headTitle($title);
-$this->headLink()->prependStylesheet($this->basePath() . '/css/font-awesome-4.3.0/css/font-awesome.min.css');
-$this->headLink()->prependStylesheet($this->basePath() . '/jqueryUI/themes/smoothness/jquery-ui.css');
-$this->headScript()->appendFile($this->basePath() . '/jqueryUI/jquery-ui.min.js');
+// $this->headTitle($title);
+// $this->headLink()->prependStylesheet($this->basePath() . '/css/font-awesome-4.3.0/css/font-awesome.min.css');
+// $this->headLink()->prependStylesheet($this->basePath() . '/jqueryUI/themes/smoothness/jquery-ui.css');
+// $this->headScript()->appendFile($this->basePath() . '/jqueryUI/jquery-ui.min.js');
 ?>
 <form method="post" id="category-list-form">
 <div class="jumbotron">
@@ -25,7 +24,7 @@ $this->headScript()->appendFile($this->basePath() . '/jqueryUI/jquery-ui.min.js'
  <?php foreach ($categories as $main_category): ?>
     <li >
         
-         <img src="<?= $this->basePath()?>/files/<?= $main_category->getCatImage() ?>" height="42" width="42">
+         <img src="<?= $this->basePath()?>/files/<?= $main_category->getCatImage() ?>" height="42" width="42" class="round5">
          <a href="<?= $this->url('home/category', array('action'=>'edit', 'id'=>$main_category->getCatId()));?>" title="Edit <?= $main_category->getCatDescription() ?>" style="font-size: 18px;"><?= $main_category->getCatName() ?>
          </a>
          <a href="<?= $this->url('home/category', array('action'=>'delete', 'id'=>$main_category->getCatId()));?>" title="Delete <?= $main_category->getCatDescription() ?>" style="font-size: 24px;"><i class="fa fa-trash fa-1x"></i></a>
@@ -82,6 +81,29 @@ $this->headScript()->appendFile($this->basePath() . '/jqueryUI/jquery-ui.min.js'
           }
         });
 
+//     $('#category-list-form').submit(function() { // catch the form's submit event
+		
+// //		$('#newsletter-add-newsletter-save-button > i').removeClass("fa-floppy-o").addClass('fa-spinner').addClass('fa-pulse');
+// 		  //console.log('Calling submit...');
+// 		    $.ajax({ // create an AJAX call...
+// 		        data: $(this).serialize(), // get the form data
+// 		        type: $(this).attr('method'), // GET or POST
+// 		        url: $(this).attr('action'), // the file to call
+// 		        success: function(response) { // on success..
+// 		        	if (typeof response ==  'object') {
+// 		        		updatePages(['#event-my-events', '#event-city-events', '#event-upcoming-events']);
+// 	        		$('.modal').modal('hide');
+// 	        	    //$('#add-new-proposal-dialog').remove();
+// 	        	}
+// 	        	else {
+// 	        	    // its not json
+// 	        		$('#event-add-event').parent().html(response); // update the DIV
+// 	        	}
+// 		        },
+// 		    });
+// 		    return false; // cancel original event to prevent form submitting
+// 	});
+
     $('#country').on('change', function () {
         var url = $(this).val(); // get selected value
         if (url) { // require a URL
@@ -91,6 +113,3 @@ $this->headScript()->appendFile($this->basePath() . '/jqueryUI/jquery-ui.min.js'
     });
   });
   </script>
-  
-  <!-- /category/index -->
-  

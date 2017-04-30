@@ -1,25 +1,28 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity\Repository;
 
+use DGIModule\Entity\Program;
+use DGIModule\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Zend\Session\Container;
 
 class ProgramRepository extends EntityRepository
 {
-    public function countPrograms(\DGIModule\Entity\User $user)
+    public function countPrograms(User $user)
     {
         $level = new Container('level');
         
         $q = $this->createQueryBuilder('p')
                 ->leftJoin('p.city', 'city')
                 ->leftJoin('p.programProposals', 'progprop')
+
                 ->where('p.progDeletedDate IS NULL')
                 ->having('count(progprop)>0')
                 ->groupBy('p.progId')
@@ -91,8 +94,8 @@ class ProgramRepository extends EntityRepository
         return $q->getQuery()->getResult();
     }
     
-    public function getPagedPrograms(\DGIModule\Entity\User $user, $offset = 0, $limit = 10, $sort, $order) {
-    
+    public function getPagedPrograms(User $user, $offset = 0, $limit = 10, $sort, $order) {
+
         $level = new Container('level');
     
         $sorts = [];
@@ -113,7 +116,6 @@ class ProgramRepository extends EntityRepository
                 $sorts[] = 'p.progName';
                 break;
         }
-        
         $q = $this->createQueryBuilder('p')
                     ->leftJoin('p.usr', 'u')
                     ->leftJoin('p.city', 'city')
@@ -163,5 +165,80 @@ class ProgramRepository extends EntityRepository
         return $paginator;
     }
 
-    
+
+    /**
+     * @param User $user
+     * @param \DateTime $startDate
+     * @param \DateTime $endDate
+     * @param $levels
+     * @return array
+     */
+    public function countUserPeriodPrograms(User $user, \DateTime $startDate, \DateTime $endDate, $levels) {
+
+        $q = $this->createQueryBuilder('p')
+                    ->leftJoin('p.city', 'city')
+                    ->select('sum(CASE WHEN (p.progLevel = :cityLevel) THEN 1 ELSE 0 END) as cityPrograms')
+                    ->addSelect('sum(CASE WHEN (p.progLevel = :regionLevel) THEN 1 ELSE 0 END) as regionPrograms')
+                    ->addSelect('sum(CASE WHEN (p.progLevel = :countryLevel) THEN 1 ELSE 0 END) as countryPrograms')
+                    ->addselect('count(distinct p.progId) as totalPrograms')
+                    ->where('p.progDeletedDate IS NULL')
+                    ->andWhere('p.progCreatedDate >= :startDate')
+                    ->andWhere('p.progCreatedDate < :endDate')
+                    ->setParameter('cityLevel', $levels['city'])
+                    ->setParameter('regionLevel', $levels['region'])
+                    ->setParameter('countryLevel', $levels['country'])
+                    ->setParameter('startDate', $startDate)
+                    ->setParameter('endDate', $endDate);
+
+
+        $city = $user->getCity();
+        if ($city->getFullCity()) {
+            $sql[0]= '(city = :city OR city.fullCity = :fullCity OR city.fullCity = :city OR city = :fullCity)';
+            $q->setParameter('city', $city)
+                ->setParameter('fullCity', $city->getFullCity());
+        }
+        else {
+            $sql[0]= 'city = :city OR city.fullCity = :city';
+            $q->setParameter('city', $city);
+        }
+        $sql[1]= 'city.region = :region ';
+        $q->setParameter('region', $user->getCity()->getRegion());
+        $sql[2]= 'city.country = :country ';
+        $q->setParameter('country', $user->getCountry());
+
+        $q->andWhere(implode(' OR ', $sql));
+
+        $proposalCount = $q->getQuery()->getOneOrNullResult();
+
+        if ($proposalCount) return
+            [
+                'city' => $proposalCount["cityPrograms"],
+                'region' => $proposalCount["regionPrograms"],
+                'country' => $proposalCount["countryPrograms"],
+                'total' => $proposalCount["totalPrograms"],
+            ];
+        else return [
+            'city' => 0,
+            'region' => 0,
+            'country' => 0,
+            'total' => 0,
+        ];
+    }
+
+    /**
+     * @return array|Program[]
+     */
+    public function getProgramsWithCommentsByPeriod() {
+
+        $q = $this->createQueryBuilder('p')
+            ->leftJoin('p.comments', 'c')
+            ->addSelect('sum(CASE WHEN (DATEDIFF(CURRENT_TIME(),c.comCreatedDate) <= 7) THEN 1 ELSE 0 END) as weeklyComments')
+            ->addSelect('sum(CASE WHEN (DATEDIFF(CURRENT_TIME(),c.comCreatedDate) <= 1) THEN 1 ELSE 0 END) as dailyComments')
+            ->groupBy('p.progId')
+            ->having('weeklyComments > 0');
+
+        return $q->getQuery()->getResult();
+    }
+
+
 }

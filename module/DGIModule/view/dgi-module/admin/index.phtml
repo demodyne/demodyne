@@ -1,0 +1,12 @@
+
+<?php
+$title = 'Email - Admin';
+?>
+
+<div class="jumbotron">
+<h2>Email templates</h2>
+
+Email validation : <a href="<?= $this->url('email', array('action'=>'email-validation', 'email'=>'false'), array('force_canonical' => true));?>">Email validation</a><br>
+
+    Admin digest : <a href="<?= $this->url('admin', array('action'=>'admin-digest'), array('force_canonical' => true));?>">Admin digest</a>
+</div>

@@ -1,0 +1,277 @@
+
+<?php $paging = $this->sortingDivPaginationHelper($pagedEvents, $page, $this->url('session', array('action'=>'my-sessions-list')), 'my-sessions-list', $limit, $sort, $order, null); ?>
+<div id="session-my-sessions-list"
+     data-view-attendees="<?=$this->translate('View Session Attendees')?>"
+     data-edit-session="<?=$this->translate('Edit Session')?>"
+     data-delete-session="<?=$this->translate('Delete Session')?>"
+     data-duplicate-session="<?=$this->translate('Duplicate Session')?>"
+     data-add-session="<?=$this->translate('Add New Session')?>"
+     data-cancel-session="<?=$this->translate('Cancel Session')?>"
+     data-publish-session="<?=$this->translate('Publish Session')?>"
+     data-url="<?=$this->url('session', array('action'=>'my-sessions-list', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit))?>">
+    <div class="row top10">
+        <div class="col-md-6 col-xs-12">
+            <div class="btn-group top5" role="group" aria-label="...">
+                <a type="button" id="upcoming-sessions"
+                   class="btn btn-sm <?= strpos($filter, 'completed')===false?'btn-success':'btn-default'?>"
+                   data-url="<?= $this->url('session', array('action'=>'my-sessions-list', 'page'=>1, 'filter'=>'none'));?>">
+                    <?=$this->translate('Upcoming')?></a>
+                <a type="button" id="completed-sessions"
+                   class="btn btn-sm <?= strpos($filter, 'completed')!==false?'btn-success':'btn-default'?>"
+                   data-url="<?= $this->url('session', array('action'=>'my-sessions-list', 'page'=>1, 'filter'=>'city'));?>">
+                    <?=$this->translate('Completed')?> </a>
+
+            </div>
+
+
+            <div class="btn-group top5" role="group"
+                 aria-label="Button group with nested dropdown">
+
+
+
+                <a id="btnGroupDrop1" type="button" class="btn btn-sm <?=$filter!='none'&&$filter!='completed'?'btn-success':'btn-default'?>"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                   style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;">
+                    <i class="fa fa-arrow-down"></i> <?=$this->translate('Filter')?> <span
+                            class="caret"></span>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1"
+                     style="min-width: 300px; max-width: 300px; padding-left: 20px;">
+
+					<span id="session-my-sessions-list-filter">
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'owner')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="owner"></i> <?= $this->translate('Created by me')?></a></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'accepted')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="accepted"></i> <?= $this->translate('Invitation accepted')?></a></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'pending')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="pending"></i> <?= $this->translate('Invitation pending')?></a></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'attending')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="attending"></i> <?= $this->translate('Attended by me')?></a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'city')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="city"></i> <?= $this->translate('City level')?></a></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'region')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="region"></i> <?= $this->translate('Region level')?></a></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'country')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="country"></i> <?= $this->translate('Country level')?></a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'private')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="private"></i> <?= $this->translate('Private')?></a></li>
+						<li><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'public')!==false||$filter=='none')?'fa-check':'fa-times'?> size15em"
+                                        data-filter="public"></i> <?= $this->translate('Public')?></a></li>
+						<li role="separator" class="divider"></li>
+						<li style="display: none;"><a href="#"><i
+                                        class="fa <?=(strpos($filter, 'completed')!==false)?'fa-check':'fa-times'?> size15em"
+                                        data-filter="completed"></i> <?= $this->translate('Completed')?></a></li>
+						<li><a href="#" id="filter-select-all"><?= $this->translate('Select all')?></a></li>
+						<li><a href="#" id="filter-deselect-all"><?= $this->translate('Deselect all')?></a></li>
+						<li role="separator" class="divider"></li>
+						<button class="btn btn-orange"
+                                id="session-my-sessions-list-filter-apply"
+                                data-url="<?=$this->url('session', array('action'=>'my-sessions-list', 'page'=>1))?>"><?=$this->translate('Apply')?></button>
+						<button class="btn btn-default"
+                                id="session-my-sessions-list-filter-reset"
+                                data-url="<?=$this->url('session', array('action'=>'my-sessions-list', 'page'=>1))?>"><?=$this->translate('Reset')?></button>
+					</span>
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+        <div class="col-md-6 col-xs-12">
+            <div class="fltr">
+                <ul class="nav">
+                    <li class="dropdown"><a class="dropdown-toggle"
+                                            data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                    class="label label-default"><i class="fa fa-caret-down"></i> </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a id="page-my-sessions-list"
+                                   href="<?= $this->url('session', array('action'=>'my-sessions-list', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Name')?></a></li>
+<!--                            <li><a id="page-my-sessions-list"-->
+<!--                                   href="--><?//= $this->url('session', array('action'=>'my-sessions-list', 'sort'=>'status', 'page'=>1, 'order'=>'desc'), true);?><!--">--><?//=$this->translate('Private/Public')?><!--</a></li>-->
+                            <li class="divider"></li>
+                            <li><a id="page-my-sessions-list"
+                                   href="<?= $this->url('session', array('action'=>'my-sessions-list', 'sort'=>'start_date', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Start date')?></a></li>
+                        </ul></li>
+                </ul>
+            </div>
+            <div class="fltr">
+                <ul class="nav">
+                    <li class="dropdown"><a class="dropdown-toggle"
+                                            data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                    class="label label-default"><i class="fa fa-caret-up"></i> </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a id="page-my-sessions-list"
+                                   href="<?= $this->url('session', array('action'=>'my-sessions-list', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Name')?></a></li>
+<!--                            <li><a id="page-my-sessions-list"-->
+<!--                                   href="--><?//= $this->url('session', array('action'=>'my-sessions-list', 'sort'=>'status', 'page'=>1, 'order'=>'asc'), true);?><!--">--><?//=$this->translate('Private/Public')?><!--</a></li>-->
+                            <li class="divider"></li>
+                            <li><a id="page-my-sessions-list"
+                                   href="<?= $this->url('session', array('action'=>'my-sessions-list', 'sort'=>'start_date', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Start date')?></a></li>
+
+                        </ul></li>
+                </ul>
+            </div>
+            <div class="fltr right10 top5"><?= $this->translate('Sorted by')?> <?php if ($sort=='start_date'):?><?=$this->translate('Start date')?><?php elseif ($sort=='status'):?><?=$this->translate('Private/Public')?><?php else:?><?=$this->translate(ucfirst($sort))?><?php endif;?>
+
+                <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
+        </div>
+    </div>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-12">
+
+
+            <?php foreach ($pagedEvents as $session):?>
+
+
+                <div class="row">
+                    <div class="col-md-5 col-xs-12">
+                        <?php $sessionDescription = preg_replace('/<[^>]*>/', ' ', $session->getEventDescription());
+
+                        $sessionDescription = (strlen($sessionDescription) > 150) ? substr($sessionDescription, 0, 150) . '...' : $sessionDescription;?>
+
+                        <a href="<?= $this->url('session', array('action'=>'view-session', 'id'=> $session->getEventUUID()));?>">
+								<span class="big" title="<?=$sessionDescription?>">
+									<?=$session->getEventName()?>
+		          				</span></a> <br>
+
+                        <?= $this->translate('by')?> <a
+                                href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$session->getUsr()->getUsrUUID()));?>"
+                                data-title="<?=sprintf($this->translate("%s's mini profile"), $session->getUsr()->getUsrName())?>"
+                                data-id="<?=$session->getUsr()->getUsrUUID()?>"
+                                id="view-profile"> <span class="badge"><?= $session->getUsr()->getUsrName() ?></span></a>
+
+                        - <?= $this->translate('Session type')?>
+
+
+
+
+                        <?php if ($session->getEventCanceledDate()):?>
+
+                            <span class="red"><strong><?= $this->translate('CANCELED')?></strong></span>
+
+                        <?php elseif ($session->getEventPublishedDate()):?>
+                            <span class="label label-success"><i class="fa fa-user size15em"></i> <span class="size15em"><?= $this->translate('Public')?></span></span>
+                        <?php else:?>
+                            <span class="label label-primary"><i class="fa fa-lock size15em"></i> <span class="size15em"><?= $this->translate('Private')?></span></span>
+                        <?php endif;?>
+
+                        <br>
+
+                        <strong>
+                            <?php if ($user!=$session->getUsr()):?>
+                                <?php if ($user->isAttending($session)):?>
+                                    <span class="green"><span id="userstat"><?= $this->translate('Invited - Accepted')?></span></span>
+                                <?php else:?>
+                                    <span class="blue"><span id="userstat"><?= $this->translate('Invited - pending')?></span></span>
+                                <?php endif;?>
+                            <?php else:?>
+                                <span class="owner"><span id="userstat"><?= $this->translate('My session')?></span></span>
+                            <?php endif;?>
+                        </strong>
+
+                    </div>
+                    <div class="col-md-5 col-xs-12">
+
+                        <?php if ($session->getEventLevel()==$this->configItem('demodyne.level.city')):?>
+                            <?= $this->translate('City Level')?> - <?=$session->getCity()->getCityName()?>
+                        <?php elseif ($session->getEventLevel()==$this->configItem('demodyne.level.region')):?>
+                            <?= $this->translate('Region Level')?> - <?=$session->getCity()->getRegion()->getRegionName()?>
+                        <?php elseif ($session->getEventLevel()==$this->configItem('demodyne.level.country')):?>
+                            <?= $this->translate('Country Level')?> - <img src="/img/flags/<?=str_replace(' ', '-', $user->getCountry()->getCountryName())?>.png" style="margin-bottom: 4px;" width="20" height="14"> <?=$session->getCity()->getCountry()->getCountryName()?>
+                        <?php endif;?>
+                        <br> <span class="glyphicon glyphicon-calendar"></span>
+                        <?=$this->dateFormat(
+                            $session->getEventStartDate(),
+                            IntlDateFormatter::MEDIUM, // date
+                            IntlDateFormatter::SHORT, // time
+                            $session->getCity()->getCountry()->getCountryFormat()
+                        )?><br>
+                        <i class="fa fa-map-marker size15em"></i> <?=$session->getEventLocation()?> - <?=$session->getCity()->getCityName()?> (<?=$session->getCity()->getCityPostalcode()?>)<br>
+
+
+
+
+                    </div>
+
+                    <div class="col-md-2 col-xs-12 text-xs-left text-right">
+                        <? $now = new \DateTime();?>
+                        <?php if ($session->getEventStartDate()<$now && $session->getEventEndDate()>$now):?>
+                            <span class="right5">
+								<span class="green"><i class="fa fa-circle size15em" title="<?= $this->translate('Session Started')?>"></i>
+								</span>
+							</span>
+                        <?php endif;?>
+                        <?php if ($user==$session->getUsr()):?>
+
+                            <span class="right5">
+						<a
+                                href="<?= $this->url('session', array('id'=> $session->getEventUUID()));?>"
+                                id="session-my-sessions-list-view-attendees"><i
+                                    class="fa fa-users size15em"
+                                    title="<?=count($session->getAttendees())?> <?= $this->translate('Confirmed Attendees')?>"></i> <?=count($session->getAttendees())?></a>
+					</span>
+                            <a
+                                    href="<?= $this->url('session', array('id'=> $session->getEventUUID()));?>">
+                                <i class="fa fa-paper-plane size15em" title="<?=count($session->getInvitations())?> <?= $this->translate('Invitations sent')?>"></i> <?=count($session->getInvitations())?></a>
+
+                        <?php endif;?>
+
+
+                    </div>
+                </div>
+
+                <hr>
+
+
+
+
+
+            <?php endforeach;?>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $paging; ?>
+                </div>
+                <!--/12-->
+            </div>
+            <!-- /row -->
+
+
+
+
+
+        </div>
+    </div>
+
+    <?php $lang = $this->plugin('translate')->getTranslator()->getLocale();?>
+    <script type="text/javascript">
+
+
+
+        $(function() {
+            sessionMySessionsListHandlers('<?=$lang?>');
+
+        });
+
+
+
+    </script>
+</div>

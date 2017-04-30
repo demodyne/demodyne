@@ -1,1 +1,222 @@
-<!-- event/add-edit-event --><div id="event-add-event"><?php $event=isset($event)?$event:null?><?php $form->prepare(); ?><?php $form->setAttribute('method', 'post'); ?><?php $form->setAttribute('id', 'event-add-event-form'); ?><?= $this->form()->openTag($form);?>	<div class="row">		<div class="col-md-6 col-xs-12">			<div class="form-group">				<label class="col-sm-2 control-label"><?= $this->translate('Name')?></label>				<div class="col-sm-10 bot5">      <?= $this->formElement($form->get('eventName'));?>						<?php if ($form->get('eventName')->getMessages()):?>                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventName'));?></span>                    <?php endif;?>    </div>			</div>			<div class="form-group">				<label class="col-sm-2 control-label"><?= $this->translate('Description')?></label>				<div class="col-sm-10 bot5">    </div>			</div>			<div class="form-group">				<div class="col-sm-12 bot5">				<button class="btn btn-mini" type="button"					id="inbox-new-message-textbox-bold"					onclick="document.execCommand('bold');">					<strong><?=$this->translate('Bold')?></strong>				</button>				<button class="btn btn-mini" type="button"					id="inbox-new-message-textbox-italic"					onclick="document.execCommand('italic');">					<i><?=$this->translate('Italic')?></i>				</button>				<button class="btn btn-mini" type="button"					id="inbox-new-message-textbox-underline"					onclick="document.execCommand('underline');">					<u><?=$this->translate('Underline')?></u>				</button><br><br>			<div class="form-control desc" contenteditable="true"  data-placeholder=""				maxlength="1000" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"				id="event-add-event-textbox"				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$eventDescription?$eventDescription:($event?$event->getEventDescription():'')?></div>				<div id="event-add-event-textbox-count"></div>				<div class="col-sm-12 bot5">	<?= $this->formElement($form->get('eventDescription'));?>						<?php if ($form->get('eventDescription')->getMessages()):?>                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventDescription'));?></span>                    <?php endif;?>    </div></div></div>			<div class="form-group">			</div>			<div class="form-group">				<label class="col-sm-2 control-label">URL</label>				<div class="col-sm-10 bot5">      <?= $this->formElement($form->get('eventLink'));?>						<?php if ($form->get('eventLink')->getMessages()):?>                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventLink'));?></span>                    <?php endif;?>    </div>			</div>			<div class="form-group">				<label class="col-sm-2 control-label"><?= $this->translate('Event Image')?></label>				<div class="col-sm-10 bot5 form-inline">      <?= $this->formElement($form->get('eventImage'));?>						<?php if ($form->get('eventImage')->getMessages()):?>                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventImage'));?></span>                    <?php endif;?>    </div>			</div>			<div class="form-group">				<label class="col-sm-2 control-label"> </label>				<div class="col-sm-10 bot5">					<img width="200" class="img-thumbnail" id="event-add-event-preview"						height="120"						src="<?=($event&&$event->getEventImage())?$this->basePath($event->getEventImage()):''?>"						valign="middle"						title="<?= $this->translate('Please select an image')?>">				</div>			</div>		</div>		<div class="col-md-6 col-xs-12 ">			<div class="panel panel-default">				<div class="panel-body">					<div class="form-group">						<label class="col-sm-3 control-label"><?= $this->translate('Start')?></label>						<div class="col-sm-9 bot5">							<div class="row">								<div class='col-sm-12'>									<div class="form-group">										<div class='input-group date' id='eventStartDateGroup'>                    <?= $this->formElement($form->get('eventStartDate'));?>                    <span class="input-group-addon"> <span												class="glyphicon glyphicon-calendar"></span>											</span>										</div>                <?php if ($form->get('eventStartDate')->getMessages()):?>                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventStartDate'));?></span>                    <?php endif;?>            </div>								</div>									</div>						</div>					</div>					<div class="form-group">						<label class="col-sm-3 control-label"><?= $this->translate('End')?></label>						<div class="col-sm-9 bot5">							<div class="row">								<div class='col-sm-12'>									<div class="form-group">										<div class='input-group date' id='eventEndDateGroup'>                    <?= $this->formElement($form->get('eventEndDate'));?>                    <span class="input-group-addon"> <span												class="glyphicon glyphicon-calendar"></span>											</span>										</div>                <?php if ($form->get('eventEndDate')->getMessages()):?>                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventEndDate'));?></span>                    <?php endif;?>            </div>								</div>													</div>						</div>					</div>					<div class="form-group">						<label class="col-sm-3 control-label">Location</label>						<div class="col-sm-9 bot5">      <?= $this->formElement($form->get('eventLocation'));?>						<?php if ($form->get('eventLocation')->getMessages()):?>                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventLocation'));?></span>                    <?php endif;?>    </div>					</div>				</div>			</div>			<!-- /panel -->		</div>	</div>	<div class="row">		<div class="col-xs-12">			<hr />		</div>	</div>	<div class="row">		<div class="col-xs-12 text-right">			<button type="button" class="btn btn-orange"				id="event-add-event-save-button">				<i class="fa fa-floppy-o"></i> <?= ($event && $event->getEventPublishedDate())?$this->translate('Save'):$this->translate('Save as Draft')?></button><?php if (!$event || !$event->getEventPublishedDate()):?><button type="button" class="btn btn-success"				id="event-add-event-publish-button">				<i class="fa fa-share-square-o"></i> <?= $this->translate('Publish Event')?></button><?php endif;?><button type="button" class="btn btn-default" data-dismiss="modal">				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>		</div>	</div></div><!-- /r --><?=$this->form()->closeTag();?><script type="text/javascript">		$(function () {			eventAddEventHandlers();		});	</script>	<!-- /event/add-edit-event -->	
+<!-- event/add-edit-event -->
+<?php
+setlocale(LC_ALL, $user->getCountry()->getCountryFormat());
+?>
+<div id="event-add-event">
+<?php $event=isset($event)?$event:null?>
+<?php $form->prepare(); ?>
+<?php $form->setAttribute('method', 'post'); ?>
+<?php $form->setAttribute('id', 'event-add-event-form'); ?>
+<?= $this->form()->openTag($form);?>
+	<div class="row">
+		<div class="col-md-6 col-xs-12">
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><?= $this->translate('Name')?></label>
+				<div class="col-sm-10 bot5">
+      <?= $this->formElement($form->get('eventName'));?>
+						<?php if ($form->get('eventName')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventName'));?></span>
+                    <?php endif;?>
+    </div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><?= $this->translate('Description')?></label>
+				<div class="col-sm-10 bot5">
+    </div>
+			</div>
+
+
+			<div class="form-group" id="edit-description">
+				<div class="col-sm-12 bot5">
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="event-add-event-textbox"
+                            data-format="bold">
+                        <strong><i class="fa fa-times"></i> <?=$this->translate('Bold')?></strong>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="event-add-event-textbox"
+                            data-format="italic">
+                        <i><i class="fa fa-times"></i> <?=$this->translate('Italic')?></i>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="event-add-event-textbox"
+                            data-format="underline">
+                        <u><i class="fa fa-times"></i> <?=$this->translate('Underline')?></u>
+                    </button>
+
+<br><br>
+			<div class="form-control desc" contenteditable="true"  data-placeholder=""
+				maxlength="1000" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
+				id="event-add-event-textbox"
+				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$eventDescription?$eventDescription:($event?$event->getEventDescription():'')?></div>
+				<div id="event-add-event-textbox-count"></div>
+				<div class="col-sm-12 bot5">
+	<?= $this->formElement($form->get('eventDescription'));?>
+						<?php if ($form->get('eventDescription')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventDescription'));?></span>
+                    <?php endif;?>
+    </div>
+</div>
+</div>
+
+			<div class="form-group">
+
+
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">URL</label>
+				<div class="col-sm-10 bot5">
+      <?= $this->formElement($form->get('eventLink'));?>
+						<?php if ($form->get('eventLink')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventLink'));?></span>
+                    <?php endif;?>
+    </div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><?= $this->translate('Event Image')?></label>
+				<div class="col-sm-10 bot5 form-inline">
+      <?= $this->formElement($form->get('eventImage'));?>
+						<?php if ($form->get('eventImage')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventImage'));?></span>
+                    <?php endif;?>
+    </div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"> </label>
+				<div class="col-sm-10 bot5">
+					<img width="200" class="img-thumbnail" id="event-add-event-preview"
+						height="120"
+						src="<?=($event&&$event->getEventImage())?$this->basePath($event->getEventImage()):''?>"
+						valign="middle"
+						title="<?= $this->translate('Please select an image')?>">
+				</div>
+			</div>
+		</div>
+
+        <?php
+        if ($event && $event->getEventStartDate()) {
+            $form->get('eventStartDate')->setValue($this->dateFormat(
+                $event->getEventStartDate(),
+                IntlDateFormatter::SHORT, // date
+                IntlDateFormatter::SHORT, // time
+                'fr_FR'
+            ));
+        }
+        if ($event && $event->getEventEndDate()) {
+            $form->get('eventEndDate')->setValue($this->dateFormat(
+                $event->getEventEndDate(),
+                IntlDateFormatter::SHORT, // date
+                IntlDateFormatter::SHORT, // time
+                'fr_FR'
+            ));
+        }
+        ?>
+
+
+		<div class="col-md-6 col-xs-12 ">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="form-group">
+						<label class="col-sm-3 control-label"><?= $this->translate('Start')?></label>
+						<div class="col-sm-9 bot5">
+							<div class="row">
+								<div class='col-sm-12'>
+									<div class="form-group">
+										<div class='input-group date' id='eventStartDateGroup'>
+                    <?= $this->formElement($form->get('eventStartDate'));?>
+                    <span class="input-group-addon"> <span
+												class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+                <?php if ($form->get('eventStartDate')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventStartDate'));?></span>
+                    <?php endif;?>
+            </div>
+								</div>
+								<!--
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker2').datetimepicker({
+                    locale: 'ru'
+                });
+            });
+        </script>
+-->
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label"><?= $this->translate('End')?></label>
+						<div class="col-sm-9 bot5">
+							<div class="row">
+								<div class='col-sm-12'>
+									<div class="form-group">
+										<div class='input-group date' id='eventEndDateGroup'>
+                    <?= $this->formElement($form->get('eventEndDate'));?>
+                    <span class="input-group-addon"> <span
+												class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+                <?php if ($form->get('eventEndDate')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventEndDate'));?></span>
+                    <?php endif;?>
+            </div>
+								</div>
+								<!--
+        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker2').datetimepicker({
+                    locale: 'ru'
+                });
+            });
+        </script>
+-->
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label">Location</label>
+						<div class="col-sm-9 bot5">
+      <?= $this->formElement($form->get('eventLocation'));?>
+						<?php if ($form->get('eventLocation')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventLocation'));?></span>
+                    <?php endif;?>
+    </div>
+					</div>
+				</div>
+			</div>
+			<!-- /panel -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn btn-orange"
+				id="event-add-event-save-button">
+				<i class="fa fa-floppy-o"></i> <?= ($event && $event->getEventPublishedDate())?$this->translate('Save'):$this->translate('Save as Draft')?></button>
+<?php if (!$event || !$event->getEventPublishedDate()):?>
+<button type="button" class="btn btn-success"
+				id="event-add-event-publish-button">
+				<i class="fa fa-share-square-o"></i> <?= $this->translate('Publish Event')?></button>
+<?php endif;?>
+<button type="button" class="btn btn-default" data-dismiss="modal">
+				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+</div>
+<!-- /r -->
+<?=$this->form()->closeTag();?>
+<script type="text/javascript">
+		$(function () {
+			eventAddEventHandlers();
+		});
+	</script>

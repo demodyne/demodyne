@@ -1,6 +1,6 @@
-<!-- event/my-events -->
 
-  <?php $paging = $this->sortingDivPaginationHelper($pagedEvents, $page, $this->url('city/event', array('action'=>'my-events')), 'my-events', $limit, $sort, $order, null, $month?'/date/'.$month.'/'.$year:''); ?>
+
+  <?php $paging = $this->sortingDivPaginationHelper($pagedEvents, $page, $this->url('event', array('action'=>'my-events')), 'my-events', $limit, $sort, $order, null, $month?'/date/'.$month.'/'.$year:''); ?>
 <div id="event-my-events"
 	data-view-attendees="<?=$this->translate('View Event Attendees')?>"
 	data-edit-event="<?=$this->translate('Edit Event')?>"
@@ -9,11 +9,11 @@
 	data-add-event="<?=$this->translate('Add New Event')?>"
 	data-cancel-event="<?=$this->translate('Cancel Event')?>"
 	data-publish-event="<?=$this->translate('Publish Event')?>"
-	data-url="<?=$this->url('city/event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit))?>">
+	data-url="<?=$this->url('event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit))?>">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-8">
 			<button
-				data-href="<?= $this->url('city/event', array('action'=>'add-event')); ?>"
+				data-href="<?= $this->url('event', array('action'=>'add-event')); ?>"
 				data-dialog-title="<?=$this->translate('Add New Event')?>"
 				class="btn btn-orange" id="event-my-events-add-new-event">
 				<i class="fa fa-plus-circle"></i> <?= $this->translate('Create Event')?>
@@ -23,7 +23,7 @@
 			<?= $this->translate('Events')?>
 
 		</div>
-		<div class="col-md-6">
+		<div class="col-md-4">
 			<div class="fltr">
 				<ul class="nav">
 					<li class="dropdown"><a class="dropdown-toggle"
@@ -32,14 +32,14 @@
 					</a>
 						<ul class="dropdown-menu dropdown-menu-right">
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Name')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Name')?></a></li>
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'status', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Status')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'status', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Status')?></a></li>
 							<li class="divider"></li>
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Start date')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Start date')?></a></li>
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('End date')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('End date')?></a></li>
 						</ul></li>
 				</ul>
 			</div>
@@ -51,18 +51,18 @@
 					</a>
 						<ul class="dropdown-menu dropdown-menu-right">
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Name')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Name')?></a></li>
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'status', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Status')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'status', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Status')?></a></li>
 							<li class="divider"></li>
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Start date')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Start date')?></a></li>
 							<li><a id="page-my-events"
-								href="<?= $this->url('city/event', array('action'=>'my-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('End date')?></a></li>
+								href="<?= $this->url('event', array('action'=>'my-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('End date')?></a></li>
 						</ul></li>
 				</ul>
 			</div>
-			<div class="fltr right10 top5"><?= $this->translate('Sorted by')?> <?php if ($sort=='start_date'):?><?=$this->translate('Start date')?><?php elseif ($sort=='end_date'):?><?=$this->translate('End date')?><?php else:?><?=$this->translate(ucfirst($sort))?><?php endif;?> 
+			<div class="fltr right10 top5"><?= $this->translate('Sorted by')?> <?php if ($sort=='start_date'):?><?=$this->translate('Start date')?><?php elseif ($sort=='end_date'):?><?=$this->translate('End date')?><?php else:?><?=$this->translate(ucfirst($sort))?><?php endif;?>
 
                     <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
 		</div>
@@ -72,21 +72,21 @@
 		<div class="col-md-4 col-xs-12 bot5">
 			<button type="button"
 				class="btn <?=($month || $searchTerms || $drafts)?'btn-default':'btn-success'?>"
-				data-url="<?=$this->url('city/event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
+				data-url="<?=$this->url('event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
 				id="event-my-events-see-all"><?= $this->translate('All upcoming')?></button>
 
 			<button type="button"
 				class="btn <?=$drafts?'btn-success':'btn-default'?>"
-				data-url="<?=$this->url('city/event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit, 'publish' => true))?>"
+				data-url="<?=$this->url('event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit, 'publish' => true))?>"
 				id="event-my-events-see-drafts"><?= $this->translate('All drafts')?></button>
 		</div>
 		<div class="col-md-4 col-xs-12">
         <div class="fltl right10 bot5">
 			<button type="button"
 				class="btn <?=$month?'btn-success':'btn-default'?>"
-				data-url="<?=$this->url('city/event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit, 'month' => $month?$month:date('n'), 'year' => $year?$year:date('Y')))?>"
+				data-url="<?=$this->url('event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit, 'month' => $month?$month:date('n'), 'year' => $year?$year:date('Y')))?>"
 				id="event-my-events-see-month"><?= $this->translate('By month')?></button>
-                </div>                
+                </div>
 			<div class="input-group date col-md-6 fltl" id="event-my-events-month">
 				<input style=" max-height:37px !important;" type="text" name="event-my-events-start-month"
 					id="event-my-events-start-month" class="form-control" value=""> <span
@@ -95,7 +95,7 @@
 				</span>
 			</div>
 		</div>
-		<form action="<?=$this->url('city/event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
+		<form action="<?=$this->url('event', array('action'=>'my-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
 			method="post"
 			id="event-my-events-search-form">
 			<div class="col-md-4 col-xs-12">
@@ -127,14 +127,14 @@
 				<div class="table-cell">
 					<div class="row">
 						<div class="col-md-4 col-xs-12">
-						
+
 						<?php if ($event->getEventPublishedDate()):?>
 							<a
-								href="<?= $this->url('city/event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));?>"><span
+								href="<?= $this->url('event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));?>"><span
 								class="big">
 						<?php else:?>
 						<a
-								href="<?= $this->url('city/event', array('action'=>'edit-event', 'id'=> $event->getEventUUID()));?>"
+								href="<?= $this->url('event', array('action'=>'edit-event', 'id'=> $event->getEventUUID()));?>"
 								id="event-my-events-edit">
 						<?php endif;?>
 
@@ -149,12 +149,29 @@
           <?=$eventDescription?>
 
         </div>
+
+        <?php $countryFormat = $event->getCity()->getCountry()->getCountryFormat() ?>
 						<div class="col-md-3 col-xs-12">
-							<span class="glyphicon glyphicon-calendar"></span> <?= $this->translate('Start Date')?>: <?=$event->getEventStartDate()->format('d/m/Y H:i')?><br>
-							<span class="glyphicon glyphicon-calendar"></span> <?= $this->translate('End Date')?>: <?=$event->getEventEndDate()->format('d/m/Y H:i')?>
+							<span class="glyphicon glyphicon-calendar"></span>
+								<?= $this->translate('Start Date')?>:
+								<?=$this->dateFormat(
+                					        $event->getEventStartDate(),
+                                            IntlDateFormatter::MEDIUM, // date
+                                            IntlDateFormatter::SHORT, // time
+								            $countryFormat
+                                        )?>
+                            <br>
+							<span class="glyphicon glyphicon-calendar"></span>
+								<?= $this->translate('End Date')?>:
+								<?=$this->dateFormat(
+                					        $event->getEventEndDate(),
+                                            IntlDateFormatter::MEDIUM, // date
+                                            IntlDateFormatter::SHORT, // time
+                                            $countryFormat
+                                        )?>
 
         </div>
-						<div class="col-md-2 col-xs-12 text-right">       
+						<div class="col-md-2 col-xs-12 text-right">
 
 			<?php if ($event->getEventCanceledDate()):?>
 
@@ -170,40 +187,40 @@
 
             <?php endif;?>
 
-      	 
 
-       
+
+
 
         </div>
 						<div class="col-md-3 col-xs-12">
 							<a
-								href="<?= $this->url('city/event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));?>"
+								href="<?= $this->url('event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));?>"
 								id="event-my-events-view-attendees"><i class="fa fa-users"></i> <?=count($event->getAttendees())?> <?= $this->translate('Attendees')?></a><br>
 							<a
-								href="<?= $this->url('city/event', array('action'=>'edit-event', 'id'=> $event->getEventUUID()));?>"
+								href="<?= $this->url('event', array('action'=>'edit-event', 'id'=> $event->getEventUUID()));?>"
 								id="event-my-events-edit"><i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit Event')?></a><br>
 
                         <?php if (!$event->getEventPublishedDate()):?>
 
                         	<a
-								href="<?= $this->url('city/event', array('action'=>'publish-event', 'id'=> $event->getEventUUID()));?>"
+								href="<?= $this->url('event', array('action'=>'publish-event', 'id'=> $event->getEventUUID()));?>"
 								id="event-my-events-publish"><i class="fa fa-share-square-o"></i> <?= $this->translate('Publish Event')?></a><br>
 							<a
-								href="<?= $this->url('city/event', array('action'=>'delete-event', 'id'=> $event->getEventUUID()));?>"
+								href="<?= $this->url('event', array('action'=>'delete-event', 'id'=> $event->getEventUUID()));?>"
 								id="event-my-events-delete"><i class="fa fa-times-circle"></i> <?= $this->translate('Delete Event')?></a><br>
 
                     	<?php elseif (!$event->getEventCanceledDate()):?>
 
                     		<a
-								href="<?= $this->url('city/event', array('action'=>'cancel-event', 'id'=> $event->getEventUUID()));?>"
+								href="<?= $this->url('event', array('action'=>'cancel-event', 'id'=> $event->getEventUUID()));?>"
 								id="event-my-events-cancel"><i class="fa fa-share-square-o"></i> <?= $this->translate('Cancel Event')?></a><br>
 
                         <?php endif;?>
 
-                        
+
 
                         <a
-								href="<?= $this->url('city/event', array('action'=>'duplicate-event', 'id'=> $event->getEventUUID()));?>"
+								href="<?= $this->url('event', array('action'=>'duplicate-event', 'id'=> $event->getEventUUID()));?>"
 								id="event-my-events-duplicate"><i class="fa fa-calendar-plus-o"></i> <?= $this->translate('Duplicate Event')?></a>
 						</div>
 					</div>
@@ -211,9 +228,9 @@
 			</div>
 			<hr>
 
-  
 
-  
+
+
 
   <?php endforeach;?>
 
@@ -231,10 +248,10 @@
 
     </div>
 	</div>
-	
+
 	<?php $lang = $this->plugin('translate')->getTranslator()->getLocale();?>
 	<script type="text/javascript">
-	
+
 	var month = ("<?=$this->translate('January')?> <?=$this->translate('February')?> <?=$this->translate('March')?> <?=$this->translate('April')?> <?=$this->translate('May')?> <?=$this->translate('June')?> <?=$this->translate('July')?> <?=$this->translate('August')?> <?=$this->translate('September')?> <?=$this->translate('October')?> <?=$this->translate('November')?> <?=$this->translate('December')?>").split(" ");
 
 	var now = new Date();
@@ -258,5 +275,3 @@ $(function() {
 
 </script>
 </div>
-
-<!-- /event/my-events -->

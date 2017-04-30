@@ -1,0 +1,80 @@
+@charset "utf-8";
+/* CSS Document */
+
+.top20 {
+	padding-top: 20px;
+}
+
+.topm20 {
+	margin-top: 20px;
+}
+
+body {
+	margin: 30px 0;
+}
+
+p {
+    margin-bottom: 15px!important;
+    font-size: 14px!important;
+    font-weight: 200;
+}
+
+.marianne {
+    background: #f00 url('../images/marianne.svg') no-repeat left top;
+    background-size: 100% auto;
+}
+
+.jumbotron {
+	border-radius: 0px!important;
+}
+.title1 {
+    font-size: 32px;
+}
+.title2 {
+    font-size: 24px;
+}
+.title3 {
+    font-size: 18px;
+}
+
+.bluebg {
+	/*background-image: url(../images/slide.jpg);*/
+	background-color: #074065;
+}
+.bluebox {
+    padding: 1em 3em;
+    background: rgba(83, 157, 219, 0.9);
+    -webkit-box-shadow: 0px 10px 30px -13px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 10px 30px -13px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 10px 30px -13px rgba(0, 0, 0, 0.75);
+}
+.blue {
+	color: #074065;
+}
+.lightblue {
+	color: #60b0f7;
+}
+.white {
+	color: #FFFFFF;
+}
+.orange {
+	color: #FF9900;
+}
+.lightorange {
+	color: #FDB913;
+}
+
+.btn-orange {
+    background-color: #fa9c18;
+    border-color: #da8105;
+    color: #000!important;
+}
+.btn-orange:hover, .btn-orange:focus, .btn-orange:active, .btn-orange.active {
+    background-color: #f39005;
+    border-color: #da8105;
+}
+.btn-orange.disabled:hover, .btn-orange.disabled:focus, .btn-orange.disabled:active, .btn-orange.disabled.active, .btn-orange[disabled]:hover, .btn-orange[disabled]:focus, .btn-orange[disabled]:active, .btn-orange[disabled].active, fieldset[disabled] .btn-orange:hover, fieldset[disabled] .btn-orange:focus, fieldset[disabled] .btn-orange:active, fieldset[disabled] .btn-orange.active {
+    background-color: #fa9c18;
+    border-color: #fa9c18;
+}
+

@@ -12,16 +12,37 @@ return array(
             'member'  => 'guest',
             'partner' => 'member',
             'administration' => 'member',
-            'admin'  => 'member',
+            'admin'  => 'administration',
         ),
         'resources' => array(
             'allow' => array(
+                'DGIModule\Controller\Admin' => array(
+                    'all'	         => 'admin',
+                ),
+                'DGIModule\Controller\Blog' => array(
+                    'all'	         => 'guest',
+                ),
+                'DGIModule\Controller\Administration' => array(
+                    'all'	         => 'administration',
+                ),
                 'DGIModule\Controller\Banner' => array(
                     'all'	         => 'administration',
                     'carousel-banners' => 'member'
                 ),
+                'DGIModule\Controller\Category' => array(
+                    'all'     => 'admin',
+                    'get-categories'	=> 'member',
+                    'get-subcategories'	=> 'member',
+                    'get-all-categories'	=> 'guest',
+                    'json-list' => 'guest'
+                ),
+                'DGIModule\Controller\Chat' => array(
+                    'all'	         => 'member',
+                    'message-list' => 'guest'
+                ),
                 'DGIModule\Controller\Comment' => array(
                     'all'	         => 'member',
+                    'list' => 'guest'
                 ),
                 'DGIModule\Controller\CommentThumb' => array(
                     'add'	=> 'member',
@@ -52,6 +73,13 @@ return array(
                 'DGIModule\Controller\Error' => array( 
                     'all'	=> 'guest',
                 ),
+                'DGIModule\Controller\Email' => array(
+//                    'email-validation'	=> 'guest',
+//                    'change-password' => 'guest',
+//                    'admin-digest' => 'guest',
+//                    'index' => 'admin'
+                    'all' => 'guest',
+                ),
                 'DGIModule\Controller\Event' => array(
                     'all'	         => 'member',
                     'all-events'    => 'guest',
@@ -81,7 +109,7 @@ return array(
                     'claim-ownership'   => 'administration',
                     'view-measure'      => 'guest',
                     'view-history'      => 'guest',
-                    'country-measures'  => 'guest',
+//                    'country-measures'  => 'guest',
                     'all-measures'      => 'guest'
                 ),
                 'DGIModule\Controller\News' => array(
@@ -113,13 +141,25 @@ return array(
                     'my-proposals'     => 'guest',
                     'user-proposals'    => 'guest',
                     'check-proposals' => 'guest',
+                    'json-proposals' => 'guest',
+                ),
+                'DGIModule\Controller\Referendum' => array(
+                    'all'	=> 'member',
+                    'index' => 'guest',
+                    'register' => 'guest',
+
                 ),
                 'DGIModule\Controller\Report' => array(
                     'all'	=> 'member',
                 ),
+                'DGIModule\Controller\Session' => array(
+                    'all'	=> 'member',
+					'my-sessions'    => 'guest',
+                    'view-session' => 'guest',
+                    'idea-list' => 'guest'
+                ),
                 'DGIModule\Controller\UserLogin' => array( 
-                    'index'	    => 'guest',
-                    'login'	    => 'guest',
+                    'all'	    => 'guest',
                     'logout'    => 'member',
                 ),
                 'DGIModule\Controller\UserProfile' => array( 
@@ -137,11 +177,6 @@ return array(
                 ),
                 'DGIModule\Controller\Vote' => array(
                     'all'	=> 'member',
-                ),
-                'DGIModule\Controller\Category' => array( 
-                    'all'     => 'admin',
-                    'get-categories'	=> 'member',
-                    'get-subcategories'	=> 'member',
                 ),
             )
         )

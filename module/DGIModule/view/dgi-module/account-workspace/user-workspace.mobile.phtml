@@ -1,0 +1,184 @@
+
+    <div class="container" style="padding: 0px!important;">
+        <ul class="nav nav-tabs-mobile dunga">
+            <li class="active"><a href="#inbox" data-toggle="tab">
+                    <i class="fa fa-envelope-o size15em"></i></a></li>
+            <li><a href="#mycontacts" data-toggle="tab">
+                    <i class="fa fa-book size15em"></i></a></li>
+            <li><a href="#favorites" data-toggle="tab">
+                    <i class="fa fa-heart-o size15em"></i></a></li>
+            <li><a href="#myprop2" data-toggle="tab">
+                    <i class="fa fa-bullhorn size15em"></i></a></li>
+            <li><a href="#myprog" data-toggle="tab">
+                    <img src="/img/icon-programme-33.svg" width="20"></a></li>
+            <li><a href="#my-sessions" data-toggle="tab"><i class="fa fa-users size15em"></i></a></li>
+        </ul>
+    </div>
+
+
+
+    <div class="row">
+          <div class="col-md-12  tab-content">
+            
+            <!-- INBOX -->
+            
+            <div class="tab-pane active" id="inbox">
+              <?= $this->inboxSection ?>
+            </div>
+            
+            <!-- end INBOX --> 
+            
+            <!-- CONTACTS -->            
+            <div class="tab-pane" id="mycontacts">
+              <?= $this->contactsSection; ?>
+            </div>            
+            <!-- end CONTACTS --> 
+            
+            <!-- FAVORITES -->            
+            <div class="tab-pane" id="favorites">
+              <?= $this->favoritesSection ?>
+            </div>            
+            <!-- end FAVORITES --> 
+            
+            <!-- MY PROPOSALS -->            
+            <div class="tab-pane" id="myprop2">
+              <?= $this->myProposalsSection ?>
+            </div>            
+            <!-- end PROPOSALS --> 
+            
+            <!-- MY PROGRAMS-->            
+            <div class="tab-pane" id="myprog">
+              <?= $this->myProgramsSection ?>
+            </div>            
+            <!-- end PROGRAMS --> 
+            
+            <!-- MY SESSIONS-->            
+            <div class="tab-pane" id="my-sessions">
+              <?= $this->mySessionsSection ?>
+            </div>            
+            <!-- end SESSIONS --> 
+            
+            <!-- MY IMPLEMENTATION -->
+            
+            <div class="tab-pane" id="impl">
+              <div class="row">
+                <div class="col-md-6 top10">
+                  <?= $this->translate('You are Champion for')?>
+                  <span class="badge">XX</span>
+                  <?= $this->translate('Proposals')?>
+                </div>
+                <div class="col-md-6">
+                  <div class="fltr">
+                    <ul class="nav top10">
+                      <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"> <span class="label label-default"><i class="fa fa-caret-up"></i> </span> </a>
+                        <ul class="dropdown-menu">
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Name')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Category')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Scenario')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published / Draft')?>
+                            </a></li>
+                          <li class="divider"></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published date')?>
+                            </a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="fltr">
+                    <ul class="nav top10">
+                      <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"> <span class="label label-default"><i class="fa fa-caret-down"></i> </span> </a>
+                        <ul class="dropdown-menu">
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Name')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Category')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Scenario')?>
+                            </a></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published / Draft')?>
+                            </a></li>
+                          <li class="divider"></li>
+                          <li><a id="page_my_prop" href="">
+                            <?= $this->translate('Published date')?>
+                            </a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="fltr top10 right10">
+                    <?= $this->translate('Sort')?>
+                  </div>
+                </div>
+                <!-- /6 --> 
+                
+              </div>
+              <!-- /row -->
+              
+              <hr />
+              <div class="table-layout">
+                <div class="table-cell fixed-width-60"> <img src="../../../files/catImage14261703010.jpg" valign="middle" width="45" height="45" title="User Name" class="round5"/> </div>
+                <div class="table-cell">
+                  <div class="row">
+                    <div class="col-md-6 col-xs-12"> category title<br />
+                      <a target="_parent" href="" title=""><span class="big">Proposal name from database</span> </a><br />
+                      <?= $this->translate('Published')?>: <i class="fa fa-clock-o"></i> d/m/Y H:i from database </div>
+                    <div class="col-md-6 col-xs-12">
+                      <?= $this->translate('Current Status')?>
+                      :<br />
+                      <span class="label label-default" title="Debate step, NO implementation yet">&nbsp;D&nbsp;</span> <span class="label label-default" title="Voting step, NO implementation yet">&nbsp;V&nbsp;</span> <span class="label label-success" title="Implementation, Planning step">&nbsp;<i class="fa fa-caret-right"></i> P&nbsp;</span> <span class="label label-default" title="Implementation, Execution step">&nbsp;E&nbsp;</span> <span class="label label-default" title="Implementation, Proposal Completed">&nbsp;C&nbsp;</span> </div>
+                  </div>
+                </div>
+                <div class="table-cell fixed-width-150 text-right"> <a href="" title="Tasks Pending">X
+                  <?= $this->translate('Tasks Pending')?>
+                  </a> <br />
+                  <a href="" title="Tasks Completed">X
+                  <?= $this->translate('Tasks Completed')?>
+                  </a> </div>
+              </div>
+              <hr />
+              <div class="row">
+                <div class="col-md-12"> Pagination here please </div>
+                <!--/12--> 
+                
+              </div>
+              <!-- /row --> 
+              
+            </div>
+            
+            <!-- end IMPLEMENTATION --> 
+            
+            <!-- MY DCS HOURS -->
+            
+            <div class="tab-pane" id="hours"> My DCS Hours detailed </div>
+            
+            <!-- end MY DCS HOURS --> 
+            
+            <!-- MY FUNDINGS -->
+            
+            <div class="tab-pane" id="fundings"> My Fundings, detailed
+              <p>&nbsp;</p>
+              <p>&nbsp;</p>
+              <p>&nbsp;</p>
+            </div>
+            
+            <!-- end FUNDINGS --> 
+            
+          </div>
+          
+          <!-- /10 --> 
+          
+        </div>
+        
+        <!-- end row --> 
+        

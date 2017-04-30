@@ -1,5 +1,3 @@
-<!-- measure/draft-measures -->
-
 <?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('measure', array('action'=>'draft-measures')), 'draft-measures', $limit, $sort, $order); ?>
 <div id="administration-dashboard-draft-measures"
 	data-url="<?= $this->url('measure', array('action'=>'draft-measures', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit));?>"
@@ -127,12 +125,10 @@
         </div>
 <!-- /jumbotron -->
 
-<script type="text/javascript">
-    $(function () {
-    
-    	mesureDraftMeasuresHandlers();
-    
-    });
-</script>
+        <script type="text/javascript">
+            $(function () {
 
-<!-- /measure/draft-measures -->
+            	mesureDraftMeasuresHandlers();
+
+            });
+        </script>

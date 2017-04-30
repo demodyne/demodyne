@@ -1,0 +1,44 @@
+
+<div id="delete-newsletter-content">
+  <div class="row">
+    <div class="col-md-12">
+      <?= sprintf($this->translate('Your newsletter <strong>%s</strong> will be deleted.'), $newsletter->getNlName())?><br>
+      <h1>
+        <?= $this->translate('Are you sure?')?>
+      </h1>
+    </div>
+    
+    <!-- /12 --> 
+    
+  </div>
+  
+  <!-- end row -->
+  
+  <div class="row">
+    <div class="col-xs-12">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-right">
+        <a href="<?= $this->url('administration/newsletter', array('action'=>'delete-newsletter', 'id' => $newsletter->getNlUUID() ), true);?>" class="btn btn-orange" id="delete-newsletter-yes-button" >
+            <i class="fa fa-trash"></i> <?= $this->translate('Yes')?></a>
+      <button type="button" class="btn" data-dismiss="modal">
+          <i class="fa fa-ban"></i> <?= $this->translate('No')?>
+      </button>
+    </div>
+  </div>
+  <!-- /r -->
+  
+
+</div>
+<script type="text/javascript">
+
+		$(function () {
+
+			newsletterDeleteHandlers();
+			
+
+		});
+
+	</script> 

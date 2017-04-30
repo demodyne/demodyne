@@ -1,18 +1,19 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity\Repository;
 
+use DGIModule\Entity\Administration;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class NewsletterRepository extends EntityRepository
 {
-    public function countAdminNewsletters(\DGIModule\Entity\Administration  $admin)
+    public function countAdminNewsletters(Administration  $admin)
     {
         $q = $this->createQueryBuilder('n')
                         ->select('count(distinct n.nlId) as total')
@@ -21,7 +22,8 @@ class NewsletterRepository extends EntityRepository
         return $q->getQuery()->getOneOrNullResult();
     }
     
-    public function getAdminPagedNewsletters(\DGIModule\Entity\Administration  $admin, $offset = 0, $limit = 10, $sort, $order) {
+    
+    public function getAdminPagedNewsletters(Administration  $admin, $offset = 0, $limit = 10, $sort, $order) {
         $sorts = [];
         // variable tranformation
         switch ($sort) {
@@ -56,5 +58,5 @@ class NewsletterRepository extends EntityRepository
     
         return $paginator;
     }
-     
+
 }

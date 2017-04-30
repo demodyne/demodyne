@@ -1,19 +1,29 @@
-<!-- measure/all-measures -->
+<?php
 
-<?php 
+$city = $user->getCity();
+if ($_SESSION['level']['level']=='city') {
+    $levelName = ($city->getFullCity()?$city->getFullCity()->getCityName():$city->getCityName());
+    $levelUrl = $this->url('browse', [
+        'country' => $city->getCountry()->getCountryName(),
+        'postalcode' => $city->getCityPostalcode(),
+        'region'=> $city->getRegion()->getRegionName(),
+        'cityname' => $city->getCityName()
+    ], array('force_canonical' => true));
+}
+elseif ($_SESSION['level']['level']=='region') {
+    $levelName = $city->getRegion()->getRegionName();
+    $levelUrl = $this->url('browse',
+        ['country' => $city->getCountry()->getCountryName(),
+            'region'=> $city->getRegion()->getRegionName(),
+        ], array('force_canonical' => true));
+}
+elseif ($_SESSION['level']['level']=='country') {
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $city->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14" alt="'. $city->getCountry()->getCountryName() .'"> '.$city->getCountry()->getCountryName();
+    $levelUrl = $this->url('browse', ['country' => $city->getCountry()->getCountryName()]);
+}
+else {
 
-    $level = $_SESSION['level']['level'];
-    $levelValue = $_SESSION['level']['levelValue'];
-    if ($level=='city') {
-        $levelName = ($user->getCity()->getFullCity()?$user->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getCity()->getDistrictName().'</i></span>':$user->getCity()->getCityName());
-    }
-    else if ($level=='region') {
-        $levelName = $user->getCity()->getRegion()->getRegionName();
-    }
-    else if ($level=='country') {
-        $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$user->getCountry()->getCountryName() .'</span>';
-    }
-    
+}
 ?>
 
 <?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('measure', array('action'=>'all-measures')), 'all-measures', $limit, $sort, $order); ?>
@@ -22,13 +32,32 @@
 	data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
 	data-add-favorite="<?=$this->translate('Add Favorite')?>"
 	data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
+	
+	
+
+	
+	
+	<div class="panel panel-default panel-body orangebackground">
+<?= sprintf($this->translate('These are the Official Measures announced by the Public Administration in charge of <a href="%s">%s</a>.'), $levelUrl, $levelName)?>
+ <br>
+<?= $this->translate('They are either published directly by the Administration with its Demodyne account, or crowdsourced by the citizens.')?><br>
+<?= $this->translate('If you notice that an official measure is missing, you can add it as long as you cite sources (administration website, reliable news websites).')?><br>
+<?= $this->translate('Do not post here your own proposals or ideas as a citizen: go to the <a href="#allprop">Citizen Proposals</a> tab')?>.
+</div>
+	
+	
+	
+	
+	
+	
+	
 	<div class="row">
 		<div class="col-md-8">
-			<?php if ($user->getUsrId() && ($user->isCitizen() || ($user->isAdministration() && $user->getAdmin()->getAdminLevel() == $levelValue ))):?>
+			<?php if ($user->getUsrId() && ($user->isCitizen() || ($user->isAdministration() && $user->getAdmin()->getAdminLevel() == $_SESSION['level']['levelValue'] ))):?>
 			<button type="button"
 				data-url="<?= $this->url('measure', array('action'=>'add-measure')); ?>"
 				class="btn btn-orange" id="measure-all-measures-add-new-measure"
-				data-dialog-title="<?=$user->isAdministration()?$this->translate('New Official Measure for $level$'):$this->translate('Submit Official Measure for $level$')?>">
+				data-dialog-title="<?=$user->isAdministration()?$this->translate('New Official Measure for $level$'):$this->translate('Submit missing Official Measure for $level$')?>">
 				<i class="fa fa-plus-circle"></i> 
                 <?php if ($user->isAdministration()):?>
                 <?= $this->translate('Create a new measure')?>
@@ -65,7 +94,7 @@
 								href="<?= $this->url('measure', array('action'=>'all-measures', 'page'=>1, 'sort'=>'vote-average', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('Vote average')?></a></li>
 							<li class="divider"></li>
 							<li><a id="page-all-measures"
-								href="<?= $this->url('measure', array('action'=>'all-measures', 'page'=>1, 'sort'=>'published-date', 'order'=>'desc'));?>"><?= $this->translate('Published date')?></a></li>
+								href="<?= $this->url('measure', array('action'=>'all-measures', 'page'=>1, 'sort'=>'published', 'order'=>'desc'));?>"><?= $this->translate('Published date')?></a></li>
 						</ul></li>
 				</ul>
 			</div>
@@ -91,11 +120,11 @@
 								href="<?= $this->url('measure', array('action'=>'all-measures', 'page'=>1, 'sort'=>'vote-average', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Vote average')?></a></li>
 							<li class="divider"></li>
 							<li><a id="page-all-measures"
-								href="<?= $this->url('measure', array('action'=>'all-measures', 'sort'=>'published-date', 'page'=>1, 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Published date')?></a></li>
+								href="<?= $this->url('measure', array('action'=>'all-measures', 'sort'=>'published', 'page'=>1, 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Published date')?></a></li>
 						</ul></li>
 				</ul>
 			</div>
-			<div class="fltr right10 top5"> <?= $this->translate('Sorted by')?> <?php if ($sort=='published-date'):?><?= $this->translate('Published date')?>
+			<div class="fltr right10 top5"> <?= $this->translate('Sorted by')?> <?php if ($sort=='published'):?><?= $this->translate('Published date')?>
                     									<?php elseif ($sort=='votes'):?><?= $this->translate('Number of Votes')?>
                     									<?php elseif ($sort=='vote-average'):?><?= $this->translate('Vote average')?>
                     									<?php else:?><?=$this->translate(ucfirst($sort))?>
@@ -110,81 +139,77 @@
             <?php if(count($pagedProposals)>0):?>
 
                 <?php foreach($pagedProposals as $index => $proposal): ?>
-	<div class="table-layout">
-		<div class="table-cell fixed-width-40">
-			<img
-				src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
-				height="34" width="34"
-				title="<?= $proposal->getCat()->getCatCat()->getCatName() ?>">
-		</div>
-		<div class="table-cell">
-			<div class="row">
-				<div class="col-md-4 col-xs-12">
 
+
+
+
+
+
+
+
+	<div class="row">
+
+		<div class="col-xs-12 col-sm-12 col-md-4">
+
+			<div class="pull-left" style="min-width: 42px !important">
+				<img
+					src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
+					height="34" width="34" class="round5" 
+					title="<?= $proposal->getCat()->getCatCat()->getCatName() ?>">
+			</div>
+			<div style="margin-left: 42px !important">
 <?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription());  
       $proposalDescription = (strlen($proposalDescription) > 150) ? substr($proposalDescription, 0, 150) . '...' : $proposalDescription;?>
 
 <a
-						href="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>"
-						title="<?= $proposalDescription ?>" id="city-proposal-item"
-						data-id="<?= $proposal->getPropUUID()?>"><span class="big"><?= $proposal->getPropSavedName() ?></span></a>
-					<br />
+					href="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>"
+					title="<?= $proposalDescription ?>" id="city-proposal-item"
+					data-id="<?= $proposal->getPropUUID()?>"><span class="big"><?= $proposal->getPropSavedName() ?></span></a>
+				<br />
 <?= $this->translate('in')?> <?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName()?>
 					<br />
-					<!-- user -->
+				<!-- user -->
 					<?= $this->translate('by')?> <a
-						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
-						data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
-						data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
-						id="view-profile"> <span class="badge"><?= $proposal->getUsr()->getUsrName() ?></span></a>
-					<span class="nobr"><i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()?$proposal->getPropPublishedDate()->format('d/m/Y'):'' ?></span>
-				</div>
-				
-				<?php if ($level=='country'):?>
-    				<div class="col-md-5 col-xs-12">
-    					<span class=""><?=$proposalDescription?></span>
-    				</div>
-				<?php else:?>
-				<div class="col-md-3 col-xs-12">
-					<?= $this->translate('Current Status')?>:<br /> 
-
-<?= $this->{"status-$index"}?><br /> <?= $this->translate('Last updated')?> <span
-						class="nobr"><i class="fa fa-clock-o"></i> <?= $proposal->getPropSavedDate()->format('d/m/Y')?> </span>
-				</div>
-
-				<?php $measure = $proposal->getMeasure();?>
-				<div class="col-md-2 col-xs-12">        
-					<?= $this->translate('Start')?>: <?=$measure->getMesStartDate()?$measure->getMesStartDate()->format('d/m/Y'):'Undefined'?> <br>
-					<br>
-					<?= $this->translate('Cost')?>: <?=$measure->getMesCost()?$measure->getMesCost().' '.$proposal->getCity()->getCountry()->getCountryCurrency():'Undefined'?>
-				</div>
-				<?php endif;?>
-
-				<div class="col-md-3 col-xs-12">
-
-<?= $this->{"status-details-$index"}?><br />
-				</div>
+					href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
+					data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
+					data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="view-profile">
+					<span class="badge"><?= $proposal->getUsr()->getUsrName() ?></span>
+				</a> <span class="nobr"><i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()?$proposal->getPropPublishedDate()->format('d/m/Y'):'' ?></span>
 			</div>
 		</div>
-		<div class="table-cell fixed-width-150 text-right">
 
-<?php if ($user->getUsrId() && !$user->isAdministration()):?>
-<a
-				href="<?= $this->url('proposal', array('action'=>'favorite', 'id'=>$proposal->getPropUUID()));?>"
-				alt="Favorite Proposal" id="measure-all-measures-favorite"
-				data-favorite="<?= $proposal->getPropUUID()?>"><?php if (in_array($user, $proposal->getUsers())):?><i
-				class="fa fa-heart"
-				title="<?= $this->translate('Remove Favorite')?>"></i> <?= $this->translate('Remove Favorite')?><?php else:?><i
-				class="fa fa-heart-o" title="<?= $this->translate('Add Favorite')?>"></i> <?= $this->translate('Add Favorite')?><?php endif;?></a> <br /> 
-				
-            <?= $this->partial('partial/add-proposal-to-program.phtml', ['proposal' => $proposal]); ?>
-            				
-<?php endif;?>
-<a target="_parent"
-				href="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>#comment-list"
-				title="<?= $this->translate('Comments')?>"><i class="fa fa-comments"></i> <?= sprintf($this->translate('%d Comments'), count($proposal->getComments()))?></a>
+	
+		<?php if ($_SESSION['level']['level']=='country'):?>
+		<div class="col-xs-12 col-sm-4 col-md-4">
+			<?=$proposalDescription?>
+  		</div>
+		<?php else:?>
+		<div class="col-xs-12 col-sm-4 col-md-2">
+			<?= $this->translate('Current Status')?>:
+			<br /> 
+			<?= $this->partial('partial/proposal-status.phtml', ['proposal' => $proposal])?>
+			<br/> 
+			<?= $this->translate('Last updated')?>: <span
+				class="nobr"><i class="fa fa-clock-o"></i> <?= $proposal->getPropSavedDate()->format('d/m/Y')?> </span>
 		</div>
+		<?php $measure = $proposal->getMeasure();?>
+		<div class="col-xs-12 col-sm-4 col-md-2">
+			<?= $this->translate('Start')?>: <?=$measure->getMesStartDate()?$measure->getMesStartDate()->format('d/m/Y'):$this->translate('Undefined')?> <br>
+			<br>
+			<?= $this->translate('Cost')?>: <?=$measure->getMesCost()?$measure->getMesCost().' '.$proposal->getCity()->getCountry()->getCountryCurrency():$this->translate('Undefined')?>
+  		</div>
+		<?php endif;?>
+		<div class="col-xs-6 col-sm-4 col-md-2">
+    		<?= $this->{"status-details-$index"}?>
+       	</div>
+		<div class="col-xs-6 col-sm-4 col-md-2 text-right">
+	<?= $this->partial('partial/proposal-actions.phtml', ['user' => $user, 'proposal' => $proposal])?>
 	</div>
+	</div>
+
+
+
+
 	<hr />
 
                         <?php endforeach; ?>
@@ -198,12 +223,25 @@
                     <?php else:?>
 <div class="row">
 		<div class="col-md-12">
-    		<?php if ($user->isAdministration()):?>
-            	<?= $this->translate('There are no measures in your city.')?>
-            <?php else:?>
-           		<?= $this->translate('There are no measures in your city. Be the first to submit a missing measure.')?>
-            <?php endif;?>
-				
+			<?php if ($_SESSION['level']['level']=='city'):?>
+        		<?php if ($user->isAdministration()):?>
+                	<?= $this->translate('There are no measures in your city.')?>
+                <?php else:?>
+               		<?= $this->translate('There are no measures in your city. Be the first to submit a missing measure.')?>
+                <?php endif;?>
+			<?php elseif ($_SESSION['level']['level']=='region'):?>
+        		<?php if ($user->isAdministration()):?>
+                	<?= $this->translate('There are no measures in your region.')?>
+                <?php else:?>
+               		<?= $this->translate('There are no measures in your region. Be the first to submit a missing measure.')?>
+                <?php endif;?>
+			<?php elseif ($_SESSION['level']['level']=='country'):?>
+        		<?php if ($user->isAdministration()):?>
+                	<?= $this->translate('There are no measures in your country.')?>
+                <?php else:?>
+               		<?= $this->translate('There are no measures in your country. Be the first to submit a missing measure.')?>
+                <?php endif;?>
+			<?php endif;?>
 			</div>
 		<!--/12-->
 	</div>
@@ -215,11 +253,8 @@
         </div>
 <!-- /jumbotron -->
 
-<script type="text/javascript">
-	$(function () {
-    	mesureAllMeasuresHandlers();
-    });
-</script>
-
-<!-- /measure/all-measures -->
-        
+        <script type="text/javascript">
+		$(function () {
+            	mesureAllMeasuresHandlers();
+            });
+        </script>

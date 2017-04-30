@@ -1,0 +1,121 @@
+    <div class="modal-header-soft round5top ui-draggable-handle topm20">
+        <a href="/" class="close"><i class="fa fa-home w"></i></a>
+        <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+        <span class="big" id="modal-dialog-title"><strong><?= $this->translate('Search results')?></strong></span>
+    </div>
+
+
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
+
+
+<div class="row bot10">
+    <div class="col-md-10 col-xs-12 text-xs-center">
+
+<h5 style="line-height:1.7em;"><?=$this->translate('Search criteria:')?>
+    <?foreach ($keywords as $keyword):?>
+        <span class="badge badge-default"><span id="keyword"><?=$keyword?></span> <a href="#" class="white" id="removeKeyword"><i class="fa fa-times-circle"></i></a> </span>
+    <?endforeach;?>
+</h5>
+    </div>
+    <div class="col-md-2 col-xs-12 text-right text-xs-center">
+        <a href="<?=$this->url('search', array('action'=>'search'))?>" class="btn btn-orange">
+                <i class="fa fa-search"></i> <?= $this->translate('Search again')?></a>
+    </div>
+
+
+	</div>
+    <hr>
+
+<div class="row bot10">
+<div class="col-md-10 col-xs-12 text-xs-center">
+
+
+
+
+</div>
+
+</div>
+
+
+<!-- mobile view -->
+   <div class="row visible-xs">
+
+   <div class="col-xs-12"><hr>
+   <div class="pull-left" style="min-width: 26px!important"><i class="fa fa-bullhorn size17em" title="<?= $this->translate('Proposal')?>"></i><br>
+<img src="../files/catImage1426170308.jpg" height="24" width="24" title="<?= $this->translate('Culture')?>">
+  </div>
+   <div style="margin-left: 42px!important"> <span class="big"><a id="" href="" data-id="">Proposal title test utc datetime</a></span><br>
+   ... or maybe 15 words before the <mark>keyword</mark> and another 15 words after the FIRST keyword ...     
+         <br>
+          by <a href="" data-title="" data-id="" id="" title=""><span class="badge">owner</span></a> <i class="fa fa-clock-o"></i>10/01/2017
+          </div>
+</div>
+
+   <div class="col-xs-12"><hr>
+   <div class="pull-left" style="min-width: 26px!important"><i class="fa fa-bullhorn size17em" title="<?= $this->translate('Proposal')?>"></i><br>
+<img src="../files/catImage1426170309.jpg" height="24" width="24" title="<?= $this->translate('Culture')?>">
+  </div>
+   <div style="margin-left: 42px!important"> <span class="big"><a id="" href="" data-id="">Proposal title test utc datetime</a></span><br>
+   ... or maybe 15 words before the <mark>keyword</mark> and another 15 words after the FIRST keyword ...     
+         <br>
+          by <a href="" data-title="" data-id="" id="" title=""><span class="badge">owner</span></a> <i class="fa fa-clock-o"></i>10/01/2017
+          </div>
+</div>
+	
+   <div class="col-xs-12"><hr>
+   <div class="pull-left" style="min-width: 26px!important"><i class="fa fa-users size17em" title="<?= $this->translate('Proposal')?>"></i><br>
+<span class="green" style="padding: 5px 0 0 4px;"> <i class="fa fa-circle size15em" title="Live Now!"></i> </span>
+  </div>
+   <div style="margin-left: 42px!important"> <span class="big"><a id="" href="" data-id="">Session title pretty please, from database if possible</a></span><br>
+   ... or maybe 15 words before the <mark>keyword</mark> and another 15 words after the FIRST keyword ...     
+         <br>
+          by <a href="" data-title="" data-id="" id="" title=""><span class="badge">owner</span></a> <i class="fa fa-clock-o"></i>10/01/2017
+          </div>
+</div>
+
+	</div>
+<!-- /mobile view -->
+
+<!-- results -->
+<div>
+    <?=$this->searchAllSection;?>
+</div>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $('a#removeKeyword').click(function () {
+                var keyword  = $(this).siblings('#keyword').text()
+                $.ajax({ // create an AJAX call...
+                    data: {keyword:keyword}, // get the form data
+                    type: 'POST', // GET or POST
+                    url: $('#search-search-all').data('url'), // the file to call
+                    success: function(response) { // on success..
+                        //alert(response);
+                        //console.log(response);
+                        $("#search-search-all").parent().html(response); // update the DIV
+                        //else alert('not OK');
+
+                    }
+                });
+                $(this).parent().remove();
+                return false;
+            });
+
+
+        });
+
+    </script>
+
+
+</div><!-- end jumbotron -->
+
+
+
+
+
+

@@ -1,38 +1,46 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Form;
 
 use Zend\Form\Form;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\InputFilter\InputFilterProviderInterface;
 use DGIModule\Entity\Proposal;
+use Zend\Mvc\I18n\Translator;
+use Zend\Validator\NotEmpty;
+use Zend\Validator\StringLength;
 
 class AddEditProposalForm extends Form implements InputFilterProviderInterface
 {
-    public function __construct($entityManager = null)
+    /** @var Translator $translator */
+    private $translator;
+
+    public function __construct($entityManager, Translator $translator, Proposal $proposal = null)
     {
-        parent::__construct('proposalForm');
+        parent::__construct('proposal-form');
+
+        $this->translator = $translator;
+
         $this->setAttribute('method', 'post');
-        $this->setHydrator(new ClassMethods());
+        $this->setHydrator(new DoctrineHydrator($entityManager,'DGIModule\Entity\Proposal'));
         $this->setObject(new Proposal());
         $this->setAttribute('class', 'form-horizontal');
+        $this->setAttribute('id', 'proposal-form');
+
 
         $this->add(array(
 		    'name' => 'propSavedName',
-		    'attributes' => array(
+            'attributes' => array(
 		        'type'  => 'text',
 		        'class'=>'form-control text-change',
 		        'id' => 'propSavedName',
-		        'maxlength' => 50,
-		        'size' => 50,
-		    ),
-            'options' => array(
-                'label' => 'Name:',
+		        'maxlength' => 100,
+                'value' => $proposal?$proposal->getPropSavedName():'',
             ),
 		));
 		
@@ -43,15 +51,11 @@ class AddEditProposalForm extends Form implements InputFilterProviderInterface
                 'rows' => 4,
                 'class'=>'form-control text-change',
                 'id' => 'propDescription',
-                'style' => 'display:none'
+                'style' => 'display:none',
+                'value' => $proposal?$proposal->getPropDescription():'',
             ),
-            'options' => [
-                'label' => 'Description: ',
-            ]
         ]);
-		
-		
-		
+
 		$this->add([
 		    'type' => 'Zend\Form\Element\Hidden',
 		    'name' => 'propHiddenImage1',
@@ -59,9 +63,7 @@ class AddEditProposalForm extends Form implements InputFilterProviderInterface
 		        'id' => 'propImage1'
 		    ),
 		]);
-		
-		
-		
+
 		$this->add([
 		    'type' => 'Zend\Form\Element\Hidden',
 		    'name' => 'propHiddenImage2',
@@ -69,9 +71,7 @@ class AddEditProposalForm extends Form implements InputFilterProviderInterface
 		        'id' => 'propImage2'
 		    ),
 		]);
-		
-		
-		
+
 		$this->add([
 		    'type' => 'Zend\Form\Element\Hidden',
 		    'name' => 'propHiddenImage3',
@@ -79,8 +79,6 @@ class AddEditProposalForm extends Form implements InputFilterProviderInterface
 		        'id' => 'propImage3'
 		    ),
 		]);
-		
-        
     }
     
     /**
@@ -100,21 +98,20 @@ class AddEditProposalForm extends Form implements InputFilterProviderInterface
                             'replacement' => '&rdquo;'
                         ]
                     ),
-                    
                 ),
                 'validators' => array(
                     array(
                         'name'    => 'NotEmpty',
                         'options' => array(
-                            'messages' => array(\Zend\Validator\NotEmpty::IS_EMPTY  => _("You must provide a proposal name."))
+                            'messages' => array(NotEmpty::IS_EMPTY  => $this->translator->translate("You must provide a proposal name.", 'DGIModule'))
                         ),
                     ),
                     array(
                         'name'    => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
-                            'max'      => 50,
-                            'messages' => array(\Zend\Validator\StringLength::TOO_LONG  => _("The proposal name is more than %max% characters long"))
+                            'max'      => 100,
+                            'messages' => array(StringLength::TOO_LONG  => $this->translator->translate("The proposal name is more than %max% characters long", 'DGIModule'))
                         ),
                     ),
                 ),
@@ -130,11 +127,17 @@ class AddEditProposalForm extends Form implements InputFilterProviderInterface
                 ),
                 'validators' => array(
                     array(
+                        'name'    => 'NotEmpty',
+                        'options' => array(
+                            'messages' => array(NotEmpty::IS_EMPTY  => $this->translator->translate("You must provide a description for this proposal.", 'DGIModule'))
+                        ),
+                    ),
+                    array(
                         'name'    => 'StringLength',
                         'options' => array(
                             'encoding' => 'UTF-8',
-                            'min'      => 1,
-                            'max'      => 5000,
+                            'max'      => 10000,
+                            'messages' => array(StringLength::TOO_LONG  => $this->translator->translate("The proposal description is more than %max% characters long", 'DGIModule'))
                         ),
                     ),
                 ),
@@ -142,5 +145,5 @@ class AddEditProposalForm extends Form implements InputFilterProviderInterface
             
         );
     }
-    
+
 }

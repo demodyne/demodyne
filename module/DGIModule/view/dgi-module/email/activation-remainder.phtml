@@ -1,0 +1,65 @@
+
+<?php
+$title = 'Activation remainder';
+?>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("Please activate your account...")?></h1>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;"><?=$this->translate("Dear member of the Demodyne community,")?></p>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;"><?=$this->translate("To contribute and vote on the important matters for your city, region and country, you still have to activate your account.")?>
+        <?=$this->translate("Click the following button to activate your Demodyne account:")?>
+    </p>
+</div>
+
+
+<? $confirmUrl = $this->url('home/user-register', array('action' => 'confirm-email','id' => $user->getUsrRegistrationToken()), array('force_canonical' => true))?>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <div style="Margin-bottom:20px;text-align:center">
+        <center><a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$confirmUrl?>">Verify your email address</a>
+        </center>
+    </div>
+</div>
+<div style="Margin:0 auto;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+    <div style="border-collapse:collapse;display:table;width:100%;max-width:601px;font-size:13px;line-height:16px;font-family:Roboto,sans-serif;color: #7E7E7E;">
+        <center>
+            <p><?=$this->translate('Having trouble with that button? Copy and paste this link into your browser:')?><br>
+                <?=$confirmUrl?></p>
+        </center>
+    </div>
+</div>
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;"><?=$this->translate("We're looking forward to seeing you on Demodyne.")?></p>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;"><?=$this->translate('Thank you,')?><br>
+        <?=$this->translate('The Demodyne Team')?></p>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+    <div style="border-collapse:collapse;display:table;width:100%;max-width:601px;font-size:13px;line-height:16px;font-family:Roboto,sans-serif;color: #7E7E7E;">
+        <center>
+            <p><?=$this->translate('Note : It is possible that this reminder email or the original email validation message ended up in your spam/junk folder.')?>
+                <?=$this->translate('If this is the case, please do not forget to mark these emails as legitimate / "not spam" to properly receive our communications in your inbox.')?></p>
+        </center>
+    </div>
+</div>
+
+<div style="Margin:0 auto;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+    <div style="border-collapse:collapse;display:table;width:100%;max-width:601px;font-size:13px;line-height:16px;font-family:Roboto,sans-serif;color: #7E7E7E;">
+        <center>
+            <p><?=sprintf($this->translate('Should you need any help, please check out our <a href="%s">Forum</a> or contact us at <a href="%s">support@demodyne.org</a>.'), "https://forum.demodyne.org", "mailto:support@demodyne.org")?></p>
+        </center>
+    </div>
+</div>
+
+
+
+

@@ -1,31 +1,46 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Controller;
 
+use Zend\Filter\File\Rename;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Mail\Message;
-use Zend\Mime\Message as MimeMessage;
-use Zend\Mime\Part as MimePart;
 use DGIModule\Entity\Report;
 use DGIModule\Form\AddEditBugForm;
 use DGIModule\Entity\Bug;
 use DGIModule\Entity\Inbox;
 use DGIModule\Form\AddReportForm;
 
+use Doctrine\ORM\EntityManager;
+use Zend\Mvc\I18n\Translator;
+
 class ReportController extends AbstractActionController
 {
+
+    protected $entityManager;
+    protected $translator;
+    protected $config;
+
+    public function __construct(
+        array $config,
+        EntityManager $entityManager,
+        Translator $translator
+    )
+    {
+        $this->config = $config;
+        $this->entityManager = $entityManager;
+        $this->translator = $translator;
+    }
+    
     public function addReportAction()
     {
         $user = $this->identity();
-       
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
+
         $type = $this->params()->fromRoute('type');
         $UUID = $this->params()->fromRoute('id', 0);
         
@@ -38,19 +53,19 @@ class ReportController extends AbstractActionController
         $inbox = null;
         
         if ($type == 'comment') {
-            $comment = $entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(array('comUUID' => $UUID));
+            $comment = $this->entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(array('comUUID' => $UUID));
         }
         elseif ($type == 'proposal') {
-            $proposal = $entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(array('propUUID' => $UUID));
+            $proposal = $this->entityManager->getRepository('DGIModule\Entity\Proposal')->findOneBy(array('propUUID' => $UUID));
         }
         elseif ($type == 'program') {
-            $program = $entityManager->getRepository('DGIModule\Entity\Program')->findOneBy(array('progUUID' => $UUID));
+            $program = $this->entityManager->getRepository('DGIModule\Entity\Program')->findOneBy(array('progUUID' => $UUID));
         }
         elseif ($type == 'inbox') {
-            $inbox = $entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(array('ibxUUID' => $UUID));
+            $inbox = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(array('ibxUUID' => $UUID));
         }
         
-        $report = $entityManager->getRepository('DGIModule\Entity\Report')->findOneBy(array('repUUID' => $UUID, 'repType' => $type, 'usr' => $user));
+        $report = $this->entityManager->getRepository('DGIModule\Entity\Report')->findOneBy(array('repUUID' => $UUID, 'repType' => $type, 'usr' => $user));
 
         if ($report) {
             $viewModel->setVariables([
@@ -65,7 +80,7 @@ class ReportController extends AbstractActionController
         }
         else {
             $report = new Report();
-            $form = new AddReportForm();
+            $form = new AddReportForm($this->translator);
             $form->setAttribute('action', $this->url()->fromRoute('home/report', array('action'=>'add-report', 'type' => $type, 'id' => $UUID)));
             $request = $this->getRequest();
             if ($request->isPost()) {
@@ -76,44 +91,20 @@ class ReportController extends AbstractActionController
                 
                     $report->setUsr($user)
                             ->setRepType($type)
-                            ->setRepUUID($UUID);
-                    $entityManager->persist($report);
-                    $entityManager->flush();
-                    
-                    $now = new \DateTime(); 
-                    if ($type == 'comment') {
-                         $text = $comment->getComText();
-                         $owner = $comment->getUsr();
-                    }
-                    elseif ($type == 'proposal') {
-                        $text = '<a href="https://www.demodyne.org'.$this->url()->fromRoute('proposal', array('action' => 'view' ,'id'=>$proposal->getPropUUID())).'">'.$proposal->getPropSavedName().'</a>';
-                         $owner = $proposal->getUsr();
-                    }
-                    elseif ($type == 'program') {
-                        $text = '<a href="https://www.demodyne.org'.$this->url()->fromRoute('scenario', array('action' => 'view' ,'id'=>$program->getScnUUID())).'">'.$scenario->getScnName().'</a>';
-                         $owner = $program->getUsr();
-                    }
-                    $reason = $this->params()->fromPost('repReason');
-                    $description = $this->params()->fromPost('repDescription');
-                    
+                            ->setRepUUID($UUID)
+                            ->setRepCreatedDate(new \DateTime())
+                    ;
+                    $this->entityManager->persist($report);
+                    $this->entityManager->flush();
+                    $this->entityManager->refresh($report);
+
                     // send email to bug-hunter@demodyne.org
-                    $transport = $this->getServiceLocator()->get('mail.transport');
-                    $message = new Message();
-                    
-                    $html = new MimePart('User '.$user->getUsrName().' has submitted a moderation request on '.
-                        $now->format("d/m/Y H:i").'<br>Reason: '.$reason.' <br>Description:'.$description.'<br> on '.$type.':<br><br><blockquote>'.$text.'<br>by '.$owner->getUsrName().'</blockquote><br>');
-                    $html->type = "text/html";
-                    
-                    $body = new MimeMessage();
-                    $body->setParts(array($html));
-                    
-                    $this->getRequest()->getServer();  //Server vars
-                    $message->addTo('moderation@demodyne.org')
-                            ->addFrom('moderation@demodyne.org')
-                            ->setSubject('Moderation request on '.$type)
-                            ->setBody($body);
-                    $transport->send($message);
-                    
+                    $this->forward()->dispatch('DGIModule\Controller\Email', array(
+                        'action' => 'new-moderation-report',
+                        'id' => $report->getRepId(),
+                        'email' => true
+                    ));
+
                     $viewModel->setTemplate('dgi-module/report/add-report-success.phtml');
                 }
             }
@@ -137,18 +128,15 @@ class ReportController extends AbstractActionController
     public function submitBugAction()
     {
         
-        if (!$this->getRequest()->isXmlHttpRequest())
-            return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied'));
-        
         $user = $this->identity();
         
         $viewModel = new ViewModel();
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
+
         $bug = new Bug();
-        $form = new AddEditBugForm();
+        $form = new AddEditBugForm($this->translator);
         $form->setAttribute('action', $this->url()->fromRoute('home/report', array('action'=>'submit-bug')));
         $request = $this->getRequest();
+        $msg = $this->params()->fromPost('bugDescription', '');
         if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
@@ -156,12 +144,13 @@ class ReportController extends AbstractActionController
                 );
             $form->bind($bug);
             $form->setData($post);
+            //verify if picture change
             $picture = $post["bugImage"]["name"];
             if ($form->isValid()) {
                 if ($picture!="") {
                     $files   = $request->getFiles();
                     $target = getcwd() . "/public/img/bugs/bug.jpg";
-                    $filterR = new \Zend\Filter\File\Rename(array(
+                    $filterR = new Rename(array(
                         "target"    => $target,
                         "randomize" => true,
                     ));
@@ -172,51 +161,47 @@ class ReportController extends AbstractActionController
                 else {
                     $bug->setBugImage(null);
                 }
-                $bug->setUsr($user);
-                $entityManager->persist($bug);
-
+                $bug->setUsr($user)
+                    ->setBugCreatedDate(new \DateTime());
+                $this->entityManager->persist($bug);
+                $this->entityManager->flush();
+                $this->entityManager->refresh($bug);
+                
+                
                 // send private message to user
-                $config = $this->getServiceLocator()->get('Config');
-                $bugHunter =  $entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrName'=>'bug-hunter']);
+                $bugHunter =  $this->entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrName'=>'bug-hunter']);
                 $message = new Inbox();
                 $message->setToUsr($user)
                         ->setFromUsr($bugHunter)
                         ->setIbxTitle('Bug submission - '.$bug->getBugTitle())
-                        ->setIbxText(_('Thank you for submitting the following bug:').'<br><br><blockquote>'.$bug->getBugDescription().'</blockquote><br><br>'._('We will do our best to solve it quickly.<br><br>Thank you,<br>The Demodyne Team'))
-                        ->setIbxType($config['demodyne']['inbox']['type']['private_message'])
+                        ->setIbxText($this->translator->translate('Thank you for submitting the following bug:', 'DGIModule').'<br><br><blockquote>'.
+                            $bug->getBugDescription().'</blockquote><br><br>'.
+                            $this->translator->translate('We will do our best to solve it quickly.<br><br>Thank you,<br>The Demodyne Team', 'DGIModule'))
+                        ->setIbxType($this->config['demodyne']['inbox']['type']['private_message'])
                         ->setIbxGroup(uniqid('', true));
-                $entityManager->persist($message);
+                $this->entityManager->persist($message);
                 
-                $entityManager->flush();
+                $this->entityManager->flush();
                 
-                $entityManager->refresh($bug);
+                $this->entityManager->refresh($bug);
                 
                 // send email to bug-hunter@demodyne.org
-                $transport = $this->getServiceLocator()->get('mail.transport');
-                $message = new Message();
-                
-                $html = new MimePart('User '.$user->getUsrName().' has submitted new bug on '.$bug->getBugCreatedDate()->format("d/m/Y H:i").':<br><br><blockquote>'.$bug->getBugDescription().'</blockquote><br><br>');
-                $html->type = "text/html";
-                
-                $body = new MimeMessage();
-                $body->setParts(array($html));
-                
-                $this->getRequest()->getServer();  //Server vars
-                $message->addTo('support@demodyne.org')
-                        ->addFrom($bugHunter->getUsrEmail())
-                        ->setSubject('Bug submission - '.$bug->getBugTitle())
-                        ->setBody($body);
-                    $transport->send($message);
-                    
+                $this->forward()->dispatch('DGIModule\Controller\Email', array(
+                    'action' => 'new-bug',
+                    'id' => $bug->getBugId(),
+                    'email' => true
+                ));
+
                 $viewModel->setTemplate('dgi-module/report/submit-bug-success.phtml');
             }
         }
-        
+
         // disable layout if request by Ajax
-        $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
+        $viewModel->setTerminal($request->isXmlHttpRequest());
         $viewModel->setVariables([
             'form'=>$form,
-            'user' => $user
+            'user' => $user,
+            'msg' => $msg
         ]);
         return $viewModel;
     }

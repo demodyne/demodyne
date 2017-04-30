@@ -1,5 +1,10 @@
 <!-- proposal/add-edit-proposal -->
-
+<?php
+$city = $user->getCity();
+$cityLevelName = ($city->getFullCity()?($event->getPropFullCity()?$city->getFullCity()->getCityName().' ('._('Full city').')':$city->getFullCity()->getCityName().' <span class="small"><i>'.$city->getDistrictName().'</i></span>'):$city->getCityName().($city->isFullCity()?' ('._('Full city').')':''));
+$regionLevelName = $city->getRegion()->getRegionName();
+$countryLevelName = '<img src="/img/flags/'.str_replace(' ', '-', $city->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$city->getCountry()->getCountryName() .'</span>';
+?>
 <div id="proposal-add-edit-proposal"
 	data-get-categories-url="<?= $this->url('home/category', array('action'=>'get-categories')); ?>"
 	data-get-subcategories-url="<?= $this->url('home/category', array('action'=>'get-subcategories')); ?>"
@@ -7,7 +12,6 @@
 	data-error-image-size="<?=$this->translate('You cannot add more than 3 images')?>">
   <?php $form->prepare(); ?>
   <?php $form->setAttribute('method', 'post'); ?>
-  <?php $form->setAttribute('id', 'proposal-add-edit-proposal-form'); ?>
   <?= $this->form()->openTag($form);?>
   <div class="row">
 		<div class="col-md-6">
@@ -17,9 +21,9 @@
 					<?php if (!$this->params()->fromRoute('level')):?>
 						<div class="bot20">
 						<?=$this->translate('Choose level for New Proposal:')?><br>
-						<label class="radio-inline"><input type="radio" name="level" value="city" <?=$level=='city'?'checked="checked"':''?>> <?=$this->translate('City')?></label>
-						<label class="radio-inline"><input type="radio" name="level" value="region" <?=$level=='region'?'checked="checked"':''?>> <?=$this->translate('Region')?></label>
-						<label class="radio-inline"><input type="radio" name="level" value="country" <?=$level=='country'?'checked="checked"':''?>> <?=$this->translate('Country')?></label>
+						<label class="radio-inline"><input type="radio" name="level" value="city" <?=$level=='city'?'checked="checked"':''?>> <?=$cityLevelName?></label>
+						<label class="radio-inline"><input type="radio" name="level" value="region" <?=$level=='region'?'checked="checked"':''?>> <?=$regionLevelName?></label>
+						<label class="radio-inline"><input type="radio" name="level" value="country" <?=$level=='country'?'checked="checked"':''?>> <?=$countryLevelName?></label>
 					</div>
 					<?php else:?>
 					<input type="hidden" name="level" value="<?=$this->params()->fromRoute('level')?>">
@@ -33,33 +37,36 @@
                      	<?php endif;?>
                     </div>
 				</div>
-				<div class="row">
+				<div class="row"  id="edit-description">
 					<div class="col-md-12">
 					<?= $this->translate('Description')?>:
                         <div class="bot5">
-				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-bold"
-					onclick="document.execCommand('bold');">
-					<strong><?=$this->translate('Bold')?></strong>
+				<button class="btn btn-mini btn-default" type="button"
+					id="textbox-format-button"
+                    data-contenteditable-id="proposal-textbox"
+                    data-format="bold">
+					<strong><i class="fa fa-times"></i> <?=$this->translate('Bold')?></strong>
 				</button>
-				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-italic"
-					onclick="document.execCommand('italic');">
-					<i><?=$this->translate('Italic')?></i>
+				<button class="btn btn-mini btn-default" type="button"
+					id="textbox-format-button"
+                        data-contenteditable-id="proposal-textbox"
+                        data-format="italic">
+					<i><i class="fa fa-times"></i> <?=$this->translate('Italic')?></i>
 				</button>
-				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-underline"
-					onclick="document.execCommand('underline');">
-					<u><?=$this->translate('Underline')?></u>
+				<button class="btn btn-mini btn-default" type="button"
+					id="textbox-format-button"
+                        data-contenteditable-id="proposal-textbox"
+                        data-format="underline">
+					<u><i class="fa fa-times"></i> <?=$this->translate('Underline')?></u>
 				</button>
 			</div>
 						<div class="form-control" contenteditable="true"
-							data-placeholder="" maxlength="1000"
+							data-placeholder="" maxlength="2500"
 							over-text="<?=$this->translate('<span>0</span> characters in excess')?>"
 							below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
-							id="proposal-add-edit-proposal-textbox"
+							id="proposal-textbox"
 							style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$propDescription?$propDescription:($proposal?$proposal->getPropDescription():'')?></div>
-						<div id="proposal-add-edit-proposal-textbox-count"></div>
+						<div id="proposal-textbox-count"></div>
 						<?= $this->formElement($form->get('propDescription'));?> <br />
                         <?php if ($form->get('propDescription')->getMessages()):?>
                             <span class="text-danger">
@@ -121,6 +128,35 @@
 		<div class="col-md-3 col-xs-3"></div>
 	</div>
 
+                <div class="row bot5 top10">
+                    <div class="col-md-12">
+                        <?= $this->translate('Add Sources (external links)')?>
+                        <div id="proposal-links">
+                            <?php if ($links):?>
+                                <?php foreach ($links as $link):?>
+                                    <div class="bot5" id="link-row">
+                                        <div style="width: 250px; float: left;" class="bot5">
+                                            <input type="url" name="links[]"
+                                                   class="form-control col-md-11 text-change" value="<?= $link ?>">
+                                        </div>
+                                        <div style="width: 20px; float: left; padding: 10px 0 0 5px;">
+                                            <a href="#" id="remove-link"><i
+                                                        class="fa fa-times-circle darkgray"></i></a>
+                                        </div>
+                                    </div>
+                                <?php endforeach;?>
+                            <?php endif;?>
+                        </div>
+                        <?php if ($linksError && !$user->isAdministration()):?>
+                            <br /> <span class="text-danger"><?= $this->translate('You must provide at least one source (URL)')?></span><br />
+                        <?php endif;?>
+
+                    </div>
+                </div>
+                <button type="button" class="btn btn-orange"
+                        id="proposal-new-link">
+                    <i class="fa fa-external-link"></i> <?= $this->translate('Add source')?></button>
+
 
 				<!--
         <div class="row">
@@ -168,7 +204,7 @@
 								<tr>
 									<td style="max-width: 50px; width: 50px; border: none;"
 										id="add-proposal-category-image"><img width="32px"
-										height="32px" src="<?=$this->basePath().'/files/'. $categoryList[ 'selected']->getCatImage()?>"></td>
+										height="32px" class="round5" src="<?=$this->basePath().'/files/'. $categoryList[ 'selected']->getCatImage()?>"></td>
 									<td style="border: none;"><?= $this->formElement($form->get('sub_category'));?></td>
 								</tr>
 							</table>
@@ -192,20 +228,21 @@
 	<div class="row">
 		<div class="col-xs-12 text-right">
 			<?php if (!$proposal || !$proposal->getPropPublished()):?>
+			<?php if (!isset($idea) || !$idea):?>
 			<button type="button" class="btn btn-orange"
-				id="proposal-add-edit-proposal-save-button">
+				id="proposal-save-button">
 				<i class="fa fa-floppy-o"></i>
       			<span><?= $this->translate('Save as Draft')?></span>
       		</button>
+      		<?php endif;?>
       		<button type="button" class="btn btn-success"
-				id="proposal-add-edit-proposal-publish-button">
-				<i class="fa fa-share-square-o"
-					id="proposal-add-edit-proposal-publish-button-icon"></i>
+				id="proposal-publish-button">
+				<i class="fa fa-share-square-o"></i>
               <?= $this->translate('Publish')?>
             </button>
 			<?php else:?>
       		<button type="button" class="btn btn-orange"
-				id="proposal-add-edit-proposal-save-button">
+				id="proposal-save-button">
 				<i class="fa fa-floppy-o"></i>
       			<span><?= $this->translate('Save')?></span>
       		</button>
@@ -242,5 +279,9 @@
 
 
 
-<script type="text/javascript">	$(document).ready(function () {		proposalAddEditProposalHandlers();	});</script>
+<script type="text/javascript">
+	$(document).ready(function () {
+		proposalAddEditProposalHandlers(true);
+	});
+</script>
 <!-- /proposal/add-edit-proposal -->

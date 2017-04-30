@@ -1,0 +1,241 @@
+<!-- session/add-edit-session -->
+
+<?php
+$levelName = '';
+$city = $user->getCity();
+$cityLevelName = ($city->getFullCity()?($event->getPropFullCity()?$city->getFullCity()->getCityName().' ('._('Full city').')':$city->getFullCity()->getCityName().' <span class="small"><i>'.$city->getDistrictName().'</i></span>'):$city->getCityName().($city->isFullCity()?' ('._('Full city').')':''));
+$regionLevelName = $city->getRegion()->getRegionName();
+$countryLevelName = '<img src="/img/flags/'.str_replace(' ', '-', $city->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$city->getCountry()->getCountryName() .'</span>';
+?>
+
+<div id="session-add-session"
+	data-getcities="<?= $this->url('location', array('action'=>'get-cities')); ?>"
+	data-write-postal-code="<?=$this->translate('Please write a postalcode first!')?>"
+	data-no-cities="<?=$this->translate('No cities for this postal code!')?>">
+<?php $session=isset($session)?$session:null?>
+<?php $form->prepare(); ?>
+<?php $form->setAttribute('method', 'post'); ?>
+<?= $this->form()->openTag($form);?>
+	<div class="row">
+		<div class="col-md-6 col-xs-12">
+		
+			<?php if (!$user->isAdministration()):?>
+			<div class="bot20 form-group">
+					<?=$this->translate('Choose level for this Session:')?><br> <label
+					class="radio-inline"><input type="radio" name="level" value="city"
+					<?=$level=='city'?'checked="checked"':''?>> <?=$cityLevelName?></label>
+				<label class="radio-inline"><input type="radio" name="level"
+					value="region" <?=$level=='region'?'checked="checked"':''?>> <?=$regionLevelName?></label>
+				<label class="radio-inline"><input type="radio" name="level"
+					value="country" <?=$level=='country'?'checked="checked"':''?>> <?=$countryLevelName?></label>
+			</div>
+			<?php endif;?>
+			
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><?= $this->translate('Title')?></label>
+				<div class="col-sm-10 bot5">
+      <?= $this->formElement($form->get('eventName')->setAttribute('placeholder', $this->translate('Give a title to this session')));?>
+						<?php if ($form->get('eventName')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventName'));?></span>
+                    <?php endif;?>
+    </div>
+			</div>
+
+
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><?= $this->translate('Description')?></label>
+				<div class="col-sm-10 bot5"></div>
+			</div>
+
+
+			<div class="form-group" id="edit-description">
+				<div class="col-sm-12 bot5">
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="session-add-session-textbox"
+                            data-format="bold">
+                        <strong><i class="fa fa-times"></i> <?=$this->translate('Bold')?></strong>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="session-add-session-textbox"
+                            data-format="italic">
+                        <i><i class="fa fa-times"></i> <?=$this->translate('Italic')?></i>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="session-add-session-textbox"
+                            data-format="underline">
+                        <u><i class="fa fa-times"></i> <?=$this->translate('Underline')?></u>
+                    </button>
+
+					<br> <br>
+					<div class="form-control desc" contenteditable="true"
+						data-placeholder="<?=$this->translate('Explain the scope of this session')?>" maxlength="1000"
+						over-text="<?=$this->translate('<span>0</span> characters in excess')?>"
+						below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
+						id="session-add-session-textbox"
+						style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$eventDescription?$eventDescription:($session?$session->getEventDescription():'')?></div>
+					<div id="session-add-session-textbox-count"></div>
+					<div class="col-sm-12 bot5">
+	<?= $this->formElement($form->get('eventDescription'));?>
+						<?php if ($form->get('eventDescription')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventDescription'));?></span>
+                    <?php endif;?>
+    </div>
+				</div>
+			</div>
+
+			<div class="form-group"></div>
+			<div class="form-group">
+				<label class="col-sm-2 control-label"><?=$this->translate('URL')?></label>
+				<div class="col-sm-10 bot5">
+      <?= $this->formElement($form->get('eventLink')->setAttribute('placeholder', $this->translate('Address of any related webpage (http://...)')));?>
+						<?php if ($form->get('eventLink')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventLink'));?></span>
+                    <?php endif;?>
+    </div>
+			</div>
+
+
+		</div>
+		<div class="col-md-6 col-xs-12 ">
+			<div class="panel panel-default">
+				<div class="panel-body">
+
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label"><?= $this->translate('Start')?></label>
+						<div class="col-sm-9 bot5">
+							<div class="row">
+								<div class='col-sm-8'>
+									<div class="form-group">
+										<div class="input-group date" id='sessionStartDateGroup'
+											data-provide="datepicker" data-date-autoclose="true"
+											data-date-language="<?= $this->plugin('translate')->getTranslator()->getLocale()?>"
+											data-date-format="yyyy-mm-dd"
+											data-date-start-date="<?= date('Y-m-d')?>"
+											data-date-today-btn="true">
+                    <?= $this->formElement($form->get('eventDate'));?>
+                    <span class="input-group-addon"> <span
+												class="glyphicon glyphicon-calendar"></span>
+											</span>
+										</div>
+
+									</div>
+								</div>
+								<div class="col-md-4">
+                							<?= $this->formElement($form->get('eventTime'));?>
+                						</div>
+							</div>
+						</div>
+					</div>
+							
+					<?php if ($form->get('eventDate')->getMessages()):?>
+					<div class="form-group">
+						<label class="col-sm-3 control-label"></label>
+						<div class="col-sm-9 bot5">
+							<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventDate'));?></span>
+						</div>
+					</div>
+					<?php endif;?>
+					
+					<div class="form-group">
+						<label class="col-sm-3 control-label"><?=$this->translate('Duration')?></label>
+						<div class="col-sm-9 bot5">
+      <?= $this->formElement($form->get('eventDuration'));?>
+						<?php if ($form->get('eventDuration')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventDuration'));?></span>
+                    <?php endif;?>
+    </div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label"><?=$this->translate('Address')?></label>
+						<div class="col-sm-9 bot5">
+      <?= $this->formElement($form->get('eventLocation')->setAttribute('placeholder', $this->translate('Where will this session take place?')));?>
+						<?php if ($form->get('eventLocation')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventLocation'));?></span>
+                    <?php endif;?>
+    </div>
+					</div>
+
+					<div class="form-group">
+					<label class="col-md-3 control-label"><?= $this->translate('Postal code'); ?></label>
+					<div class="col-md-9 bot5">
+						<div class="row">
+							<div class="col-md-8"><?= $this->formElement($form->get('eventPostalcode')->setAttribute('placeholder', $this->translate('Session postal code')));?></div>
+							<div class="col-md-4 top10">
+								<i class="fa s18 fa-spinner fa-pulse" id="cityLoad"
+									style="display: none"></i>
+							</div>
+							<?php if ($form->get('eventPostalcode')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('eventPostalcode'));?></span>
+                    <?php endif;?>
+						</div>
+						<!-- /r -->
+					</div>
+					<!-- /8 -->
+				</div>
+						
+						<div class="form-group">
+						<label class="col-sm-3 control-label"><?=$this->translate('City')?></label>
+						<div class="col-sm-9 bot5">
+      <?= $this->formElement($form->get('city'));?>
+      					<input type="hidden" id="country" value="<?=$user->getCountry()->getCountryId()?>">
+						<?php if ($form->get('city')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('city'));?></span>
+                    <?php endif;?>
+    </div>
+					</div>
+
+					</div>
+				</div>
+			<!-- /panel -->
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn btn-orange"
+				id="session-add-session-save-button">
+				<i class="fa fa-lock size15em"></i> <?= $session?$this->translate('Save'):$this->translate('Create Private Session')?></button>
+            <?php if (!$session || !$session->getEventPublishedDate()):?>
+            <button type="button" class="btn btn-success"
+				id="session-add-session-publish-button">
+				<i class="fa fa-users size15em"></i> <?=$session?$this->translate('Save & Make Public'):$this->translate('Create Public Session')?></button>
+            <?php endif;?>
+            <button type="button" class="btn btn-default"
+				data-dismiss="modal">
+				<i class="fa fa-ban size15em"></i> <?= $this->translate('Cancel')?></button>
+		</div>
+	</div>
+</div>
+<!-- /r -->
+<?=$this->form()->closeTag();?>
+
+<style>
+[contenteditable]:empty:before {
+    content: attr(data-placeholder);
+    color: grey;
+    display: inline-block;
+}
+
+</style>
+
+<script type="text/javascript">
+		$(function () {
+			$("[contenteditable]").blur(function(){
+		        var $element = $(this);
+		        if ($element.html().length && !$element.text().trim().length) {
+		            $element.empty();
+		        }
+		    });
+			sessionAddEditSessionHandlers();
+		});
+	</script>

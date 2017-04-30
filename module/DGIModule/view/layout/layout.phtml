@@ -1,284 +1,151 @@
 <?= $this->doctype(); ?>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
-<link href='https://fonts.googleapis.com/css?family=Open+Sans'
-	rel='stylesheet' type='text/css'>
-<?= $this->headTitle($this->translate('Demodyne'))->setSeparator(' - ')->setAutoEscape(false) ?>
-<?= $this->headMeta()
-            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-        ?>
-<!-- Styles -->
-<?= $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        ->appendStylesheet($this->basePath() . 'https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
-                        ->appendStylesheet($this->basePath() . '/css/demodyne.bootstrap.css')
-                        ->appendStylesheet('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css')
-                        ->appendStylesheet($this->basePath() . '/css/style.css')
-                        ->appendStylesheet($this->basePath() . '/css/bootstrap-datepicker3.min.css');
-         ?>
-<!-- Scripts -->
-<?= $this->headScript()
-            ->prependFile('/js/jquery-2.1.3.min.js')
-            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
-           ->appendFile('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
-            ->appendFile('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
-            ->appendFile($this->basePath() . '/js/bootstrap-datepicker.min.js')
+    <meta charset="utf-8">
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans'
+          rel='stylesheet' type='text/css'>
+    <?= $this->headTitle($this->translate('Demodyne'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?= $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
+    <!-- Le styles -->
+    <?=
+    isset($_SESSION['mobile']) && $_SESSION['mobile']?
+    $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+        ->appendStylesheet('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+//        ->appendStylesheet('https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css')
+        ->appendStylesheet('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+        ->appendStylesheet($this->basePath() . '/css/jquery.mmenu.all.css')
+        ->appendStylesheet($this->basePath() . '/css/demodyne.m.css')
+        :
+    $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+        ->appendStylesheet($this->basePath() . 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+        ->appendStylesheet($this->basePath() . '/css/demodyne.bootstrap.css')
+        ->appendStylesheet('https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css')
+        ->appendStylesheet($this->basePath() . '/css/style.css')
+        ->appendStylesheet($this->basePath() . '/css/bootstrap-datepicker3.min.css');
+    ?>
+    <!-- Scripts -->
+    <?= $this->headScript() ->appendFile('https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')?>
+    <? if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+        $this->inlineScript()
+
+//        ->appendFile('/js/bootstrap.js')
+            ->appendFile('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+            ->appendFile('https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
+//            ->appendFile('https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js')
+            ->appendFile($this->basePath() . '/js/jquery.mmenu.all.min.js')
             ->appendFile($this->basePath() . '/js/moment.min.js')
             ->appendFile($this->basePath() . '/js/bootstrap-datetimepicker.min.js')
+            ->appendFile($this->basePath() . '/js/bootstrap-datepicker.min.js')
             ->appendFile($this->basePath() . '/js/jquery.matchHeight-min.js')
             ->appendFile($this->basePath() . '/js/jquery.blockUI.js')
             ->appendFile($this->basePath() . '/js/jquery.print.js')
             ->appendFile($this->basePath() . '/js/demodyne.common.js')
-            ->appendFile($this->basePath() . '/js/demodyne.min.js')
-        ; ?>
-        <?php $lang = $this->plugin('translate')->getTranslator()->getLocale()?>
-  <?php if ($lang != 'en'):?>
-  <script
-	src="<?= $this->basePath('/js/datepicker-locales/bootstrap-datepicker.'.$lang.'.min.js')?> "
-	charset="UTF-8"></script>
-  <?php endif;?>
+            ->appendFile($this->basePath() . '/js/demodyne.js');
+        }
+        else {
+            $this->inlineScript()
+//                ->prependFile('https://code.jquery.com/jquery-2.2.4.min.js')
+                ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->prependFile($this->basePath() . '/js/html5shiv.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+                ->appendFile('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+//        ->appendFile('/js/bootstrap.js')
+                ->appendFile('https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
+//                ->appendFile($this->basePath() . '/js/bootstrap-datepicker.min.js')
+                ->appendFile($this->basePath() . '/js/moment.min.js')
+                ->appendFile($this->basePath() . '/js/bootstrap-datetimepicker.min.js')
+                ->appendFile($this->basePath() . '/js/bootstrap-datepicker.min.js')
+                ->appendFile($this->basePath() . '/js/jquery.matchHeight-min.js')
+                ->appendFile($this->basePath() . '/js/jquery.blockUI.js')
+                ->appendFile($this->basePath() . '/js/jquery.print.js')
+                ->appendFile($this->basePath() . '/js/demodyne.common.js')
+                ->appendFile($this->basePath() . '/js/demodyne.js')
+                ->appendFile($this->basePath() . '/js/demodyne.work.js');
+            }
+    ?>
+    <?php $lang = $this->plugin('translate')->getTranslator()->getLocale()?>
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function(){
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "#423a33"
+                    },
+                    "button": {
+                        "background": "#ffb800"
+                    }
+                },
+                "theme": "classic",
+                "position": "top",
+                "content": {
+                    "href": "https://www.demodyne.org/page/terms"
+                }
+            })});
+    </script>
+
+
+
 </head>
 <body>
-<?php
-$user = $this->identity();
-
-
-?>
-<?php if ($user):?>
-<nav class="navbar navbar-default ">
-		<!--  navbar-fixed-top -->
-		<div class="container">
-			<div class="navbar-header" style="padding-bottom: 5px;">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<span><a class="navbar-brand" href="<?= $this->url('home') ?>"><img
-						src="<?= $this->basePath('img/logo30.png') ?>" width="140"
-						height="30"
-						title="DEMODYNE - <?= $this->translate('Shape your Society') ?>"
-						alt="DEMODYNE - <?= $this->translate('Shape your Society') ?>" />&nbsp;</a></span>
-			</div>
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-              <?php if ($user->getUsrlId() == $this->configItem('demodyne.account.type.member') || $user->getUsrlId() == $this->configItem('demodyne.account.type.admin')): ?>
-              <?php if (isset($_SESSION['guest'])):?>
-                  	<?php if ($_SESSION['guest']['level']=='city'):?>
-    					<span class="nav navbar-nav navbar-default gray" style="padding:20px 20px 0 20px; text-transform:uppercase; font-size:15px;">
-    						Viewing <?=$_SESSION['guest']['cityName']?> (<?=$_SESSION['guest']['postalCode']?>) - <img src="/img/flags/<?=str_replace(' ', '-', $_SESSION['guest']['countryName'])?>.png" style="margin-bottom: 4px;" width="25" height="17"> <?=$_SESSION['guest']['countryName']?>
-    					</span>
-						<a class="nav navbar-nav navbar-default gray" style="padding:20px 20px 0 20px; text-transform:uppercase; font-size:15px;" href="<?=$this->url('city')?>"><?=$user->getCity()->getCityName()?> (<?=$user->getCity()->getCityPostalcode()?>)</a>
-
-    					<?php elseif ($_SESSION['guest']['level']=='country'):?>
-    					<span class="nav navbar-nav navbar-default gray" style="padding:20px 20px 0 20px; text-transform:uppercase; font-size:15px;">
-    						Viewing <img src="/img/flags/<?=str_replace(' ', '-', $_SESSION['guest']['countryName'])?>.png" style="margin-bottom: 4px;" width="25" height="17"> <?=$_SESSION['guest']['countryName']?>
-        				</span>
-        					<a class="nav navbar-nav navbar-default gray" style="padding:20px 20px 0 20px; text-transform:uppercase; font-size:15px;" href="<?=$this->url('country')?>"><?= $this->translate('My Country');?></a>
-    					<?php endif;?>
-
-                  <?php else:?>
-                  	<?= $this->navigation('Navigation')->menu()->setMinDepth(0)->setMaxDepth(0)->setUlClass('nav navbar-nav')->escapeLabels(false); ?>
-                  <?php endif;?>
-              <?php elseif ($user->getUsrlId() == $this->configItem('demodyne.account.type.partner')):?>
-              <a class="nav navbar-nav navbar-default gray"
-        					style="padding: 20px 20px 0 20px; text-transform: uppercase; font-size: 15px;"
-        					href="<?= $this->url('partner/dashboard') ?>">
-              <?= $this->translate('Dashboard');?>
-              </a>
-              <?php elseif ($user->getUsrlId() == $this->configItem('demodyne.account.type.administration')):?>
-              
-                  	<?= $this->navigation('Navigation')->menu()->setMinDepth(0)->setMaxDepth(0)->setUlClass('nav navbar-nav')->escapeLabels(false); ?>
-
-              <?php endif;?>
-
-				<!-- user -->
-				<ul class="nav navbar-nav navbar-right">
-					<li><a
-						href="<?= $user->isPartner()?$this->url('partner/dashboard'):$this->url('city') ?>#inbox"
-						id="layout-goto-inbox"><i class="fa fa-envelope-o size15em"></i><span
-							class="badge badge-info up size07em"
-							id="inbox-unread-messages-count">0</span></a></li>
-					<li class="dropdown" style="padding: 13px 0 0 10px;"><img
-						src="<?=$this->basePath(). $user->getUsrPicture() ?>" width="30"
-						height="30" alt="<?= $user->getUsrName() ?>"
-						title="<?= $user->getUsrName() ?>" class="round5"
-						id="layout-picture" /></li>
-					<li class="dropdown top15"><a href="#user" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-expanded="false"> <span style="text-transform: initial;"><?=$this->escapeHtml($user->getUsrName());?>
-                      	</span> <span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a
-								href="<?= $this->url('user/profile',  ['action'=>'user-profile']);?>"><i
-									class="fa fa-pencil-square-o"></i>
-                              <?= $this->translate('Profile & Settings'); ?></a>
-                          	</li>
-							<li class="divider"></li>
-							<li><a
-								href="<?= $this->url('home/login', array( 'action' => 'logout'));?>"><i
-									class="fa fa-sign-out"></i> <?= $this->translate('Logout'); ?></a>
-							</li>
-						</ul>
-					</li>
-					<li><a
-						href="<?= $this->url('home/report', ['action'=>'submit-bug']);?>"
-						id="submit-bug" title="<?= $this->translate('Submit Bug')?>"
-						data-dialog-title="<?= $this->translate('Submit Bug')?>"><i
-							class="fa fa-bug size15em"></i></a></li>
-					<li><a href="<?= $this->url('home/pages', ['action'=>'help']);?>"
-						target="_blanc" id="contextual-help"
-						title="<?= $this->translate('Help')?>"
-						data-base-url="<?= $this->url('home/pages', ['action'=>'help']);?>"><i
-							class="fa fa-question-circle size15em"></i></a></li>
-				</ul>
-
-
-
-
-
-				<!-- search
-      <div style="margin:7px 0;">
-        <ul class="nav navbar-nav navbar-right">
-          <form class="navbar-form navbar-left" role="search">
-            <div class="form-group input-group">
-              <input type="text" class="form-control" placeholder="<?=$this->translate('Search')?>">
-              <span class="input-group-addon"><a href="search-me-pretty-please"><i class="fa fa-search fa-fw"></i></a></span> </div>
-          </form>
-        </ul>
-      </div> -->
-
-
-
-
-
-			</div>
-		</div>
-	</nav>
-
-
-
-
-
-
+<? $mobile = isset($_SESSION['mobile']) && $_SESSION['mobile'];?>
+<?php if ($mobile): ?>
+    <?= $this->partial('layout/layout-mobile.phtml')?>
 <?php else:?>
-    
-    <?php 
-    $routeMatch = $this->getHelperPluginManager()->getServiceLocator()->get('Application')->getMvcEvent()->getRouteMatch();
-    $routeName = $routeMatch?$routeMatch->getMatchedRouteName():null;
-    
-    if ($routeName && $routeName!='home/user-register' && $routeName!='home/administration-register' && $routeName!='home/partner-register'):?>
-
-
-
-<nav class="navbar navbar-default ">
-		<!--  navbar-fixed-top -->
-		<div class="container">
-			<div class="navbar-header" style="padding-bottom: 5px;">
-				<button type="button" class="navbar-toggle collapsed"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<span><a class="navbar-brand" href="<?= $this->url('home') ?>"><img
-						src="<?= $this->basePath('img/logo30.png') ?>" width="140"
-						height="30"
-						title="DEMODYNE - <?= $this->translate('Shape your Society') ?>"
-						alt="DEMODYNE - <?= $this->translate('Shape your Society') ?>" />&nbsp;</a></span>
-			</div>
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
-
-<ul class="nav navbar-nav">
-    <li>
-    <?php if (isset($_SESSION['guest'])):?>
-        <?php if ($_SESSION['guest']['level']=='city'):?>
-			Viewing <?=$_SESSION['guest']['cityName']?> (<?=$_SESSION['guest']['postalCode']?>) - <img src="/img/flags/<?=str_replace(' ', '-', $_SESSION['guest']['countryName'])?>.png" style="margin-bottom: 4px;" width="25" height="17"> <?=$_SESSION['guest']['countryName']?>
-		<?php elseif ($_SESSION['guest']['level']=='country'):?>
-			<a href="<?=$this->url('browse', ['country'=> 'france'])?>"><img src="/img/flags/<?=str_replace(' ', '-', ucfirst($_SESSION['guest']['countryName']))?>.png" style="margin-bottom: 4px;" width="25" height="17"> <?=$_SESSION['guest']['countryName']?></a>
-		<?php endif;?>
-	<?php endif;?>
-    </li>
-
-</ul>
-				
-					 <!-- user -->
-				<ul class="nav navbar-nav navbar-right">
-					<li class="dropdown" style="padding: 13px 0 0 10px;"><img
-						src="<?=$this->basePath('/img/avatar/avatar.png')?>" width="30"
-						height="30" alt="Guest"
-						title="Guest" class="round5"
-						id="layout-picture" /></li>
-					<li class="dropdown top15"><a href="#user" class="dropdown-toggle"
-						data-toggle="dropdown" role="button" aria-expanded="false"> Guest
-						<span class="caret"></span></a>
-						<ul class="dropdown-menu" role="menu">
-							<li><a
-								href="<?= $this->url('home/user-register');?>"><i
-									class="fa fa-pencil-square-o"></i>
-                              <?= $this->translate('Register'); ?></a>
-                          	</li>
-							<li class="divider"></li>
-							<li><a
-								href="<?= $this->url('home/login');?>"><i
-									class="fa fa-sign-in"></i> <?= $this->translate('Login'); ?></a>
-							</li>
-						</ul>
-					</li>
-
-				</ul>
-
-
-			</div>
-		</div>
-	</nav>
-
-
-
-
-
+    <?= $this->partial('layout/layout-user.phtml')?>
 <?php endif;?>
 
-
-
-<?php endif;?>
 <div class="container" id="pageContent">
-  <?= $this->content; ?>
-	</div>
-	<div class="container">
-  <footer>
-			<div class="row graylight">
-				<div class="col-md-6 col-xs-12 bot10">&copy; 2015 - <?= date('Y') ?>
-        <?= $this->translate('by') ?>
-        <a href="<?= $this->url('home')?>"><span class="orange">DEMODYNE</span></a>. <?= $this->translate('All rights reserved.') ?>
-      </div>
-				<div class="col-md-6 col-xs-12 text-right">
-					<span class="right20"> <a
-						href="https://www.facebook.com/demodyne.official" target="_blank"><i
-							class="fa fa-facebook size15em orange"></i></a>&nbsp;&nbsp; <a
-						href="https://www.linkedin.com/company/demodyne" target="_blank"><i
-							class="fa fa-linkedin size15em orange"></i></a>&nbsp;&nbsp; <a
-						href="https://twitter.com/demodyne" target="_blank"><i
-							class="fa fa-twitter size15em orange"></i></a>&nbsp;
-					</span> <span class="right20"> </span> <span class="right20"><a
-						href="<?= $this->url('home/pages', array('action'=>'legal'))?>"><span
-							class="orange"><?= $this->translate('Legal') ?></span></a></span>
-					<a href="https://forum.demodyne.org/showthread.php?tid=8"
-						target="_blank"><span class="orange"><?= $this->translate('Terms & Conditions') ?></span></a>
-					<!-- <a href="<?= $this->url('home/pages', array('action'=>'terms'))?>"><span class="orange"><?= $this->translate('Terms & Conditions') ?></span></a> -->
-				</div>
-			</div>
-		</footer>
-	</div>
+    <?= $this->content; ?>
+</div>
+<div class="container">
+    <footer>
+        <div class="row graylight">
+            <div class="col-md-5 col-xs-12 text-xs-center bot5">&copy; 2015 - <?= date('Y') ?>
+                <?= $this->translate('by') ?>
+                <a href="<?= $this->url('home')?>"><span class="orange">DEMODYNE</span></a>. <?= $this->translate('All rights reserved.') ?>
+            </div>
+            <div class="col-md-2 col-xs-12 text-center bot5">
+                <a href="https://www.facebook.com/demodyne" target="_blank"><i
+                            class="fa fa-facebook size15em orange"></i></a>&nbsp;&nbsp; <a
+                        href="https://www.linkedin.com/company/demodyne" target="_blank"><i
+                            class="fa fa-linkedin size15em orange"></i></a>&nbsp;&nbsp; <a
+                        href="https://twitter.com/demodyne" target="_blank"><i
+                            class="fa fa-twitter size15em orange"></i></a>
+            </div>
+            <div class="col-md-5 col-xs-12 text-xs-center text-right">
+                <? if (!$mobile):?>
+                <span class="right20"> </span> <span class="right20"><a
+                            href="<?= $this->url('home/pages', array('page'=>'legal'))?>" target="_blank"><span
+                                class="orange"><?= $this->translate('Legal') ?></span></a></span>
+
+                <a href="<?= $this->url('home/pages', array('page'=>'terms'))?>"
+                    target="_blank"><span class="orange"><?= $this->translate('Terms & Conditions') ?></span></a>
+                <?endif;?>
+            </div>
+        </div>
+    </footer>
+</div>
 
 
 
 
-	<!-- /container -->
+<!-- /container -->
 <?= $this->inlineScript() ?>
+<?php if ($lang != 'en' && (!isset($_SESSION['mobile']) || !$_SESSION['mobile'])):?>
+    <script
+            src="<?= $this->basePath('/js/datepicker-locales/bootstrap-datepicker.'.$lang.'.min.js')?> "
+            charset="UTF-8"></script>
+<?php endif;?>
+<!-- Go to www.addthis.com/dashboard to customize your tools
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-553755353bc6bf82" async></script>-->
 </body>
 </html>

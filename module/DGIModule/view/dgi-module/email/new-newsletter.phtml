@@ -1,0 +1,85 @@
+<?
+$urlBase = $this->url('home', [], array('force_canonical' => true));
+
+setlocale(LC_ALL, $toUser->getCountry()->getCountryFormat());
+/** @var \DGIModule\Entity\Newsletter $newsletter */
+$newsletter = $inboxMessage->getNewsletter();
+?>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px; text-align:center">
+    <h1 style="Margin-top:0;Margin-bottom:5px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;">
+    <?= $this->translate('Newsletter from')?> 
+    <?=sprintf($this->translate('%s', 'DGIModule'), $newsletter->getAdmin()->getAdminName())?></h1>
+    <img width="100" class="img-thumbnail" height="32" src="<?=$this->basePath($newsletter->getAdmin()->getUser()->getUsrPicture())?>"><br> 
+    <?= $this->translate('on')?> <?= utf8_encode(strftime('%e %B %Y %R', strtotime($newsletter->getNlSentDate()->format('d F Y H:i'))))?>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px; text-align: center;">
+       <hr style="height: 2px; background-color: #FFF; border:none">
+    
+            <img style="max-width: 100%;"
+                 id="newsletter-add-newsletter-preview" height="120"
+                 src="<?= $newsletter?$newsletter->getNlHeaderImage():''?>"><br>
+            <h3 id="newsletter-add-newsletter-title"><?= $newsletter->getNlSubject()?></h3>
+            
+            <p style="text-align: justify!important;"><span id="newsletter-add-newsletter-message"><?= $newsletter->getNlMessage()?></span></p>
+
+ <hr style="height: 2px; background-color: #FFF; border:none"> 
+ 
+	<p style="text-align: justify!important;">
+            <?= $this->translate('Categories concerned')?>: <span
+                    id="newsletter-add-newsletter-category-preview">
+								<?php if ($newsletter->getCategories()->count()):?>
+                                    <?php foreach ($newsletter->getCategories() as $category):?>
+                                        <span><img style="vertical-align: middle;" width="24" height="24"
+                                                   title="<?=$category->getCatName()?>"
+                                                   src="<?= $this->basePath()?>/files/<?= $category->getCatImage() ?>"></span>
+                                    <?php endforeach;?>
+                                <?php else:?>
+                                    <strong><?= $this->translate('No target categories. All user groups are concerned.')?></strong>
+                                <?php endif;?>
+							</span>		
+	</p>
+	
+	<p style="text-align: justify!important;">
+            <?= $this->translate('Link')?>: <span
+                    id="newsletter-add-newsletter-url">
+							<?php if ($newsletter->getNlUrl()!=''):?>
+                                <a href="<?=$newsletter->getNlUrl()?>" target="_blank"><?=$newsletter->getNlUrl()?></a>
+                            <?php else:?>
+                                <strong><?= $this->translate('No url defined.')?></strong>
+                            <?php endif;?>
+							</span>	
+	</p>
+
+    <hr style="height: 2px; background-color: #FFF; border:none">  
+
+  <p style="text-align: justify!important;">
+            <?= $this->translate('For more information please contact')?>: 
+            <span id="newsletter-add-newsletter-contact">
+									<strong><?php if ($newsletter->getNlContact()!=''):?>
+                                        <?=$newsletter->getNlContact()?>
+                                    <?php else:?>
+                                        <strong><?= $this->translate('No contact defined.')?></strong>
+                                    <?php endif;?></strong>
+								</span>  
+	</p>  
+  
+  </div>
+   
+ 
+
+
+
+
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <div style="Margin-bottom:20px;text-align:center">
+        <center>
+
+            <a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$this->url('user/inbox', array('action'=>'view-message', 'id'=>$inboxMessage->getIbxUUID()), array('force_canonical' => true));?>"><?=$this->translate('View on Demodyne')?></a>
+        </center>
+    </div>
+</div>
+
+

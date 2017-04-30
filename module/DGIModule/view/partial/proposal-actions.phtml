@@ -1,0 +1,49 @@
+<?php 
+
+$user = $this->user;
+$proposal = $this->proposal;
+if ($user->getCity()) {
+    $userCity = $user->getCity()->getFullCity() ? $user->getCity()->getFullCity() : $user->getCity();
+    $proposalCity = $proposal->getCity()->getFullCity() ? $proposal->getCity()->getFullCity() : $proposal->getCity();
+    $sameLevel = ($proposal->getPropLevel() == $this->configItem('demodyne.level.city') &&
+            ($proposalCity === $userCity ||
+                $proposalCity == $userCity->getFullCity() ||
+                ($proposalCity->getDistrictCode() == $userCity->getDistrictCode() && $proposalCity->getFullCity() == $userCity->getFullCity()) ||
+                ($proposal->getPropFullCity() && $proposalCity->getFullCity() == $userCity->getFullCity()))) ||
+        ($proposal->getPropLevel() == $this->configItem('demodyne.level.region') && $userCity->getRegion() == $proposalCity->getRegion()) ||
+        ($proposal->getPropLevel() == $this->configItem('demodyne.level.country') && $userCity->getCountry() == $proposalCity->getCountry());
+}
+else {
+    $sameLevel = false;
+}
+?>
+
+	<?php if ($user->getUsrId()):?>   
+
+        <? if (!$user->isAdministration()):?>
+            <a href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" >
+    			<span class="right5">       
+    			<?php if ($proposal->getUsr()==$user && !$proposal->isMeasure()):?>
+    				<span title="<?= $proposal->isMeasure()?$this->translate('This is your own Official Measure'):$this->translate('This is your own Proposal')?>"><i class="fa fa-user-circle-o fa-2x violet"></i></span>
+    			<?php elseif (!$sameLevel):?>  
+    				<!--<span title="<?= $proposal->isMeasure()?$this->translate('You cannot vote for an Official Measure from another area'):$this->translate('You cannot vote for an Proposal from another area')?>"><i class="fa fa-times-circle-o fa-2x red"></i></span>-->
+				<?php elseif ($proposal->isVotedBy($user)):?>
+                    <span title="<?= $proposal->isMeasure()?$this->translate('Voted Official Measure'):$this->translate('Voted Proposal')?>"><i class="fa fa-check-circle-o fa-2x green"></i></span>
+                <?php elseif ($proposal->getPropStatus()!=$this->configItem('demodyne.proposal.status.vote') && !$proposal->isMeasure()):?>
+            		<!--<span title="<?= $proposal->isMeasure()?$this->translate('This Official Measure is not in vote step'):$this->translate('This Proposal is not in vote step')?>"><i class="fa fa-times-circle-o fa-2x red"></i></span>-->
+                <?php else:?>
+            		<span title="<?= $proposal->isMeasure()?$this->translate('Official Measure pending your vote'):$this->translate('Proposal pending your vote')?>"><i class="fa fa-exclamation-circle fa-2x orange"></i></span>
+                <?php endif;?>
+                    </span>   
+            </a>
+
+        <?endif;?>
+
+<span class="right5"><a href="<?= $this->url('proposal', array('action'=>'favorite', 'id'=>$proposal->getPropUUID()));?>" alt="Favorite Proposal" id="favorite" data-favorite="<?= $proposal->getPropUUID()?>"><?php if (in_array($user, $proposal->getUsers())):?><i class="fa fa-heart size15em" title="<?= $this->translate('Remove Favorite')?>"></i><?php else:?><i class="fa fa-heart-o size15em" title="<?= $this->translate('Add Favorite')?>"></i><?php endif;?></a></span>            
+
+             <span class="right5"><?= $this->partial('partial/add-proposal-to-program.phtml', ['proposal' => $proposal]); ?></span>       
+		<?php endif;?>
+
+			<a target="_parent"
+				href="<?= $this->url($proposal->isMeasure()?'measure':'proposal', array('id'=>$proposal->getPropUUID()));?>#comment-list"
+				title="<?= count($proposal->getComments())?> <?= $this->translate('Comments')?>"><i class="fa <?= count($proposal->getComments())?'fa-comments':'fa-comments-o'?> size15em"></i></a> <?= count($proposal->getComments())?>

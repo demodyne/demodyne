@@ -1,0 +1,83 @@
+<div id="user-profile-user-mailing"
+     data-url="<?= $this->url('user/profile', array('action' => 'user-mailing'))?>"
+     data-delete-account="<?=$this->translate('Delete account')?>">
+
+     <div class="title-mobile"><?= $this->translate('Mailing Settings for')?> <?= $user->getUsrName() ?></div>
+     
+    <?php if ($refresh):?>
+        <span class="text-center" id="user-profile-user-mailing-refresh"><?= $this->translate('Changing the language now. Please wait...')?></span>
+    <?php endif;?>
+    <hr />
+
+
+
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('user/profile', array('action' => 'user-mailing')));
+    $form->setAttribute('id', 'user-mailing-form');
+    $form->prepare();
+    ?>
+
+    <?= $this->form()->openTag($form);?>
+
+    <fieldset>
+
+      <div class="form-group">
+        <p><strong><?= $this->translate('Email alerts - Private messages')?></strong><br>
+        <?= $this->formElement($form->get('privateMessagesAlert'));?></p>
+<hr>
+        <p><strong><?= $this->translate('Email alerts - Major updates')?></strong><br>
+          <?= $this->formElement($form->get('updatesAlert'));?></p>
+<hr>
+          <p><strong><?= $this->translate('Email alerts - New comments')?></strong><br>
+          <?= $this->formElement($form->get('commentsAlert'));?></p>
+<hr>
+          <p><strong><?= $this->translate('Reminders - Status change')?></strong><br>
+            <?= $this->formElement($form->get('statusAlert'));?></p>
+<hr>
+            <p><strong><?= $this->translate('Reminders - Events & Sessions')?></strong><br>
+              <?= $this->formElement($form->get('eventsAlert'));?></p>
+<hr>
+              <p><strong><?= $this->translate('Email Digest Frequency')?></strong><br>
+                <?= $this->formElement($form->get('freq'));?></p>
+<hr>
+                <p><strong><?= $this->translate('Content')?></strong><br>
+                  <?= $this->formElement($form->get('highlight'));?> <label for="highlight"> <?=$this->translate('Highlights')?></label><br>
+                  <?= $this->formElement($form->get('proposals'));?> <label for="proposals"> <?=$this->translate('New Proposals/Official Measures/Programs')?></label><br>
+                  <?= $this->formElement($form->get('events'));?> <label for="events"> <?=$this->translate('New Events/Sessions')?></label><br>
+                  <!-- <?= $this->formElement($form->get('academy'));?> <label for="academy"> <?=$this->translate('Demodyne Academy')?></label><br> --></p>
+
+      </div>
+
+      <hr>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-orange" id="user-profile-user-mailing-save"><i class="fa fa-floppy-o"></i> <?= $this->translate('Save')?></button>
+        <button type="button" class="btn btn-default" id="user-profile-user-mailing-cancel"><i class="fa fa-undo"  id="cancelEditContactIcon"></i> <?= $this->translate('Cancel')?></button>
+      </div>
+
+
+
+
+
+    </fieldset>
+
+
+    <?=  $this->form()->closeTag();?>
+
+</div>
+<script type="text/javascript">
+
+    $(function () {
+
+
+
+        userProfileUserMailingHandlers();
+
+
+
+
+
+    });
+
+</script>

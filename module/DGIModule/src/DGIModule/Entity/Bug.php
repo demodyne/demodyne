@@ -1,12 +1,13 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,14 +51,14 @@ class Bug
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="bug_created_date", type="datetime", nullable=true)
+     * @ORM\Column(name="bug_created_date", type="utcdatetime", nullable=true)
      */
     private $bugCreatedDate;
 
     /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
-     * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
+     * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User", cascade={"persist", "merge"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")
      * })
@@ -153,7 +154,7 @@ class Bug
      *
      * @param \DateTime $bugCreatedDate
      *
-     * @return DgiBugs
+     * @return Bug
      */
 //     public function setBugCreatedDate($bugCreatedDate)
 //     {
@@ -175,11 +176,11 @@ class Bug
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      *
      * @return Bug
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -189,10 +190,18 @@ class Bug
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User
+     * @return User
      */
     public function getUsr()
     {
         return $this->usr;
     }
+    /**
+     * @param \DateTime $bugCreatedDate
+     */
+    public function setBugCreatedDate($bugCreatedDate)
+    {
+        $this->bugCreatedDate = $bugCreatedDate;
+    }
+
 }

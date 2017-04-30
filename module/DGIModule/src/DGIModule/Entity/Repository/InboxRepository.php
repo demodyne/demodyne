@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -9,6 +9,7 @@ namespace DGIModule\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+
 use DGIModule\Entity\User;
 
 class InboxRepository extends EntityRepository
@@ -22,9 +23,8 @@ class InboxRepository extends EntityRepository
                   ->andWhere('i.ibxToDeletedDate IS NULL')
                   ->orderBy('i.ibxId', 'desc')
                   ->setFirstResult($offset)
-                  ->setMaxResults($limit)
                   ->setParameter('user', $user);
-       
+
         if ($filter>=0) {
             $q->andWhere(($filter)?'i.ibxType=:ibxType':'i.ibxType > :ibxType')->setParameter('ibxType', $filter);
         }
@@ -32,8 +32,12 @@ class InboxRepository extends EntityRepository
             $q->andWhere('i.ibxViewed=0');
         }
             
-        $query = $q->getQuery();
+        if ($limit!='all') {
+              $q->setMaxResults($limit);
+        }
     
+        $query = $q->getQuery();
+
         $paginator = new Paginator( $query );
     
         return $paginator;
@@ -49,11 +53,16 @@ class InboxRepository extends EntityRepository
                 ->orderBy('i.ibxId', 'desc')
                 ->groupBy('i.ibxGroup')
                 ->setFirstResult($offset)
-                ->setMaxResults($limit)
                 ->setParameter('user', $user)
                 ->setParameter('ibxType', $filter);
     
-        $paginator = new Paginator($q->getQuery());
+        if ($limit!='all') {
+            $q->setMaxResults($limit);
+        }
+    
+        $query = $q->getQuery();
+
+        $paginator = new Paginator( $query );
     
         return $paginator;
     }
@@ -66,11 +75,16 @@ class InboxRepository extends EntityRepository
                     ->andWhere(($filter)?'i.ibxType=:ibxType':'i.ibxType > :ibxType')
                     ->orderBy('i.ibxId', 'desc')
                     ->setFirstResult($offset)
-                    ->setMaxResults($limit)
                     ->setParameter('user', $user)
                     ->setParameter('ibxType', $filter);
     
-        $paginator = new Paginator($q->getQuery());
+        if ($limit!='all') {
+            $q->setMaxResults($limit);
+        }
+    
+        $query = $q->getQuery();
+
+        $paginator = new Paginator( $query );
     
         return $paginator;
     }
@@ -111,11 +125,53 @@ class InboxRepository extends EntityRepository
             $q->andWhere(implode(' OR ', $searchArray))
              ->setParameter('sk', $sk);
         }
-        
-        $paginator = new Paginator($q->getQuery());
+
+        $query = $q->getQuery();
+
+        $paginator = new Paginator( $query );
     
         return $paginator;
     }
-    
+
+    public function getInboxByPeriod(User $user,\DateTime $startDate, \DateTime $endDate, $offset = 0, $limit = 'all') {
+
+        $q = $this->createQueryBuilder('i')
+            ->where('i.toUsr = :user')
+            ->andWhere('i.ibxToTrashDate IS NULL')
+            ->andWhere('i.ibxToDeletedDate IS NULL')
+            ->andWhere('i.ibxViewed=0')
+            ->andWhere('i.ibxCreatedDate >= :startDate')
+            ->andWhere('i.ibxCreatedDate < :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->orderBy('i.ibxId', 'desc')
+            ->setFirstResult($offset)
+            ->setParameter('user', $user);
+
+        if ($limit!='all') {
+            $q->setMaxResults($limit);
+        }
+
+        return new Paginator($q->getQuery());
+    }
+
+    public function countInboxByPeriod(User $user,\DateTime $startDate, \DateTime $endDate) {
+
+        $q = $this->createQueryBuilder('i')
+            ->select('count(distinct i.ibxId) as total')
+            ->where('i.toUsr = :user')
+            ->andWhere('i.ibxToTrashDate IS NULL')
+            ->andWhere('i.ibxToDeletedDate IS NULL')
+            ->andWhere('i.ibxViewed=0')
+            ->andWhere('i.ibxCreatedDate >= :startDate')
+            ->andWhere('i.ibxCreatedDate < :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('user', $user);
+
+        $count = $q->getQuery()->getOneOrNullResult();
+
+        return $count?$count["total"]:0;
+    }
     
 }

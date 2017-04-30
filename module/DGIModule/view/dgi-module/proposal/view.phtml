@@ -1,281 +1,262 @@
-<!-- proposal/view -->
+<?php
+$levelName = '';
+/** @var \DGIModule\Entity\Proposal $proposal */
+$level=$proposal->getPropLevel();
+if ($level==$this->configItem('demodyne.level.city')) {
+    $levelName = ($proposal->getCity()->getFullCity()?($proposal->getPropFullCity()?$proposal->getCity()->getFullCity()->getCityName().' ('.$this->translate('Full city').')':$proposal->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$proposal->getCity()->getDistrictName().'</i></span>'):$proposal->getCity()->getCityName());
+}
+elseif ($level==$this->configItem('demodyne.level.region')) {
+    $levelName = $proposal->getCity()->getRegion()->getRegionName();
+}
+else {
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $proposal->getCity()->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$proposal->getCity()->getCountry()->getCountryName() .'</span>';
+}
+?>
 
-<?php 
-        $levelName = '';$level=$proposal->getPropLevel();
-        if ($level==$this->configItem('demodyne.level.city')) {
-            $levelName = ($proposal->getCity()->getFullCity()?($proposal->getPropFullCity()?$proposal->getCity()->getFullCity()->getCityName().' ('._('Full city').')':$proposal->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$proposal->getCity()->getDistrictName().'</i></span>'):$proposal->getCity()->getCityName());
-        }
-        elseif ($level==$this->configItem('demodyne.level.region')) {
-            $levelName = $proposal->getCity()->getRegion()->getRegionName();
-        }
-        else {
-        $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $proposal->getCity()->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$proposal->getCity()->getCountry()->getCountryName() .'</span>';
-        }
-    ?>
+<?= $this->partial('partial/page-header.phtml', ['title' => '<i class="fa fa-bullhorn size15em"></i> '.sprintf($this->translate('Citizen Proposal for %s'), $levelName)])?>
 
-<div class="modal-header-soft round5top ui-draggable-handle">
-<a class="close" href="<?= $this->url($_SESSION['level']['level']);?>"><i class="fa fa-home w"></i></a>
-
-  <button type="button" class="close" onclick="parent.history.back();"> <i class="fa fa-arrow-circle-left w right10"></i> </button>
-  &nbsp; <span class="big" id="modal-dialog-title"><strong>
-  <?= sprintf($this->translate('Citizen Proposal for %s'), $levelName)?>
-  </strong></span> </div>
 <div class="jumbotron parent"
-	style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
-	id="proposal-view"
-	data-url="<?= $this->url('proposal', array('action'=>'view', 'id' => $proposal->getPropUUID() ));?>"
-	data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
-	data-add-favorite="<?=$this->translate('Add Favorite')?>"
-	data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
-  <div class="row equal">
-    <div class="col-md-6">
-      <!-- View proposal infos -->
-      <div class="panel panel-default">
-        <div class="panel-body">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="bigblack bot10">
-                <?= $proposal->getPropSavedName() ?>
-              </div>
-              <p>
-                <div class="desc"><?= $proposal->getPropDescription() ?></div>
-              </p>
+     style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+     id="proposal-view"
+     data-url="<?= $this->url('proposal', array('action'=>'view', 'id' => $proposal->getPropUUID() ));?>"
+     data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
+     data-add-favorite="<?=$this->translate('Add Favorite')?>"
+     data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
+
+
+
+
+
+
+
+    <div class="row equal">
+        <div class="col-md-6">
+            <!-- View proposal infos -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="bigblack bot10">
+                                <?= $proposal->getPropSavedName() ?>
+                            </div>
+                            <p>
+                            <div class="desc"><?= $proposal->getPropDescription() ?></div>
+                            <?php if ($proposal->getPropPublished()):?>
+
+                                <?= $this->partial('partial/social-links.phtml', [
+                                    'type' => 'proposal',
+                                    'url' => $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true)),
+                                    'title' => $proposal->getPropSavedName(),
+                                    'description' => $proposal->getPropDescription()
+                                ]); ?>
+                            <?php endif;?>
+
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+
+
+                    <?= $this->translate('Current Status')?>:
+                    <?= $this->partial('partial/proposal-status.phtml', ['proposal' => $proposal])?>
+                    <hr>
+
+                    <?php if ($proposal->getPropPublished()):?>
+                        <div>
+                            <?= $this->voteSection;?>
+                        </div>
+                    <?php endif;?>
+
+                    <!--
+                    Go to:
+                    <a href="<?= $this->url('execution', array('id'=>$proposal->getPropUUID()));?>">
+
+                        <button type="submit" class="btn btn-orange">Proposal Implementation</button>
+
+                    </a>
+                    -->
+
+                </div>
             </div>
-          </div>
-          <hr>
-
-	<?php if ($proposal->getPropLevel()!=$this->configItem('demodyne.level.country')):?>
-          <?= $this->translate('Current Status')?>:
-          <?= $this->statusSection;?>
-          <hr>
-          <?php endif;?>
-
-		<?php if ($proposal->getPropPublished()):?>
-          <div>
-            <?= $this->voteSection;?>
-          </div>
-          <?php endif;?>
-
-          
-
+            <!-- /panel -->
         </div>
-      </div>
-      <!-- /panel -->
-    </div>
-    <!-- /6 -->
-    <div class="col-md-6">
-      <div class="panel panel-default">
-        <div class="panel-body">
+        <!-- /6 -->
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
 
 
-            <div class="row">
-            <div class="col-md-8">
-              <div class="table-layout">
-                <div class="table-cell fixed-width-40"><img	src="<?= $this->basePath()?>/files/<?= $mainCategoryImage ?>" height="32" width="32" title="<?= $mainCategoryName ?>"></div>
-                <div class="table-cell"><span class="big">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="table-layout">
+                                <div class="table-cell fixed-width-40"><img	src="<?= $this->basePath()?>/files/<?= $mainCategoryImage ?>" height="32" width="32" title="<?= $mainCategoryName ?>"></div>
+                                <div class="table-cell"><span class="big">
                   <?= $mainCategoryName ?>
                   </span><br>
-                  <?= $subCategoryName ?>
-                  <hr>
-                </div>
-              </div>
-              <div class="table-layout">
-                <div class="table-cell fixed-width-40"> <img src="<?=$this->basePath($proposal->getUsr()->getUsrPicture()) ?>" width="32" height="32" class="round5"> </div>
-                <div class="table-cell">
-                  <?= $this->translate('Published by')?>
-                  <a
-								href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
-								data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
-								data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
-								id="proposal-view-profile"><span class="badge">
+                                    <?= $subCategoryName ?>
+                                    <hr>
+                                </div>
+                            </div>
+                            <div class="table-layout">
+                                <div class="table-cell fixed-width-40"> <img src="<?=$this->basePath($proposal->getUsr()->getUsrPicture()) ?>" width="32" height="32" class="round5"> </div>
+                                <div class="table-cell">
+                                    <?= $this->translate('Published by')?>
+                                    <a
+                                            href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
+                                            data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
+                                            data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
+                                            id="proposal-view-profile"><span class="badge">
                   <?= $proposal->getUsr()->getUsrName() ?>
                   </span></a> <i class="fa fa-clock-o"></i>
-                  <?= ($proposal->getPropPublished())?$proposal->getPropPublishedDate()->format('d/m/Y'):$proposal->getPropCreatedDate()->format('d/m/Y')  ?>
-                  <br>
-                  <i class="fa fa-map-marker" aria-hidden="true"></i>  <?= $proposal->getCity()->getCityName() ?>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 text-right"> 
-            	<?php if ($user):?>
-            	<a
-					href="<?= $this->url('proposal', array('action'=>'favorite', 'id'=>$proposal->getPropUUID()));?>"
-					alt="Favorite Proposal" id="proposal-view-favorite"
-					data-favorite="<?= $proposal->getPropUUID()?>">
-                      <?php if (in_array($user, $proposal->getUsers())):?>
-                      <i
-        								class="fa fa-heart"
-        								title="<?= $this->translate('Remove Favorite')?>"></i>
-                      <?= $this->translate('Remove Favorite')?>
-                      <?php else:?>
-                      <i class="fa fa-heart-o"
-        								title="<?= $this->translate('Add Favorite')?>"></i>
-                      <?= $this->translate('Add Favorite')?>
-                      <?php endif;?>
-              </a><br />
-              
-              <?= $this->partial('partial/add-proposal-to-program.phtml', ['proposal' => $proposal]); ?>
-            				
-				
+                                    <?= ($proposal->getPropPublished())?$proposal->getPropPublishedDate()->format('d/m/Y'):$proposal->getPropCreatedDate()->format('d/m/Y')  ?>
+                                    <br>
+                                    <i class="fa fa-map-marker" aria-hidden="true"></i>  <?= $proposal->getCity()->getCityName() ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-right text-xs-left">
+                            <?php if ($user):?>
+                                <?= $this->partial('partial/proposal-actions.phtml', ['user' => $user, 'proposal' => $proposal])?>
+
+                                <span class="right5">
               <a href="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'proposal','id'=>$proposal->getPropUUID()));?>"
-								id="proposal-view-report"
-								data-dialog-title="<?=$this->translate('Report proposal')?>"
-								title="<?= $this->translate('Report Proposal as inapropiate')?>"><i
-								class="fa fa-exclamation-triangle"></i>
-              <?= $this->translate('Report')?>
-              </a> 
-              <?php endif;?>
-              </div>
-          </div>
-          <hr>
-        <?php if ($proposal->getPropStatus()<=$this->configItem('demodyne.proposal.status.debate') && $proposal->getUsr()==$user): // Debate?>
+                 id="proposal-view-report"
+                 data-dialog-title="<?=$this->translate('Report proposal')?>"
+                 title="<?= $this->translate('Report Proposal as inapropiate')?>"><i
+                          class="fa fa-exclamation-triangle size15em"></i>
+              </a> </span>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                    <hr>
+                    <?php if (count($proposal->getLinks())):?>
+                        <!-- Sources -->
+                        <span class="big"><strong><?= $this->translate('Sources')?>:</strong></span><br />
 
-        	<div class="row">
-            <div class="col-md-12">
+                        <?php foreach($proposal->getLinks() as $index => $link):?>
+                            #<?=$index+1?> -  <a href="<?=$link?>" target="_blanc"><?=$link?></a>
+                            <br>
+                        <?php endforeach;?>
+                        <br> <span class="red"><strong><i class="fa fa-exclamation-triangle"></i> <?= $this->translate('Warning')?>:</strong></span>
+                        <?= $this->translate('External links added by users are not checked by the Demodyne team')?>.<br>
+                        <?= $this->translate('Make sure you use appropriate security measures (up-to-date antivirus etc.)')?>
+                        <!-- /Sources -->
+                        <hr>
+                    <?php endif;?>
 
-            	<button type="button" class="btn btn-orange"
-            		data-url="<?= $this->url('proposal', array('action'=>'edit-proposal', 'id'=>$proposal->getPropUUID()));?>"
-					id="proposal-view-proposal-edit"
-					data-dialog-title="<?=$this->translate('Edit Proposal')?>">
-					<i class="fa fa-floppy-o"></i> <?= $this->translate('Edit')?></button>
-				<?php if (!$proposal->getPropPublished()):?>
-				<button type="button" class="btn btn-success"
-					id="proposal-view-proposal-publish"
-					data-url="<?= $this->url('proposal', array('action'=>'publish-proposal', 'id'=>$proposal->getPropUUID()));?>"
-					data-dialog-title="Publish Proposal">
-					<i class="fa fa-share-square-o"></i> <?= $this->translate('Publish')?></button>
-				<?php else:?>
-					<button type="button" class="btn btn-success"
-					id="proposal-view-proposal-extend-debate"
-					data-url="<?= $this->url('proposal', array('action'=>'prolong-debate', 'id'=>$proposal->getPropUUID()));?>"
-					data-dialog-title="Prolong Debate Phase">
-					<i class="fa fa-calendar-plus-o"></i> <?= $this->translate('Prolong Debate')?></button>
-				<?php endif;?>
-				<button type="button" class="btn btn-danger"
-					id="proposal-view-proposal-delete"
-					data-dialog-title="Delete Proposal"
-					data-url="<?= $this->url('proposal', array('action'=>'delete', 'id'=>$proposal->getPropUUID()));?>">
-					<i class="fa fa-trash"></i> <?= $this->translate('Delete')?></button>
-            </div>
-            </div>
-            <hr>
-        <?php endif;?>
+                    <?php if ($proposal->getPropStatus()<=$this->configItem('demodyne.proposal.status.debate') && $proposal->getUsr()==$user): // Debate?>
 
-          <div class="big bot10">
-            <?= $this->translate('Proposal Images')?>
-          </div>
-          <?php
-            $images=[];
-            if ($proposal->getPropImage1()) {
-                $images[] = $this->basePath($proposal->getPropImage1());
-            }
-            if ($proposal->getPropImage2()) {
-                $images[] = $this->basePath($proposal->getPropImage2());
-            }
-            if ($proposal->getPropImage3()) {
-                $images[] = $this->basePath($proposal->getPropImage3());
-            }
+                        <div class="row">
+                            <div class="col-md-12">
 
-            ?>
-          <?php if (count($images)):?>
-          
-          
-          <div class="row"> 
-            <?php foreach ($images as $index => $image):?>
-            <div class="col-sm-4">
-            <a href="#" class="pop"><img src="<?= $image ?>" style="width: 200px; height: 110px; padding-bottom:10px;" class="img-responsive"></a>
-            </div>
-            <?php endforeach;?>
-            </div>
-          
-          
-          
-          <!-- 
-          
-          
-          <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-              <?php foreach ($images as $index => $image):?>
-              <div class="item equal <?=$index==0?'active':''?>"> <img src="<?= $image ?>" class="img-responsive round5"
-									style="width: 100%"> </div>
-              <?php endforeach;?>
-              <div class="row top10">
-                <div class="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
-                  <div class="row">
-                    <?php foreach ($images as $index => $image):?>
-                    <div class="col-md-4 col-xs-4"> <span data-target="#myCarousel" data-slide-to="<?=$index?>" <?=$index==0?'class="active"':''?>><a
-										href="#"><img
-											src="<?= $image ?>"
-											class="img-responsive round5"></a></span> </div>
-                    <?php endforeach;?>
-                  </div>
-          
+                                <button type="button" class="btn btn-orange"
+                                        data-url="<?= $this->url('proposal', array('action'=>'edit-proposal', 'id'=>$proposal->getPropUUID()));?>"
+                                        id="proposal-view-proposal-edit"
+                                        data-dialog-title="<?=$this->translate('Edit Proposal')?>">
+                                    <i class="fa fa-floppy-o"></i> <?= $this->translate('Edit')?></button>
+                                <?php if (!$proposal->getPropPublished()):?>
+                                    <button type="button" class="btn btn-success"
+                                            id="proposal-view-proposal-publish"
+                                            data-url="<?= $this->url('proposal', array('action'=>'publish-proposal', 'id'=>$proposal->getPropUUID()));?>"
+                                            data-dialog-title="<?=$this->translate('Publish Proposal')?>">
+                                        <i class="fa fa-share-square-o"></i> <?= $this->translate('Publish')?></button>
+                                <?php else:?>
+                                    <button type="button" class="btn btn-success"
+                                            id="proposal-view-proposal-extend-debate"
+                                            data-url="<?= $this->url('proposal', array('action'=>'prolong-debate', 'id'=>$proposal->getPropUUID()));?>"
+                                            data-dialog-title="<?=$this->translate('Prolong Debate Phase')?>">
+                                        <i class="fa fa-calendar-plus-o"></i> <?= $this->translate('Prolong Debate')?></button>
+                                <?php endif;?>
+                                <button type="button" class="btn btn-danger"
+                                        id="proposal-view-proposal-delete"
+                                        data-dialog-title="<?=$this->translate('Delete Proposal')?>"
+                                        data-url="<?= $this->url('proposal', array('action'=>'delete', 'id'=>$proposal->getPropUUID()));?>">
+                                    <i class="fa fa-trash"></i> <?= $this->translate('Delete')?></button>
+                            </div>
+                        </div>
+                        <hr>
+                    <?php endif;?>
+
+
+                    <?php
+                    $images=[];
+                    if ($proposal->getPropImage1()) {
+                        $images[] = $this->basePath($proposal->getPropImage1());
+                    }
+                    if ($proposal->getPropImage2()) {
+                        $images[] = $this->basePath($proposal->getPropImage2());
+                    }
+                    if ($proposal->getPropImage3()) {
+                        $images[] = $this->basePath($proposal->getPropImage3());
+                    }
+                    if (count($images)):?>
+                        <div class="big bot10">
+                            <?= $this->translate('Proposal Images')?>
+                        </div>
+                        <div class="row">
+                            <?php foreach ($images as $index => $image):?>
+                                <div class="col-sm-4">
+                                    <a href="#" class="pop"><img src="<?= $image ?>" style="width: 200px; height: 110px; padding-bottom:10px;" class="img-responsive"></a>
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                        <hr>
+                    <?php endif;?>
+
+
+                    <div class="panel panel-default panel-body orangebackground" style="margin-bottom: 1px!important;">
+                        <?=sprintf($this->translate('This proposal das been viewed <span class="badge">%d</span> times.'), $proposal->getPropViews())?><br>
+                        <?=sprintf($this->translate('<span class="badge">%d</span> citizens has added this proposal to their program.'), count($proposal->getPrograms()))?><br>
+                    </div>
+
+
+                    <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" data-dismiss="modal">
+                            <div class="modal-content">
+                                <div class="modal-body" style="border-radius: 5px !important;">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <img src="" class="imagepreview" style="width: 100% !important;" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
                 </div>
-              </div>
-          
             </div>
-          </div>
-          -->
-          <?php else:?>
-          <table class="table table-condensed table-hover table-striped">
-            <tr>
-              <td><?=$this->translate('This proposal doesn\'t have any image attached.')?></td>
-            </tr>
-          </table>
-          <?php endif;?>
-
-
-
-
-<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" data-dismiss="modal">
-    <div class="modal-content">              
-      <div class="modal-body" style="border-radius: 5px !important;">
-      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <img src="" class="imagepreview" style="width: 100% !important;" >
-      </div> 
-    </div>
-  </div>
-</div>
-
-
-
+            <!-- /panel -->
 
         </div>
-      </div>
-      <!-- /panel -->
-
+        <!-- /6 -->
     </div>
-    <!-- /6 -->
-  </div>
-  <!-- /row -->
- <?php if ($proposal->getPropPublished()):?>
-<div class="row">
-		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
-<?= $this->commentsSection;?>
-</div>
-	</div>
-	<!--/r-->
-	<?php endif;?>
-  <!--/r-->
+    <!-- /row -->
+    <?php if ($proposal->getPropPublished()):?>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+                <?= $this->commentsSection;?>
+            </div>
+        </div>
+        <!--/r-->
+    <?php endif;?>
+    <!--/r-->
 </div>
 <!-- /j -->
 
 <script type="text/javascript">
-            $(function () {
-            	proposalViewHandlers();
-            });
-        </script>
+    $(function () {
+        proposalViewHandlers();
+    });
+</script>
 
 
 <!-- SIMPLE POPUP IMAGES -->
 <script>
-$(function() {
-		$('.pop').on('click', function() {
-			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
-			$('#imagemodal').modal('show');   
-		});		
-});
+    $(function() {
+        $('.pop').on('click', function() {
+            $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+            $('#imagemodal').modal('show');
+        });
+    });
 </script>
-
-<!-- /proposal/view -->

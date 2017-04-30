@@ -16,16 +16,13 @@
 namespace DGIModule\Acl;
 
 /**
- * @uses Zend\Acl\Acl
- * @uses Zend\Acl\Role\GenericRole
- * @uses Zend\Acl\Resource\GenericResource
+ * @uses Zend\Permissions\Acl\Acl
+ * @uses Zend\Permissions\Acl\Role\GenericRole
+ * @uses Zend\Permissions\Acl\Resource\GenericResource
  */
 use Zend\Permissions\Acl\Acl as ZendAcl,
     Zend\Permissions\Acl\Role\GenericRole as Role,
     Zend\Permissions\Acl\Resource\GenericResource as Resource;
-// use Zend\Acl\Acl as ZendAcl,
-//    Zend\Acl\Role\GenericRole as Role,
-//    Zend\Acl\Resource\GenericResource as Resource;
 
 /**
  * Class to handle Acl

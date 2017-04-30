@@ -1,0 +1,92 @@
+<div style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+	id="facebook-registration"
+	data-facebook-login-url="<?=$this->url('home/login', ['action'=>'facebook-login'])?>">
+	<div class="row">
+		<div class="col-md-4 text-right">
+			<img src="//graph.facebook.com/<?=$fid?>/picture?type=normal">
+		</div>
+		<div class="col-md-8">
+			<?=$name?>,<br> 
+            <h4><?= $this->translate('Welcome to DEMODYNE!')?></h4>
+            <?= $this->translate('Please enter your desired username, then click on register button below.')?>
+		</div>
+	</div>
+
+
+	<div class="row top10 bot10">
+			<div class="col-md-12">
+				<hr>
+			</div>
+		</div>
+		
+	<?php
+$form->prepare();
+$form->setAttribute('method', 'post'); 
+$form->setAttribute('action', $this->url('home/user-register', ['action'=>'facebook-registration'])); ?>
+  
+<?=$this->form()->openTag($form);?>
+	<fieldset>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Username'); ?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrName'));?>
+						<span class="text-danger"><?= $this->formElementErrors($form->get('usrName'));?></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('E-mail'); ?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrEmail'));?>
+						<span class="text-danger"><?= $this->formElementErrors($form->get('usrEmail'));?></span>
+					</div>
+				</div>
+			</div>
+			<!-- /6 -->
+		</div>
+		<!-- end row -->
+		
+		<?= $this->formHidden($form->get('userCSRF'));?>
+
+	</fieldset>
+
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+			<button type="button" class="btn btn-default"
+				data-dismiss="modal">
+				<i class="fa fa-ban"></i>
+              <?= $this->translate('Cancel')?>
+              
+            </button>
+            <button type="submit" class="btn btn-orange" id="facebook-registration-submit">
+<i class="fa fa-sign-in" aria-hidden="true"></i> <?= $this->translate('Register')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+	<?=  $this->form()->closeTag();?> 
+</div>
+
+
+
+<script type="text/javascript">
+
+$(function() {
+	userRegistrationFacebookRegistrationHandlers();
+
+});    
+
+</script>
+
+

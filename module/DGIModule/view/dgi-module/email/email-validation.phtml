@@ -1,0 +1,33 @@
+
+<?php
+$title = 'Email Validation';
+?>
+
+            <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+                <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("Welcome to DEMODYNE!")?></h1>
+            </div>
+
+            <div style="Margin-left:20px;Margin-right:20px">
+                <p style="Margin-top:30px;Margin-bottom:20px;">
+                    <?=$this->translate("To validate your email and activate your account, please click on the following button:")?></p>
+            </div>
+
+            <? $confirmUrl = $this->url('home/user-register', array('action' => 'confirm-email','id' => $user->getUsrRegistrationToken()), array('force_canonical' => true))?>
+
+            <div style="Margin-left:20px;Margin-right:20px">
+                <div style="Margin-bottom:20px;text-align:center">
+                    <center><a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$confirmUrl?>"><?=$this->translate("Verify your email address")?></a>
+                    </center>
+                </div>
+            </div>
+
+
+            <div style="Margin:0 auto;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+                <div style="border-collapse:collapse;display:table;width:100%;max-width:601px;font-size:13px;line-height:16px;font-family:Roboto,sans-serif;color: #7E7E7E;">
+                    <center>
+                        <p><?=$this->translate('Having trouble with that button? Copy and paste this link into your browser:')?><br>
+                            <?=$confirmUrl?></p>
+                    </center>
+                </div>
+            </div>
+

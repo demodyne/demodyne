@@ -16,24 +16,27 @@
 						class="text-danger"><?= $this->formElementErrors($form->get('progName'));?></span>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" id="edit-description">
 				<div class="col-md-12"><?= $this->translate('Description')?>:
 				<div class="bot5">
-    				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-bold"
-					onclick="document.execCommand('bold');">
-					<strong><?=$this->translate('Bold')?></strong>
-				</button>
-				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-italic"
-					onclick="document.execCommand('italic');">
-					<i><?=$this->translate('Italic')?></i>
-				</button>
-				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-underline"
-					onclick="document.execCommand('underline');">
-					<u><?=$this->translate('Underline')?></u>
-				</button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="program-add-program-textbox"
+                            data-format="bold">
+                        <strong><i class="fa fa-times"></i> <?=$this->translate('Bold')?></strong>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="program-add-program-textbox"
+                            data-format="italic">
+                        <i><i class="fa fa-times"></i> <?=$this->translate('Italic')?></i>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="program-add-program-textbox"
+                            data-format="underline">
+                        <u><i class="fa fa-times"></i> <?=$this->translate('Underline')?></u>
+                    </button>
     			</div>
     			<div class="form-control desc" contenteditable="true"  data-placeholder="Enter your comment"
     				maxlength="1000" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"

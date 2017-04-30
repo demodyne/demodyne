@@ -1,0 +1,18 @@
+
+            <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+                <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("New request for moderation")?></h1>
+            </div>
+
+            <div style="Margin-left:20px;Margin-right:20px">
+                <p style="Margin-top:30px;Margin-bottom:20px;">
+                    User <?=$report->getUsr()->getUsrName() ?>  has submitted a moderation request on
+                    <?=$report->getRepCreatedDate()->format("d/m/Y H:i")?><br>
+                    Reason: <?=$report->getRepReason()?> <br>
+                    Description: <?=$report->getRepDescription()?><br>
+                    on <?=$report->getRepType()?>:<br><br>
+                <blockquote><?=$text?><br>by <?=$owner->getUsrName()?></blockquote><br>
+
+                </p>
+            </div>
+
+

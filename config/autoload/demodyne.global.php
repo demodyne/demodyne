@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -10,6 +10,7 @@
  */
 return [
     'demodyne' => [
+//        'server' => 'www.demodyne.org',
         'account' => [
             'type' => [
                 'guest' => 1,
@@ -32,15 +33,6 @@ return [
         ],
         'proposal' => [
             'status' => [
-               'type' =>[
-                   'unvalidated' => -1,
-                   'draft' => 0,
-                   'debate'=> 1,
-                   'vote' => 2,
-                   'plan' => 3,
-                   'execute' => 4,
-                   'followup' => 5
-               ], 
                 'unvalidated' => -1,
                 'draft' => 0,
                 'debate'=> 1,
@@ -66,8 +58,35 @@ return [
                 'new_measure_citizen' => 6, 
                 'measure_validated' => 7, 
                 'task_suggestion' => 8,
-                
+                'new_public_event' => 9,
+                'new_public_session' => 10
             ],
+        ],
+        'email' =>[
+            'digest' => [
+                'daily' => 1,
+                'weekly' => 2,
+                'monthly' => 3,
+                'never' => 0,
+            ],
+            'alert' => [
+                'instant'   => 1,
+                'daily'     => 2,
+                'weekly'    => 3,
+                'never'     => 0,
+            ],
+            // @todo add instant
+            'remainder' => [
+                '2 days before' => 0,
+                '5 days before' => 1
+            ]
+        ],
+        'blog' => [
+            'tag' => [
+                'all'       => 0,
+                'features'  => 1,
+                'news'      => 2,
+            ]
         ],
         'inbox' => [
             'type' => [
@@ -77,7 +96,8 @@ return [
                 'new_step' => 2,
                 'champion_news' => 3,
                 'private_message' => 4,
-                'newsletter' => 5
+                'newsletter' => 5,
+                'invitation' => 6,
             ],
         ],
         'registration' => [

@@ -1,12 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
-
+ 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Category;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -32,12 +34,12 @@ class History
      *
      * @ORM\Column(name="his_type", type="integer", nullable=true)
      */
-    private $hisType = '1';
+    private $hisType = 1;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="his_created_date", type="datetime", nullable=true)
+     * @ORM\Column(name="his_created_date", type="utcdatetime", nullable=true)
      */
     private $hisCreatedDate;
 
@@ -58,14 +60,14 @@ class History
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="his_start_date", type="datetime", nullable=true)
+     * @ORM\Column(name="his_start_date", type="utcdatetime", nullable=true)
      */
     private $hisStartDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="his_end_date", type="datetime", nullable=true)
+     * @ORM\Column(name="his_end_date", type="utcdatetime", nullable=true)
      */
     private $hisEndDate;
 
@@ -93,7 +95,7 @@ class History
     private $links;
 
     /**
-     * @var \DGIModule\Entity\Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Category")
      * @ORM\JoinColumns({
@@ -103,7 +105,7 @@ class History
     private $category;
 
     /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -156,13 +158,13 @@ class History
     {
         return $this->links;
     }
-    
+
     /**
-     * @param Link $link
+     * @param string $url
+     * @param int $added
      */
     public function addLink($url, $added = 1)
     {
-    
         $this->links->add(new Link($url, $added));
     }
     
@@ -269,7 +271,7 @@ class History
     /**
      * Set hisStartDate
      *
-     * @param integer $hisStartDate
+     * @param \DateTime $hisStartDate
      *
      * @return History
      */
@@ -283,7 +285,7 @@ class History
     /**
      * Get hisStartDate
      *
-     * @return integer
+     * @return \DateTime
      */
     public function getHisStartDate()
     {
@@ -293,7 +295,7 @@ class History
     /**
      * Set hisEndDate
      *
-     * @param integer $hisEndDate
+     * @param \DateTime $hisEndDate
      *
      * @return History
      */
@@ -307,7 +309,7 @@ class History
     /**
      * Get hisEndDate
      *
-     * @return integer
+     * @return \DateTime
      */
     public function getHisEndDate()
     {
@@ -341,11 +343,11 @@ class History
    /**
      * Set category
      *
-     * @param \DGIModule\Entity\Category $category
+     * @param Category $category
      *
      * @return History
      */
-    public function setCategory(\DGIModule\Entity\Category $category = null)
+    public function setCategory(Category $category = null)
     {
         $this->category = $category;
 
@@ -355,7 +357,7 @@ class History
     /**
      * Get category
      *
-     * @return \DGIModule\Entity\Category
+     * @return Category
      */
     public function getCategory()
     {
@@ -365,11 +367,11 @@ class History
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      *
      * @return History
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -379,7 +381,7 @@ class History
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User
+     * @return User
      */
     public function getUsr()
     {

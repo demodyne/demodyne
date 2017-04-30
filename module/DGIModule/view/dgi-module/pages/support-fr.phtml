@@ -1,38 +1,83 @@
-<!-- pages/support-fr -->
+<?= $this->partial('partial/page-header.phtml', ['title' => $this->translate('Support us')])?>
 
-<?php if ($user = $this->identity()):?>
-<div class="modal-header-soft round5top ui-draggable-handle">
-<button type="button" class="close">
-        <?php if ($_SESSION['level']['level']=='city'):?>
-        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
-        <?php elseif ($_SESSION['level']['level']=='country'):?>
-        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
-        <?php endif;?>
-    </button>
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title"><strong><?= $this->translate('Support us')?></strong></span>
-</div>
-<?php else:?>
-<div class="modal-header-soft round5top ui-draggable-handle topm20">
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title"><a href="../"><img
-			src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30"
-			alt="DEMODYNE - Shape your Society" /></a> - <strong><?= $this->translate('Support us')?></strong></span>
-</div>
-<?php endif;?>
+
 <div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<div class="row">
-		<div class="col-md-12 text-center">
-			<img src="<?= $this->basePath('img/uc.png') ?>">
-			<p>La page <span class="orange big">DEMODYNE / <?= $this->translate('Support us')?></span> <?= $this->translate('is under construction')?>.<br />
-<?= $this->translate('Please come back later. Thank you')?>!</p>
-			<p>&nbsp;</p>
+
+		<div class="col-md-12">
+
+<h3>Soutenez Demodyne !</h3>
+<hr>
+    
+    <p>Si vous avez cliqué sur ce lien, c'est probablement que pour vous l'amélioration de nos processus et outils démocratiques mérite bien qu'on y consacre au moins le prix de quelques cafés... et plus si capacité :)</p>
+    <p>Demodyne est portée par une association à but non-lucratif et son développement passe par des financements multiples et variés pour préserver son indépendance - pour nous, il n'est pas question d'être tributaires d'une subvention ou d'un sponsor en particulier.</p>
+    <p>Les comptes Partenaires permettront à terme, nous l'espérons, de fournir un revenu stable pour couvrir les frais fixes de la plateforme (frais de serveur et de domaine, petite équipe globale pour le développement, la maintenance et la communication avec la communauté). Mais dans l'immédiat nous ne monétisons pas la plateforme qui est en beta ouverte.</p>
+    <p>Nous avons décidé de lancer des crowdfundings réguliers de petite taille pour financer les vagues successives de nouvelles fonctionnalités en développement. En attendant la formalisation de ce processus et un plan financier plus détaillé pour la seconde moitié de 2016, nous évaluons nos besoins à environs 5000 euros pour le trimestre suivant le lancement de la beta - soit d'ici à mi-juillet.</p>
+    <p>L'association est jeune et n'a pas encore demandé la reconnaissance d'utilité publique (prévu cette année), vous ne pouvez donc pas à ce jour profiter de la défiscalisation partielle de vos dons directs. Pas de souci, ils vous suffit de donner moins, nous vous en serons tout aussi reconnaissants :)</p>
+    <p> Envoyez vos dons par chèque avec vos coordonnées et message d'accompagnement à:<br>
+      Association "Direct Governance Initiative"<br>
+      1, rue de la Fontaine<br>
+      68300 Saint-Louis</p>
+    <p> Brique par brique, avec votre aide, nous serons en mesure de construire une structure solide pour la démocratie réelle de demain.<br>
+      Histoire que nos enfants déterminent les politiques et dépenses publiques au lieu de les subir...<br>
+      <br>
+      Merci d'avance pour votre soutien,<br>
+      Toute l'équipe DEMODYNE</p>
+
 		</div>
+
 	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div><!-- end jumbotron -->
 
-<!-- /pages/support-fr -->
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+<?= $this->partial('partial/page-header.phtml', ['title' => '<i class="fa fa-university size15em"></i> '.$this->translate('Administration Profile Details')])?>
+
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;" id="user-profile-view">
+	<div class="row">
+		<div class="col-md-2 col-xs-4 tabbable tabs-left">
+			<ul class="nav nav-tabs">
+				<div class="text-center bot10">
+					<img src="<?=$this->basePath($user->getUsrPicture()) ?>"
+						valign="middle" width="100%" alt="<?= $user->getUsrName() ?>"
+						title="<?= $user->getUsrName() ?>" class="img-thumbnail"
+						style="max-width: 200px !important;" />
+				</div>
+				<li class="active"><a href="#user-profile-info" data-toggle="tab"><i
+						class="fa fa-info-circle"></i> <?= $this->translate('General Info')?></a></li>
+				<li><a href="#user-profile-proplist" data-toggle="tab"><i
+						class="fa fa-bullhorn"></i> <?= $this->translate('List of Measures')?></a></li>
+				<li><br /></li>
+			</ul>
+		</div>
+		<!--/2-->
+		<div class="col-md-10 col-xs-8 tab-content">
+			<!-- GENERAL INFO -->
+			<div class="tab-pane active" id="user-profile-info">
+				<?= $this->userInfo?>
+			</div>
+			<!-- /INFO -->
+			<!-- MEASURES LIST -->
+			<div class="tab-pane" id="user-profile-proplist">
+            <?= $this->userMeasures?>
+            </div>
+			<!-- /MEASURES LIST -->
+
+		</div>
+		<!--/10-->
+	</div>
+	<!-- /row -->
+</div>
+<!-- /j -->
+<script type="text/javascript">
+		$(function () {
+// 			updateContextualHelp('#user-profile-view');
+		});
+	</script>

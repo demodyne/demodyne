@@ -1,0 +1,234 @@
+
+<div class="row" id="event-invite-attendees"
+	data-selected-user-stat="<?=$this->translate('Selected to invite')?>"
+	data-not-invited="<?=$this->translate('Not invited')?>"
+	data-no-users-found="<?=$this->translate('No users found. Please modify your search input.')?>"
+	data-search-users="<?= $this->translate('Please use the search input to display user list (3 chars minimum).')?>"
+	data-search-users-url="<?= $this->url('user/profile', array('action'=>'search-users', 'results'=>30, 'search' => ''), array('force_canonical' => true));?>"
+	>
+
+		<div class="col-md-12">
+
+
+
+
+
+
+	<div class="row">
+		<div class="col-md-2">
+
+<span class="fa-stack fa-4x">
+  <i class="fa fa-circle fa-stack-2x blue"></i>
+  <i class="fa fa-paper-plane fa-stack-1x white"></i>
+</span>
+
+
+		</div>
+		<div class="col-md-10">
+			<p><?=$event->isSession()?$this->translate('You are about to send invitation to your session:'):$this->translate('You are about to send invitation to your event:')?></p>
+
+
+
+
+<div style="padding-left: 20px;">
+				<strong><span class="big"><?=$event->getEventName()?></span></strong><br>
+					<?php if ($event->getEventLevel()==$this->configItem('demodyne.level.city')):?>
+		<i class="fa fa-bullseye"></i> <?=sprintf($this->translate('Scope: City %s'), $event->getCity()->getCityName())?>
+	<?php elseif ($event->getEventLevel()==$this->configItem('demodyne.level.region')):?>
+		<i class="fa fa-bullseye"></i> <?=sprintf($this->translate('Scope: Region %s'), $event->getCity()->getRegion()->getRegionName())?>
+	<?php elseif ($event->getEventLevel()==$this->configItem('demodyne.level.country')):?>
+		<i class="fa fa-bullseye"></i> <?=sprintf($this->translate('Scope: Country <img src="/img/flags/%s.png" style="margin-bottom: 4px;" width="18" height="12"> %s'), str_replace(' ', '-', $event->getCity()->getCountry()->getCountryName()), $event->getCity()->getCountry()->getCountryName())?>
+<?php endif;?>
+				<br>
+    <?php
+    $eventStartDate = $event->getEventStartDate();//->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+    $eventEndDate = $event->getEventEndDate();//->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+    $countryFormat = $event->getCity()->getCountry()->getCountryFormat();
+    ?>
+				 <span
+					class="glyphicon glyphicon-calendar"></span> <?=$this->dateFormat(
+        $eventStartDate,
+        IntlDateFormatter::MEDIUM, // date
+        IntlDateFormatter::SHORT, // time
+        $countryFormat
+    );?>
+						<i class="fa fa-arrow-right"></i>
+    <?=$eventEndDate->format('d/m/Y') == $event->getEventStartDate()->format('d/m/Y')?
+        $this->dateFormat(
+            $eventEndDate,
+            IntlDateFormatter::NONE, // date
+            IntlDateFormatter::SHORT, // time
+            $countryFormat
+        )
+        :
+        $this->dateFormat(
+            $eventEndDate,
+            IntlDateFormatter::MEDIUM, // date
+            IntlDateFormatter::SHORT, // time
+            $countryFormat
+        )?>
+    <br>
+				<i class="fa fa-map-marker size15em"></i> <?=$event->getEventLocation()?> - <?=$event->getCity()->getCityName()?> (<?=$event->getCity()->getCityPostalcode()?>)
+</div>
+
+		</div>
+	</div>
+
+	<!-- /row -->
+
+
+
+
+<hr>
+
+			<div class="row">
+		<div class="col-md-12">
+			<p><span><?= $this->translate('Use the search bar to find users, tick the box next to their name to select them.<br>Once you have selected all users you want to invite, click on the orange Invite button.')?></span><br>
+			<?php if ($event->getEventLevel()==$this->configItem('demodyne.level.city')):?>
+				<?=sprintf($this->translate('You can choose to invite users from <b>your contacts</b>, from <b>your city, %s</b>, or search from <b>all users</b>.'), $user->getCity()->getCityName())?>
+			<?php elseif ($event->getEventLevel()==$this->configItem('demodyne.level.region')):?>
+				<?=sprintf($this->translate('You can choose to invite users from <b>your contacts</b>, from <b>your region, %s</b>, or search from <b>all users</b>.'), $user->getCity()->getRegion()->getRegionName())?>
+			<?php elseif ($event->getEventLevel()==$this->configItem('demodyne.level.country')):?>
+				<?=$this->translate('You can choose to invite users from <b>your contacts</b> or search from <b>all users</b>.') /*$user->getCity()->getCountry()->getCountryName()*/?>
+			<?php endif;?>
+<br>
+
+		<?php if (count($event->getInvitations())):?>
+      <?= sprintf($this->translate('You have already invited <strong id="event-invite-attendees-count">%d</strong> users.'), count($event->getInvitations()))?>
+      <?php else:?>
+      <?= $this->translate("You haven't sent any invitations for this event yet.")?>
+      <?php endif;?>
+      </p>
+				</div>
+				</div>
+
+<hr>
+
+	<div class="row">
+		<div class="col-md-6 col-xs-12">			<?= $this->translate('Search in')?>: <br>
+			<div class="btn-group" role="group" aria-label="...">
+				<button type="button" class="btn btn-sm btn-success"
+					id="contacts-button">
+        	<?= $this->translate('My Contacts (<span id="no-users">0</span>)')?>
+        </button>
+      	<?php if ($event->getEventLevel()!=$this->configItem('demodyne.level.country')):?>
+        <button type="button" class="btn btn-sm btn-default"
+					id="level-button">
+        	<?php if ($event->getEventLevel()==$this->configItem('demodyne.level.city')):?>
+				<?= $this->translate('My City (<span id="no-users">0</span>)')?>
+			<?php elseif ($event->getEventLevel()==$this->configItem('demodyne.level.region')):?>
+				<?= $this->translate('My Region (<span id="no-users">0</span>)')?>
+			<?php endif;?>
+		</button>
+        <?php endif;?>
+        <button type="button" class="btn btn-sm btn-default"
+					id="all-button">
+        	<?= $this->translate('All users (<span id="no-users">0</span>)')?>
+        </button>
+			</div>
+		</div>
+		<!-- /6 -->
+		<div class="col-md-6 col-xs-12 text-right">			<?= $this->translate('View users')?>: <br>
+			<div class="btn-group" role="group" aria-label="...">
+				<button type="button" class="btn btn-sm btn-default"
+					id="selected-button">
+        	<?= $this->translate('Selected (<span id="event-invite-attendees-no-invitations">0</span>)')?>
+        </button>
+      	<button type="button" class="btn btn-sm btn-default"
+					id="invited-button">
+        	<?= $this->translate('Invited (<span id="no-users">0</span>)')?>
+        </button>
+			</div>
+		</div>
+		<!-- /6 -->
+	</div>
+	<hr>
+
+
+
+	<?= $this->partial('dgi-module/event/invite-attendees-user-list-partial.phtml', ['id' => 'my-contacts-list', 'users' => $contacts, 'event'=>$event]); ?>
+
+  	<?php if ($event->getEventLevel()!=$this->configItem('demodyne.level.country')):?>
+  		<?= $this->partial('dgi-module/event/invite-attendees-user-list-partial.phtml', ['id' => 'level-list', 'users' => $allLevel, 'event'=>$event]); ?>
+  	<?php endif;?>
+
+	<?= $this->partial('dgi-module/event/invite-attendees-user-list-partial.phtml', ['id' => 'all-users-list', 'users' => [], 'event'=>$event, 'function' => 'user-ajax']); ?>
+
+
+	<form
+		action="<?= $this->url('event', array('action'=>'invite-attendees', 'id'=> $event->getEventUUID()))?>"
+		method="post" id="invite-form">
+
+			<?= $this->partial('dgi-module/event/invite-attendees-user-list-partial.phtml', ['id' => 'selected-list', 'users' => [], 'event'=>$event]); ?>
+
+    </form>
+
+	<?= $this->partial('dgi-module/event/invite-attendees-user-list-partial.phtml', ['id' => 'invitations-list', 'users' => $invitations, 'event'=>$event, 'select'=>false]); ?>
+
+
+  <div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+
+		<div class="col-md-12 text-right">
+			<button type="button" class="btn btn-orange" id="event-invite-attendees-invite-button"
+				disabled="disabled">
+				<i class="fa fa-users"></i> <?= $this->translate('Invite <span id="event-invite-attendees-no-invitations">0</span> selected users')?>
+      </button>
+			<button type="button" class="btn btn-default" id="cancel"
+				data-dismiss="modal">
+				<i class="fa fa-ban" aria-hidden="true"></i> <?= $this->translate('Close')?>
+      </button>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+input[type=checkbox] {
+  display: none;
+}
+
+label input[type=checkbox] ~ span {
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #888;
+  padding: 1px;
+  height: 20px;
+  width: 20px;
+}
+
+label input[type=checkbox]:checked ~ span {
+  /* image: Picol.org, cc-by 3.0, https://commons.wikimedia.org/wiki/File:Accept_Picol_icon.svg */
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><path d="M14 18L26 6l4 4-16 16L4 16l4-4z"/></svg>');
+  background-size: 100%;
+}
+</style>
+
+<script type="text/javascript">
+            $(function () {
+
+                $('.modal-dialog').width(700);
+
+            	eventInviteAttendeesHandlers();
+            });
+        </script>

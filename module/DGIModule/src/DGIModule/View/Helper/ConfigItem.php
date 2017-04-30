@@ -1,15 +1,14 @@
 <?php
-/**
- * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
- * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
- */
 
 namespace DGIModule\View\Helper;
 
 use Zend\View\Helper\AbstractHelper;
 use Zend\ServiceManager\ServiceManager; 
 
+/**
+ * Returns total value (with tax)
+ *
+ */
 class ConfigItem extends AbstractHelper
 {
     /**
@@ -35,10 +34,14 @@ class ConfigItem extends AbstractHelper
                 $returnValue = $config;
             }
         }
+        /*if(isset($config[$value])) {
+            return $config[$value];
+        }*/
         if (isset($returnValue)) {
             return $returnValue;
         }
         return NULL;
+        // we could return a default value, or throw exception etc here
     }
 
     /**

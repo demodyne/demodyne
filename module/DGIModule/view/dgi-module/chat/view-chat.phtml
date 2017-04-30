@@ -1,0 +1,176 @@
+
+	<div class="row">
+		<div class="col-md-12">
+
+
+			<div class="row ">
+				<div class="col-md-9">
+					<div class="big bot10">
+							</div>
+				</div>
+				<div class="col-md-3 text-right"></div>
+			</div>
+			<div class="panel panel-default">
+						<div class="panel-body" style="min-height: 300px;">
+			<?php if ($chat->getUsr()&& $chat->getChatOpened()):?>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="big bot10">
+						    
+            					<div 
+                                    class="admin-chat-message">
+                                    
+							<div class="table-layout">
+							<div class="table-cell  fixed-width-30">
+							<a
+										href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$chat->getUsr()->getUsrUUID()));?>"
+										data-title="<?=sprintf($this->translate("%s's mini profile"), $chat->getUsr()->getUsrName())?>"
+										data-id="<?=$chat->getUsr()->getUsrUUID()?>"
+										id="chat-view-chat-moderator-profile">
+<img class="round5" src="<?=$chat->getUsr()->getUsrPicture()?>" height="24" width="24" title="<?=$chat->getUsr()->getUsrName()?>"></a>
+							</div>
+							<div class="table-cell">
+<?= $this->translate('Moderator&apos;s Word')?>:
+							</div>
+						</div>
+							<div class="table-layout top5">
+							<?php if ($chat->getUsr()==$user ):?>
+							<div class="form-control desc" 
+                                contenteditable="true"
+                                data-url="<?= $this->url('chat', array('action'=>'set-title', 'id'=> $chat->getChatUUID()));?>"
+                                data-placeholder="<?=$this->translate('Title of the chat')?>" maxlength="500"
+                                title="Edit the title and hit ENTER to save."
+        						id="chat-title"
+        						style="min-height: 50px; height: 50px; max-height: 50px; overflow: auto"><?=$chat->getChatTitle()?>
+        					</div>
+        					<?php else:?>
+							<div  id="chat-title" class="table-cell small" style="background-color: #f3eee9!important; padding: 5px; min-height: 50px; height: 50px; max-height: 50px; overflow: auto">
+							</div>
+							<?php endif;?>
+						</div>
+
+            					</div>
+    					    
+					
+							</div>
+				</div>
+			</div>
+			<?php endif;?>
+			<div class="row">
+				<div class="col-md-12">
+
+
+
+					
+
+							<div id="chat-message-list"
+								 data-message-list="<?= $this->url('chat', array('action'=>'message-list', 'id'=> $chat->getChatUUID()));?>"
+								 data-mini-profile-title="<?=$this->translate('%username%\'s mini profile')?>"
+								 data-chat-filter-uuid=""
+								 data-entity=""
+								 data-entity-lists="[]"
+								 data-block-user=""
+								 data-chat-opened="<?=$chat->getChatOpened()?>"
+								 data-chat-id="<?=$chat->getChatUUID()?>"
+								 data-deleted="<?=$this->translate('Deleted')?>" 
+								 data-back-full-chat="<?=$this->translate('Back to full chat')?>"
+								 data-says="<?=$this->translate('says:')?>" 
+								 data-you-have-been-blocked="<?=$this->translate('You have been blocked by the moderator')?>"
+								 data-no-messages="<?=$this->translate('No messages yet. Be the first to comment.')?>"
+								 <?php if ($chat->getChatEntityType()=='session'):?>
+								 data-blocked-user-text="<?=$this->translate('has been blocked by session owner')?>"
+								 data-unblocked-user-text="<?=$this->translate('has been unblocked by session owner')?>"
+								 data-comment-element="<?=$this->translate('Comment on idea:')?>"
+								 <?php else:?>
+								 data-blocked-user-text="<?=$this->translate('has been blocked by owner')?>"
+								 data-unblocked-user-text="<?=$this->translate('has been unblocked by owner')?>"
+								 data-comment-element="<?=$this->translate('Comment on element:')?>"
+								
+								 <?php endif;?>
+								 ></div>
+
+
+						</div>
+					</div>
+
+
+
+
+
+
+
+				</div>
+			</div>
+
+		</div>
+		<!--/7-->
+
+
+	</div>
+	<!--/r-->
+
+
+<?php if ($input):?>
+	<div class="row">
+		<div class="col-md-12">
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="big bot10"><?= $this->translate('Message')?> 
+							</div>
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<form id="chat-add-message-form" method="post" class="form-horizontal"
+						action="<?= $this->url('chat', array('action'=>'add-message', 'id'=> $chat->getChatUUID()));?>">
+							<div class="table-layout">
+							
+							<!--<div class="table-cell form-group visible-xs">
+								<input style="width: 75%; margin-left: 15px;" name="message" id="chat-message" class="form-control form-control-lg input-group" autocomplete="off"> 
+							</div>-->
+							
+							<div class="table-cell form-group">
+								<input name="message" id="chat-message" class="form-control form-control-lg input-group" autocomplete="off"> 
+							</div>
+
+								<div class="table-cell  fixed-width-10"> </div>
+							<div class="table-cell  fixed-width-40">
+
+								<button type="submit" class="btn btn-orange"
+									id="chat-add-message-button">
+									<i class="fa fa-paper-plane"></i> <span><?= $this->translate('Send')?></span>
+								</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			
+
+		</div>
+		<!--/7-->
+
+	</div>
+	<!--/r-->
+<?php endif;?>
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+		$(function () {
+
+			chatViewChatHandlers();
+			
+		});
+
+	</script>

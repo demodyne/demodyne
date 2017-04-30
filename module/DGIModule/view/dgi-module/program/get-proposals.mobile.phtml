@@ -1,0 +1,227 @@
+<?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('program', array('action'=>'get-proposals', 'id'=>$program->getProgUUID())), 'prog-prop', $limit, $sort, $order); ?>
+
+<div id="program-get-proposals"
+
+	data-url="<?= $this->url('program', ['action'=>'get-proposals'], true);?>">
+  <?php if ($owner):?>
+  <div class="row bot10">
+    <div class="col-md-12">
+    <?php
+    $levelName = '';
+    $levels = $this->configItem('demodyne.level');
+    if (array_search($program->getProgLevel(), $levels)=='city') {
+        $levelName = $program->getCity()->getFullCity()?$program->getCity()->getFullCity()->getCityName():$program->getCity()->getCityName();
+    }
+    elseif (array_search($program->getProgLevel(), $levels)=='region') {
+        $levelName = $program->getCity()->getRegion()->getRegionName();
+    }
+    elseif (array_search($program->getProgLevel(), $levels)=='country') {
+        $levelName = $program->getCity()->getCountry()->getCountryName();
+    }
+    
+    ?>
+    
+    
+      <button type="button"
+
+				data-url="<?= $this->url('program', array('action'=>'add-proposals-from-city', 'id' => $program->getProgUUID()));?>"
+
+				class="btn btn-orange" id="add-remove-proposals"
+
+				data-dialog-title="<?=sprintf($this->translate('Add/Remove Proposals/Measures in my Program for %s'), $levelName)?>"> <i class="fa fa-plus-circle"></i>
+      <?= $this->translate('Add Proposals & Measures')?>
+      </button>
+
+    </div>
+    
+    <!-- /12 --> 
+    
+  </div>
+  
+  <!-- /row -->
+  
+  <hr>
+  <?php endif;?>
+  <div class="row">
+    <div class="col-md-4"> 
+      <span class="title-mobile"><?= sprintf($this->translate('%d Linked Items'), count($program->getProposals()))?></span>
+       </div>
+    
+    <!-- /6 -->
+    
+    <div class="col-md-8 bot10">
+      <div class="fltr">
+        <ul class="nav">
+          <li class="dropdown"><a class="dropdown-toggle"
+
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+
+							class="label label-default"><i class="fa fa-caret-down"></i> </span> </a>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'priority', 'page'=>1, 'order'=>'desc'), true);?>">
+                <?= $this->translate('Priority')?>
+                </a></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>">
+                <?= $this->translate('Name')?>
+                </a></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'user', 'page'=>1, 'order'=>'desc'), true);?>">
+                <?= $this->translate('Owner')?>
+                </a></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'category', 'page'=>1, 'order'=>'desc'), true);?>">
+                <?= $this->translate('Category')?>
+                </a></li>
+              <li class="divider"></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'published-date', 'page'=>1, 'order'=>'desc'), true);?>">
+                <?= $this->translate('Published date')?>
+                </a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="fltr">
+        <ul class="nav">
+          <li class="dropdown"><a class="dropdown-toggle"
+
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+
+							class="label label-default"><i class="fa fa-caret-up"></i> </span> </a>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'priority', 'page'=>1, 'order'=>'asc'), true);?>">
+                <?= $this->translate('Priority')?>
+                </a></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>">
+                <?= $this->translate('Name')?>
+                </a></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'user', 'page'=>1, 'order'=>'asc'), true);?>">
+                <?= $this->translate('Owner')?>
+                </a></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'category', 'page'=>1, 'order'=>'asc'), true);?>">
+                <?= $this->translate('Category')?>
+                </a></li>
+              <li class="divider"></li>
+              <li><a id="page-prog-prop"
+
+								href="<?= $this->url('program', array('action'=>'get-proposals', 'sort'=>'published-date', 'page'=>1, 'order'=>'asc'), true);?>">
+                <?= $this->translate('Published date')?>
+                </a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+    
+    <!-- /6 --> 
+    
+  </div>
+  
+  <!-- /row -->
+  
+  <?php if (count($pagedProposals)>0):?>
+  <?php foreach ($pagedProposals as $proposalScn): ?>
+  <?php $proposal = $proposalScn->getProp();?>
+  <hr>
+  
+  
+  
+<div class="row">
+<div class="col-xs-12">
+<div class="pull-left" style="min-width: 42px!important">
+<img src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatCat()->getCatImage() ?>" height="34" width="34" class="round5">
+      <br>
+      <?php if ($proposal->isMeasure()):?>
+      <span	title="<?= $this->translate('Measure')?>"><i
+
+				class="fa fa-university size15em"></i></span>
+      <?php else:?>
+      <span	title="<?= $this->translate('Proposal')?>"><i
+
+				class="fa fa-bullhorn size15em"></i></span>
+      <?php endif;?>
+</div>
+
+<div style="margin-left: 42px!important">
+	<a
+
+				href="<?= $this->url($proposal->isMeasure()?'measure':'proposal', array('id'=>$proposal->getPropUUID()));?>"
+
+				style="text-decoration: none !important;"
+
+				id="program-get-proposals-list-item"> <span class="big">
+      <?= $proposal->getPropSavedName() ?>
+      </span></a> <?= $proposal->getPropAggregatedScore() ?><br>
+      <?= $this->translate('Published by')?>
+      <a
+
+				href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
+
+				data-title="<?= $proposal->getUsr()->getUsrName() ?>'s <?= $this->translate('mini profile')?>"
+
+				data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
+
+				id="program-get-proposals-view-profile"> <span class="badge">
+      <?= $proposal->getUsr()->getUsrName() ?>
+      </span></a><br>
+      <i class="fa fa-clock-o"></i>
+      <?= $proposal->getPropPublishedDate()->format('d/m/Y') ?>
+	</div>
+	</div>
+	</div>
+  
+  
+  
+
+  <?php endforeach;?>
+  <hr>
+  <div class="row">
+    <div class="col-md-12">
+      <?= $paging; ?>
+    </div>
+    
+    <!--/12--> 
+    
+  </div>
+  
+  <!-- /row -->
+  
+  <?php else:?>
+<table class="table table-condensed table-hover table-striped"><tr><td>  
+  <?php if ($user==$program->getUsr()):?>
+  <?= $this->translate('This program is empty. Fill it with Citizen Proposals and Official Measures.')?>
+  <?php else:?>
+	<?= $this->translate('This program is empty.')?>
+  <?php endif;?>
+  
+  </td></tr></table>
+  <?php endif;?>
+</div>
+
+<!-- /jumbotron --> 
+
+<script type="text/javascript">
+
+	$(function(){  
+
+		programGetProposalsHandlers(<?=$owner?>)
+
+	});
+
+</script> 

@@ -1,0 +1,165 @@
+
+<div id="<?=$this->id?>">
+
+	<div id="sort-search">
+		<div class="row">
+			<div class="col-md-6">				<div class="form-group input-group">				<input style="min-height: 37px !important;" type="text" class="form-control form-control-sm" id="<?= (isset($this->function) && $this->function=='user-ajax')?'search-users':'search-text' ?>"
+					placeholder="<?=$this->translate('Search in username and city')?>" />					<span class="input-group-btn">										<button type="submit" class="btn btn-default">											<i class="fa fa-search fa-fw"></i>				          </button>									</span>
+			</div></div>
+			<div class="col-md-6">
+				<div class="fltr">
+					<ul class="nav">
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#" aria-expanded="false"> <span
+								class="label label-default"><i class="fa fa-caret-down"></i> </span>
+								<!--  by <span class="caret"></span> -->
+						</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li><a id="sort-name-desc" href="#">
+                <?= $this->translate('Name')?>
+                </a></li>
+								<li><a id="sort-city-desc" href="#">
+                <?= $this->translate('City')?>
+                </a></li>
+								<li><a id="sort-state-desc" href="#">
+                <?= $this->translate('Status')?>
+                </a></li>
+							</ul></li>
+					</ul>
+				</div>
+				<div class="fltr">
+					<ul class="nav">
+						<li class="dropdown"><a class="dropdown-toggle"
+							data-toggle="dropdown" href="#" aria-expanded="false"> <span
+								class="label label-default"><i class="fa fa-caret-up"></i> </span>
+								<!-- by <span class="caret"></span> -->
+						</a>
+							<ul class="dropdown-menu dropdown-menu-right">
+								<li><a id="sort-name-asc" href="#">
+                <?= $this->translate('Name')?>
+                </a></li>
+								<li><a id="sort-city-asc" href="#">
+                <?= $this->translate('City')?>
+                </a></li>
+								<li><a id="sort-state-asc" href="#">
+                <?= $this->translate('Status')?>
+                </a></li>
+							</ul></li>
+					</ul>
+				</div>
+				<div class="fltr right10 top5">
+        <?= $this->translate('Sort by <span id="sort-value" data-sort="name-up">Name <i class="fa fa-arrow-up"></i></span> ')?>
+
+      </div>
+			</div>
+			<!--/6-->
+		</div>
+		<!-- /row -->
+		<hr>
+	</div>
+
+	<div id="user-list"
+		style="width: 100%; height: 100%; max-height: 300px; overflow-x: hidden">
+
+        <?php /** @var \DGIModule\Entity\User $usr */
+        foreach($this->users as $index => $usr): ?>
+            <? if(!$usr->getCity()) continue;?>
+		<div id="user" data-id="<?=$usr->getUsrUUID()?>">
+			<div class="row">
+				<div class="col-md-1 col-xs-1"
+					style="min-width: 45px; max-width: 45px;">
+        			<?php if (!$usr->isInvited($this->event)):?>
+        			<label><input type="checkbox" name="contact[]"
+        						value="<?=$usr->getUsrUUID()?>"
+        						<?=$usr->isInvited($this->event)?'checked="checked" disabled="disabled"':''?> />
+        						<span></span></label>
+        			<?php endif;?>
+        		</div>
+				<div class="col-md-1 col-xs-1"
+					style="min-width: 45px; max-width: 45px;">
+					<a
+						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$usr->getUsrUUID()));?>"
+						data-title="<?= $usr->getUsrName() ?>'s <?= $this->translate('mini profile')?>"
+						data-id="<?=$usr->getUsrUUID()?>" id="view-profile"><img
+						src="<?=$this->basePath($usr->getUsrPicture())  ?>"
+						valign="middle" width="36" height="36"
+						title="<?= $usr->getUsrName() ?>" class="round5" /></a>
+
+				</div>
+				<div class="col-md-3 col-xs-3">
+					<a
+						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$usr->getUsrUUID()));?>"
+						data-title="<?= $usr->getUsrName() ?>'s <?= $this->translate('mini profile')?>"
+						data-id="<?=$usr->getUsrUUID()?>" id="view-profile"> <span
+						id="username"><?=$usr->getUsrName()?></span></a><br> <span
+						class="badge"><?=$usr->isAdministration()?$this->translate('Administration'):($usr->isPartner()?$this->translate('Partner'):$this->translate('Citizen'))?></span>
+				</div>
+				<div class="col-md-4">
+					<i class="fa fa-map-marker size15em"></i>
+					<span id="usercity"><?=$usr->getCity()->getCityName()?></span> <br>
+					<span id="user-region"><?=$usr->getCity()->getRegion()->getRegionName()?></span><br>
+					<span id="user-country"><img src="/img/flags/<?= str_replace(' ', '-', $usr->getCity()->getCountry()->getCountryName())?>.png" style="margin-bottom: 4px;" width="18" height="12"><?=$usr->getCity()->getCountry()->getCountryName()?></span>
+				</div>
+				<div class="col-md-3 col-xs-3 text-right">
+                	<?php if ($usr->isInvited($this->event)):?>
+                		<?php if ($usr->isAttending($this->event)):?>
+                			<span class="green" id="userstat"><?= $this->translate('Invited - accepted')?></span>
+            			<?php else:?>
+            				<span class="blue" id="userstat"><?= $this->translate('Invited - pending')?></span>
+            			<?php endif;?>
+        			<?php else:?>
+        				<span class="darkred" id="userstat"><?= $this->translate('Not invited')?></span>
+        			<?php endif;?>
+        		</div>
+			</div>
+			<!-- /r -->
+			<hr>
+		</div>
+		<!-- /row -->
+
+
+
+  		<?php endforeach; ?>
+</div>
+
+
+	<div id="no-users" <?=count($this->users)?'style="display: none;"':''?>>
+		<div class="row">
+			<div class="col-md-12">
+			<?php if (isset($this->function) && $this->function=='eventInviteAttendeesAllUserListHandlers'):?>
+				<?= $this->translate('Please use the search input to display user list (3 chars minimum).')?>
+      		<?php else:?>
+      			<?= $this->translate('There are no Users to display.')?>
+  			<?php endif;?>
+		</div>
+		</div>
+			<hr>
+	</div>
+
+	<?php if (!isset($this->selected) || $this->selected):?>
+	<div class="row">
+			<div class="col-md-12">
+			<div class="btn-group" role="group" aria-label="...">
+				<button type="button" class="btn btn-sm btn-default" id="select">
+              		<?= $this->translate('Select all')?>
+              	</button>
+				<button type="button" class="btn  btn-sm btn-default" id="deselect">
+                  	<?= $this->translate('Deselect all')?>
+              	</button>
+              	</div>
+			</div>
+
+		</div>
+	<?php endif;?>
+</div>
+
+
+
+
+<script type="text/javascript">
+            $(function () {
+
+            		eventInviteAttendeesUserListHandlers('<?=$this->id?>');
+
+            });
+        </script>

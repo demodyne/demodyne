@@ -1,0 +1,54 @@
+
+
+  
+  		<?php foreach($this->users as $index => $usr): ?>
+		<div id="user" data-id="<?=$usr->getUsrUUID()?>">
+			<div class="row">
+				<div class="col-md-1 col-xs-1"
+					style="min-width: 45px; max-width: 45px;">
+        			<?php if ($usr!=$user):?>
+        			<label><input type="checkbox" name="contact[]"
+        						value="<?=$usr->getUsrUUID()?>" />
+        						<span></span></label>
+        			<?php endif;?>
+        		</div>
+				<div class="col-md-1 col-xs-1"
+					style="min-width: 45px; max-width: 45px;">
+					<a
+						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$usr->getUsrUUID()));?>"
+						data-title="<?= $usr->getUsrName() ?>'s <?= $this->translate('mini profile')?>"
+						data-id="<?=$usr->getUsrUUID()?>" id="view-profile"><img
+						src="<?=$this->basePath($usr->getUsrPicture())  ?>"
+						valign="middle" width="36" height="36"
+						title="<?= $usr->getUsrName() ?>" class="round5" /></a>
+
+				</div>
+				<div class="col-md-3 col-xs-3">
+					<a
+						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$usr->getUsrUUID()));?>"
+						data-title="<?= $usr->getUsrName() ?>'s <?= $this->translate('mini profile')?>"
+						data-id="<?=$usr->getUsrUUID()?>" id="view-profile"> <span
+						id="username"><?=$usr->getUsrName()?></span></a><br> <span
+						class="badge"><?=$usr->isAdministration()?$this->translate('Administration'):($usr->isPartner()?$this->translate('Partner'):$this->translate('Citizen'))?></span>
+				</div>
+				<div class="col-md-4">
+					<i class="fa fa-map-marker size15em"></i> 
+					<span id="usercity"><?=$usr->getCity()->getCityName()?></span>,
+					<span id="user-region"><?=$usr->getCity()->getRegion()->getRegionName()?></span>,
+					<span id="user-country"><img src="/img/flags/<?= str_replace(' ', '-', $usr->getCity()->getCountry()->getCountryName())?>.png" style="margin-bottom: 4px;" width="18" height="12"><?=$usr->getCity()->getCountry()->getCountryName()?></span>  
+				</div>
+				<div class="col-md-3 col-xs-3 text-right" id="status">
+                	
+        				<span class="label <?= $usr!=$user?'label-default':'label-success'?>"><i class="fa fa-user"></i> <span
+        						class="size15em" id="userstat"><?= $usr!=$user?$this->translate('Not invited'):$this->translate('This is me')?></span></span>
+        							
+        		</div>
+			</div>
+			<!-- /r -->
+			<hr>
+		</div>
+		<!-- /row -->
+				
+				
+
+  		<?php endforeach; ?>

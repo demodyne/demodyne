@@ -1,0 +1,507 @@
+<?php $cityName = $user->getCity()?($user->getCity()->getFullCity()?
+                    $user->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getCity()->getDistrictName().'</i></span>':
+                    $user->getCity()->getCityName()):''?>
+
+
+
+
+
+
+<div id="home-step-user-0">
+
+
+<div class="text-center size15em bot20">
+<?= sprintf($this->translate('Hi %s'), $user->getUsrName())?>,<br>
+<span class="size2em"><?=$this->translate('Where do you want to contribute?')?></span>
+</div><!--/center-->
+
+
+
+<!--city-->
+<div class="panel panel-default">
+<div class="panel-body wbr">
+
+
+<div class="row">
+	<div class="col-xs-12">
+<div class="pull-left" style="min-width: 100px!important">
+<a href="#" id="city-level-chooser"><img src="<?= $this->basePath('img/city.png') ?>" width="100" alt="City"></a>
+</div>
+<div style="margin-left: 110px!important">
+	<p><br>
+<?=$this->translate('My City')?><br><strong><span class="size15em"><?=$cityName?></span></strong></p>
+	</div>
+</div>
+</div>
+	<hr>
+	
+	<div>
+	<?php $cnt = $this->count?$this->count['city']:['proposal' => [
+                    'debate' => 0,
+                    'vote' => 0,
+                ],
+                'measure' => [
+                    'vote' => 0,
+                ],];?>
+<?php if ($cnt['proposal']['debate']!=0):?>
+    	<?= sprintf($this->translate('<span class="badge">%d</span> Proposals <strong>open to debate</strong>'), $cnt['proposal']['debate'])?> <br>
+<?php endif;?>
+<?php if ($cnt['proposal']['vote']!=0 ):?>
+    <?= sprintf($this->translate('<span class="badge">%d</span> Proposals <strong>awaiting your vote!</strong>'), $cnt['proposal']['vote'])?><br>
+<?php endif;?>
+<?php if ($cnt['measure']['vote']!=0):?>
+	<?= sprintf($this->translate('<span class="badge">%d</span> Official <strong>measures awaiting your vote!</strong>'), $cnt['measure']['vote'])?><br>
+<?php endif;?>
+</div>
+	
+		</div>
+	</div>
+	
+<!--region-->
+<div class="panel panel-default">
+<div class="panel-body wbr">
+
+
+<div class="row">
+	<div class="col-xs-12">
+<div class="pull-left" style="min-width: 100px!important">
+<a href="<?=$this->url('region')?>" id="region-level-chooser"><img src="<?= $this->basePath('img/Region_select.png') ?>" width="100" alt="Region"></a>
+</div>
+<div style="margin-left: 110px!important">
+	<p><br>
+<?=$this->translate('My Region')?><br><strong><span class="size15em"><?=$user->getCity()?$user->getCity()->getRegion()->getRegionNameSolo():''?></span></strong></p>
+	</div>
+</div>
+</div>
+	<hr>
+	
+	<div>
+<?php $cnt = $this->count?$this->count['region']:['proposal' => [
+                    'debate' => 0,
+                    'vote' => 0,
+                ],
+                'measure' => [
+                    'vote' => 0,
+                ],];?>
+<?php if ($cnt['proposal']['debate']!=0):?>
+    	<?= sprintf($this->translate('<span class="badge">%d</span> Proposals <strong>open to debate</strong>'), $cnt['proposal']['debate'])?> <br>
+<?php endif;?>
+<?php if ($cnt['proposal']['vote']!=0 ):?>
+    <?= sprintf($this->translate('<span class="badge">%d</span> Proposals <strong>awaiting your vote!</strong>'), $cnt['proposal']['vote'])?><br>
+<?php endif;?>
+<?php if ($cnt['measure']['vote']!=0):?>
+	<?= sprintf($this->translate('<span class="badge">%d</span> Official <strong>measures awaiting your vote!</strong>'), $cnt['measure']['vote'])?><br>
+<?php endif;?>
+</div>
+	
+		</div>
+	</div>
+
+<!--country-->
+<div class="panel panel-default">
+<div class="panel-body wbr">
+
+
+<div class="row">
+	<div class="col-xs-12">
+<div class="pull-left" style="min-width: 100px!important">
+<a href="<?=$this->url('country')?>" id="country-level-chooser"><img src="<?= $this->basePath('img/countries/country-'.($user->getCountry()?strtolower($user->getCountry()->getCountryCode()):'default').'.png') ?>" width="100" alt="Country"></a>
+</div>
+<div style="margin-left: 110px!important">
+	<p><br>
+<?=$this->translate('My Country')?><br><strong><span class="size15em"><?=$user->getCountry()?$user->getCountry()->getCountryName():''?></span></strong></p>
+	</div>
+</div>
+</div>
+	<hr>
+	
+	<div>
+<?php $cnt = $this->count?$this->count['country']:['proposal' => [
+                    'debate' => 0,
+                    'vote' => 0,
+                ],
+                'measure' => [
+                    'vote' => 0,
+                ],];?>
+<?php if ($cnt['proposal']['debate']!=0):?>
+    	<?= sprintf($this->translate('<span class="badge">%d</span> Proposals <strong>open to debate</strong>'), $cnt['proposal']['debate'])?> <br>
+<?php endif;?>
+<?php if ($cnt['proposal']['vote']!=0 ):?>
+    <?= sprintf($this->translate('<span class="badge">%d</span> Proposals <strong>awaiting your vote!</strong>'), $cnt['proposal']['vote'])?><br>
+<?php endif;?>
+<?php if ($cnt['measure']['vote']!=0):?>
+	<?= sprintf($this->translate('<span class="badge">%d</span> Official <strong>measures awaiting your vote!</strong>'), $cnt['measure']['vote'])?><br>
+<?php endif;?>
+</div>
+	
+		</div>
+	</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="home-step-user-1" style="display: none;">
+<div class="row">
+		<div class="col-md-8  col-xs-12 ">
+			<button type="button" class="btn btn-default" id="home-step-goto"
+					data-show="#home-step-user-0" data-hide="#home-step-user-1"><i class="fa fa-arrow-left size15em"></i> <?=$this->translate('Back')?></button>
+		</div>
+	</div>
+	<div class="row text-center size15em">
+<?= sprintf($this->translate('Hi %s'), $user->getUsrName())?>,<br> <span
+			class="size2em"><?= $this->translate('What you would like to do?')?></span>
+	</div>
+	<!--/center-->
+	<div class="row equal form-group product-chooser top20">
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+
+
+			<div class="panel panel-default">
+				<div class="panel-body text-center">
+					<a href="#" id="home-step-user-1-next" data-value="proposal"> <img
+						src="<?= $this->basePath('img/landing-proposal-icon.png') ?>" width="100" alt="Proposal">
+					</a>
+					<p>
+					<span
+						class="big"><strong><?=sprintf($this->translate('Review and vote on other citizens proposals for %s'), $cityName)?></strong></span>
+				</p>
+                </div>
+			</div>
+
+
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+
+		<div class="panel panel-default">
+				<div class="panel-body text-center">
+					<a href="#" id="home-step-user-1-next" data-value="measure"> <img
+						src="<?= $this->basePath('img/landing-official-measure-icon.png') ?>" width="100" 
+						alt="Measures">
+					</a>
+                <p>
+					<span
+						class="big"><strong><?=$this->translate('Review the official program from the Administration of')?> <?=$cityName?> </strong></span>
+				</p>
+				<?=$this->translate('Give feedback and add missing information, if any')?>
+                </div>
+			</div>
+
+
+
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+
+			<div class="panel panel-default">
+				<div class="panel-body text-center">
+					<a href="#" id="home-step-user-1-next" data-value="program"> <img
+						src="<?= $this->basePath('img/landing-scenario-icon.png') ?>" width="100"
+						alt="Program">
+					</a>
+					<p>
+					<span
+						class="big"><strong><?=sprintf($this->translate('Build my own ideal program for %s'), $cityName)?></strong></span>
+				</p>
+				<?=$this->translate('based on selected citizen proposals and official measures')?>
+                </div>
+			</div>
+
+
+
+
+		</div>
+	</div>
+	<!--/r-->
+
+	<!--/center-->
+</div>
+<!--/step 1-->
+<div id="home-step-user-proposal" style="display: none;">
+	<div class="row">
+		<div class="col-md-8  col-xs-12 ">
+			<button type="button" class="btn btn-default" id="home-step-goto"
+				data-show="#home-step-user-1" data-hide="#home-step-user-proposal"><i class="fa fa-arrow-left size15em"></i> <?=$this->translate('Back')?></button>
+		</div>
+	</div>
+	<div class="row text-center">
+		<div class="col-xs-12">
+
+			<p><img src="<?= $this->basePath('img/landing-proposal-icon.png') ?>" style="max-width:100px;"><br>
+				<span class="title-mobile"><?=$this->translate('Contributing on Citizen Proposals')?></span><hr>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('On the <strong>All Proposals Tab</strong> of your City Dashboard, you will find a list of all published proposals from registered Citizens.')?>
+				</p>
+				<p>
+					<?=$this->translate('<strong>Click on any proposal title</strong> in the list to view the Proposal page with description and status. There you can <strong>vote</strong> and<strong> post comments</strong>.')?>
+				</p>
+				<p>
+					<?=$this->translate('<strong>Click the Create New Proposal button to submit your own proposal.</strong> Enter a Description and select a Category and sub-category to help other citizens in their review. You can either <strong>publish</strong> upfront or save it as <strong>draft</strong> to make changes later.')?>
+				</p>
+				<p>
+					<?=$this->translate('Your draft proposals are saved to you <strong>Workspace Tab</strong>.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/city#allprop">
+					<button type="button" class="btn btn-orange"><?= $this->translate('Take me to the All Proposals list')?></button>
+				</a>
+			</p>
+			<p>
+				<button type="button" class="btn btn-default" id="home-step-goto"
+					data-show="#home-step-user-proposal-details"
+					data-hide="#home-step-user-proposal"><?= $this->translate('Tell me more about Proposals')?></button>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-user-proposal-details" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-user-proposal"
+		data-hide="#home-step-user-proposal-details"><i class="fa fa-arrow-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+
+			<p><img src="<?= $this->basePath('img/landing-proposal-icon.png') ?>" style="max-width:100px;"><br>
+				<span class="title-mobile"><?=$this->translate('More about Citizen Proposals')?></span><hr>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('Proposals from Citizens have a <strong>lifecycle</strong>. You can easily see their current status from the letters:')?>
+				</p>
+				<p align="center">
+					<span class="label label-success big"
+						title="<?=$this->translate('Debate step, NO implementation yet')?>">&nbsp;<i
+						class="fa fa-caret-right"></i>&nbsp;D&nbsp;</span> <span class="label label-default big"
+						title="<?=$this->translate('Voting step, NO implementation yet')?>">&nbsp;V&nbsp;</span> <span
+						class="label label-default big"
+						title="<?=$this->translate('Implementation, Planning step')?>">&nbsp;&nbsp;P&nbsp;</span> <span
+						class="label label-default big"
+						title="<?=$this->translate('Implementation, Execution step')?>">&nbsp;E&nbsp;</span> <span
+						class="label label-default big"
+						title="<?=$this->translate('Implementation, Proposal Completed')?>">&nbsp;C&nbsp;</span>
+				</p>
+				<p>
+					<?=$this->translate('In <strong>Debate</strong> phase, proposals are open to comments and can still be modified by their creator. Voting is not yet open. Debate lasts 14 days.')?>
+				</p>
+				<p>
+					<?=$this->translate('In <strong>Voting</strong> phase, proposals are open to comments but can no longer be modified by their creator. Voting lasts until the required implementation threshold has been reached and maintained for 14 days.')?>
+				</p>
+				<p>
+					<?=$this->translate('After being successfully voted by the community, a proposal enters the Implementation: <strong>Planning</strong>, <strong>Execution</strong> and <strong>Complete</strong> phases. Implementation is coordinated by selected volunteering citizens (Champions) and the Administration (work in progress feature, imminent release).')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/city#allprop">
+					<button type="button" class="btn btn-orange"><?= $this->translate('Take me to the All Proposals list')?></button>
+				</a>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-user-measure" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-user-1" data-hide="#home-step-user-measure"><i class="fa fa-arrow-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+
+			<p><img src="<?= $this->basePath('img/landing-official-measure-icon.png') ?>" style="max-width:100px;"><br>
+				<span class="title-mobile"><?=$this->translate('Reviewing the Official Measures')?></span><hr>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('On the <strong>Official Measures Tab</strong> of your City Dashboard, you will find a list of all measures announced by the Administration.')?>
+				</p>
+				<p>
+					<?=$this->translate('<strong>Click on any measure title</strong> in the list to view the Official Measure page with description and status. There you can <strong>vote</strong> and <strong>post comments</strong>.')?>
+				</p>
+				<p>
+					<?=$this->translate('If you are aware of a Measure announced by the Administration (official website, media) that is <strong>missing</strong> from the list, you can add it yourself. Don\'t forget to <strong>state your sources </strong>to enable other citizens to verify. The Administration can <strong>validate</strong> the information posted by citizens.')?>
+				</p>
+				<p>
+					<?=$this->translate('Note that if you want to make your own proposals, you should go the <a href="/city#allprop">All Proposals tab</a>.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/city#officialm">
+					<button type="button" class="btn btn-orange"><?= $this->translate('Take me to the Official Measures list')?></button>
+				</a>
+			</p>
+			<p>
+				<button type="button" class="btn btn-default" id="home-step-goto"
+					data-show="#home-step-user-measure-details"
+					data-hide="#home-step-user-measure"><?= $this->translate('Tell me more about Official Measures')?></button>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-user-measure-details" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-user-measure"
+		data-hide="#home-step-user-measure-details"><i class="fa fa-arrow-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+
+			<p><img src="<?= $this->basePath('img/landing-official-measure-icon.png') ?>" style="max-width:100px;"><br>
+				<span class="title-mobile"><?=$this->translate('More about Official Measures')?></span><hr>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('Official Measures from the Administration have a <strong>shortened lifecycle</strong>, compared with Citizens Proposals (details here).')?>
+				</p>
+				<p>
+					<?=$this->translate('There is no Debate or Voting phase, implementation starts immediately when the Administration publishes or validates an Official Measure.')?>
+				</p>
+				<p>
+					<?=$this->translate('The implementation consists of <strong>Planning</strong>, <strong>Execution</strong> and <strong>Complete</strong> phases. They\'re all coordinated by the Administration. You can easily see current status from the letters:')?>
+				</p>
+				<p align="center">
+					<span class="label label-success big" title="<?=$this->translate('Planning Phase')?>">&nbsp;<i
+						class="fa fa-caret-right"></i>&nbsp;P&nbsp;</span> <span class="label label-default big"
+						title="<?=$this->translate('Execution Phase')?>">&nbsp;E&nbsp;</span> <span
+						class="label label-default big" title="<?=$this->translate('Completed Phase')?>">&nbsp;C&nbsp;</span>
+				</p>
+				<p>
+					<?=$this->translate('Citizens can provide feedback all along through comments and <strong>satisfaction votes</strong>.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/city#officialm">
+					<button type="button" class="btn btn-orange"><?= $this->translate('Take me to the Official Measures list')?></button>
+				</a>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-user-program" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-user-1" data-hide="#home-step-user-program"><i class="fa fa-arrow-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+
+			<p><img src="<?= $this->basePath('img/landing-scenario-icon.png') ?>" style="max-width:100px;"><br>
+				<span class="title-mobile"><?=$this->translate('Build your own Program')?></span><hr>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('You can build your <strong>ideal program</strong> from the Citizen Proposals and Official Measures you agree with and that seem to work fine together.')?>
+				</p>
+				<p>
+					<?=$this->translate('In the <strong>Citizen Programs Tab</strong>, you can see: <ul> <li>an aggregated program for the city, generated from all the individual citizen programs</li> <li>a list of all individual citizen programs for the city</li> </ul>')?>
+                </p>
+				<p>
+                	<?=$this->translate('Click on the <strong>Create My Program</strong> to start building your own ideal program for the city.')?>
+                </p>
+				<p>
+                	<?=$this->translate('Give it a name and description, then you can start <strong>adding Proposals and Measures</strong> from the lists. Click <strong>Done</strong> when you\'re done.')?>
+                </p>
+                <p>
+                	<?=$this->translate('You can modify or delete your programs in your <strong>Workspace Tab</strong>. You can create one program for each level: city, region and country.')?>
+                </p>
+                <p>
+                	<?=$this->translate('Importantly, you should rank the elements of your program by <strong>order of priority</strong>. This will affect their rank in the aggregated program.')?>
+                </p>
+
+
+
+			</div>
+			<hr>
+			<p>
+				<a href="/city#allscn">
+					<button type="button" class="btn btn-orange"><?= $this->translate('Take me to the All Programs list')?></button>
+				</a>
+			</p>
+			<p>
+				<button type="button" class="btn btn-default" id="home-step-goto"
+					data-show="#home-step-user-program-details"
+					data-hide="#home-step-user-program"><?= $this->translate('Tell me more about Programs')?></button>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-user-program-details" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-user-program"
+		data-hide="#home-step-user-program-details"><i class="fa fa-arrow-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+
+			<p><img src="<?= $this->basePath('img/landing-scenario-icon.png') ?>" style="max-width:100px;"><br>
+				<span class="title-mobile"><?=$this->translate('More about Citizen Programs')?></span><hr>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('Citizen Programs matter because the individual programs created are <strong>aggregated</strong> together by DEMODYNE.')?>
+				</p>
+				<p>
+					<?=$this->translate('This way, Proposals and Measures <strong>included in many individual programs</strong> and/or <strong>often found together</strong> in the programs will become the central elements of the aggregated program.')?>
+				</p>
+				<p>
+					<?=$this->translate('With this approach, Citizens are <strong>no longer limited </strong>to chose between two pre-constructed programs during elections. The can collectively define their priorities and adjust them on an ongoing basis.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/city#allscn">
+					<button type="button" class="btn btn-orange"><?= $this->translate('Take me to the All Programs list')?></button>
+				</a>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<script>
+
+$(function(){
+
+//	updateContextualHelp('#user-steps');
+
+});
+
+</script>

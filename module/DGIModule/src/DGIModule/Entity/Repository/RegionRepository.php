@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -30,5 +30,17 @@ class RegionRepository extends EntityRepository
                     ->setParameter('country', $countryId);
         return $q->getQuery()->getResult();
     }
+
+    public function getAllRegionsCountryCode($countryCode)
+    {
+        $q = $this->createQueryBuilder('r')
+            ->leftJoin('r.country', 'c')
+            ->where('c.countryCode=:countryCode')
+            ->orderBy('r.regionName')
+            ->setParameter('countryCode', $countryCode);
+        return $q->getQuery()->getResult();
+    }
+    
+    
     
 }

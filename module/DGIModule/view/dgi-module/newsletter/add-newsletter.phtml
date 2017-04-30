@@ -1,269 +1,296 @@
-<!-- newsletter/add-newsletter -->
 
 <div id="newsletter-add-newsletter"
-	data-no-categories-selected="<?= $this->translate('<strong>No target categories. All user groups are concerned.</strong>')?>"
-	data-no-url="<?= $this->translate('<strong>No url defined.</strong>')?>"
-	data-no-contact="<?= $this->translate('<strong>No contact defined.</strong>')?>">
+     data-no-categories-selected="<strong><?= $this->translate('No target categories. All user groups are concerned.')?></strong>"
+     data-no-url="<strong><?= $this->translate('No url defined.')?></strong>"
+     data-no-contact="<strong><?= $this->translate('No contact defined.')?></strong>">
 
-<?php $newsletter = isset($newsletter)?$newsletter:null; ?>
+    <?php $newsletter = isset($newsletter)?$newsletter:null; ?>
 
-	
-<?php $form->prepare(); ?>
-<?php $form->setAttribute('method', 'post'); ?>
-<?php $form->setAttribute('id', 'newsletter-add-newsletter-form'); ?>
 
-<?= $this->form()->openTag($form);?>
-	
-	
-	<div class="row">
-		<div class="col-md-6 col-xs-12">
-			<div class=" row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('Send to')?></label>
-				<div class="col-md-9 bot5">
-					<label class="checkbox-inline" style="width: 100px;"><?= $this->translate('My Contacts')?>:</label>
-					<label class="checkbox-inline"> <input type="checkbox"
-						id="newsletter-add-newsletter-contacts" value="1"
-						<?=($newsletter&&(($newsletter->getNlSendTo()>>3)&1))?'checked="checked"':''?>> <?= $this->translate('All')?>
-						</label><br> <label class="checkbox-inline" style="width: 100px;"><?= $this->translate('Citizens')?>:</label>
-					<label class="checkbox-inline"> <input type="checkbox"
-						id="newsletter-add-newsletter-citizens" value="1"
-						<?=($newsletter&&(($newsletter->getNlSendTo()>>2)&1))?'checked="checked"':''?>> <?= $this->translate('All')?>
-						</label> <label class="checkbox-inline"> <input type="checkbox"
-						id="newsletter-add-newsletter-champions" value="1"
-						<?=($newsletter&&(($newsletter->getNlSendTo()>>1)&1))?'checked="checked"':''?>> <?= $this->translate('Champions only')?>
-						</label> <br> <label class="checkbox-inline" style="width: 100px;"><?= $this->translate('Partners')?>:</label>
-					<label class="checkbox-inline"> <input type="checkbox"
-						id="newsletter-add-newsletter-partners" value="1"
-						<?=($newsletter&&(($newsletter->getNlSendTo()>>0)&1))?'checked="checked"':''?>> <?= $this->translate('All')?>
-						</label> 
-						
-						<?= $this->formElement($form->get('nlSendTo'));?>
-						<?php if ($form->get('nlSendTo')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlSendTo'));?></span>
-                    <?php endif;?>
-					</div>
-			</div>
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('Save as')?></label>
-				<div class="col-sm-9 bot5">
-						<?= $this->formElement($form->get('nlName'));?>
-						<?php if ($form->get('nlName')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlName'));?></span>
-                    <?php endif;?>
-					</div>
-			</div>
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('Notes')?></label>
-				<div class="col-sm-9 bot5">
-						<?= $this->formElement($form->get('nlDescription'));?>
-						<?php if ($form->get('nlDescription')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlDescription'));?></span>
-                    <?php endif;?>
-					</div>
-			</div>
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('Title')?></label>
-				<div class="col-sm-9 bot5">
-							<?= $this->formElement($form->get('nlSubject'));?>
-							<?php if ($form->get('nlSubject')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlSubject'));?></span>
-                    <?php endif;?>
-						</div>
-			</div>
-			
-			
-			<div class="row form-group">      
+    <?php $form->prepare(); ?>
+    <?php $form->setAttribute('method', 'post'); ?>
+    <?php $form->setAttribute('id', 'newsletter-add-newsletter-form'); ?>
 
-            <label class="col-sm-3"><?= $this->translate('Message:')?></label>
-            
-            <div class="col-sm-9 bot5">
-            
-            <div class="bot5">
-            
-            <button class="btn btn-mini" type="button" id="newsletter-add-newsletter-bold" onclick="document.execCommand('bold');"><strong><?= $this->translate('Bold')?></strong></button>
-            
-            <button class="btn btn-mini" type="button" id="newsletter-add-newsletter-italic" onclick="document.execCommand('italic');"><i><?= $this->translate('Italic')?></i></button>
-            
-            <button class="btn btn-mini" type="button" id="newsletter-add-newsletter-underline" onclick="document.execCommand('underline');"><u><?= $this->translate('Underline')?></u></button>
-            
+    <?= $this->form()->openTag($form);?>
+
+    <div class="panel panel-default panel-body orangebackground" >
+        <div class="col-md-12 col-xs-12">
+
+                    <h4><?=$this->translate('Options and internal information')?></h4>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="row form-group">
+                        <label class="col-sm-3 control-label"><?= $this->translate('Save as')?></label>
+                        <div class="col-sm-9 bot5">
+                            <?= $this->formElement($form->get('nlName'));?>
+                            <?php if ($form->get('nlName')->getMessages()):?>
+                                <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlName'));?></span>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-sm-3 control-label"><?= $this->translate('Notes')?></label>
+                        <div class="col-sm-9 bot5">
+                            <?= $this->formElement($form->get('nlDescription'));?>
+                            <?php if ($form->get('nlDescription')->getMessages()):?>
+                                <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlDescription'));?></span>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-xs-12">
+                        <div class=" row form-group">
+                            <label class="col-sm-3 control-label"><?= $this->translate('Send to')?></label>
+                            <div class="col-md-9 bot5">
+                                <label class="checkbox-inline"> <input type="checkbox"
+                                                                       id="newsletter-add-newsletter-contacts" value="1"
+                                        <?=($newsletter&&(($newsletter->getNlSendTo()>>3)&1))?'checked="checked"':''?>> <?= $this->translate('All my contacts')?>
+                                </label>
+                                <br>
+                                <label class="checkbox-inline"> <input type="checkbox"
+                                                                       id="newsletter-add-newsletter-citizens" value="1"
+                                        <?=($newsletter&&(($newsletter->getNlSendTo()>>2)&1))?'checked="checked"':''?>> <?= $this->translate('All citizens')?>
+                                </label>
+                                <!--  <label class="checkbox-inline"> <input type="checkbox"
+                                                                        id="newsletter-add-newsletter-champions" value="1"
+                                <?=($newsletter&&(($newsletter->getNlSendTo()>>1)&1))?'checked="checked"':''?>> <?= $this->translate('Champions only')?>
+                        </label>-->
+                                <br>
+                                <!--<label class="checkbox-inline" style="width: 100px;"><?= $this->translate('Partners')?>:</label>
+                        <label class="checkbox-inline"> <input type="checkbox"
+                                                               id="newsletter-add-newsletter-partners" value="1"
+                                <?=($newsletter&&(($newsletter->getNlSendTo()>>0)&1))?'checked="checked"':''?>> <?= $this->translate('All')?>
+                        </label>-->
+
+                                <?= $this->formElement($form->get('nlSendTo'));?>
+                                <?php if ($form->get('nlSendTo')->getMessages()):?>
+                                    <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlSendTo'));?></span>
+                                <?php endif;?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
-            <div class="form-control " contenteditable="true" id="newsletter-add-newsletter-textbox" style="width:100%; min-height:100px; overflow-y: scroll; height:200px;"><?=$newsletter?$newsletter->getNlMessage():''?></div>
-            
-            <?= $this->formElement($form->get('nlMessage'));?> 
-            
-            <?php if ($form->get('nlMessage')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlMessage'));?></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-xs-12">
+
+
+            <div class="row form-group">
+                <label class="col-sm-3 control-label"><?= $this->translate('Title')?></label>
+                <div class="col-sm-9 bot5">
+                    <?= $this->formElement($form->get('nlSubject'));?>
+                    <?php if ($form->get('nlSubject')->getMessages()):?>
+                        <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlSubject'));?></span>
                     <?php endif;?>
-            
+                </div>
             </div>
-            
+
+
+            <div class="row form-group">
+
+                <label class="col-sm-3"><?= $this->translate('Message')?></label>
+
+                <div class="col-sm-9 bot5">
+
+                    <div class="bot5">
+
+                        <button class="btn btn-mini" type="button" id="newsletter-add-newsletter-bold" onclick="document.execCommand('bold');"><strong><?= $this->translate('Bold')?></strong></button>
+
+                        <button class="btn btn-mini" type="button" id="newsletter-add-newsletter-italic" onclick="document.execCommand('italic');"><i><?= $this->translate('Italic')?></i></button>
+
+                        <button class="btn btn-mini" type="button" id="newsletter-add-newsletter-underline" onclick="document.execCommand('underline');"><u><?= $this->translate('Underline')?></u></button>
+
+                    </div>
+
+                    <div class="form-control " contenteditable="true" id="newsletter-add-newsletter-textbox" style="width:100%; min-height:100px; overflow-y: scroll; height:200px;"><?=$newsletter?$newsletter->getNlMessage():''?></div>
+
+                    <?= $this->formElement($form->get('nlMessage'));?>
+
+                    <?php if ($form->get('nlMessage')->getMessages()):?>
+                        <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlMessage'));?></span>
+                    <?php endif;?>
+
+                </div>
+
             </div><!-- end row -->
-			
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('Newsletter Image')?></label>
-				<div class="col-sm-9 bot5 form-inline">
-						<?= $this->formElement($form->get('picture-file'));?>
-						<?php if ($form->get('picture-file')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('picture-file'));?></span>
+
+            <div class="row form-group">
+                <label class="col-sm-3 control-label"><?= $this->translate('Newsletter Image')?></label>
+                <div class="col-sm-9 bot5 form-inline">
+                    <?= $this->formElement($form->get('picture-file'));?>
+                    <?php if ($form->get('picture-file')->getMessages()):?>
+                        <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('picture-file'));?></span>
                     <?php endif;?>
-					</div>
-			</div>
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('Categories')?></label>
-				<div class="col-sm-9 bot5">
-					<div class="fltl">
-						<select name="mainCategories" class="form-control TFOlstFiltreImg"
-							id="mainCategories" style="width: 175px">
-<?php foreach ($mainCategories as $mainCategory):?>
-      <div class="top10">
-								<option value="<?= $mainCategory->getCatId(); ?>"
-									data-style="background-image: url('<?= $this->basePath()?>/files/<?= $mainCategory->getCatImage() ?>'); background-position: left;">
-                <?= $mainCategory->getCatName(); ?>
-      </option>
-							</div>
- <?php endforeach;?>
-</select>
-					</div>
-					<div class="fltl bot10 left10">
-						<button type="button" class="btn btn-success"
-							id="newsletter-add-newsletter-add-category"><?= $this->translate('Add')?></button> (<?= $this->translate('max 3')?>)
-</div>
-					<div class="col-sm-12 bot5"
-						id="newsletter-add-newsletter-category-list">
-<?php if ($newsletter):?>
-    <?php foreach($newsletter->getCategories() as $category):?>
-    	<span id="category-<?=$category->getCatId()?>"><img width="32"
-							height="32" title="<?=$category->getCatName()?>"
-							src="<?= $this->basePath()?>/files/<?= $category->getCatImage() ?>">
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 control-label"><?= $this->translate('Categories')?> (<?= $this->translate('max 3')?>)</label>
+                <div class="col-sm-9 bot5">
+                    <div class="fltl">
+                        <select name="mainCategories" id="mainCategories" class="form-control">
+                            <?php foreach ($mainCategories as $category):?>
+                                <option value="<?= $category->getCatId() ?>" style="background: url(<?=$this->basePath().'/files/'. $category->getCatImage() ?>) no-repeat; background-size: 32px 32px;  padding-left: 35px; padding-top:10px; height:35px;"> &nbsp;&nbsp;
+                                    <?= $category->getCatName() ?>
+                                </option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                    <div class="fltl bot10 left10"
+                        id="add-proposal-category-image">
+                        <img width="32px" height="32px" class="round5" src="<?=$this->basePath().'/files/'. $mainCategories[0]->getCatImage()?>" title="<?=$mainCategories[0]->getCatName()?>">
+                    </div>
+                    <div class="fltl bot10 left10">
+                        <button type="button" class="btn btn-success"
+                                id="newsletter-add-newsletter-add-category"><?= $this->translate('Add')?></button>
+                    </div>
+                    <div class="col-sm-12 bot5"
+                         id="newsletter-add-newsletter-category-list">
+                        <?php if ($newsletter):?>
+                            <?php foreach($newsletter->getCategories() as $category):?>
+                                <span id="category-<?=$category->getCatId()?>"><img width="32"
+                                                                                    height="32" title="<?=$category->getCatName()?>"
+                                                                                    src="<?= $this->basePath()?>/files/<?= $category->getCatImage() ?>">
 							<input type="hidden" name="categories[]"
-							value="<?=$category->getCatId()?>"> <a href=""
-							id="newsletter-add-newsletter-remove-category"><i
-								class="fa fa-times-circle darkgray"></i></a></span>
-	<?php endforeach;?>
-<?php endif;?>
-</div>
-				</div>
-			</div>
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('Contact info')?></label>
-				<div class="col-sm-9 bot5">
-						<?= $this->formElement($form->get('nlContact'));?>
-						<?php if ($form->get('nlContact')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlContact'));?></span>
+                                   value="<?=$category->getCatId()?>"> <a href=""
+                                                                          id="newsletter-add-newsletter-remove-category"><i
+                                                class="fa fa-times-circle darkgray"></i></a></span>
+                            <?php endforeach;?>
+                        <?php endif;?>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 control-label"><?= $this->translate('Contact info')?></label>
+                <div class="col-sm-9 bot5">
+                    <?= $this->formElement($form->get('nlContact'));?>
+                    <?php if ($form->get('nlContact')->getMessages()):?>
+                        <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlContact'));?></span>
                     <?php endif;?>
-					</div>
-			</div>
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"><?= $this->translate('External link')?></label>
-				<div class="col-sm-9 bot5">
-						<?= $this->formElement($form->get('nlUrl'));?>
-						<?php if ($form->get('nlUrl')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlUrl'));?></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 control-label"><?= $this->translate('External link')?></label>
+                <div class="col-sm-9 bot5">
+                    <?= $this->formElement($form->get('nlUrl'));?>
+                    <?php if ($form->get('nlUrl')->getMessages()):?>
+                        <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlUrl'));?></span>
                     <?php endif;?>
-					</div>
-			</div>
-			<div class="row form-group">
-				<label class="col-sm-3 control-label"></label>
-				<div class="col-sm-9 bot5">
-					<label class="checkbox-inline"> <?= $this->formElement($form->get('nlReply'));?><?= $this->translate('Enable Newsletter Reply')?>?
-						<?php if ($form->get('nlReply')->getMessages()):?>
-                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlReply'));?></span>
-                    <?php endif;?>
-						</label>
-				</div>
-			</div>
-		</div>
-		<div class="col-md-6 col-xs-12 ">
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<span class="big"><strong><?= $this->translate('Newsletter Layout Preview')?></strong></span>
-					<hr>
-					
-					<?= $this->partial('dgi-module/newsletter/view-newsletter.phtml', ['newsletter'=>$newsletter, 'user'=>$user]); ?>
-					
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<hr />
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12 text-right">
-			<button type="submit" class="btn btn-orange"
-				id="newsletter-add-newsletter-save-button">
-				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save as Draft')?></button>
-			<button type="button" class="btn btn-success"
-				id="newsletter-add-newsletter-publish-button">
-				<i class="fa fa-share-square-o"></i> <?= $this->translate('Send Newsletter')?></button>
-			<button type="button" class="btn btn-default" data-dismiss="modal">
-				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
-		</div>
-	</div><!-- /r -->
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-9 bot5">
+                    <label class="checkbox-inline"> <?= $this->formElement($form->get('nlReply'));?><?= $this->translate('Enable Newsletter Reply')?>?
+                        <?php if ($form->get('nlReply')->getMessages()):?>
+                            <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('nlReply'));?></span>
+                        <?php endif;?>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xs-12 ">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <span class="big"><strong><?= $this->translate('Newsletter Layout Preview')?></strong></span>
+                    <hr>
+
+                    <?= $this->partial('dgi-module/newsletter/view-newsletter.phtml', ['newsletter'=>$newsletter, 'user'=>$user]); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 text-right">
+            <button type="submit" class="btn btn-orange"
+                    id="newsletter-add-newsletter-save-button">
+                <i class="fa fa-floppy-o"></i> <?= $this->translate('Save as Draft')?></button>
+            <button type="button" class="btn btn-success"
+                    id="newsletter-add-newsletter-publish-button">
+                <i class="fa fa-share-square-o"></i> <?= $this->translate('Send Newsletter')?></button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+                <i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
+        </div>
+    </div><!-- /r -->
 
 
-<?=$this->form()->closeTag();?>
-
- 
-
-<style>
+    <?=$this->form()->closeTag();?>
 
 
-.ui-widget
-{
-font-size: 1em;
-}
 
-.ui-widget-content
-{
-border-style: none;
-}
-
-/*Affichage des options*/
-.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item
-{
-padding: 0.5em 0 0.5em 2.1em;
-background-repeat: no-repeat;
-}
-
-/*Agrandir sinon 16px par defaut*/
-.ui-selectmenu-menu .ui-menu.customicons .ui-menu-item .ui-icon
-{
-    height: 24px;
-    width: 24px;
-    top: 0.1em;
-}
-
-.TFOlstFiltreImg
-{
-width: 100px;
-}
-
-.TFOSizeImgSelected
-{
-position:absolute;
-height: 24px;
-width: 24px;
-left:70%;
-right:auto;
-margin-top:-12px; /* 24/2*/
-top:50%;
-background-size:24px 24px;
-background-repeat:no-repeat;
-}
-
-.TFOOptlstFiltreImg
-{
-background-size:24px 24px;
-background-repeat:no-repeat;
-}
-
-</style>
+    <style>
 
 
-<script type="text/javascript">	$(function () {		newsletterAddNewsletterHandlers();	});</script>
+        .ui-widget
+        {
+            font-size: 1em;
+        }
 
-<!-- /newsletter/add-newsletter -->
+        .ui-widget-content
+        {
+            border-style: none;
+        }
+
+        /*Affichage des options*/
+        .ui-selectmenu-menu .ui-menu.customicons .ui-menu-item
+        {
+            padding: 0.5em 0 0.5em 2.1em;
+            background-repeat: no-repeat;
+        }
+
+        /*Agrandir sinon 16px par defaut*/
+        .ui-selectmenu-menu .ui-menu.customicons .ui-menu-item .ui-icon
+        {
+            height: 24px;
+            width: 24px;
+            top: 0.1em;
+        }
+
+        .ui-front{z-index:0 !important; }
+        .ui-selectmenu-open {z-index:9999 !important;}
+
+        .TFOlstFiltreImg
+        {
+            width: 100px;
+        }
+
+        .TFOSizeImgSelected
+        {
+            position:absolute;
+            height: 24px;
+            width: 24px;
+            left:70%;
+            right:auto;
+            margin-top:-12px; /* 24/2*/
+            top:50%;
+            background-size:24px 24px;
+            background-repeat:no-repeat;
+        }
+
+        .TFOOptlstFiltreImg
+        {
+            background-size:24px 24px;
+            background-repeat:no-repeat;
+        }
+
+    </style>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            newsletterAddNewsletterHandlers();
+
+        });
+
+    </script>

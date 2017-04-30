@@ -1,0 +1,26 @@
+
+<?php
+$title = 'New bug';
+$urlBase = $this->url('home', [], array('force_canonical' => true));
+
+?>
+
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("A new bug has been reported")?></h1>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;">
+        User <?=$bug->getUsr()->getUsrName() ?> has submitted new bug on <?=$bug->getBugCreatedDate()->format("d/m/Y H:i")?><br><br>
+    <blockquote><?=$bug->getBugDescription()?></blockquote><br><br></p>
+</div>
+
+<?if ($bug->getBugImage()):?>
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;">
+        Image link: <a href="<?=$urlBase.$bug->getBugImage() ?>"><?=$urlBase.$bug->getBugImage() ?></a>
+    </p>
+</div>
+<?endif;?>
+

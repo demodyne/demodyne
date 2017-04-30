@@ -1,0 +1,288 @@
+<?php
+    $search = isset($_SESSION['search']);
+?>
+
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+    <a href="/" class="close"><i class="fa fa-home w"></i></a>
+    <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+    <span class="big" id="modal-dialog-title"><strong><?= $this->translate('Search Demodyne')?></strong></span>
+</div>
+
+
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
+    <form action="<?=$this->url('search', array('action'=>'search'))?>" id="searchForm" method="post">
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h5><strong><?= $this->translate('Search by Keywords')?></strong></h5>
+
+
+                <div class="row bot10">
+                    <div class="col-md-10 col-xs-12 bot5">
+
+                        <div><div class="fltl input-group">
+                                <input type="text" class="form-control" aria-label="" name="searchKeywords" id="" required="required" placeholder="<?= $this->translate('Search')?>" style="max-height: 35px!important;" <?=$search&&isset($_SESSION['search']['keywords'])?'value="'.implode(' ', $_SESSION['search']['keywords']).'"':''?>>
+                                <div class="input-group-btn">
+                                    <button type="submit" class="btn btn-orange" id="inbox-partial-menu-search-submit" style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;max-height: inherit!important;">
+                                        <i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-2 col-xs-12 text-xs-center">
+                        <hr class="visible-xs">
+                        <span><button type="submit" class="btn btn-orange"><i class="fa fa-search"></i> <?= $this->translate('Search')?></button></span>
+
+                    </div>
+                </div>
+                <!--/r-->
+
+
+
+        </div>
+    </div>
+
+
+
+
+    <!-- collapse area begin -->
+    <div id="advanced" class="row collapse in">
+        <div class="col-md-12">
+
+
+            <div class="row bot10">
+                <div class="col-md-12">
+                    <h5><strong><?= $this->translate('Search by type')?></strong>:
+                        <div class="btn-group right10 bot5" role="group">
+                            <button type="button" class="btn btn-sm <?=$entityType['proposal']?'btn-success':'btn-default'?>"  id="entity-type-button" data-type="proposal"><?= $this->translate('Proposals')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['measure']?'btn-success':'btn-default'?>"  id="entity-type-button" data-type="measure"><?= $this->translate('Measures')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['program']?'btn-success':'btn-default'?>"  id="entity-type-button" data-type="program"><?= $this->translate('Programs')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['event']?'btn-success':'btn-default'?>"  id="entity-type-button" data-type="event"><?= $this->translate('Events')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['session']?'btn-success':'btn-default'?>"  id="entity-type-button" data-type="session"><?= $this->translate('Sessions')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['user']?'btn-success':'btn-default'?>"  id="entity-type-button" data-type="user"><?= $this->translate('Users')?></button>
+                        </div>
+                        <input name="entityType[]" type="checkbox" value="proposal" <?=$entityType['proposal']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="measure" <?=$entityType['measure']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="program" <?=$entityType['program']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="event" <?=$entityType['event']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="session" <?=$entityType['session']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="user" <?=$entityType['user']?'checked="checked"':''?> style="display: none">
+                        <span class="text-right">(<a href="#" id="entityTypeSelectAll">Select all</a> | <a href="#" id="entityTypeDeselectAll">Deselect all</a>)</span>
+                    </h5>
+
+                </div>
+            </div>
+
+            <div class="row bot10" style="display: none" id="entityTypeNoSelectionError">
+                <div class="col-md-12">
+                    <span class="red"><?=$this->translate('Please select at least one type.')?></span>
+                </div>
+            </div>
+
+            <hr>
+            <div class="row bot10">
+                <div class="col-md-6 col-xs-12">
+                    <form method="post" name="browse-level-form" class="form-horizontal" action="/location/search-cities" id="browse-level-form">
+                        <fieldset>
+
+                            <!-- search by country -->
+                            <h5><strong><?= $this->translate('Search by Country')?></strong></h5>
+                            <hr>
+                            <div class="row bot10">
+                                <div class="col-md-9 col-xs-7 bot5">
+                                    <select name="country" required class="form-control text-change" id="browse-country">
+                                        <option value="73">France</option>
+                                        <option value="178">Romania</option>
+                                    </select>
+                                    <span class="text-danger"></span>
+                                    <label class="checkbox-inline"><input checked type="checkbox" value=""><?= $this->translate('National level')?></label>
+                                    <label class="checkbox-inline"><input type="checkbox" value=""><?= $this->translate('All Regions')?></label>
+                                    <label class="checkbox-inline"><input type="checkbox" value=""><?= $this->translate('All Cities')?></label>
+                                </div>
+                                <div class="col-md-3 col-xs-5">
+                                    <button type="button" class="btn btn-orange" id="view-country-level" data-url=""><i class="fa fa-plus-circle"></i> Add Country</button>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-12">
+                                    <span class="badge badge-default">Feroe Islands (National) <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">France (Regions) <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">Romania (Cities) <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <br>
+                                    <a href="" data-toggle=""><?= $this->translate('Clear selected')?></a>
+                                </div>
+                            </div>
+                            <!-- /search by country -->
+
+
+                            <!-- search by region -->
+                            <h5><strong><?= $this->translate('Search by Region')?></strong></h5>
+                            <hr>
+                            <div class="row bot10">
+                                <div class="col-md-9 col-xs-7 bot5">
+                                    <select name="country" required class="form-control text-change" id="browse-region">
+                                        <option value="30">Centre-Val de Loire</option>
+                                        <option value="31">Corse</option>
+                                        <option value="32">Grand Est</option>
+                                        <option value="33">Guadeloupe</option>
+                                        <option value="34">Guyane</option>
+                                        <option value="38">Hauts-de-France</option>
+                                        <option value="35">Île-de-France</option>
+                                        <option value="37">Martinique</option>
+                                        <option value="39">Normandie</option>
+                                        <option value="26">Nouvelle Aquitaine</option>
+                                        <option value="36">Occitanie</option>
+                                        <option value="40">Pays de la Loire</option>
+                                        <option value="41">Provence-Alpes-Côte d'Azur</option>
+                                        <option value="42">Réunion</option>
+                                    </select>
+                                    <span class="text-danger"></span>
+                                    <label class="checkbox-inline"><input checked type="checkbox" value=""><?= $this->translate('Regional level')?></label>
+                                    <label class="checkbox-inline"><input type="checkbox" value=""><?= $this->translate('All Cities')?></label>
+                                </div>
+                                <div class="col-md-3 col-xs-5">
+                                    <button type="button" class="btn btn-orange" id="view-country-level" data-url=""><i class="fa fa-plus-circle"></i> Add Region</button>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-12">
+                                    <span class="badge badge-default">Prahova (Regional) <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">Occitanie (Regions) <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">Corse (Cities) <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <br>
+                                    <a href="" data-toggle=""><?= $this->translate('Clear selected')?></a>
+                                </div>
+                            </div>
+                            <!-- /search by region -->
+
+
+
+                            <!-- search by city -->
+                            <h5><strong><?= $this->translate('Search by City / Postal Code')?></strong></h5>
+                            <hr>
+                            <div class="row bot10">
+                                <div class="col-md-9 col-xs-7 bot5">
+                                    <input name="search" type="text" class="form-control text-change" id="browse-search" size="10" value=""> <span class="text-danger"></span>
+                                </div>
+                                <div class="col-md-3 col-xs-5">
+                                    <button type="button" class="btn btn-orange" id="view-country-level" data-url=""><i class="fa fa-plus-circle"></i> Add City</button>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-12">
+                                    <span class="badge badge-default">Bucuresti <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">Paris <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">Belgrade <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">Rio de Janeiro <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <span class="badge badge-default">Luxembourg <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                                    <br>
+                                    <a href="" data-toggle=""><?= $this->translate('Clear selected')?></a>
+                                </div>
+                            </div>
+                            <!-- /search by city -->
+
+
+
+                        </fieldset>
+
+
+                    </form>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <h5><strong><?= $this->translate('Search by Categories of Interest')?></strong></h5>
+                    <hr>
+
+                    <div class="row">
+
+                        <div class="col-md-8 col-xs-12" style="line-height:1.7em;">
+
+                            <span><?= $this->translate('You have selected the following Categories of Interest')?>:</span><br>
+
+
+                            <span class="badge badge-default"><img src="../files/catImage1426170307.jpg" width="14"> Dépenses de fonctionnement <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                            <span class="badge badge-default"><img src="../files/catImage1426170309.jpg" width="14"> Emplois municipaux <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                            <span class="badge badge-default"><img src="../files/catImage1426170308.jpg" width="14"> Bibliothèque-Médiathèque <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                            <span class="badge badge-default"><img src="../files/catImage1426170309.jpg" width="14"> Sport <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                            <span class="badge badge-default"><img src="../files/catImage1426170305.jpg" width="14"> Stratégie pour l'Emploi <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                            <span class="badge badge-default"><img src="../files/catImage1426170306.jpg" width="14"> Familie <a href="" class="white"><i class="fa fa-times-circle"></i></a> </span>
+                            <br>
+                            <a href="" data-toggle=""><?= $this->translate('Clear categories')?></a>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <button class="btn btn-orange" id="partner-dashboard-search-opportunities-form-collapse-categories-button" aria-expanded="false" aria-controls="collapsecategories" type="button" data-toggle="collapse" data-target="#collapsecategories"><i class="fa fa-plus-circle"></i> Add Category
+                            </button>
+                        </div>
+                    </div><!--/r-->
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+    <!-- collapse area end -->
+
+    </form>
+
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $('button#entity-type-button').click(function() {
+                var type = $(this).data('type');
+                if ($(this).hasClass('btn-success')) {
+                    $(this).removeClass('btn-success').addClass('btn-default');
+                    $('input[value="'+type+'"]').prop('checked', false);
+                    if ($('button#entity-type-button.btn-success').length==0) {
+                        $('#entityTypeNoSelectionError').show();
+                    }
+                }
+                else {
+                    $(this).addClass('btn-success').removeClass('btn-default');
+                    $('input[value="'+type+'"]').prop('checked', true);
+                    $('#entityTypeNoSelectionError').hide();
+                }
+            });
+
+            $('#entityTypeSelectAll').click(function () {
+                $('input[name="entityType[]"]').prop('checked', true);
+                $('button#entity-type-button').addClass('btn-success').removeClass('btn-default');
+                $('#entityTypeNoSelectionError').hide();
+            });
+
+            $('#entityTypeDeselectAll').click(function () {
+                $('input[name="entityType[]"]').prop('checked', false);
+                $('button#entity-type-button').removeClass('btn-success').addClass('btn-default');
+                $('#entityTypeNoSelectionError').show();
+            });
+
+            $('#searchForm').submit(function () {
+                if ($('button#entity-type-button.btn-success').length==0) {
+                    $('#entityTypeNoSelectionError').show();
+                    return false;
+                }
+
+            });
+
+        });
+
+    </script>
+
+
+
+</div>
+<!-- end jumbotron -->

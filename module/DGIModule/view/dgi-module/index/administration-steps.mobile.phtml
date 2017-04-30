@@ -1,0 +1,239 @@
+
+<?php 
+if ($user->getAdmin()->getAdminLevel()==1) {
+    $levelName = ($user->getAdmin()->getAdminCity()->getFullCity()?$user->getAdmin()->getAdminCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getAdmin()->getAdminCity()->getDistrictName().'</i></span>':$user->getAdmin()->getAdminCity()->getCityName());
+}
+elseif ($user->getAdmin()->getAdminLevel()==3) {
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="25" height="17" alt="'. $user->getCountry()->getCountryName() .'"> '.$user->getCountry()->getCountryName();
+} 
+?>
+
+<div id="home-step-admin-1">
+	<div class="text-center">
+<?= $this->translate('Hi')?> <?= $user->getAdmin()->getAdminName()?>,<br> <span class="size2em"><?= $this->translate('What do you want to do?')?></span>
+	</div>
+	<!--/center-->
+	<div class="row equal form-group product-chooser top20">
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+			<div class="product-chooser-item text-center" style="max-height:350px !important; min-height:350px !important;" id="admin-bne">
+				<img src="<?= $this->basePath('img/landing-administration-news-icon.png') ?>" class="img-rounded col-xs-4 col-sm-4 col-md-12 col-lg-12"><br>
+				<br>
+				<p>
+					<input type="radio" name="admin-radio" value="bne"> <span
+						class="big"><strong><?=$this->translate('Communicate with my Citizens and Partners')?> </strong></span>
+				</p>
+				<?=$this->translate('Create News Banners, Newsletters and Events')?>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+			<div class="product-chooser-item text-center" style="max-height:350px !important; min-height:350px !important;" id="admin-program">
+				<img src="<?= $this->basePath('img/landing-official-measure-icon.png') ?>" class="img-rounded col-xs-4 col-sm-4 col-md-12 col-lg-12"><br>
+				<br>
+				<p>
+					<input type="radio" name="admin-radio" value="program"> <span
+						class="big"><strong><?=$this->translate('Update my Official program for')?> <?= $levelName ?> </strong></span>
+				</p>
+				<?=$this->translate('Validate information contributed by Citizens')?>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+            <div class="product-chooser-item text-center" style="max-height:350px !important; min-height:350px !important;">
+            <a href="/administration/dashboard#allprop">
+                <img src="<?= $this->basePath('img/landing-administration-review-icon.png') ?>" class="img-rounded col-xs-4 col-sm-4 col-md-12 col-lg-12"><br>
+                <br>
+                <p>
+                    <!-- <input type="radio" name="admin-radio" value="scnprop"> --><span
+                            class="big"><strong><?=$this->translate('Review Proposals and Programs from my Citizens')?></strong></span>
+                </p></a>
+            <div class="clear"></div>
+        </div>
+		</div>
+	</div>
+	<!--/r-->
+
+	<!--/center-->
+</div>
+<div id="home-step-admin-bne" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-admin-1" data-hide="#home-step-admin-bne"><i class="fa fa-arrow-circle-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+			<img src="<?= $this->basePath('img/landing-administration-news-icon.png') ?>" style="max-width:150px;">
+			<p>
+				<span class="size2em"><?=$this->translate('Communicate with Citizens and Partners')?></span>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('From your <strong>Workspace Tab</strong>, you can create news banners, newsletters and events.')?>
+				</p>
+				<p>
+					<?=$this->translate('<strong>News banners</strong> are large images immediately visible by the Citizens and Partners on their News home page. You can freely link them to external addresses such as a page of your official website.')?>
+				</p>
+				<p>
+					<?=$this->translate('<strong>Newsletters</strong> are sent to the inbox of a selected groups of users (Citizens, Partners, your Contacts...). You can specifically target users interested in certain categories such as environment, economy, education etc.')?>
+				</p>
+				<p>
+					<?=$this->translate('You can create <strong>Events</strong> for Citizens and Partners to attend, they will show up in the agenda and you can track who plans to attend.')?>
+				</p>
+			</div>
+			<hr>
+		</div>
+		<!--/offset-->
+		<p>
+			<a href="/administration/dashboard#banner" class="btn btn-orange"><?= $this->translate('Take me to the Banners')?></a>
+			<a href="/administration/dashboard#newsletter" class="btn btn-orange"><?= $this->translate('Take me to the Newsletters')?></a>
+			<a href="/administration/dashboard#events" class="btn btn-orange"><?= $this->translate('Take me to the Events')?></a>
+		</p>
+		<p>
+			<button type="button" class="btn btn-default" id="home-step-goto"
+				data-show="#home-step-admin-banner"
+				data-hide="#home-step-admin-bne"><?= $this->translate('Tell me more about Banners')?></button>
+			<button type="button" class="btn btn-default" id="home-step-goto"
+				data-show="#home-step-admin-newsletter"
+				data-hide="#home-step-admin-bne"><?= $this->translate('Tell me more about Newsletters')?></button>
+			<button type="button" class="btn btn-default" id="home-step-goto"
+				data-show="#home-step-admin-event"
+				data-hide="#home-step-admin-bne"><?= $this->translate('Tell me more about Events')?></button>
+		</p>
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-admin-banner" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-admin-bne" data-hide="#home-step-admin-banner"><i class="fa fa-arrow-circle-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+			<img src="<?= $this->basePath('img/landing-administration-news-icon.png') ?>" style="max-width:150px;">
+			<p>
+				<span class="size2em"><?=$this->translate('More about Banners')?></span>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('From your <strong>Workspace Tab</strong>, go the the Banners sub-Tab.')?>
+				</p>
+				<p>
+					<?=$this->translate('You can create new banners, assign them with a title, description, target external URL and of course a <strong>custom image</strong> you will upload.')?>
+				</p>
+				<p>
+					<?=$this->translate('Once created, you can <strong>activate or deactivate</strong> banners depending on how you want them to appear at a given time.')?>
+				</p>
+				<p>
+					<?=$this->translate('You can also define their <strong>order of appearance</strong>.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/administration/dashboard#banner" class="btn btn-orange"><?= $this->translate('Take me to the Banners')?></a>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-admin-newsletter" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-admin-bne"
+		data-hide="#home-step-admin-newsletter"><i class="fa fa-arrow-circle-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+			<img src="<?= $this->basePath('img/landing-administration-news-icon.png') ?>" style="max-width:150px;">
+			<p>
+				<span class="size2em"><?=$this->translate('More about targeted Newletters')?></span>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('From your <strong>Workspace Tab</strong>, go the the Newletters sub-Tab.')?>
+				</p>
+				<p>
+					<?=$this->translate('You can create new newsletters, assign them with a title, main text, header image, external URL and selected the groups of users to receive it.')?>
+				</p>
+				<p>
+					<?=$this->translate('You can also target users who have expressed certain categories of interest.')?>
+				</p>
+				<p>
+					<?=$this->translate('Once created, you can <strong>send</strong> them, <strong>save</strong> them as draft or <strong>duplicate</strong> to send variants of older newsletters.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/administration/dashboard#newsletter">
+					<button type="submit" class="btn btn-orange"><?= $this->translate('Take me to the Newsletters')?></button>
+				</a>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-admin-event" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-admin-bne" data-hide="#home-step-admin-event"><i class="fa fa-arrow-circle-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+			<img src="<?= $this->basePath('img/landing-administration-news-icon.png') ?>" style="max-width:150px;">
+			<p>
+				<span class="size2em"><?=$this->translate('More about Events')?></span>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('From your <strong>Workspace Tab</strong>, go the the Events sub-Tab.')?>
+				</p>
+				<p>
+					<?=$this->translate('You can create new Events, assign them with a title, description, header image, external URL and of course start date/hour, finish date/hour &amp; location.')?>
+				</p>
+				<p>
+					<?=$this->translate('Once published, you can still <strong>cancel</strong> events, or <strong>duplicate</strong> them to create variants or new occurrences.')?>
+				</p>
+				<p>
+					<?=$this->translate('Citizens and Partners can state their intention to attend, giving you a sense of the turnout to expect.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/administration/dashboard#events" class="btn btn-orange"><?= $this->translate('Take me to the Events')?></a>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<div id="home-step-admin-program" style="display: none;">
+	<button type="button" class="btn btn-default" id="home-step-goto"
+		data-show="#home-step-admin-1" data-hide="#home-step-admin-program"><i class="fa fa-arrow-circle-left size15em"></i> <?=$this->translate('Back')?></button>
+	<div class="row text-center">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+			<img src="<?= $this->basePath('img/landing-official-measure-icon.png') ?>" style="max-width:150px;">
+			<p>
+				<span class="size2em"><?=$this->translate('Updating my Official Program')?></span>
+			</p>
+			<div class="text-left">
+				<p>
+					<?=$this->translate('On the <strong>Official Measures Tab</strong> of your Dashboard, you can publish all Measures you have publicly announced, citing sources such as your official website or online media.')?>
+				</p>
+				<p>
+					<?=$this->translate('Click <strong>Create New Measure</strong> to add an official measure. Assign it with a title, description, category and sub-category to help citizens in their review, and an estimate of cost and start date.')?>
+				</p>
+				<p>
+					<?=$this->translate('Be aware that Citizens are able to add <strong>missing</strong> Measures from the list, if they do so you can still correct content if needed and <strong>validate</strong> when everything is accurate.')?>
+				</p>
+			</div>
+			<hr>
+			<p>
+				<a href="/administration/dashboard#officialm"class="btn btn-orange"><?= $this->translate('Take me to the Official Measures list')?></a>
+			</p>
+		</div>
+		<!--/offset-->
+	</div>
+	<!--/r-->
+</div>
+<script>
+
+$(function(){
+
+//	updateContextualHelp('#administration-steps');
+		
+});
+
+</script>

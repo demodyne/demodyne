@@ -1,14 +1,10 @@
 <?php
-/**
- * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
- * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
- */
 
 namespace DGIModule\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Partner
@@ -329,18 +325,19 @@ class Partner
     public function addCategory(Category $category)
     {
         if ($this->categories->contains($category)) {
-            return;
+            return $this;
         }
     
         $this->categories->add($category);
         
         return $this;
+        //$proposition->addUser($this);
     }
     
     public function removeCategory(Category $category)
     {
         if (!$this->categories->contains($category)) {
-            return;
+            return $this;
         }
     
         $this->categories->remove($category);
@@ -365,7 +362,7 @@ class Partner
     public function addDepartment(Department $department)
     {
         if ($this->departments->contains($department)) {
-            return;
+            return $this;
         }
     
         $this->departments->add($department);
@@ -376,7 +373,7 @@ class Partner
     public function removeDepartment(Department $department)
     {
         if (!$this->departments->contains($department)) {
-            return;
+            return $this;
         }
     
         $this->departments->remove($department);

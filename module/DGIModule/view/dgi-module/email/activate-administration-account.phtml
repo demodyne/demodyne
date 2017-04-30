@@ -1,0 +1,52 @@
+
+<?php
+$title = 'Activate Administration Account';
+
+$adminLevel = $user->getAdmin()->getAdminLevel();
+$adminLevelConfig = $this->configItem('demodyne.level');
+
+
+?>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("Activate Administration Account")?></h1>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px;">
+
+        The Administration account
+        <a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()), array('force_canonical' => true));?>"><strong><?=$user->getUsrName()?></strong></a> for
+        <?=($adminLevel == $adminLevelConfig['country']?'Country '.$user->getCountry()->getCountryName():
+            ($adminLevel == $adminLevelConfig['region']?'Region '.$user->getAdmin()->getAdminRegion()->getRegionName():
+                'City '.($user->getAdmin()->getAdminCity()?$user->getAdmin()->getAdminCity()->getCityName():'No city')))?>
+        has validated his email!
+
+        You can click on the button to activate this account:
+
+
+
+</div>
+
+<? $confirmUrl = $this->url('home/user-register', array('action' => 'activate-administration-account','id' => $user->getUsrUUID()), array('force_canonical' => true))?>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <div style="Margin-bottom:20px;text-align:center;">
+        <center><a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$confirmUrl?>">Validate Administration account</a>
+        </center>
+    </div>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <p style="Margin-top:30px;Margin-bottom:20px; text-align: center;">
+        <?=$this->translate("Thank you,<br>The Demodyne Team")?>
+    </p></div>
+
+<div style="Margin:0 auto;max-width:602px;min-width:322px;width:322px;width:calc(28000% - 167398px);word-wrap:break-word;word-break:break-word">
+    <div style="border-collapse:collapse;display:table;width:100%;max-width:601px;font-size:13px;line-height:16px;font-family:Roboto,sans-serif;color: #7E7E7E;">
+        <center>
+            <p><?=$this->translate('Having trouble with that button? Copy and paste this link into your browser:')?><br>
+                <?=$confirmUrl?></p>
+        </center>
+    </div>
+</div>

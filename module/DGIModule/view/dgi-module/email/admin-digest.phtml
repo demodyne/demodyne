@@ -1,0 +1,50 @@
+
+<?php
+$title = 'Admin digest';
+
+//$this->plugin("dateFormat")->setTimezone("Europa/Paris")->setLocale("fr_FR");
+
+$dDiff = $from->diff($to);
+$days = $dDiff->days;
+
+?>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=sprintf($this->translate("Admin digest from %s to %s"), $from->format('d/m/Y h:i'), $to->format('d/m/Y h:i'))?></h1>
+</div>
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;">
+        <a href="<?= $this->url('admin', array('from'=>$from->format('Y-m-d'), 'to' => $to->format('Y-m-d')), array('fragment' => 'new-users', 'force_canonical' => true));?>">
+            <?=sprintf($this->translate("%d New Users registered in last %d days"), $users, $days)?></a>
+    </h2>
+
+</div>
+
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;">
+        <a href="<?= $this->url('admin', array('from'=>$from->format('Y-m-d'), 'to' => $to->format('Y-m-d')), array('fragment' => 'proposals', 'force_canonical' => true));?>">
+            <?=sprintf($this->translate("%d New Proposals published in last %d days"), $proposals, $days)?></a>
+    </h2>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;">
+            <a href="<?= $this->url('admin', array('from'=>$from->format('Y-m-d'), 'to' => $to->format('Y-m-d')), array('fragment' => 'new-om', 'force_canonical' => true));?>">
+            <?=sprintf($this->translate("%d New Measures submitted in last %d days"), $measures, $days)?></a></h2>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;">
+        <a href="<?= $this->url('admin', array('from'=>$from->format('Y-m-d'), 'to' => $to->format('Y-m-d')), array('fragment' => 'new-events', 'force_canonical' => true));?>">
+            <?=sprintf($this->translate("%d New Events published in last %d days"), $events, $days)?></a>
+    </h2>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;">
+        <a href="<?= $this->url('admin', array('from'=>$from->format('Y-m-d'), 'to' => $to->format('Y-m-d')), array('fragment' => 'new-sessions', 'force_canonical' => true));?>">
+            <?=sprintf($this->translate("%d New Sessions published in last %d days"), $sessions, $days)?></a>
+    </h2>
+
+</div>

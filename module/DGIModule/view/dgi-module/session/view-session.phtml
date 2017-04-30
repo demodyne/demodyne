@@ -1,0 +1,276 @@
+<?php $this->inlineScript()->appendFile('/js/jquery.uitimebomb.min.js'); ?>
+
+<?php
+$levelName = '';
+/** @var \DGIModule\Entity\Event $event */
+$level=$event->getEventLevel();
+if ($level==$this->configItem('demodyne.level.city')) {
+    $levelName = ($event->getCity()->getFullCity()?($event->getPropFullCity()?$event->getCity()->getFullCity()->getCityName().' ('._('Full city').')':$event->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$event->getCity()->getDistrictName().'</i></span>'):$event->getCity()->getCityName().($event->getCity()->isFullCity()?' ('._('Full city').')':''));
+}
+elseif ($level==$this->configItem('demodyne.level.region')) {
+    $levelName = $event->getCity()->getRegion()->getRegionName();
+}
+else {
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $event->getCity()->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$event->getCity()->getCountry()->getCountryName() .'</span>';
+}
+$title = $event->getEventPublishedDate()?$this->translate('Public Session for %s'):$this->translate('Private Session for %s');
+?>
+
+<?= $this->partial('partial/page-header.phtml', ['title' => '<i class="fa fa-users size15em"></i> '.sprintf($title, $levelName).
+    '<span class="right10">'.$this->translate(' (Starts in:') .' <span id="timer" class="big green"></span>)</span>'])?>
+
+<div class="jumbotron"
+	style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+	id="session-view-session"
+	data-edit-session="<?=$this->translate('Edit Session')?>"
+     data-cancel-session="<?=$this->translate('Cancel Session')?>"
+	data-url="<?= $this->url('session', array('action'=>'view-session', 'id'=> $event->getEventUUID()));?>"
+	>
+
+	<div class="row">
+		<div class="col-md-8">
+
+			<div class="panel panel-default">
+				<div class="panel-body">
+
+					<div class="row">
+						<div class="col-md-6 col-xs-12">
+							<p>
+								<span class="bigblack"><?=$event->getEventName()?></span><br>
+						<?php if ($event->getEventPublishedDate()):?>
+                            <span class="label label-success"> <i
+									class="fa fa-user size15em"></i> <span class="size15em"><?= $this->translate('Public session')?></span>
+								</span>
+                        <?php else:?>
+                            <span class="label label-primary"> <i
+									class="fa fa-lock size15em"></i> <span class="size15em"><?=$this->translate('Private session')?></span>
+								</span>
+                    	<?php endif;?>
+					</p>
+							<hr>
+							<span class="wbr"><?=$event->getEventDescription()?></span>
+
+							<p></p>
+
+
+
+                        <?php if ($event->getEventPublishedDate()):?>
+                            <?= $this->partial('partial/social-links.phtml', [
+                                'type' => 'session',
+                                'url' => $this->url('session', array('action'=>'view-session', 'id'=>$event->getEventUUID()), array('force_canonical' => true)),
+                                'title' => $event->getEventName(),
+                                'description' => $event->getEventDescription()
+                            ]); ?> 
+                        <?php endif;?>
+
+						</div>
+						<div class="col-md-6 col-xs-12 top15 wbr">
+
+							<div class="table-layout">
+								<div class="table-cell fixed-width-40">
+                                    <img
+										src="<?=$this->basePath($event->getUsr()->getUsrPicture()) ?>"
+										width="32" height="32" class="round5">
+								</div>
+								<div class="table-cell">
+                                  <?= $this->translate('Organized by')?>
+                                  <a
+										href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$event->getUsr()->getUsrUUID()));?>"
+										data-title="<?=sprintf($this->translate("%s's mini profile"), $event->getUsr()->getUsrName())?>"
+										data-id="<?=$event->getUsr()->getUsrUUID()?>"
+										id="session-view-session-view-profile"><span class="badge">
+                                  <?= $event->getUsr()->getUsrName() ?>
+                                  </span></a>
+
+								</div>
+							</div>
+
+<?php 
+$eventStartDate = $event->getEventStartDate();//->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+$eventEndDate = $event->getEventEndDate();//->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+$countryFormat =  $user?$user->getCity()->getCountry()->getCountryFormat():'en_US';
+?>
+
+							<hr>
+							<span class="glyphicon glyphicon-calendar"></span>
+							<?=$this->dateFormat(
+                                            $eventStartDate,
+                                            IntlDateFormatter::SHORT, // date
+                                            IntlDateFormatter::SHORT, // time
+            							    $countryFormat
+                                        );?> 
+    						<i class="fa fa-arrow-right"></i> 
+    						<?=$eventEndDate->format('d/m/Y') == $event->getEventStartDate()->format('d/m/Y')?
+    						      $this->dateFormat(
+                                            $eventEndDate,
+                                            IntlDateFormatter::NONE, // date
+                                            IntlDateFormatter::SHORT, // time
+                                            $countryFormat
+                                        )
+                                :
+    						      $this->dateFormat(
+                                            $eventEndDate,
+                                            IntlDateFormatter::SHORT, // date
+                                            IntlDateFormatter::SHORT, // time
+                                            $countryFormat
+                                        )?>
+                            <br>
+							<i class="fa fa-map-marker size15em"></i> <?=$event->getEventLocation()?> - <?=$event->getCity()->getCityName()?> (<?=$event->getCity()->getCityPostalcode()?>)<br>
+                           
+                                                
+                            
+                        
+           				 <?php if ($event->getEventLink()!=''):?>
+							<hr>
+							<i class="fa fa-globe size15em"></i> <a
+								href="<?=$this->escapeHtml($event->getEventLink())?>"
+								target="_blank"><?=$this->escapeHtml($event->getEventLink())?></a>
+    					<?php endif;?>
+        					<hr>
+        					
+        					
+					<?php if ($event->getUsr()==$user): // user is the owner?>
+    					<button type="button" class="btn btn-orange topm5"
+								data-url="<?= $this->url('session', array('action'=>'add-edit-session', 'id'=> $event->getEventUUID()));?>"
+								id="session-view-session-edit">
+								<i class="fa fa-pencil-square-o size15em"></i> <?= $this->translate('Edit')?></button>
+
+						<?php if (!$event->getEventPublishedDate()):?>
+                        	
+
+							<button type="button" class="btn btn-success topm5"
+								href="<?= $this->url('event', array('action'=>'publish-event', 'id'=> $event->getEventUUID()));?>"
+								id="session-view-session-publish">
+								<i class="fa fa-user size15em"></i> <?= $this->translate('Make Public')?></button>
+							
+						<?php endif;?>
+                       
+                       <!-- scos Q
+                        <button type="button" class="btn btn-owner topm5" style="color: #fff;"
+								href="<?= $this->url('session', array('action'=>'duplicate-event', 'id'=> $event->getEventUUID()));?>"
+								id="session-my-not-completed-sessions-duplicate">
+								<i class="fa fa-files-o size15em"></i> <?= $this->translate('Duplicate')?></button>
+                       -->
+                       
+                        <?php if (!$event->getEventPublishedDate() && !$event->getInvitations()->count()):?>
+                        	
+<!-- scos Q
+							<button type="button" class="btn btn-danger topm5"
+								href="<?= $this->url('session', array('action'=>'delete-event', 'id'=> $event->getEventUUID()));?>"
+								id="session-my-not-completed-sessions-delete">
+								<i class="fa fa-times-circle size15em"></i> <?= $this->translate('Delete Session')?></button>
+                    	
+                    	-->
+
+                    	<?php elseif (!$event->getEventCanceledDate()):?>
+
+                    		<button type="button"
+								class="btn btn-default topm5"
+                                data-url="<?= $this->url('event', array('action'=>'cancel-event', 'id'=> $event->getEventUUID()));?>"
+								id="session-view-session-cancel">
+								<i class="fa fa-ban size15em"></i> <?= $this->translate('Cancel Session')?></button>
+
+                        <?php endif;?>
+
+                        
+
+
+					<?php endif;?>
+
+
+
+						</div>
+					</div>
+
+
+
+
+
+				</div>
+			</div>
+			<!--/panel -->
+
+			
+			<div class="row">
+				<div class="col-md-12 bot5">
+					<a type="button" class="btn btn-orange"
+						href="<?= $this->url('session', array('action'=>'live', 'id'=> $event->getEventUUID()));?>"
+						target="_blank"
+						id="session-view-session-goto-live"
+						<?=$user == $event->getUsr()?'':'style="display:none"'?>
+						><i class="fa fa-arrow-right size15em"></i> 
+						<?=$user == $event->getUsr()?$this->translate('Start Live Session'):$this->translate('Join Live Session')?></a>
+				</div>
+			</div>
+			
+
+
+		</div>
+		<!-- /6 -->
+		<div class="col-md-4">
+			<div id="view-attendees">
+				<div class="row">
+					<div class="col-md-12"><?=$this->attendees?></div>
+				</div>
+			</div>
+
+
+
+
+
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- /row -->
+
+
+
+
+
+
+
+</div>
+<!-- /j -->
+
+
+<script>
+		"use strict";
+		jQuery(function($){
+
+			var time = $.uiTimeBomb({
+				date:new Date( <?=$eventStartDate->format('U') * 1000?> )
+				,localTime:false
+				,onStart:function(){
+//					console.log("Start");
+				}
+				,onComplete:function(){
+					window.open(
+							  '<?= $this->url('session', array('action'=>'live', 'id'=> $event->getEventUUID()));?>',
+							  '_blank' // <- This is what makes it open in a new window.
+							);
+					$('#session-view-session-goto-live').show();
+
+				}
+				,onUpdate:function(ui){
+					var data = ui.get("days");
+					var str = ui.supplant("<?=$this->translate('{d}d, {h}h, {i}m')?>",data);
+					var el = document.getElementById("timer");
+					el.innerHTML = str;
+//                    console.log(data);
+//					console.log(data.i + ':' + data.m + ':' + data.s);
+				}
+			});
+//			console.log(time);
+		});
+		</script>
+
+
+	<script type="text/javascript">
+
+		$(function () {
+
+			sessionViewSessionHandlers();
+
+		});
+
+	</script>

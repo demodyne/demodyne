@@ -1,0 +1,540 @@
+<?php $user = $this->identity(); ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<?php if ($user): ?> 
+
+
+
+
+
+
+
+<div class="modal-header-soft round5top ui-draggable-handle">
+
+
+
+<button type="button" class="close">
+
+        <?php if ($_SESSION['level']['level']=='city'):?>
+
+        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
+
+        <?php elseif ($_SESSION['level']['level']=='country'):?>
+
+        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
+
+        <?php endif;?>
+
+    </button>
+
+
+
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+
+
+
+  <span class="big" id="modal-dialog-title"><strong><?= $this->translate('The DEMODYNE User Guide - Help & Tips')?></strong></span>
+
+
+
+  </div>
+
+
+
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+
+
+
+
+
+
+
+<?php else:?>
+
+
+
+
+
+
+
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+
+
+
+  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+
+
+
+  <span class="big" id="modal-dialog-title">
+
+
+
+
+
+<!--
+
+    <a href="../"><img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> -
+
+-->
+
+
+
+
+
+    <strong><?= $this->translate('The DEMODYNE User Guide - Help & Tips')?></strong></span>
+
+
+
+  </div>
+
+
+
+  <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+
+
+
+
+
+
+
+<?php endif;?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+
+
+
+
+
+
+
+<div class="col-md-3">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span style="bot10"><strong>Înregistrarea la DEMODYNE</strong></span>
+
+
+
+<ul>
+
+
+
+<li><a href="#citizen-registration">Înregistrare cetățean</a></li>
+
+
+
+<li><a href="#administration-registration">Înregistrare Administraţie</a></li>
+
+
+
+<li><a href="#partner-registration">Înregistrare Partener</a></li>
+
+
+
+</ul>
+
+
+
+
+
+
+
+<span style="bot10"><strong>PAGINI PRINCIPALE</strong></span>
+
+
+
+<ul>
+
+
+
+<li><a href="#citizen-landing-page">Pagina principală a cetățeanului</a></li>
+
+
+
+</ul>
+
+
+
+
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><!--/3-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="col-md-9">
+
+
+
+
+
+
+
+<div class="panel panel-default">
+
+
+
+<div class="panel-body">
+
+
+
+
+
+
+
+
+
+
+
+<div class="bot50" id="citizen-registration">
+
+
+
+<span class="big"><strong>Înregistrare cetățean</strong></span>
+
+
+
+<hr>
+
+
+
+<p>Bine ați venit la DEMODYNE!</p>
+
+<p>Acest portal web a fost conceput pentru a oferi cetățenilor toate instrumentele de care au nevoie pentru a îmbunătăți  viața lor civică, toate într-un singur loc.</p>
+
+<p>Dorim să subliniem  că nici unul dintre datele tale personale NU vor fi dezvăluite nimănui, decât dacă încalcă legea sau condițiile de utilizare. Tot ceea ce vei posta va fi legat de un nume de utilizator la alegerea ta și nu trebuie să îți pui fotografia în profil dacă nu vrei asta.</p>
+
+<p>Pentru a te înregistra, trebuie mai întâi să furnizezi numele tău complet <u><strong>real</strong></u>. Aceste va fi păstrat confidențial, cu excepția cazului în care setezi să apară în mod public în profilul tău.</p>
+
+<p>Vom efectua audituri, cum ar fi verificarea încrucișată în lista utilizatorilor înregistrați cu liste de alegători înregistrați într-un anumit oraș ... doar pentru a vă asigura că Batman, Cenusareasa sau John / Jane Doe nu beneficiază de aceleași drepturi civice ca persoane reale.</p>
+
+<p>Anul nașterii, sexul  sunt, de asemenea, păstrate confidențiale și sunt utilizate pentru a distinge conturile  diferitelor persoane cu același nume, sau pentru statisticile noastre generale.</p>
+
+<p>Adresa ta de e-mail va fi folosită pentru a valida contul tău și pantru a-ți trimite informații importante. Nu îți vom trimite cu forța cu actualizări nedorite; abonarea la newsletter-ul nostru depinde  de tine. Nu vom da sau  vinde e-mail-uri către terți!</p>
+
+<p>Telefonul tău este opțional, dar, cu toate acestea, îți recomandăm insistent să îl furnizezi, deoarece ne va permite să te contactăm  rapid, dacă observăm orice activitate anormală sau problemă cu contul tău. Din nou, datele tale rămâ complet confidențiale.</p>
+
+<p>Numele tău de utilizator este unic și va fi singurul identificator care apare în mod public cu privire la propunerile, comentariile, programele tale, etc.</p>
+
+<p>Parola ta ar trebui să fie o combinație de litere și cifre, cel puțin 8 caractere. Atenție: literele mici sunt considerate diferite de cele majuscule. NU TRIMITEȚI parola nimănui.</p>
+
+<p>Selectează țara ta, introdu codul poștal, apoi selectează orașul printre opțiunile propuse. Acest pas este esențial, deoarece DEMODYNE va atribui contului tău un anumit oraș, județ și țara pentru care poți contribui.</p>
+
+<p>În cele din urmă, introdu textul pe care îl vezi în caseta de siguranță și apasă butonul &quot;Înregistrare&quot;. <strong>Vei primi un e-mail de validare pentru a activa contul dacă înregistrarea a reușit.</strong></p>
+
+
+
+<p>&nbsp;</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="bot50" id="administration-registration">
+
+
+
+<span class="big"><strong>Înregistrare Administraţie</strong></span>
+
+<hr>
+
+
+
+<p>Conturile de administraţie sunt strict rezervate pentru administrațiile oficiale responsabile de orașe, judeţe sau țări (de exemplu, administraţia judeţului Arad, a orașului Mangalia sau a României).</p>
+
+<p>Numai funcționarii pot pretinde aceste conturi, vom verifica toate cererile direct cu administrația în cauză înainte de activarea contului (aceasta poate dura câteva zile). Pe formular, specificați denumirea oficială completă a administrației, țara și nivelul la care administrația reglementează: oraș, judeţ sau țară. În funcție de nivelul în cauză,  furnizați informațiile suplimentare necesare pentru a identifica orașul sau judeţul.</p>
+
+<p>Apoi se adaugă o scurtă prezentare a administrației (de exemplu, domeniul de aplicare al responsabilităților), precum și un link către site-ul său oficial.</p>
+
+<p>Numele de utilizator ar trebui să fie un nume scurt în mod obișnuit ușor de înțeles cu referire la administrație (nu persoana responsabilă de gestionarea contului) - de exemplu, &quot;Arad_Primarie&quot;.</p>
+
+<p>Parola ta ar trebui să fie o combinație de litere și cifre, cel puțin 8 caractere. Atenție: literele mici sunt considerate diferite de cele majuscule. Parola trebuie să fie distribuit numai cu angajații autorizați în mod oficial de către administrația respectivă pentru a gestiona contul în numele său.</p>
+
+<p>Trebuie  furnizate detalii complete ale persoanei principale de contact  (manager de cont principal), inclusiv numărul de telefon direct și e-mail direct.</p>
+
+<p>În cele din urmă, introdu textul pe care îl vezi în caseta de siguranță și apasă butonul &quot;Înregistrare&quot;. <strong>Contactl primar va primi un e-mail de validare pentru a activa contul dacă înregistrarea a reușit.</strong></p>
+
+<p>Apoi, cererea va fi transferată către echipa noastră de suport,  care va contacta administrația pentru a verifica informațiile furnizate înainte de a activa contul (o notificare va fi trimisă la e-mail-ul de contact principal).</p>
+
+<p>&nbsp;</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="bot50" id="partner-registration">
+
+
+
+<span class="big"><strong>Înregistrare Partner </strong></span>
+
+<hr>
+
+
+
+<p>În construcție. Te rog intoarce-te mai tarziu. Mulțumesc!</p>
+
+<p>&nbsp;</p>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="bot50" id="citizen-landing-page">
+
+
+
+<span class="big"><strong>Pagina	principala a cetățeanului</strong></span>
+
+<hr>
+
+
+
+<p>Observă mai întâi bara de meniu din partea de sus a ecranului. Rămâne accesibilă oriunde vă aflați pe DEMODYNE.</p>
+
+
+
+<p>Partea din stânga:</p>
+
+
+
+<p><img src="<?php echo $this->basePath('img/help1-ro.png') ?>" class="img-responsive"></p>
+
+
+
+<p>Partea din dreapta:</p>
+
+
+
+<p><img src="<?php echo $this->basePath('img/help2-ro.png') ?>" class="img-responsive"></p>
+
+
+
+<p>Dacă nu esti încă familiarizat cu ecranele principale ale   orașului, judeţului și țării, pur și simplu utilizați ghidul de navigare din centrul paginii de destinație: câteva clicuri pentrua alege  încotro care vrei să mergi! Sau poti sa faci clic pe meniul de sus: oraș &gt;  judeţ &gt; țară.</p>
+
+
+
+<p><img src="<?php echo $this->basePath('img/help3-ro.png') ?>" class="img-responsive"></p>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div></div><!--/panel-->
+
+
+
+
+
+
+
+</div><!--/9-->
+
+
+
+
+
+
+
+</div><!-- end row -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><!-- end jumbotron -->
+

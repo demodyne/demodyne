@@ -1,17 +1,15 @@
-<!-- user-registration/confirm-email -->
-
 <div class="modal-header-soft round5top ui-draggable-handle topm20">
-<button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+
   <span class="big" id="modal-dialog-title"><a href="/"><img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> - <strong><?= $this->translate('Citizen Registration')?></strong></span>
 </div>
 
 
 
-<div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;" id="">
+<div class="jumbotron text-center" style="border-top-left-radius: 0px;border-top-right-radius: 0px;" id="">
         
-<?= $this->translate('Thank you! Yor registration has been confirmed. You can now')?> <a href="<?=$this->url('home/login');?>"><?= $this->translate('sign in')?></a>.
+<?= $this->translate('Thank you! Your registration has been confirmed. ')?><br><br>
+    <span ><a href="/" class="btn btn-orange"><?= $this->translate('Continue')?></a></span>
 
 
 </div><!--/j-->  
 
-<!-- /user-registration/confirm-email -->

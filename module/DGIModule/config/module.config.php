@@ -1,760 +1,1 @@
-<?php
-/**
- * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
- * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
- */
-
-return array(
-    'controllers' => array(
-        'invokables' => array(
-            'DGIModule\Controller\Proposal'         => 'DGIModule\Controller\ProposalController',
-            'DGIModule\Controller\Measure'          => 'DGIModule\Controller\MeasureController',
-            'DGIModule\Controller\Program'          => 'DGIModule\Controller\ProgramController',
-            'DGIModule\Controller\Comment'          => 'DGIModule\Controller\CommentController',
-            'DGIModule\Controller\CommentThumb'     => 'DGIModule\Controller\CommentThumbController',
-            'DGIModule\Controller\UserLogin'        => 'DGIModule\Controller\UserLoginController',
-            'DGIModule\Controller\UserRegistration' => 'DGIModule\Controller\UserRegistrationController',
-            'DGIModule\Controller\UserProfile'      => 'DGIModule\Controller\UserProfileController',
-            'DGIModule\Controller\PartnerProfile'   => 'DGIModule\Controller\PartnerProfileController',
-            'DGIModule\Controller\AdministrationProfile'   => 'DGIModule\Controller\AdministrationProfileController',
-            'DGIModule\Controller\Inbox'            => 'DGIModule\Controller\InboxController',
-            'DGIModule\Controller\Location'         => 'DGIModule\Controller\LocationController',
-            'DGIModule\Controller\Banner'           => 'DGIModule\Controller\BannerController',
-            'DGIModule\Controller\Newsletter'       => 'DGIModule\Controller\NewsletterController',
-            'DGIModule\Controller\Event'            => 'DGIModule\Controller\EventController',
-            'DGIModule\Controller\Dashboard'        => 'DGIModule\Controller\DashboardController',
-            'DGIModule\Controller\PartnerDashboard' => 'DGIModule\Controller\PartnerDashboardController',
-            'DGIModule\Controller\AccountWorkspace' => 'DGIModule\Controller\AccountWorkspaceController',
-            'DGIModule\Controller\News'             => 'DGIModule\Controller\NewsController',
-            'DGIModule\Controller\Report'           => 'DGIModule\Controller\ReportController',
-            'DGIModule\Controller\Vote'             => 'DGIModule\Controller\VoteController',
-            'DGIModule\Controller\Category'         => 'DGIModule\Controller\CategoryController',
-            'DGIModule\Controller\Index'            => 'DGIModule\Controller\IndexController',
-            'DGIModule\Controller\Pages'            => 'DGIModule\Controller\PagesController',
-            'DGIModule\Controller\Error'            => 'DGIModule\Controller\ErrorController',
-        ),
-    ),
-    'router' => array(
-        'routes' => array(
-            'city' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/city', 
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Dashboard',
-                        'action'        => 'city-dashboard',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'event' => array( // TODO: city/event
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/event[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish][/date/:month/:year]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Event', 
-                                'action' => 'view-event',
-                                'publish'   => false
-                            ),
-                            'constraints' => array(
-                                'action'     => '(view-attendees|attend-event|view-event|city-events|upcoming-events|add-event|my-events|edit-event|publish-event|cancel-event|delete-event|duplicate-event|search-events)',
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'page' => '[0-9]*',
-                                'month' => '1[0-2]|[1-9]',
-//                                 'year' => '^\d{4}?$',
-                                'filter' => '(none|new_comment|new_step|champion_news|private_message)', 
-                                'sort' => '(name|status|start_date|end_date|type)',
-                                'order' => '(asc|desc)'
-                            ),
-                        ),
-                    ),
-                )
-            ),
-            'proposal' => array( // @todo Proposals
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/proposal[/:action][/:id][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results][/level/:level][/publish/:publish]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Proposal',
-                        'action'        => 'view',
-                        'publish'   => false,
-                    ),
-                    'constraints' => [
-                        'action' => '(prolong-debate|check-proposals|user-proposals|index|add-proposal|view|edit-proposal|publish-proposal|delete|all-proposals|my-proposals|my-favorites|favorite|top-proposals|status|status-details)', /*|add-favorite|remove-favorite*/
-                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'sort' => '(name|user|category|created-date|votes|vote-average|draft|published|status|level)',
-                        'order' => '(asc|desc)',
-                        'results' => '[0-9]*',
-                        'filter' => '(none|city|region|country)',
-                         'level' => '(city|region|country)'
-                    ]
-                ),
-            ),
-            'measure' => array( // TODO: administration/measure
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/measure[/:action][/:id][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Measure',
-                        'action'        => 'view',
-                        'publish'   => false,
-                    ),
-                    'constraints' => [
-                        'action' => '(claim-ownership|view-history|edit-measure|draft-measures|all-measures|add-measure|view-measure|publish-measure|delete-measure)',
-                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'sort' => '(name|user|category|created-date|votes|vote-average|draft|published-date|created-date|status)',
-                        'order' => '(asc|desc)',
-                        'results' => '[0-9]*',
-                    ]
-                ),
-            ),
-            'program' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/program[/:action][/:id][/proposal/:proposal][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results][/ajax/:ajax][/level/:level]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Program',
-                        'action'        => 'view-program',
-                    ),
-                    'constraints' => [
-                        'action' => '(sort-proposals|get-categories-count|add-proposals-from-city|add-remove-proposal|get-proposals|add-proposal|edit-program|add-program|view-program|view-aggregated-program|delete-program|my-programs|user-programs|all-programs)',
-                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'proposal' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'sort' => '(name|owner|category|created_date|saved_date|published-date|status|priority)',
-                        'order' => '(asc|desc)',
-                        'results' => '[0-9]*',
-                        'filter' => '(included|proposal-not-included|my-proposals|none|measures-not-included)',
-                        'level' => '(city|region|country)'
-                    ]
-                ),
-            ),
-            'comment' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/comment/:type/:id/:action[/actions/:actions][/page/:page][/sort/:sort][/order/:order][/results/:results][/ajax/:ajax][/com/:com]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Comment',
-                        'action'        => 'index',
-                        'sort'          => 'published',
-                        'order'          => 'desc',
-                        'results'         => 5,
-                        'ajax'  => true,
-                        'actions' => 'true'
-                    ),
-                    'constraints' => [
-                        'action' => '(create-comment|add-comment|list)',
-                        'type' => '(program|proposal|comment)',
-                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'sort' => '(name|user|createdDate|published|votes)',
-                        'order' => '(asc|desc)',
-                        'results' => '[0-9]*',
-                    ]
-                ),
-            ),
-            'comment-thumb' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/comment/:id/thumb[/:action][/:type]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'CommentThumb',
-                        'action'        => 'add',
-                    ),
-                    'constraints' => [
-                        'action' => '(add|remove)',
-                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'type' => '(up|down)',
-                    ]
-                ),
-            ),
-            'event' => array( // TODO: city/event
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/event[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish][/date/:month/:year]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Event',
-                        'action' => 'view-event',
-                        'publish'   => false
-                    ),
-                    'constraints' => array(
-                        'action'     => '(view-attendees|attend-event|view-event|city-events|all-events|upcoming-events|add-event|my-events|edit-event|publish-event|cancel-event|delete-event|duplicate-event|search-events)',
-                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'month' => '1[0-2]|[1-9]',
-                        'filter' => '(none|new_comment|new_step|champion_news|private_message)',
-                        'sort' => '(name|status|start_date|end_date|type)',
-                        'order' => '(asc|desc)'
-                    ),
-                ),
-            ),
-            'news' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/news[/:id][/page/:page][/filter/:filter][/results/:results]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'News',
-                        'action'        => 'all-news',
-                    ),
-                    'constraints' => [
-                        'action' => '(all-news|create-news)',
-                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'filter' => '(none|new_measure|new_proposal|implementation_phase|completed_proposal|deleted_proposal|task_suggestion|updated_payement)', //new_scenario|updated_scenario|
-                        'results' => '[0-9]*',
-                    ]
-                ),
-            ),
-            'country' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/country[/]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Dashboard',
-                        'action'        => 'country-dashboard',
-                    ),
-                ),
-            ),
-            'browse' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/browse[/:action][/:country[/region/:region[/city/:postalcode/:cityname]]]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'browse',
-                    ),
-                    'constraints' => [
-                        'action' => '(browse|browse-content)',
-                    ]
-                ),
-            ),
-            'vote' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/vote/:action/:id[/terminal/:terminal][/text/:text]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Vote',
-                        'action'        => 'add',
-                        'terminal' => true,
-                        'text' => true,
-                    ),
-                    'constraints' => [
-                       'action' => '(add|view)',
-                       'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                    ]
-                ),
-            ),
-            // @todo: partner
-            'partner' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/partner',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'UserLogin',
-                        'action'        => 'login',
-                    ),
-                    'constraints' => array(
-                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'filter' => '(none|new_comment|new_step|champion_news|private_message)'
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'dashboard' => array( 
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/dashboard[/:action[/:id]][/type/:type][/uuid/:uuid][/page/:page][/filter/:filter][/sort/:sort][/order/:order]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'PartnerDashboard',
-                                'action'        => 'index',
-                                'type'          => 0,
-                                'uuid'          => '00000000-0000-0000-0000-000000000000',
-                                'filter'        => 'none',
-                                'sort'          => 'name',
-                                'order'          => 'desc',
-                            ),
-                            'constraints' => array(
-                                'action'     => '(search-opportunities-form|inbox|news|citizen-proposals|ongoing-projects|view|find-partners|search-opportunities)',
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                //'to'     	 => '[a-zA-Z0-9_-+]*',
-                                'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'page' => '[0-9]*',
-                                'filter' => '(none|new_comment|new_step|champion_news|private_message)', // @todo to modify
-                                'sort' => '(pertinence|name|user|category|city|published|votes|scenario)', // TODO 
-                                'order' => '(asc|desc)'
-                            ),
-                        ),
-                    ),
-                    'profile' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/profile[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/ajax/:ajax]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'PartnerProfile',
-                                'action'        => 'view',
-                                'sort'          => 'name',
-                                'order'          => 'asc',
-                                'action'        => 'view',
-                                'results'         => 5,
-                                'ajax'          => true
-                            ),
-                            'constraints' => array(
-                                'action'     => '(partner-account-settings|partner-contact|partner-presentation|mini-profile|partner-profile|contact|edit-profile|view|select-categories|select-regions)',// change-password|change-email|change-city|
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'page' => '[0-9]*',
-                                'sort' => '(name|user|category|created-date|votes|draft|published-date|status)',
-                                'order' => '(asc|desc)',
-                                'results' => '[0-9]*',
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            // TODO: administration
-            'administration' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/administration',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'UserLogin',
-                        'action'        => 'login',
-                    ),
-                    'constraints' => array(
-                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                        'page' => '[0-9]*',
-                        'filter' => '(none|new_comment|new_step|champion_news|private_message)'
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    // TODO: administration/profile 
-                    'profile' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/profile[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/ajax/:ajax]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'AdministrationProfile',
-                                'action'        => 'view',
-                                'action'        => 'view',
-                                'ajax'          => true
-                            ),
-                            'constraints' => array(
-                                'action'     => '(view-user-info|partner-account-settings|partner-contact|partner-presentation|mini-profile|administration-profile|contact|edit-profile|view|select-categories|select-regions)',// change-password|change-email|change-city|
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'page' => '[0-9]*',
-                                'sort' => '(name|user|category|created-date|votes|draft|published-date|status)',
-                                'order' => '(asc|desc)',
-                                'results' => '[0-9]*',
-                            ),
-                        ),
-                    ),
-                    'banner' => array( // TODO: administration/banner
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/banner[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Banner',
-                                'publish'   => false
-                            ),
-                            'constraints' => array(
-                                'action'     => '(my-banners|carousel-banners|sort-active-banners|active-banners|inactive-banners|add-banner|edit-banner|publish-banner|delete-banner|duplicate-banner)',
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'page' => '[0-9]*',
-                                'sort' => '(name)',
-                                'order' => '(asc|desc)'
-                            ),
-                        ),
-                    ),
-                    'newsletter' => array( // TODO: administration/newsletter
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/newsletter[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Newsletter',
-                                'type'          => 0,
-                                'publish'   => false
-                            ),
-                            'constraints' => array(
-                                'action'     => '(view-newsletter|add-newsletter|my-newsletters|edit-newsletter|publish-newsletter|delete-newsletter|duplicate-newsletter)',
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'page' => '[0-9]*',
-                                'sort' => '(name|status|created_date)',
-                                'order' => '(asc|desc)'
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            'user' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/user',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'UserLogin',
-                        'action'        => 'login',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'inbox' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/inbox[/:action[/:id]][/to/:to][/type/:type][/uuid/:uuid][/sk/:sk][/sr/:sr][/ss/:ss][/st/:st][/sm/:sm][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Inbox',
-                                'action'        => 'list',
-                                'type'          => 0,
-                                'uuid'          => '00000000-0000-0000-0000-000000000000',
-                                'sk' => '', // search keywords
-                                'sr' => 1, // search receiver
-                                'ss' => 1, // search sender
-                                'st' => 1, // search title/subject
-                                'sm' => 1, // search message
-                            ),
-                            'constraints' => array(
-                                'action'     => '(forward|reply-all|reply|list-search|delete-selected|delete-one|list-trash|list-sent|get-contacts|add-remove-contact|my-inbox|new-message|create-message|view|list-received|my-contacts)',
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                                'page' => '[0-9]*',
-                                'sort' => '(name)',
-                                'filter' => '(none|new_comment|private_message|unread|newsletter)',//new_step|champion_news|
-                                'results' => '[0-9]*',
-                            ),
-                        ),
-                    ),
-                    'profile' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/profile[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/ajax/:ajax][/list/:list]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'UserProfile',
-                                'action'        => 'view',
-                                'page'          => 1,
-                                'sort'          => 'name',
-                                'order'          => 'asc',
-                                'action'        => 'view',
-                                'results'         => 5,
-                                'ajax'          => true,
-                                'list'          => false,
-                                
-                            ),
-                            'constraints' => array(
-                                'action'     => '(view-my-activity|get-scores|get-user-notes|update-counters|change-picture|mini-profile|user-profile|user-settings|edit-info|contact|user-presentation|delete|view|view-user-info)',
-                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}', 
-                                'page' => '[0-9]*',
-                                'sort' => '(name|user|category|created-date|votes|draft|published-date|status)',
-                                'order' => '(asc|desc)',
-                                'results' => '[0-9]*',
-                            ),
-                        ),
-                    ),
-                    
-                ),
-            ),
-            'captcha_form_generate' => array(
-                'type'    => 'segment',
-                'options' => array(
-                    'route'    =>  '/captcha/[:id]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'UserRegistration',
-                        'action'     => 'generate',
-                    ),
-                ),
-            ),
-            
-            'location' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/location[/[:action[/:id]]][/country/:country][/city/:city]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Location',
-                        'action'        => 'index',
-                    ),
-                    'constraints' => [
-                        'action' => '(get-regions|get-cities|cities|get-departments|add-city)',
-                        'id' => '[0-9]+',
-                    ]
-                ),
-            ),
-           // TODO: home
-            'home' => array(
-                'type' => 'Segment',
-                'options' => array(
-                    'route'    => '/',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller' => 'Index',
-                        'action'     => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'login' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => 'login[/[:action[/[:id]]]]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'UserLogin',
-                                'action'        => 'login',
-                            ),
-                            'constraints' => array(
-                                'action'     => '(index|login|logout)',
-                                'id'     	 => '[a-zA-Z0-9_-]*',
-                            ),
-                        ),
-                    ),
-                    'report' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => 'report/:action[/:type/:id]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Report',
-                                'action'        => 'add-report',
-                            ),
-                            'constraints' => [
-                                'action' => '(add-report|submit-bug)',
-                                'type' => '(program|proposal|comment|inbox)',
-                                'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',
-                            ]
-                        ),
-                    ),
-                    'partner-register' => array(
-                        'type'    => 'Literal',
-                        'options' => array(
-                            'route'    => 'partner-register',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'UserRegistration',
-                                'action'        => 'partner-registration',
-                            ),
-                            'constraints' => array(
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     	 => '[a-zA-Z0-9_-]*',
-                            ),
-                        ),
-                    ),
-                    'administration-register' => array(
-                        'type'    => 'Literal',
-                        'options' => array(
-                            'route'    => 'administration-register',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'UserRegistration',
-                                'action'        => 'administration-registration',
-                            ),
-                            'constraints' => array(
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     	 => '[a-zA-Z0-9_-]*',
-                            ),
-                        ),
-                    ),
-                    'user-register' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => 'user-register[/:action[/:id]]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'UserRegistration',
-                                'action'        => 'user-registration',
-                            ),
-                            'constraints' => array(
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'id'     	 => '[a-zA-Z0-9_-]*',
-                            ),
-                        ),
-                    ),
-                    'pages' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => 'pages[/:action]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Pages',
-                                'action'        => 'about',
-                            ),
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ]
-                        ),
-                    ),
-                    'error' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => 'error[/:action][/dialog/:dialog][/message/:message]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Error',
-                                'action'        => 'index',
-                                'dialog'        => false,
-                            ),
-                            'constraints' => [
-                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ]
-                        ),
-                    ),
-                    'category' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => 'category[/:action][/:id][/country/:country][/level/:level]',
-                            'defaults' => array(
-                                '__NAMESPACE__' => 'DGIModule\Controller',
-                                'controller'    => 'Category',
-                                'action'        => 'index',
-                                'id'            => 0,
-                                'country'       => 73,
-                            ),
-                            'constraints' => [
-                                'action' => '(index|edit|add|delete|get-subcategories|get-categories)',
-                                'id' => '[0-9]+',
-                                'level' => '(city|region|country)'
-                            ]
-                        ),
-                    ),
-                ),
-            ),
-            'region' => array(
-                'type'    => 'Segment',
-                'options' => array(
-                    'route'    => '/region[/:action]',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'DGIModule\Controller',
-                        'controller'    => 'Dashboard',
-                        'action'        => 'region-dashboard',
-                    ),
-                    'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                    ]
-                ),
-            ),
-            
-        ),
-    ),
-    'service_manager' => array(
-        'abstract_factories' => array(
-             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-             'Zend\Log\LoggerAbstractServiceFactory',
-             'Zend\Form\FormAbstractServiceFactory',
-        ),
-    ),
-    'translator' => array(
-        'locale' => 'en',
-        'translation_file_patterns' => array(
-            array(
-                'type'     => 'gettext',
-                'base_dir' => __DIR__ . '/../language',
-                'pattern'  => '%s.mo',
-                'text_domain' => 'DGIModule',
-            ),
-        ),
-    ),
-    'view_manager' => array(
-        'display_not_found_reason' => false,
-        'display_exceptions'       => false,
-        'doctype'                  => 'HTML5',
-        'not_found_template'       => 'error/404',
-        'no_access_template'       => 'error/403',
-        'exception_template'       => 'error/index',
-        'template_map' => array(
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/403'               => __DIR__ . '/../view/error/403.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
-        ),
-        'template_path_stack' => array(
-            __DIR__ . '/../view',
-        ),
-        'strategies' => array(
-            'ViewJsonStrategy',
-        ),
-    ),
-    'view_helpers' => array(
-        'invokables'=> array(
-            'SortingDivPaginationHelper' => 'DGIModule\View\Helper\SortingDivPaginationHelper'        
-        )
-    ),
-    'console' => array(
-        'router' => array(
-            'routes' => array(
-            ),
-        ),
-    ),
-    'doctrine' => array(
-        'authentication' => array( 
-            'orm_default' => array(
-                'object_manager' => 'Doctrine\ORM\EntityManager',
-                'identity_class' => 'DGIModule\Entity\User', 
-                'identity_property' => 'usrName', // 'username', 
-                'credential_property' => 'usrPassword', // 'password',
-            ),
-        ),
-       /* 'cache' => array(
-            'class' => 'Doctrine\Common\Cache\ApcCache'
-        ),
-        'configuration' => array(
-            'orm_default' => array(
-                // 'generate_proxies' => false,
-                'metadata_cache'    => 'apc',
-                'query_cache'       => 'apc',
-                'result_cache'      => 'apc',
-            )
-        ),*/
-        'driver' => array(
-            'DGI_driver' => array(
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache' => 'array',
-                'paths' => array(__DIR__ . '/../src/DGIModule/Entity')
-            ),
-            'orm_default' => array(
-                'drivers' => array(
-                    'DGIModule\Entity' =>  'DGI_driver'
-                ),
-            ),
-        ),
-        'configuration' => array(
-            'orm_default' => array(
-                'string_functions' => array(
-                     'regexp' => 'DoctrineExtensions\Query\Mysql\Regexp',
-                    'ifelse' => 'DoctrineExtensions\Query\Mysql\IfElse',
-                    'dateformat' => 'DoctrineExtensions\Query\Mysql\DateFormat',
-                ),
-                'datetime_functions' => array(
-                    'datediff' => 'DoctrineExtensions\Query\Mysql\DateDiff',
-                    'datesub' => 'DoctrineExtensions\Query\Mysql\DateSub',
-                    'dateadd' => 'DoctrineExtensions\Query\Mysql\DateAdd',
-                )
-            )
-        )
-    ),
-);
+<?php/** * @link      https://github.com/demodyne/demodyne * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org) * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License */return [    'controllers' => [        'invokables' => [            'DGIModule\Controller\AccountWorkspace' => 'DGIModule\Controller\AccountWorkspaceController',            'DGIModule\Controller\Error'            => 'DGIModule\Controller\ErrorController',        ],        'factories' => [            'DGIModule\Controller\Admin'            => 'DGIModule\Controller\Factories\AdminControllerFactory',            'DGIModule\Controller\Banner'           => 'DGIModule\Controller\Factories\BannerControllerFactory',            'DGIModule\Controller\Blog'             => 'DGIModule\Controller\Factories\BlogControllerFactory',            'DGIModule\Controller\Category'         => 'DGIModule\Controller\Factories\CategoryControllerFactory',            'DGIModule\Controller\Chat'             => 'DGIModule\Controller\Factories\ChatControllerFactory',            'DGIModule\Controller\Comment'          => 'DGIModule\Controller\Factories\CommentControllerFactory',            'DGIModule\Controller\CommentThumb'     => 'DGIModule\Controller\Factories\CommentThumbControllerFactory',            'DGIModule\Controller\Dashboard'        => 'DGIModule\Controller\Factories\DashboardControllerFactory',            'DGIModule\Controller\Email'            => 'DGIModule\Controller\Factories\EmailControllerFactory',            'DGIModule\Controller\Referendum'       => 'DGIModule\Controller\Factories\ReferendumControllerFactory',            'DGIModule\Controller\Event'            => 'DGIModule\Controller\Factories\EventControllerFactory',//            'DGIModule\Controller\Execution'        => 'DGIModule\Controller\Factories\ExecutionControllerFactory',            'DGIModule\Controller\Inbox'            => 'DGIModule\Controller\Factories\InboxControllerFactory',            'DGIModule\Controller\Index'            => 'DGIModule\Controller\Factories\IndexControllerFactory',            'DGIModule\Controller\Location'         => 'DGIModule\Controller\Factories\LocationControllerFactory',            'DGIModule\Controller\Measure'          => 'DGIModule\Controller\Factories\MeasureControllerFactory',            'DGIModule\Controller\News'             => 'DGIModule\Controller\Factories\NewsControllerFactory',            'DGIModule\Controller\Newsletter'       => 'DGIModule\Controller\Factories\NewsletterControllerFactory',            'DGIModule\Controller\Pages'            => 'DGIModule\Controller\Factories\PagesControllerFactory',//            'DGIModule\Controller\PartnerDashboard' => 'DGIModule\Controller\Factories\PartnerDashboardControllerFactory',//            'DGIModule\Controller\PartnerProfile'   => 'DGIModule\Controller\Factories\PartnerProfileControllerFactory',            'DGIModule\Controller\Program'          => 'DGIModule\Controller\Factories\ProgramControllerFactory',            'DGIModule\Controller\Proposal'         => 'DGIModule\Controller\Factories\ProposalControllerFactory',            'DGIModule\Controller\Report'           => 'DGIModule\Controller\Factories\ReportControllerFactory',            'DGIModule\Controller\Session'          => 'DGIModule\Controller\Factories\SessionControllerFactory',            'DGIModule\Controller\UserLogin'        => 'DGIModule\Controller\Factories\UserLoginControllerFactory',            'DGIModule\Controller\UserProfile'      => 'DGIModule\Controller\Factories\UserProfileControllerFactory',            'DGIModule\Controller\UserRegistration' => 'DGIModule\Controller\Factories\UserRegistrationControllerFactory',            'DGIModule\Controller\Vote'             => 'DGIModule\Controller\Factories\VoteControllerFactory',        ],    ],    'router' => [        'routes' => [            'city' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/city',                     'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Dashboard',                        'action'        => 'city',                    ],                ],            ],            'proposal' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/proposal[/:action][/:id][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results][/level/:level][/idea/:idea][/publish/:publish]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Proposal',                        'action'        => 'view',                        'publish'   => false,                    ],                    'constraints' => [                        'action' => '(json-proposals|prolong-debate|check-proposals|user-proposals|index|add-proposal|view|edit-proposal|publish-proposal|delete|all-proposals|my-proposals|my-favorites|favorite|top-proposals|status|status-details|idea-imported-proposals)', /*|add-favorite|remove-favorite*/                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'idea' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'sort' => '(name|user|category|created-date|votes|vote-average|draft|published|status|level)',                        'order' => '(asc|desc)',                        'results' => '[0-9]*',                        'filter' => '(none|city|region|country)',                         'level' => '(city|region|country)'                    ]                ],            ],            'measure' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/measure[/:action][/:id][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Measure',                        'action'        => 'view-measure',                        'publish'   => false,                    ],                    'constraints' => [                        'action' => '(claim-ownership|view-history|edit-measure|draft-measures|all-measures|add-measure|view-measure|publish|delete)',                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'sort' => '(name|user|category|created-date|votes|vote-average|draft|published|created-date|status)',                        'order' => '(asc|desc)',                        'results' => '[0-9]*',                    ]                ],            ],            'program' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/program[/:action][/:id][/proposal/:proposal][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results][/ajax/:ajax][/level/:level]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Program',                        'action'        => 'view-program',                    ],                    'constraints' => [                        'action' => '(sort-proposals|get-categories-count|add-proposals-from-city|add-remove-proposal|get-proposals|add-proposal|edit-program|add-program|view-program|view-aggregated-program|delete-program|my-programs|user-programs|all-programs)',                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'proposal' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'sort' => '(name|owner|category|created_date|saved_date|published-date|status|priority)',                        'order' => '(asc|desc)',                        'results' => '[0-9]*',                        'filter' => '(included|proposal-not-included|my-proposals|none|measures-not-included)',                        'level' => '(city|region|country)'                    ]                ],            ],            'comment' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/comment/:type/:id/:action[/actions/:actions][/page/:page][/sort/:sort][/order/:order][/results/:results][/ajax/:ajax][/com/:com]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Comment',                        'action'        => 'index',                        'sort'          => 'published',                        'order'          => 'desc',                        'results'         => 5,                        'ajax'  => true,                        'actions' => 'true'                    ],                    'constraints' => [                        'action' => '(create-comment|add-comment|list)',                        'type' => '(program|proposal|comment|article)',                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'sort' => '(name|user|createdDate|published|votes)',                        'order' => '(asc|desc)',                        'results' => '[0-9]*',                    ]                ],            ],            'comment-thumb' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/comment/:id/thumb[/:action][/:type]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'CommentThumb',                        'action'        => 'add',                    ],                    'constraints' => [                        'action' => '(add|remove)',                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'type' => '(up|down)',                    ]                ],            ],            'event' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/event[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results][/publish/:publish][/date/:month/:year][/ajax/:ajax]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Event',                        'action' => 'view-event',                        'publish'   => false,                        'filter' => 'not-invited',                        'ajax' => true                    ],                    'constraints' => [                        'action'     => '(view-attendees|attend-event|view-invitations|invite-attendees|view-event|all-events|upcoming-events|add-event|my-events|edit-event|publish-event|cancel-event|delete-event|duplicate-event|search-events)',                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'month' => '1[0-2]|[1-9]',                        'sort' => '(name|status|start_date|end_date|type|city)',                        'order' => '(asc|desc)',                        'filter' => '(not-invited|invited|all-level)'                    ],                ],            ],            'session' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/session[/:action][/:id][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results][/publish/:publish][/ajax/:ajax]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Session',                        'action' => 'view-session',                        'publish'   => false,                        'ajax' => true                    ],                    'constraints' => [                        'action'     => '(session-ended|prolong-session|public-session-created|add-edit-session|view-session|live|add-idea|update-idea|validate-idea|delete-idea|sort-ideas|idea-list|my-sessions|my-sessions-list|view-ended-session|end-session)',                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'month' => '1[0-2]|[1-9]',                        'sort' => '(name|status|start_date|end_date|type)',                        'order' => '(asc|desc)'                    ],                ],            ],//            'execution' => [//                'type'    => 'Segment',//                'options' => [//                    'route'    => '/proposal/implementation[/:action][/:id][/step/:step][/user/:user][/page/:page][/sort/:sort][/order/:order][/results/:results]',//                    'defaults' => [//                        '__NAMESPACE__' => 'DGIModule\Controller',//                        'controller'    => 'Execution',//                        'page'          => 1,//                        'sort'          => 'name',//                        'order'          => 'asc',//                        'action'        => 'index',//                        'step'          => '1',//                        'results'         => 5//                    ],//                    'constraints' => [//                        'action' => '(index|champions|partners|get-partners|find-partners|add-remove-user|budget|timeline|add-step|edit-step|edit-step-1|edit-1|edit-2|edit-3|edit-4|edit-5|step-edit-sequence)',//                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',//                        'user' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',//                        'page' => '[0-9]*',//                        'sort' => '(name|user|category|published|votes)',//                        'order' => '(asc|desc)',//                        'results' => '[0-9]*',//                    ]//                ],//            ],            'chat' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/chat[/:action][/:id][/user/:user][/type/:type][/input/:input][/ajax/:ajax]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Chat',                        'action' => 'view-chat',                        'ajax' => true                    ],                    'constraints' => [                        'action'     => '(add-chat|view-chat|add-message|message-list|set-title|block)',                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                    ],                ],            ],            'news' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/news[/:action][/:id][/page/:page][/filter/:filter][/results/:results]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'News',                        'action'        => 'news',                    ],                    'constraints' => [                        'action' => '(all-news|create-news|news)',                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'filter' => '(none|new_measure|new_proposal|implementation_phase|completed_proposal|deleted_proposal|task_suggestion|updated_payement)', //new_scenario|updated_scenario|                        'results' => '[0-9]*',                    ]                ],            ],            'country' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/country[/:id]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Dashboard',                        'action'        => 'country',                    ],                    'constraints' => [                        'id' => '[0-9]*',                    ]                ],            ],            'browse' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/browse[/:action][/:country[/:region[/:postalcode/:cityname]]]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Index',                        'action'        => 'browse',                    ],                    'constraints' => [                        'action' => '(browse|browse-content|browse-dialog)',                    ]                ],            ],            'vote' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/vote/:action/:id[/terminal/:terminal][/text/:text]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Vote',                        'action'        => 'add',                        'terminal' => true,                        'text' => true,                    ],                    'constraints' => [                       'action' => '(add|view)',                       'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                    ]                ],            ],            'email' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/email[/[:action[/:id]]][/email/:email][/msg/:msg]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Email',                        'action'        => 'index',                        'email'         => false                    ],                    'constraints' => [                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                    ]                ],            ],            'blog' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/blog/:action[/:id][/country/:country][/tag/:tag][/page/:page][/results/:results][/publish/:publish]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Blog',                        'action'        => 'articles',                    ],                    'constraints' => [                        'page' => '[0-9]*',                        'results' => '[0-9]*',                    ]                ],            ],            'search' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/search[/:action][/criteria/:type/:id][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Index',                        'action'        => 'search',                    ],                ],            ],            'admin' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/admin[/:action[/:id]][/from/:from][/to/:to][/page/:page][/sort/:sort][/order/:order][/results/:results][/level/:level]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Admin',                        'action'        => 'admin-digest',                        'email'         => true                    ],                    'constraints' => [                        'action' => '(index|admin-digest|users|proposals|measures|events|sessions|programs)',                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'results' => '[0-9]*',                        'level' => '(all|city|region|country)'                    ]                ],            ],            'e-referendum'=> [                'type'    => 'Segment',                'options' => [                    'route'    => '/e-referendum[/[:action[/:id]]][/vote/:vote]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Referendum',                        'action'        => 'index',                        'email'         => true                    ],                    'constraints' => [                        'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                    ]                ],            ],        /*    'partner' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/partner',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'UserLogin',                        'action'        => 'login',                    ],                    'constraints' => [                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'filter' => '(none|new_comment|new_step|champion_news|private_message)'                    ],                ],                'may_terminate' => true,                'child_routes' => [                    'dashboard' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/dashboard[/:action[/:id]][/type/:type][/uuid/:uuid][/page/:page][/filter/:filter][/sort/:sort][/order/:order]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'PartnerDashboard',                                'action'        => 'index',                                'type'          => 0,                                'uuid'          => '00000000-0000-0000-0000-000000000000',                                'filter'        => 'none',                                'sort'          => 'name',                                'order'          => 'desc',                            ],                            'constraints' => [                                'action'     => '(search-opportunities-form|inbox|news|citizen-proposals|ongoing-projects|view|find-partners|search-opportunities)',                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                //'to'     	 => '[a-zA-Z0-9_-+]*',                                'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                'page' => '[0-9]*',                                'filter' => '(none|new_comment|new_step|champion_news|private_message)',                                'sort' => '(pertinence|name|user|category|city|published|votes|scenario)',                                'order' => '(asc|desc)'                            ],                        ],                    ],                    'profile' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/profile[/:action[/:id]][/context/:context][/page/:page][/sort/:sort][/order/:order][/results/:results][/ajax/:ajax]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'PartnerProfile',                                'action'        => 'view',                                'sort'          => 'name',                                'order'          => 'asc',                                'action'        => 'view',                                'results'         => 5,                                'ajax'          => true                            ],                            'constraints' => [                                'action'     => '(partner-account-settings|partner-contact|partner-presentation|mini-profile|partner-profile|contact|edit-profile|view|select-categories|select-regions)',// change-password|change-email|change-city|                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                'context'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                'page' => '[0-9]*',                                'sort' => '(name|user|category|created-date|votes|draft|published-date|status)',                                'order' => '(asc|desc)',                                'results' => '[0-9]*',                            ],                        ],                    ],                ],            ],*/            'administration' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/administration',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'UserLogin',                        'action'        => 'login',                    ],                    'constraints' => [                        'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                        'page' => '[0-9]*',                        'filter' => '(none|new_comment|new_step|champion_news|private_message)'                    ],                ],                'may_terminate' => true,                'child_routes' => [                    'banner' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/banner[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Banner',                                'publish'   => false                            ],                            'constraints' => [                                'action'     => '(my-banners|carousel-banners|sort-active-banners|active-banners|inactive-banners|add-banner|edit-banner|publish-banner|delete-banner|duplicate-banner)',                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                'page' => '[0-9]*',                                'sort' => '(name)',                                'order' => '(asc|desc)'                            ],                        ],                    ],                    'newsletter' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/newsletter[/:action[/:id]][/page/:page][/sort/:sort][/order/:order][/results/:results][/publish/:publish]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Newsletter',                                'type'          => 0,                                'publish'   => false                            ],                            'constraints' => [                                'action'     => '(view-newsletter|add-newsletter|my-newsletters|edit-newsletter|publish-newsletter|delete-newsletter|duplicate-newsletter)',                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                'page' => '[0-9]*',                                'sort' => '(name|status|created_date)',                                'order' => '(asc|desc)'                            ],                        ],                    ],                    'dashboard' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/dashboard',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Dashboard',                                'action'          => 'administration',                            ],                        ],                    ],                ],            ],            'user' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/user',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'UserLogin',                        'action'        => 'login',                    ],                ],                'may_terminate' => true,                'child_routes' => [                    'workspace' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/workspace',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'AccountWorkspace',                                'action'        => 'user-workspace',                            ],                        ],                    ],                    'inbox' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/inbox[/:action[/:id]][/to/:to][/type/:type][/uuid/:uuid][/sk/:sk][/sr/:sr][/ss/:ss][/st/:st][/sm/:sm][/page/:page][/sort/:sort][/order/:order][/filter/:filter][/results/:results]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Inbox',                                'action'        => 'list',                                'type'          => 0,                                'uuid'          => '00000000-0000-0000-0000-000000000000',                                'sk' => '', // search keywords                                'sr' => 1, // search receiver                                'ss' => 1, // search sender                                'st' => 1, // search title/subject                                'sm' => 1, // search message                            ],                            'constraints' => [                                'action'     => '(view-message|forward|reply-all|reply|list-search|delete-selected|delete-one|list-trash|list-sent|get-contacts|add-remove-contact|my-inbox|new-message|create-message|view|list-received|my-contacts)',                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                'uuid'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                'page' => '[0-9]*',                                'sort' => '(name)',                                'filter' => '(none|new_comment|private_message|unread|newsletter|invitation)',//new_step|champion_news|                                'results' => '[0-9]*',                            ],                        ],                    ],                    'profile' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => '/profile[/:action[/:id]][/context/:context][/page/:page][/sort/:sort][/order/:order][/results/:results][/search/:search][/ajax/:ajax][/list/:list]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'UserProfile',                                'action'        => 'view',                                'page'          => 1,                                'sort'          => 'name',                                'order'          => 'asc',                                'action'        => 'view',                                'results'         => 5,                                'ajax'          => true,                                'list'          => false,                            ],                            'constraints' => [                                'action'     => '(user-mailing|administration-presentation|search-users|view-my-activity|get-scores|get-user-notes|update-counters|change-picture|mini-profile|user-proposals|user-profile|user-settings|edit-info|user-presentation|delete|view|view-user-info|select-categories|select-regions)',// change-password|change-email|change-city|                                'id'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                 'context'     	 => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                                 'page' => '[0-9]*',                                'sort' => '(name|user|category|created-date|votes|draft|published-date|status)',                                'order' => '(asc|desc)',                                'results' => '[0-9]*',                            ],                        ],                    ],                ],            ],            'captcha_form_generate' => [                'type'    => 'segment',                'options' => [                    'route'    =>  '/captcha/[:id]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'UserRegistration',                        'action'     => 'generate',                    ],                ],            ],                        'location' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/location[/[:action[/:id]]][/country/:country][/city/:city][/postalcode/:postalcode]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Location',                        'action'        => 'index',                    ],                    'constraints' => [                        'action' => '(get-regions|get-regions-by-country-code|get-cities|search-cities|search-cities-all-regions|cities|get-departments|add-city)',                        'id' => '[0-9]+',                    ]                ],            ],            'home' => [                'type' => 'Segment',                'options' => [                    'route'    => '/',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller' => 'Index',                        'action'     => 'index',                    ],                ],                'may_terminate' => true,                'child_routes' => [                    'login' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'login[/[:action[/[:id]]]]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'UserLogin',                                'action'        => 'login',                            ],                            'constraints' => [                                'action'     => '(index|login|logout|facebook-login)',                                'id'     	 => '[a-zA-Z0-9_-]*',                            ],                        ],                    ],                    'report' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'report/:action[/:type/:id]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Report',                                'action'        => 'add-report',                            ],                            'constraints' => [                                'action' => '(add-report|submit-bug)',                                'type' => '(program|proposal|comment|inbox)',                                'id' => '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',                            ]                        ],                    ],                    'partner-register' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'partner-register',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'UserRegistration',                                'action'        => 'partner-registration',                            ],                            'constraints' => [                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',                                'id'     	 => '[a-zA-Z0-9_-]*',                            ],                        ],                    ],                    'administration-register' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'administration-register[/:action[/:id]]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'UserRegistration',                                'action'        => 'administration-registration',                            ],                            'constraints' => [                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',                                'id'     	 => '[a-zA-Z0-9_-]*',                            ],                        ],                    ],                    'user-register' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'user-register[/:action[/:id[/:follow]]]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'UserRegistration',                                'action'        => 'user-registration',                            ],                            'constraints' => [                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',                                'id'     	 => '[a-zA-Z0-9_-]*',                            ],                        ],                    ],                    'pages' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'page[/:page][/start/:start][/period/:period]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Pages',                                'action'        => 'page',                            ],                        ],                    ],                    'error' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'error[/:action][/dialog/:dialog][/message/:message]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Error',                                'action'        => 'index',                                'dialog'        => false,                            ],                            'constraints' => [                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',                            ]                        ],                    ],                    'category' => [                        'type'    => 'Segment',                        'options' => [                            'route'    => 'category[/:action][/:id][/country/:country][/level/:level]',                            'defaults' => [                                '__NAMESPACE__' => 'DGIModule\Controller',                                'controller'    => 'Category',                                'action'        => 'index',                                'id'            => 0,                                'country'       => 73,                            ],                            'constraints' => [                                'action' => '(index|edit|add|delete|get-subcategories|get-categories|get-all-categories|json-list)',                                'id' => '[0-9]+',                                'level' => '(city|region|country)'                            ]                        ],                    ],                ],            ],            'region' => [                'type'    => 'Segment',                'options' => [                    'route'    => '/region[/:action]',                    'defaults' => [                        '__NAMESPACE__' => 'DGIModule\Controller',                        'controller'    => 'Dashboard',                        'action'        => 'region',                    ],                    'constraints' => [                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',                    ]                ],            ],        ],    ],    'translator' => [        'locale' => 'en',        'translation_file_patterns' => [            [                'type'     => 'gettext',                'base_dir' => __DIR__ . '/../language',                'pattern'  => '%s.mo',                'text_domain' => 'DGIModule',            ],        ],    ],    'view_manager' => [        'display_not_found_reason' => false,        'display_exceptions'       => false,        'doctype'                  => 'HTML5',        'not_found_template'       => 'error/404',        'no_access_template'       => 'error/403',        'exception_template'       => 'error/index',        'template_map' => [            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',            'layout/email'           => __DIR__ . '/../view/layout/layout-email.phtml',            'error/404'               => __DIR__ . '/../view/error/404.phtml',            'error/403'               => __DIR__ . '/../view/error/403.phtml',            'error/index'             => __DIR__ . '/../view/error/index.phtml',        ],        'template_path_stack' => [            __DIR__ . '/../view',        ],        'strategies' => [            'ViewJsonStrategy',        ],    ],    'view_helpers' => [        'invokables'=> [            'SortingDivPaginationHelper' => 'DGIModule\View\Helper\SortingDivPaginationHelper',            'SortingDivPaginationHelperWithTotal' => 'DGIModule\View\Helper\SortingDivPaginationHelperWithTotal'        ]    ],    'console' => [        'router' => [            'routes' => [            ],        ],    ],    'doctrine' => [        'authentication' => [            'orm_default' => [                'object_manager' => 'Doctrine\ORM\EntityManager',                'identity_class' => 'DGIModule\Entity\User',                 'identity_property' => 'usrName',                'credential_property' => 'usrPassword',            ],        ],//       'cache' => array(//            'class' => 'Doctrine\Common\Cache\ApcCache'//        ),        'driver' => [            'DGI_driver' => [                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',                'cache' => 'array',                'paths' => [__DIR__ . '/../src/DGIModule/Entity']            ],            'orm_default' => [                'drivers' => [                    'DGIModule\Entity' =>  'DGI_driver'                ],            ],        ],        'configuration' => [            'orm_default' => [//                'metadata_cache'    => 'apc',//                'query_cache'       => 'apc',//                'result_cache'      => 'apc',                'string_functions' => [                    'regexp' => 'DoctrineExtensions\Query\Mysql\Regexp',                    'ifelse' => 'DoctrineExtensions\Query\Mysql\IfElse',                    'dateformat' => 'DoctrineExtensions\Query\Mysql\DateFormat',                    'findinset' => 'DoctrineExtensions\Query\Mysql\FindInSet',                ],                'datetime_functions' => [                    'datediff' => 'DoctrineExtensions\Query\Mysql\DateDiff',                    'datesub' => 'DoctrineExtensions\Query\Mysql\DateSub',                    'dateadd' => 'DoctrineExtensions\Query\Mysql\DateAdd',                ],                'types' => [                    'utcdatetime' => 'DGIModule\DBAL\Types\UTCDateTimeType',                ],            ]        ]    ],];

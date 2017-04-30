@@ -1,81 +1,84 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity\Repository;
 
+use DGIModule\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class NewsRepository extends EntityRepository
 {
-
-    public function countNewNews(\DGIModule\Entity\User $user, $level='city', $levels)
+    /**
+     * Count the published Proposals for the $city
+     * @param User $user
+     * @param string $level
+     * @param $levels
+     * @return mixed
+     * @internal param \DGIModule\Entity\City $city
+     */
+    public function countNewNews(User $user, $level='city', $levels)
     {
         $q = $this->createQueryBuilder('n')
-                    ->leftJoin('n.prop', 'p')
-                    ->leftJoin('p.city', 'city')
+                    ->leftJoin('n.city', 'city')
                     ->select('count(distinct n.newsId) as newNews')
                     ->where('n.newsCreatedDate>=:date')
                     ->setParameter('date', $user->getUsrLastLoginDate())
-                    ->andWhere('p.propLevel = :level')
+                    ->andWhere('n.newsLevel = :level')
                     ->setParameter('level', $levels[$level]);
-        
-        if ($level=='city') {
-            $city = $user->getCity();
-            if ($city->getFullCity()) {
-                $q->andWhere('city = :city OR (city.districtCode = :districtCode AND city.fullCity=:fullCity) OR (p.propFullCity = 1 AND city.fullCity = :fullCity)')
-                  ->setParameter('city', $city)
-                  ->setParameter('districtCode', $city->getDistrictCode())
-                  ->setParameter('fullCity', $city->getFullCity());
+        if ($user && $user->getCity()) {
+            if ($level=='city') {
+                $city = $user->getCity();
+                if ($city->getFullCity()) {
+                    $q->andWhere('city = :city OR city.fullCity = :fullCity OR city.fullCity = :city OR city = :fullCity')
+                        ->setParameter('city', $city)
+                        ->setParameter('fullCity', $city->getFullCity());
+                }
+                else {
+                    $q->andWhere('city = :city OR city.fullCity = :city')
+                        ->setParameter('city', $city);
+
+                }
             }
-            else {
-                $q->andWhere('p.city = :city')
-                    ->setParameter('city', $city);
+            if ($level=='region') {
+                $region = $user->getCity()->getRegion();
+                $q->andWhere('city.region = :region ')
+                ->setParameter('region', $region);
+            }
+            if ($level=='country') {
+                $country = $user->getCountry();
+                $q->andWhere('city.country = :country ')
+                ->setParameter('country', $country);
             }
         }
-        if ($level=='region') {
-            $region = $user->getCity()->getRegion();
-            $q->andWhere('city.region = :region ')
-            ->setParameter('region', $region);
-        }
-        if ($level=='country') {
-            $country = $user->getCountry();
-            $q->andWhere('city.country = :country ')
-            ->setParameter('country', $country);
-        }
-        
         return $q->getQuery()->getOneOrNullResult();
     }
     
-    public function getPagedNews(\DGIModule\Entity\User $user, $level='city', $levels, $offset = 0, $limit = 10, $filter) {
-        
-        
+    public function getPagedNews(User $user, $level='city', $levels, $offset = 0, $limit = 10, $filter) {
+
         $q = $this->createQueryBuilder('n')
-                    ->leftJoin('n.prop', 'p')
-                    ->leftJoin('p.city', 'city')
+                  ->leftJoin('n.city', 'city')
                   ->where(($filter)?($filter==5?'n.newsType = :newsType OR n.newsType = 6 OR n.newsType = 7':'n.newsType=:newsType'):'n.newsType > :newsType')
                   ->orderBy('n.newsCreatedDate', 'desc')
                   ->setFirstResult($offset)
                   ->setParameter('newsType', $filter)
-                  ->andWhere('p.propLevel = :level')
-                  ->setParameter('level', $levels[$level]);;
-        
+                  ->andWhere('n.newsLevel = :level')
+                  ->setParameter('level', $levels[$level]);
+
           if ($level=='city') {
               $city = $user->getCity();
               if ($city->getFullCity()) {
-                  $q->andWhere('city = :city OR (city.districtCode = :districtCode AND city.fullCity=:fullCity) OR (p.propFullCity = 1 AND city.fullCity = :fullCity)')
+                  $q->andWhere('city = :city OR city.fullCity = :fullCity OR city.fullCity = :city OR city = :fullCity')
                       ->setParameter('city', $city)
-                      ->setParameter('districtCode', $city->getDistrictCode())
                       ->setParameter('fullCity', $city->getFullCity());
               }
               else {
-                  $q->andWhere('p.city = :city')
-                    ->setParameter('city', $city);
-              
+                  $q->andWhere('city = :city OR city.fullCity = :city')
+                      ->setParameter('city', $city);
               }
           }
           if ($level=='region') {
@@ -88,7 +91,7 @@ class NewsRepository extends EntityRepository
               $q->andWhere('city.country = :country ')
               ->setParameter('country', $country);
           }
-          
+
           if ($filter==1) {
               $q
                   ->andWhere('p.propDeletedDate IS NULL');

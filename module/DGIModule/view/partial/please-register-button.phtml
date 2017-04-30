@@ -1,10 +1,13 @@
-<!-- Please register button partial -->
-
+<? if ($this->identity()):?>
 <button type="button" class="btn btn-orange"
-	data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
-	data-dialog-title="<?=$this->translate('Please register')?>"
+	data-url="<?=$this->url('home/user-register', array('action'=>'please-register-user'))?>"
+	data-dialog-title="<?=$this->translate('Action not allowed')?>"
 	id="please-register-button">
 	<?= $this->text?></button>
-	
-<!-- /Please register button partial -->
-	
+<? else:?>
+    <button type="button" class="btn btn-orange"
+            data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
+            data-dialog-title="<?=$this->translate('Please register')?>"
+            id="please-register-button">
+        <?= $this->text?></button>
+<? endif;?>

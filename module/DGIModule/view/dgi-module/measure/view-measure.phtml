@@ -1,225 +1,262 @@
-<!-- measure/view-measure -->
+<?php
+$levelName = '';$level=$proposal->getPropLevel();
+if ($level==$this->configItem('demodyne.level.city')) {
+    $levelName = ($proposal->getCity()->getFullCity()?($proposal->getPropFullCity()?$proposal->getCity()->getFullCity()->getCityName().' ('._('Full city').')':$proposal->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$proposal->getCity()->getDistrictName().'</i></span>'):$proposal->getCity()->getCityName().($proposal->getCity()->isFullCity()?' ('._('Full city').')':''));
+}
+elseif ($level==$this->configItem('demodyne.level.region')) {
+    $levelName = $proposal->getCity()->getRegion()->getRegionName();
+}
+else {
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $proposal->getCity()->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$proposal->getCity()->getCountry()->getCountryName() .'</span>';
+}
+?>
 
-<?php 
-        $levelName = '';$level=$proposal->getPropLevel();
-        if ($level==$this->configItem('demodyne.level.city')) {
-            $levelName = ($proposal->getCity()->getFullCity()?($proposal->getPropFullCity()?$proposal->getCity()->getFullCity()->getCityName().' ('._('Full city').')':$proposal->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$proposal->getCity()->getDistrictName().'</i></span>'):$proposal->getCity()->getCityName().($proposal->getCity()->isFullCity()?' ('._('Full city').')':''));
-        }
-        elseif ($level==$this->configItem('demodyne.level.region')) {
-            $levelName = $proposal->getCity()->getRegion()->getRegionName();
-        }
-        else {
-        $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $proposal->getCity()->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$proposal->getCity()->getCountry()->getCountryName() .'</span>';
-        }
-    ?>
+<?= $this->partial('partial/page-header.phtml', ['title' => '<img src="/img/icon-official-measures-33.svg" width="20">  '.sprintf($this->translate('Official Measure for %s'), $levelName)])?>
 
-<div class="modal-header-soft round5top ui-draggable-handle ">
 
-	<button type="button" class="close">
-		<?php if ((!isset($_SESSION['level']) && $proposal->getPropLevel()!=$this->configItem('demodyne.level.city')) || $_SESSION['level']['level']=='city'):?>
-		<a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
-		<?php elseif ((!isset($_SESSION['level']) && $proposal->getPropLevel()!=$this->configItem('demodyne.level.country')) || $_SESSION['level']['level']=='country'):?>
-		<a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
-		<?php endif;?>
-	</button>
-	<button type="button" class="close" onclick="parent.history.back();"><i class="fa fa-arrow-circle-left w right10"></i></a>
-	</button>
-	&nbsp; <span class="big" id="modal-dialog-title"><strong><?= sprintf($this->translate('Official Measure for %s'), $levelName)?></strong></span>
-</div>
 <div class="jumbotron parent"
-	style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
-	id="measure-view-measure"
-	data-url="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>"
-	data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
-	data-add-favorite="<?=$this->translate('Add Favorite')?>"
-	data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
-	<div class="row equal">
-		<div class="col-md-6">
-			<!-- View proposal infos -->
-			<div class="panel panel-default">
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="bigblack bot10"><?= $proposal->getPropName() ?></div>
-							<p><div class="desc"><?= $proposal->getPropDescription() ?></div></p>
-						</div>
-					</div>
-					<hr>
-					<?php if ($proposal->getPropLevel()!=$this->configItem('demodyne.level.country')):?>
-          <?= $this->translate('Current Status')?>:
-          <?= $this->statusSection;?>
-          <hr>
-          <?php endif;?>
+     style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+     id="measure-view-measure"
+     data-url="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>"
+     data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
+     data-add-favorite="<?=$this->translate('Add Favorite')?>"
+     data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
+    <div class="row equal">
+        <div class="col-md-6">
+            <!-- View proposal infos -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="bigblack bot10"><?= $proposal->getPropName() ?></div>
+                            <p><div class="desc"><?= $proposal->getPropDescription() ?></div></p>
+                            <?php if ($proposal->getPropPublished()):?>
+                                <?= $this->partial('partial/social-links.phtml', [
+                                    'type' => 'measure',
+                                    'url' => $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true)),
+                                    'title' => $proposal->getPropSavedName(),
+                                    'description' => $proposal->getPropDescription()
+                                ]); ?>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                    <hr>
+                    <?php if ($proposal->getPropLevel()!=$this->configItem('demodyne.level.country')):?>
+                        <?= $this->translate('Current Status')?>:
+                        <?= $this->partial('partial/proposal-status.phtml', ['proposal' => $proposal])?>
+                        <hr>
+                    <?php endif;?>
 
                     <?php $measure=$proposal->getMeasure()?>
 
-<div class="row">
-						<div class="col-md-4 col-xs-4">
-							<strong><?= $this->translate('Execution Start')?></strong><br> <i
-								class="fa fa-calendar"></i> <?=$measure->getMesStartDate()?$measure->getMesStartDate()->format('d/m/Y'):$this->translate('Undefined')?></div>
-						<div class="col-md-4 col-xs-4">
-							<strong><?= $this->translate('Planned Completion')?></strong><br>
-							<i class="fa fa-calendar"></i> <?=$measure->getMesEndDate()?$measure->getMesEndDate()->format('d/m/Y'):$this->translate('Undefined')?></div>
-						<div class="col-md-4 col-xs-4">
-							<strong><?= $this->translate('Cost')?></strong><br><?=$measure->getMesCost()?> <?=$proposal->getCity()->getCountry()->getCountryCurrency()?></div>
-					</div>
-					<hr>
-          <div>
-          <?= $this->voteSection;?>
-			</div>
-</div>
-			</div>
-			<!-- /panel -->
-			
-		</div>
-		<!-- /6 -->
-		<div class="col-md-6">
-			<div class="panel panel-default">
-				<div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4 col-xs-4">
+                            <strong><?= $this->translate('Execution Start')?></strong><br> <i
+                                    class="fa fa-calendar"></i> <?=$measure->getMesStartDate()?$measure->getMesStartDate()->format('d/m/Y'):$this->translate('Undefined')?></div>
+                        <div class="col-md-4 col-xs-4">
+                            <strong><?= $this->translate('Planned Completion')?></strong><br>
+                            <i class="fa fa-calendar"></i> <?=$measure->getMesEndDate()?$measure->getMesEndDate()->format('d/m/Y'):$this->translate('Undefined')?></div>
+                        <div class="col-md-4 col-xs-4">
+                            <strong><?= $this->translate('Cost')?></strong><br><?=$measure->getMesCost()?> <?=$proposal->getCity()->getCountry()->getCountryCurrency()?></div>
+                    </div>
+                    <hr>
+                    <div>
+                        <?= $this->voteSection;?>
+                    </div>
+                </div>
+            </div>
+            <!-- /panel -->
+
+        </div>
+        <!-- /6 -->
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-body">
 
 
 
-					<div class="row">
-					<div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-8">
 
 
 
 
-					<div class="table-layout">
-						<div class="table-cell fixed-width-40">
-							<img
-								src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
-								height="32" width="32"
-								title="<?= $proposal->getCat()->getCatCat()->getCatName() ?>">
-						</div>
-						<div class="table-cell">
-							<span class="big"><?= $proposal->getCat()->getCatCat()->getCatName() ?></span><br> <?= $proposal->getCat()->getCatName() ?>
-                <hr>
-							</div>
-						</div>
+                            <div class="table-layout">
+                                <div class="table-cell fixed-width-40">
+                                    <img
+                                            src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
+                                            height="32" width="32"
+                                            title="<?= $proposal->getCat()->getCatCat()->getCatName() ?>">
+                                </div>
+                                <div class="table-cell">
+                                    <span class="big"><?= $proposal->getCat()->getCatCat()->getCatName() ?></span><br> <?= $proposal->getCat()->getCatName() ?>
+                                    <hr>
+                                </div>
+                            </div>
 
-					<div class="table-layout">
-						<div class="table-cell fixed-width-40"><img src="<?=$this->basePath($proposal->getUsr()->getUsrPicture()) ?>" width="32" height="32" class="round5"></div>
-								<div class="table-cell">
-							<?= $this->translate('Published by')?>
-							<a
-										href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
-										data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
-										data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
-										id="measure-view-measure-view-profile"><span class="badge"><?= $proposal->getUsr()->getUsrName() ?></span></a>
-									<i class="fa fa-clock-o"></i> <?= ($proposal->getPropPublished())?$proposal->getPropPublishedDate()->format('d/m/Y'):$proposal->getPropCreatedDate()->format('d/m/Y')  ?>
-           </div>
-							</div>
+                            <div class="table-layout">
+                                <div class="table-cell fixed-width-40"><img src="<?=$this->basePath($proposal->getUsr()->getUsrPicture()) ?>" width="32" height="32" class="round5"></div>
+                                <div class="table-cell">
+                                    <?= $this->translate('Published by')?>
+                                    <a
+                                            href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
+                                            data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
+                                            data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
+                                            id="measure-view-measure-view-profile"><span class="badge"><?= $proposal->getUsr()->getUsrName() ?></span></a>
+                                    <i class="fa fa-clock-o"></i> <?= ($proposal->getPropPublished())?$proposal->getPropPublishedDate()->format('d/m/Y'):$proposal->getPropCreatedDate()->format('d/m/Y')  ?>
+                                </div>
+                            </div>
 
-</div><!--/8-->
-						<div class="col-md-4 text-right">
-							<?php if ($user):?>
-							<a
-								href="<?= $this->url('proposal', array('action'=>'favorite', 'id'=>$proposal->getPropUUID()));?>"
-								alt="Favorite Proposal" id="measure-view-measure-favorite"
-								data-favorite="<?= $proposal->getPropUUID()?>"><?php if (in_array($user, $proposal->getUsers())):?><i
-								class="fa fa-heart"
-								title="<?= $this->translate('Remove Favorite')?>"></i> <?= $this->translate('Remove Favorite')?><?php else:?><i
-								class="fa fa-heart-o"
-								title="<?= $this->translate('Add Favorite')?>"></i> <?= $this->translate('Add Favorite')?><?php endif;?></a><br /> 
-								
-							<?= $this->partial('partial/add-proposal-to-program.phtml', ['proposal' => $proposal]); ?>
-            				                
-							
-							<a href="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'proposal','id'=>$proposal->getPropUUID()));?>"
-								id="measure-view-measure-report"
-								data-dialog-title="<?=$this->translate('Report Measure')?>"
-								title="<?= $this->translate('Report Measure as inapropiate')?>"><i
-								class="fa fa-exclamation-triangle"></i>
-              <?= $this->translate('Report')?>
-              </a> 
-							<?php endif;?>
-						</div>
-						<!--/4-->
-</div><!--/r-->
-
-					<hr>
+                        </div><!--/8-->
+                        <div class="col-md-4 text-right">
 
 
-					<!-- Sources -->
-					<span class="big"><strong><?= $this->translate('Sources')?>:</strong></span><br />
-    				<?php if (count($measure->getLinks())):?>
-                    	<?php foreach($measure->getLinks() as $index => $link):?>
-    						#<?=$index+1?> -  <a href="<?=$link?>" target="_blanc"><?=$link?></a>
-    					<br>
-    					<?php endforeach;?>
-					<?php else:?>
-						<?=$this->translate('There are no sources defined for this measure.')?><br>
-					<?php endif;?>
-					<br> <span class="red"><strong><i
-							class="fa fa-exclamation-triangle"></i> <?= $this->translate('Warning')?>:</strong></span>
-					<?= $this->translate('External links added by users are not checked by the Demodyne team')?>.<br>
-					<?= $this->translate('Make sure you use appropriate security measures (up-to-date antivirus etc.)')?>
-			<!-- /Sources -->
-					<div class="top20">
 
-			<?php if (!$proposal->getUsr()->isAdministration() || $proposal->getUsr()==$user):?>
-				<?php if ($user):?>
-					<button type="button"
-							data-url="<?= $this->url('measure', array('action' => 'edit-measure', 'id'=>$proposal->getPropUUID()));?>"
-							data-dialog-title="<?=$this->translate('Edit Official Measure')?>"
-							class="btn btn-orange" id="measure-view-measure-edit"
-							<?=(!$proposal->getUsr()->isAdministration() && $user->isAdministration())?'disabled="disabled" title="Administrations must first claim ownership before editing"':''?>>
-							<i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit Measure')?></button>
-				<?php else:?>
-    				<button type="button" class="btn btn-orange"
-    				data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
-    				data-dialog-title="<?=$this->translate('Please register')?>"
-    				id="please-register-button">
-    				<i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit Measure')?></button>
-				<?php endif;?>
-			<?php endif;?>
+                            <?php if ($user):?>
 
-			 <button type="button"
-							data-url="<?= $this->url('measure', array('action' => 'view-history', 'id'=>$proposal->getPropUUID()));?>"
-							data-dialog-title="<?=$this->translate('View Measure History')?>"
-							class="btn btn-orange" id="measure-view-measure-view-history">
-							<i class="fa fa-history"></i> <?= $this->translate('View history')?></button>
+                                <?= $this->partial('partial/proposal-actions.phtml', ['user' => $user, 'proposal' => $proposal])?>
 
-			<?php if (!$proposal->getUsr()->isAdministration() && $user && 
-			          $user->isAdministration() && $user->getAdmin()->getAdminLevel() == $proposal->getPropLevel() && 
-			          (($proposal->getPropLevel() == $this->configItem('demodyne.level.city') && $user->getCity() == $proposal->getCity()) || 
-			              ($proposal->getPropLevel() == $this->configItem('demodyne.level.region') && $user->getCity()->getRegion()== $proposal->getCity()->getRegion()) || 
-			              ($proposal->getPropLevel() == $this->configItem('demodyne.level.country') && $user->getCountry()== $proposal->getCity()->getCountry()))):?>
-			 <button type="button"
-							data-url="<?= $this->url('measure', array('action' => 'claim-ownership', 'id'=>$proposal->getPropUUID()));?>"
-							data-dialog-title="<?=$this->translate('Claim ownership of an Official Measure')?>"
-							class="btn btn-success" id="measure-view-measure-claim-ownership">
-							<i class="fa fa-certificate"></i> <?= $this->translate('Claim ownership')?></button>
+                                <span class="right5">
+                                <a href="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'proposal','id'=>$proposal->getPropUUID()));?>"
+                                   id="measure-view-measure-report"
+                                   data-dialog-title="<?=$this->translate('Report Measure')?>"
+                                   title="<?= $this->translate('Report Measure as inapropiate')?>"><i
+                                            class="fa fa-exclamation-triangle size15em"></i>
+                                </a>
+                                </span>
 
-		 	<?php endif;?>
+                            <?php endif;?>
+                        </div>
+                        <!--/4-->
+                    </div><!--/r-->
 
-</div>
-				</div>
-			</div>
-			<!-- /panel -->
-		</div>
-		<!-- /6 -->
-	</div>
-	<!-- /row -->
-	<div class="row">
-		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
-<?= $this->commentsSection;?>
-</div>
-	</div>
-	<!--/r-->
+                    <hr>
+
+
+                    <!-- Sources -->
+                    <span class="big"><strong><?= $this->translate('Sources')?>:</strong></span><br />
+                    <?php if (count($proposal->getLinks())):?>
+                        <?php foreach($proposal->getLinks() as $index => $link):?>
+                            #<?=$index+1?> -  <a href="<?=$link?>" target="_blanc"><?=$link?></a>
+                            <br>
+                        <?php endforeach;?>
+                    <?php else:?>
+                        <?=$this->translate('There are no sources defined for this measure.')?><br>
+                    <?php endif;?>
+                    <br> <span class="red"><strong><i
+                                    class="fa fa-exclamation-triangle"></i> <?= $this->translate('Warning')?>:</strong></span>
+                    <?= $this->translate('External links added by users are not checked by the Demodyne team')?>.<br>
+                    <?= $this->translate('Make sure you use appropriate security measures (up-to-date antivirus etc.)')?>
+                    <!-- /Sources -->
+                    <div class="top20">
+
+                        <?php if (!$proposal->getUsr()->isAdministration() || $proposal->getUsr()==$user):?>
+                            <?php if ($user):?>
+                                <button type="button"
+                                        data-url="<?= $this->url('measure', array('action' => 'edit-measure', 'id'=>$proposal->getPropUUID()));?>"
+                                        data-dialog-title="<?=$this->translate('Edit Official Measure')?>"
+                                        class="btn btn-orange" id="measure-view-measure-edit"
+                                    <?=(!$proposal->getUsr()->isAdministration() && $user->isAdministration())?'disabled="disabled" title="Administrations must first claim ownership before editing"':''?>>
+                                    <i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit Measure')?></button>
+                            <?php else:?>
+                                <button type="button" class="btn btn-orange"
+                                        data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
+                                        data-dialog-title="<?=$this->translate('Please register')?>"
+                                        id="please-register-button">
+                                    <i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit Measure')?></button>
+                            <?php endif;?>
+                        <?php endif;?>
+
+                        <button type="button"
+                                data-url="<?= $this->url('measure', array('action' => 'view-history', 'id'=>$proposal->getPropUUID()));?>"
+                                data-dialog-title="<?=$this->translate('View Measure History')?>"
+                                class="btn btn-orange" id="measure-view-measure-view-history">
+                            <i class="fa fa-history"></i> <?= $this->translate('View history')?></button>
+
+                        <?php if (!$proposal->getUsr()->isAdministration() && $user &&
+                            $user->isAdministration() && $user->getAdmin()->getAdminLevel() == $proposal->getPropLevel() &&
+                            (($proposal->getPropLevel() == $this->configItem('demodyne.level.city') && $user->getCity() == $proposal->getCity()) ||
+                                ($proposal->getPropLevel() == $this->configItem('demodyne.level.region') && $user->getCity()->getRegion()== $proposal->getCity()->getRegion()) ||
+                                ($proposal->getPropLevel() == $this->configItem('demodyne.level.country') && $user->getCountry()== $proposal->getCity()->getCountry()))):?>
+                            <button type="button"
+                                    data-url="<?= $this->url('measure', array('action' => 'claim-ownership', 'id'=>$proposal->getPropUUID()));?>"
+                                    data-dialog-title="<?=$this->translate('Claim ownership of an Official Measure')?>"
+                                    class="btn btn-success" id="measure-view-measure-claim-ownership">
+                                <i class="fa fa-certificate"></i> <?= $this->translate('Claim ownership')?></button>
+
+                        <?php endif;?>
+
+                    </div>
+
+                    <?php
+                    $images=[];
+                    if ($proposal->getPropImage1()) {
+                        $images[] = $this->basePath($proposal->getPropImage1());
+                    }
+                    if ($proposal->getPropImage2()) {
+                        $images[] = $this->basePath($proposal->getPropImage2());
+                    }
+                    if ($proposal->getPropImage3()) {
+                        $images[] = $this->basePath($proposal->getPropImage3());
+                    }
+                    if (count($images)):?>
+                        <div class="big top20">
+                            <?= $this->translate('Proposal Images')?>
+                        </div>
+                        <div class="row">
+                            <?php foreach ($images as $index => $image):?>
+                                <div class="col-sm-4">
+                                    <a href="#" class="pop"><img src="<?= $image ?>" style="width: 200px; height: 110px; padding-bottom:10px;" class="img-responsive"></a>
+                                </div>
+                            <?php endforeach;?>
+                        </div>
+                        <hr>
+                    <?php endif;?>
+
+                </div>
+            </div>
+            <!-- /panel -->
+        </div>
+        <!-- /6 -->
+    </div>
+    <!-- /row -->
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+            <?= $this->commentsSection;?>
+        </div>
+    </div>
+    <!--/r-->
 </div>
 <!-- /j -->
 
-
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" data-dismiss="modal">
+        <div class="modal-content">
+            <div class="modal-body" style="border-radius: 5px !important;">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <img src="" class="imagepreview" style="width: 100% !important;" >
+            </div>
+        </div>
+    </div>
+</div>
 
 
 
 <script type="text/javascript">
     $(function () {
-    	measureViewMeasureHandlers();
+        measureViewMeasureHandlers();
     });
 </script>
 
-<!-- /measure/view-measure -->
-        
+
+<!-- SIMPLE POPUP IMAGES -->
+<script>
+    $(function() {
+        console.log('loading');
+        $('a.pop').on('click', function() {
+            console.log('show');
+            $('.imagepreview').attr('src', $(this).find('img').attr('src'));
+            $('#imagemodal').modal('show');
+        });
+    });
+</script>

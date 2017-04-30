@@ -1,12 +1,8 @@
-<!-- banner/active-banners -->
 <?php 
-if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.city')) {
+if ($user->getAdmin()->getAdminLevel()==1) {
     $levelName = ($user->getAdmin()->getAdminCity()->getFullCity()?$user->getAdmin()->getAdminCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getAdmin()->getAdminCity()->getDistrictName().'</i></span>':$user->getAdmin()->getAdminCity()->getCityName());
 }
-elseif ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.region')) {
-    $levelName = $user->getAdmin()->getAdminRegion()->getRegionName();
-}
-elseif ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.country')) {
+elseif ($user->getAdmin()->getAdminLevel()==3) {
     $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="25" height="17" alt="'. $user->getCountry()->getCountryName() .'"> '.$user->getCountry()->getCountryName();
 } 
 ?>
@@ -66,4 +62,3 @@ $(function() {
 });
 
 </script>
-<!-- /banner/active-banners -->

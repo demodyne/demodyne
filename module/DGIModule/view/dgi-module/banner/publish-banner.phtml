@@ -1,4 +1,3 @@
-<!-- banner/publish-banners -->
 
 <div id="banner-publish-banner"
 	data-url="<?= $this->url('administration/banner', array('action'=>'publish-banner', 'id' => $banner->getBannerUUID() ));?>">
@@ -57,10 +56,12 @@
 	<?php endif;?>
 </div>
 <script type="text/javascript">
-	$(document).ready(function () {
-		bannerPublishBannerHandlers();
-	});
-</script>
 
-<!-- /banner/publish-banners -->
+		$(document).ready(function () {
+
+			bannerPublishBannerHandlers();
+
+			
 	
+		});
+	</script>

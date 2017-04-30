@@ -1,6 +1,10 @@
 <!-- measure/add-measure -->
 
-<div id="measure-add-measure">
+<div id="measure-add-measure"
+     data-get-categories-url="<?= $this->url('home/category', array('action'=>'get-categories')); ?>"
+     data-get-subcategories-url="<?= $this->url('home/category', array('action'=>'get-subcategories')); ?>"
+     data-error-image-type="<?=$this->translate('Please chose an image file (png, jpg, jpeg, gif, bmp, tiff)')?>"
+     data-error-image-size="<?=$this->translate('You cannot add more than 3 images')?>">
 
 <?php if ($showDisclaimer):?>
 
@@ -17,7 +21,6 @@
 
 <?php $form->prepare(); ?>
 <?php $form->setAttribute('method', 'post'); ?>
-<?php $form->setAttribute('id', 'measure-add-measure-form'); ?>
 <?php $measure=  $form->get('measure');?>
 <?= $this->form()->openTag($form);?>
 
@@ -31,30 +34,33 @@
             				<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('propSavedName'));?></span>
 				</div>
 			</div>
-			<div class="row">
+			<div class="row" id="edit-description">
 				<div class="col-md-12"><?= $this->translate('Description')?>:
     			<div class="bot5">
-    				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-bold"
-					onclick="document.execCommand('bold');">
-					<strong><?=$this->translate('Bold')?></strong>
-				</button>
-				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-italic"
-					onclick="document.execCommand('italic');">
-					<i><?=$this->translate('Italic')?></i>
-				</button>
-				<button class="btn btn-mini" type="button"
-					id="inbox-new-message-textbox-underline"
-					onclick="document.execCommand('underline');">
-					<u><?=$this->translate('Underline')?></u>
-				</button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="proposal-textbox"
+                            data-format="bold">
+                        <strong><i class="fa fa-times"></i> <?=$this->translate('Bold')?></strong>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="proposal-textbox"
+                            data-format="italic">
+                        <i><i class="fa fa-times"></i> <?=$this->translate('Italic')?></i>
+                    </button>
+                    <button class="btn btn-mini btn-default" type="button"
+                            id="textbox-format-button"
+                            data-contenteditable-id="proposal-textbox"
+                            data-format="underline">
+                        <u><i class="fa fa-times"></i> <?=$this->translate('Underline')?></u>
+                    </button>
     			</div>
     			<div class="form-control desc" contenteditable="true"  data-placeholder="Enter your comment"
-    				maxlength="1000" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
-				 	id="measure-add-measure-textbox"
+    				maxlength="2500" over-text="<?=$this->translate('<span>0</span> characters in excess')?>" below-text="<?=$this->translate('<span>0</span> characters remaining')?>"
+				 	id="proposal-textbox"
     				style="width: 100%; min-height: 100px; height: 100%; max-height: 200px; overflow: auto"><?=$propDescription?$propDescription:($proposal?$proposal->getPropDescription():'')?></div>
-            			<div id="measure-add-measure-textbox-count"></div>
+            			<div id="proposal-textbox-count"></div>
             			<?= $this->formElement($form->get('propDescription'));?>
 
             				<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('propDescription'));?></span>
@@ -91,19 +97,53 @@
 					<span class="text-danger"><?= $this->formElementErrors($measure->get('mesCost'));?></span>
 				</div>
 			</div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $this->translate('You can chose up to 3 image files')?>:
+                    <input type="file" name="imageFile" accept="image/*" id="imageFile"><br />
+                    <span class="red"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-3" <?= $proposal && $proposal->getPropImage1()?'':'style="display: none;"'?> id="proposal-add-edit-proposal-image-1">
+                    <a href="" title="<?=$this->translate('Remove image')?>" id="proposal-add-edit-proposal-remove-image">
+                        <img class="closeButton" src="<?= $this->basePath('img/close-button.png') ?>" width="27" height="27" title="<?=$this->translate('Remove image')?>" />
+                    </a>
+                    <canvas id="propImage1Canvas" class="img33" <?= !$proposal || !$proposal->getPropImage1()?'':'data-image="'.$this->basePath($proposal->getPropImage1()).'"'?>></canvas>
+                    <?= $this->formElement($form->get('propHiddenImage1'));?>
+                </div>
+
+
+                <div class="col-md-3 col-xs-3" <?= $proposal && $proposal->getPropImage2()?'':'style="display: none;"'?>  id="proposal-add-edit-proposal-image-2">
+                    <a href="" title="<?=$this->translate('Remove image')?>" id="proposal-add-edit-proposal-remove-image">
+                        <img class="closeButton" src="<?= $this->basePath('img/close-button.png') ?>" width="27" height="27" title="<?=$this->translate('Remove image')?>" />
+                    </a>
+                    <canvas id="propImage2Canvas" class="img33" <?= !$proposal || !$proposal->getPropImage2()?'':'data-image="'.$this->basePath($proposal->getPropImage2()).'"'?>></canvas>
+                    <?= $this->formElement($form->get('propHiddenImage2'));?>
+                </div>
+                <div class="col-md-3 col-xs-3" <?= $proposal && $proposal->getPropImage3()?'':'style="display: none;"'?>  id="proposal-add-edit-proposal-image-3">
+                    <a href="" title="<?=$this->translate('Remove image')?>" id="proposal-add-edit-proposal-remove-image">
+                        <img class="closeButton" src="<?= $this->basePath('img/close-button.png') ?>" width="27" height="27" title="<?=$this->translate('Remove image')?>" />
+                    </a>
+                    <canvas id="propImage3Canvas" class="img33" <?= !$proposal || !$proposal->getPropImage3()?'':'data-image="'.$this->basePath($proposal->getPropImage3()).'"'?>></canvas>
+                    <?= $this->formElement($form->get('propHiddenImage3'));?>
+                </div>
+                <div class="col-md-3 col-xs-3"></div>
+            </div>
 			<div class="row bot5 top10">
 				<div class="col-md-12">
                     <?= $this->translate('Add Sources (external links)')?>
-                    <div id="measure-add-measure-links">
+                    <div id="proposal-links">
                         <?php if ($links):?>
                             <?php foreach ($links as $link):?>
-        					<div class="bot5" id="measure-add-measure-link-row">
+        					<div class="bot5" id="link-row">
         							<div style="width: 250px; float: left;" class="bot5">
         								<input type="url" name="links[]"
         									class="form-control col-md-11 text-change" value="<?= $link ?>">
         							</div>
         							<div style="width: 20px; float: left; padding: 10px 0 0 5px;">
-        								<a href="" id="measure-add-measure-remove-link"><i
+        								<a href="#" id="remove-link"><i
         									class="fa fa-times-circle darkgray"></i></a>
         							</div>
         						</div>
@@ -117,7 +157,7 @@
                 </div>
 			</div>
 			<button type="button" class="btn btn-orange"
-				id="measure-add-measure-new-link">
+				id="proposal-new-link">
 				<i class="fa fa-external-link"></i> <?= $this->translate('Add source')?></button>
 		</div>
 		<!-- /6 -->
@@ -204,23 +244,23 @@
 <?php if (!$proposal):?>
     <?php if ($user->isAdministration()):?>
     <button type="submit" class="btn btn-orange"
-    				id="measure-add-measure-save">
+    				id="proposal-save-button">
     				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save as Draft')?></button>
     <?php endif;?>
 	<button type="button" class="btn btn-success"
-				id="measure-add-measure-publish">
+				id="proposal-publish-button">
 				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save & Publish')?></button>
 <?php else:?>
 	<?php if ($user->isAdministration() && !$proposal->getPropPublished()):?>
     <button type="submit" class="btn btn-orange"
-    				id="measure-add-measure-save">
+    				id="proposal-save-button">
     				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save as Draft')?></button>
 	<button type="button" class="btn btn-success"
-				id="measure-add-measure-publish">
+				id="proposal-publish-button">
 				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save & Publish')?></button>
     <?php else:?>
     <button type="submit" class="btn btn-orange"
-    				id="measure-add-measure-save">
+    				id="proposal-save-button">
     				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save')?></button>
     <?php endif;?>
 <?php endif;?>
@@ -233,6 +273,8 @@
 	</div>
 	<!-- /r -->
 
+    <input type="hidden" name="level" value="<?=$level?>">
+
 
 <?=$this->form()->closeTag();?>
 
@@ -240,10 +282,11 @@
 
 </div>
 <script type="text/javascript">
-	$(function () {
-		measureAddMeasureHandlers('<?= $this->url('home/category', array('action'=>'get-subcategories', 'level'=>$level)); ?>', <?=$user->isAdministration()?>);
-	});
-</script>
 
-<!-- /measure/add-measure -->
-	
+		$(function () {
+
+			measureAddMeasureHandlers(<?=$user->isAdministration()?>);
+
+		});
+
+	</script>

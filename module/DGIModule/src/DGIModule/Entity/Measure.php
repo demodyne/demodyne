@@ -1,19 +1,19 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
-
+ 
 namespace DGIModule\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Mesure
+ * Measure
  *
- * @ORM\Table(name="dgi_mesures", indexes={@ORM\Index(name="mes_last_usr_fk_idx", columns={"last_usr_id"})})
+ * @ORM\Table(name="dgi_Measures", indexes={@ORM\Index(name="mes_last_usr_fk_idx", columns={"last_usr_id"})})
  * @ORM\Entity
  */
 class Measure
@@ -30,14 +30,14 @@ class Measure
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="mes_start_date", type="datetime", nullable=true)
+     * @ORM\Column(name="mes_start_date", type="utcdatetime", nullable=true)
      */
     private $mesStartDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="mes_end_date", type="datetime", nullable=true)
+     * @ORM\Column(name="mes_end_date", type="utcdatetime", nullable=true)
      */
     private $mesEndDate;
 
@@ -53,7 +53,7 @@ class Measure
      *
      * @ORM\ManyToMany(targetEntity="DGIModule\Entity\Link", cascade={"persist", "merge","remove"})
      * @ORM\JoinTable(
-     *  name="dgi_mesures_links",
+     *  name="dgi_Measures_links",
      *  joinColumns={
      *      @ORM\JoinColumn(name="mes_id", referencedColumnName="mes_id")
      *  },
@@ -69,7 +69,7 @@ class Measure
      *
      * @ORM\ManyToMany(targetEntity="DGIModule\Entity\History", cascade={"persist", "merge","remove"})
      * @ORM\JoinTable(
-     *  name="dgi_mesures_history",
+     *  name="dgi_Measures_history",
      *  joinColumns={
      *      @ORM\JoinColumn(name="mes_id", referencedColumnName="mes_id")
      *  },
@@ -86,49 +86,13 @@ class Measure
         $this->history = new ArrayCollection();
     }
     
-    public function getLinks()
-    {
-        $urls = [];
-        foreach ($this->links as $link) {
-            $urls[] = $link->getLinkUrl();
-        }
-        
-        return $urls;
-    }
-    
-    /**
-     * @param Link $link
-     */
-    public function addLink($url)
-    {
-        
-        $this->links->add(new Link($url));
-    }
-    
-    /**
-     * @param Link $link
-     */
-    public function removeLink(Link $link)
-    {
-        if (!$this->links->contains($link)) {
-            return;
-        }
-    
-        $this->links->removeElement($link);
-    
-    }
-    
-    public function clearLinks() {
-        $this->links->clear();
-    }
-    
     public function getHistory()
     {
         return $this->history;
     }
     
     /**
-     * @param Link $link
+     * @param History $history
      */
     public function addHistory(History $history)
     {
@@ -139,7 +103,7 @@ class Measure
     }
     
     /**
-     * @param Link $link
+     * @param History $history
      */
     public function removeHistory(History $history)
     {
@@ -170,7 +134,7 @@ class Measure
      *
      * @param \DateTime $mesStartDate
      *
-     * @return Mesure
+     * @return Measure
      */
     public function setMesStartDate($mesStartDate)
     {
@@ -194,7 +158,7 @@ class Measure
      *
      * @param \DateTime $mesEndDate
      *
-     * @return Mesure
+     * @return Measure
      */
     public function setMesEndDate($mesEndDate)
     {
@@ -218,7 +182,7 @@ class Measure
      *
      * @param integer $mesCost
      *
-     * @return Mesure
+     * @return Measure
      */
     public function setMesCost($mesCost)
     {

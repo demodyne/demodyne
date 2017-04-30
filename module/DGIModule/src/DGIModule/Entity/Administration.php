@@ -1,12 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\City;
+use DGIModule\Entity\Region;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -70,7 +72,7 @@ class Administration
     private $adminWebsite = '';
 
     /**
-     * @var \DGIModule\Entity\City
+     * @var City
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\City")
      * @ORM\JoinColumns({
@@ -80,7 +82,7 @@ class Administration
     private $adminCity;
 
     /**
-     * @var \DGIModule\Entity\Region
+     * @var Region
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Region")
      * @ORM\JoinColumns({
@@ -289,11 +291,11 @@ class Administration
     /**
      * Set adminCity
      *
-     * @param \DGIModule\Entity\City $adminCity
+     * @param City $adminCity
      *
      * @return Administration
      */
-    public function setAdminCity(\DGIModule\Entity\City $adminCity = null)
+    public function setAdminCity(City $adminCity = null)
     {
         $this->adminCity = $adminCity;
 
@@ -303,7 +305,7 @@ class Administration
     /**
      * Get adminCity
      *
-     * @return \DGIModule\Entity\City
+     * @return City
      */
     public function getAdminCity()
     {
@@ -313,11 +315,11 @@ class Administration
     /**
      * Set adminRegion
      *
-     * @param \DGIModule\Entity\Region $adminRegion
+     * @param Region $adminRegion
      *
      * @return Administration
      */
-    public function setAdminRegion(\DGIModule\Entity\Region $adminRegion = null)
+    public function setAdminRegion(Region $adminRegion = null)
     {
         $this->adminRegion = $adminRegion;
 
@@ -327,7 +329,7 @@ class Administration
     /**
      * Get adminRegion
      *
-     * @return \DGIModule\Entity\Region
+     * @return Region
      */
     public function getAdminRegion()
     {
@@ -337,7 +339,7 @@ class Administration
     /**
      * Get adminRegion
      *
-     * @return \DGIModule\Entity\Region
+     * @return User
      */
     public function getUser()
     {

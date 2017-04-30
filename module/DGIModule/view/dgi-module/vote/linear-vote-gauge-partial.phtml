@@ -1,1 +1,179 @@
-<!-- vote/linear-vote-gauge-partial --><!-- LINIAR GAUGE atention we have 2 lines of javascript at the bottom of the file  --><div class="row">	<div class="col-md-9 col-xs-8"><a href="#" data-popover-content="#myPopover<?=$proposal->getPropUUID()?>" rel="popover" data-placement="top" data-original-title="<?= $proposal->getPropName() ?> / <?= $this->translate('Breakdown of votes')?>">		<div class="progress"> 			<div style="padding-left: 70%; color:#000; position:absolute; z-index:1;"><img src="<?= $this->basePath('img/line.png')?>"></div>            <div style="padding-left: <?=$totalpoints?>%; color:#000; position:absolute; z-index:1;"><img src="<?= $this->basePath('img/square.png')?>"></div>             <div class="progress-bar progress-bar-degrade" style="width: 100%"></div>		</div></a><div id="myPopover<?=$proposal->getPropUUID()?>" class="hide" style="min-width:400px;"><div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Very Favorable')?></div><!--/3--><div class="col-md-6"><div class="progress" style="max-height:10px;">  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($veryfavourable/$totalvotes)*100:0?>%"></div>  </div></div><!--/6-->  <div class="col-md-3 small text-right"><strong><?=$veryfavourable?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($veryfavourable/$totalvotes)*100:0?>%)</div><!--/3-->  </div><!--/r--><div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Favorable')?></div><!--/3--><div class="col-md-6"><div class="progress" style="max-height:10px;">  <div class="progress-bar progress-bar-favorable" role="progressbar" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($favourable/$totalvotes)*100:0?>%"></div>  </div></div><!--/6-->  <div class="col-md-3 small text-right"><strong><?=$favourable?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($favourable/$totalvotes)*100:0?>%)</div><!--/3-->  </div><!--/r--><div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Neutral')?></div><!--/3--><div class="col-md-6"><div class="progress" style="max-height:10px;">  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($neutral/$totalvotes)*100:0?>%"></div>  </div></div><!--/6-->  <div class="col-md-3 small text-right"><strong><?=$neutral?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($neutral/$totalvotes)*100:0?>%)</div><!--/3-->  </div><!--/r--><div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Unavorable')?></div><!--/3--><div class="col-md-6"><div class="progress" style="max-height:10px;">  <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($unfavourable/$totalvotes)*100:0?>%"></div>  </div></div><!--/6-->  <div class="col-md-3 small text-right"><strong><?=$unfavourable?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($unfavourable/$totalvotes)*100:0?>%)</div><!--/3-->  </div><!--/r--><div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Opposed')?></div><!--/3--><div class="col-md-6"><div class="progress" style="max-height:10px;">  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($opposed/$totalvotes)*100:0?>%"></div>  </div></div><!--/6-->  <div class="col-md-3 small text-right"><strong><?=$opposed?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($opposed/$totalvotes)*100:0?>%)</div><!--/3-->  </div><!--/r--></div><!--/popover-->	</div><!--/9-->    	<div class="col-md-3 col-xs-4">        <span class="big"><strong><?=$totalvotes?></strong></span> <?= $this->translate('votes')?>        </div><!--/3--></div><!--/r--><div class="row"><div class="col-md-12 small"><?= $this->translate('Ratio od positive votes reached. Implementation starts in 14 days.')?></div><!--/12--></div><!--/r--><script>$(function(){    $('[rel="popover"]').popover({		trigger: "hover" ,        container: 'body',		width: '400px',        html: true,        content: function () {            var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');            return clone;        }    }).click(function(e) {        e.preventDefault();    });});    </script>        <!-- /vote/linear-vote-gauge-partial -->    
+                               
+
+<!-- LINIAR GAUGE atention we have 2 lines of javascript at the bottom of the file  -->
+
+<div class="row">
+
+	<div class="col-md-9 col-xs-8">
+
+
+
+
+
+<a href="#" data-popover-content="#myPopover<?=$proposal->getPropUUID()?>" rel="popover" data-placement="top" data-original-title="<?= $proposal->getPropName() ?> / <?= $this->translate('Breakdown of votes')?>">
+
+		<div class="progress"> 
+
+			<div style="padding-left: 70%; color:#000; position:absolute; z-index:1;"><img src="<?= $this->basePath('img/line.png')?>"></div>
+
+            <div style="padding-left: <?=$totalpoints?>%; color:#000; position:absolute; z-index:1;"><img src="<?= $this->basePath('img/square.png')?>"></div> 
+
+            <div class="progress-bar progress-bar-degrade" style="width: 100%"></div>
+
+		</div>
+
+</a>
+
+
+
+<div id="myPopover<?=$proposal->getPropUUID()?>" class="hide" style="min-width:400px;">
+
+
+
+
+
+<div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Very Favorable')?></div><!--/3-->
+
+<div class="col-md-6"><div class="progress" style="max-height:10px;">
+
+  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($veryfavourable/$totalvotes)*100:0?>%"></div>
+
+  </div></div><!--/6-->
+
+  <div class="col-md-3 small text-right"><strong><?=$veryfavourable?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($veryfavourable/$totalvotes)*100:0?>%)</div><!--/3-->
+
+  </div><!--/r-->
+
+  
+
+<div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Favorable')?></div><!--/3-->
+
+<div class="col-md-6"><div class="progress" style="max-height:10px;">
+
+  <div class="progress-bar progress-bar-favorable" role="progressbar" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($favourable/$totalvotes)*100:0?>%"></div>
+
+  </div></div><!--/6-->
+
+  <div class="col-md-3 small text-right"><strong><?=$favourable?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($favourable/$totalvotes)*100:0?>%)</div><!--/3-->
+
+  </div><!--/r-->
+
+  
+
+<div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Neutral')?></div><!--/3-->
+
+<div class="col-md-6"><div class="progress" style="max-height:10px;">
+
+  <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($neutral/$totalvotes)*100:0?>%"></div>
+
+  </div></div><!--/6-->
+
+  <div class="col-md-3 small text-right"><strong><?=$neutral?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($neutral/$totalvotes)*100:0?>%)</div><!--/3-->
+
+  </div><!--/r-->
+
+
+
+<div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Unavorable')?></div><!--/3-->
+
+<div class="col-md-6"><div class="progress" style="max-height:10px;">
+
+  <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="18" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($unfavourable/$totalvotes)*100:0?>%"></div>
+
+  </div></div><!--/6-->
+
+  <div class="col-md-3 small text-right"><strong><?=$unfavourable?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($unfavourable/$totalvotes)*100:0?>%)</div><!--/3-->
+
+  </div><!--/r-->
+
+  
+
+<div class="row"><div class="col-md-3 small text-right"><?= $this->translate('Opposed')?></div><!--/3-->
+
+<div class="col-md-6"><div class="progress" style="max-height:10px;">
+
+  <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: <?= $totalvotes?($opposed/$totalvotes)*100:0?>%"></div>
+
+  </div></div><!--/6-->
+
+  <div class="col-md-3 small text-right"><strong><?=$opposed?></strong> <?= $this->translate('votes')?> (<?= $totalvotes?($opposed/$totalvotes)*100:0?>%)</div><!--/3-->
+
+  </div><!--/r-->
+
+  
+
+</div><!--/popover-->
+
+
+
+
+
+
+
+
+
+
+
+	</div><!--/9-->
+
+    	<div class="col-md-3 col-xs-4">
+
+        <span class="big"><strong><?=$totalvotes?></strong></span> <?= $this->translate('votes')?>
+
+        </div><!--/3-->
+
+    
+
+</div><!--/r-->
+
+
+
+
+
+<div class="row">
+
+<div class="col-md-12 small"><?= $this->translate('Ratio of positive votes reached. Implementation starts in 14 days.')?>
+
+</div><!--/12-->
+
+</div><!--/r-->
+
+
+
+
+
+
+
+<script>
+
+$(function(){
+
+    $('[rel="popover"]').popover({
+
+		trigger: "hover" ,
+
+        container: 'body',
+
+		width: '400px',
+
+        html: true,
+
+        content: function () {
+
+            var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');
+
+            return clone;
+
+        }
+
+    }).click(function(e) {
+
+        e.preventDefault();
+
+    });
+
+});
+
+
+
+    </script>

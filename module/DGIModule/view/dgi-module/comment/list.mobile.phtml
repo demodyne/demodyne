@@ -1,0 +1,71 @@
+<?php $paging = $this->sortingDivPaginationHelper($pagedComments, $page, $this->url('comment', array('action'=>'list', 'type' => $type, 'id'=>$UUID)), 'com', $limit); ?>
+<div id="comment-list"
+     data-report-comment="<?=$this->translate('Report comment')?>"
+     data-reply-text="<?=$this->translate('<br><br>On %date%, %user% wrote :<br><blockquote>%text%</blockquote>')?>"
+>
+
+    <!-- TODO add sort by Newest First / Latest First -->
+    <?php if (count($pagedComments)):?>
+        <?php foreach($pagedComments as $comment): ?>
+
+            <div class="row" id="comment-item">
+                <div class="col-xs-12">
+
+                    <div class="pull-left" style="min-width: 42px!important">
+                        <img
+                                src="<?=$this->basePath(). $comment->getUsr()->getUsrPicture() ?>"
+                                valign="middle" width="34" height="34" class="round5" />
+                    </div>
+                    <div style="margin-left: 42px!important">
+                        <a
+                                href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$comment->getUsr()->getUsrUUID()));?>"
+                                data-title="<?= $comment->getUsr()->getUsrName() ?>'s mini profile"
+                                data-id="<?=$comment->getUsr()->getUsrUUID()?>"
+                                id="comment-list-profile"> <span class="badge" id="comment-list-username"><?= $comment->getUsr()->getUsrName() ?></span></a>
+                        <i class="fa fa-clock-o"></i> <span id="comment-list-datetime"><?= $comment->getComCreatedDate()->format("d/m/Y H:i") ?></span>:<br />
+                        <span id="comment-list-text"><?= $comment->getComText() ?></span>
+                        <br>
+
+                        <?php if($user):?>
+                            <a href="#reply" id="comment-list-reply"><img src="/img/icon-reply.svg" width="24"></a>
+                            <a href="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'comment','id'=>$comment->getComUUID()));?>"
+                               id="comment-list-report"><img src="/img/icon-report.svg" width="24"></a>
+
+
+                        <?php endif;?>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+        <?php endforeach; ?>
+
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <?php echo $paging; ?>
+            </div>
+            <!--/12-->
+        </div>
+        <!-- /row -->
+    <?php else:?>
+        <div class="row bot20">
+            <div class="col-md-12 text-center">
+                <?php if ($type=='proposal'):?>
+                    <?= $this->translate('Be the first to comment this proposal.')?>
+                <?php else:?>
+                    <?= $this->translate('Be the first to comment this program.')?>
+                <?php endif;?>
+
+
+            </div>
+        </div>
+        <!-- /row -->
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    $(function(){
+        commentListHandlers();
+    });
+</script>

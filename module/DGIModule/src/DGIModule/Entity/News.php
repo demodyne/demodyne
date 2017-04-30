@@ -1,12 +1,15 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
-
+ 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\City;
+use DGIModule\Entity\Proposal;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,21 +37,28 @@ class News
     private $newsType;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="news_level", type="integer", nullable=false)
+     */
+    private $newsLevel;
+
+    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="news_created_date", type="datetime", nullable=true)
+     * @ORM\Column(name="news_created_date", type="utcdatetime", nullable=true)
      */
     private $newsCreatedDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="news_uuid", type="string", length=36, nullable=true)
+     * @ORM\Column(name="news_UUID", type="uuid", length=36, nullable=true)
      */
-    private $newsUuid;
+    private $newsUUID;
 
     /**
-     * @var \DGIModule\Entity\Proposal
+     * @var Proposal
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Proposal")
      * @ORM\JoinColumns({
@@ -58,7 +68,17 @@ class News
     private $prop;
 
     /**
-     * @var \DGIModule\Entity\City
+     * @var \DGIModule\Entity\Event
+     *
+     * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Event")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="event_id", referencedColumnName="event_id")
+     * })
+     */
+    private $event;
+
+    /**
+     * @var City
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\City")
      * @ORM\JoinColumns({
@@ -68,7 +88,7 @@ class News
     private $city;
 
         /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -135,22 +155,35 @@ class News
     }
 
     /**
-     * Get newsUuid
+     * Set newsUUID
+     *
+     * @param string $newsUUID
+     * @return News
+     */
+    public function setNewsUUID($newsUUID)
+    {
+        $this->newsUUID = $newsUUID;
+
+        return $this;
+    }
+
+    /**
+     * Get newsUUID
      *
      * @return string 
      */
-    public function getNewsUuid()
+    public function getNewsUUID()
     {
-        return $this->newsUuid;
+        return $this->newsUUID;
     }
 
     /**
      * Set prop
      *
-     * @param \DGIModule\Entity\Proposal $prop
+     * @param Proposal $prop
      * @return News
      */
-    public function setProp(\DGIModule\Entity\Proposal $prop = null)
+    public function setProp(Proposal $prop = null)
     {
         $this->prop = $prop;
 
@@ -160,7 +193,7 @@ class News
     /**
      * Get prop
      *
-     * @return \DGIModule\Entity\Proposal 
+     * @return Proposal
      */
     public function getProp()
     {
@@ -170,10 +203,10 @@ class News
     /**
      * Set city
      *
-     * @param \DGIModule\Entity\City $city
+     * @param City $city
      * @return News
      */
-    public function setCity(\DGIModule\Entity\City $city = null)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
 
@@ -183,7 +216,7 @@ class News
     /**
      * Get city
      *
-     * @return \DGIModule\Entity\City 
+     * @return City
      */
     public function getCity()
     {
@@ -194,11 +227,11 @@ class News
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      *
      * @return News
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
     
@@ -208,10 +241,48 @@ class News
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User
+     * @return User
      */
     public function getUsr()
     {
         return $this->usr;
     }
+
+    /**
+     * @param Event $event
+     * @return News
+     */
+    public function setEvent($event)
+    {
+        $this->event = $event;
+        return $this;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNewsLevel()
+    {
+        return $this->newsLevel;
+    }
+
+    /**
+     * @param int $newsLevel
+     * @return News
+     */
+    public function setNewsLevel($newsLevel)
+    {
+        $this->newsLevel = $newsLevel;
+        return $this;
+    }
+
+
 }

@@ -1,20 +1,5 @@
-<!-- error/error -->
 
-<div class="modal-header-soft round5top ui-draggable-handle">
-
-<button type="button" class="close">
-        <?php if ($_SESSION['level']['level']=='city'):?>
-        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
-        <?php elseif ($_SESSION['level']['level']=='country'):?>
-        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
-        <?php endif;?>
-    </button>
-
-  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
-  &nbsp; <span class="big" id="modal-dialog-title"><strong>
-  <?= $this->translate('Error')?>
-  </strong></span>
-</div>
+<?= $this->partial('partial/page-header.phtml', ['title' => $this->translate('Error')])?>
 
 
 <div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
@@ -33,4 +18,3 @@
 
 </div><!-- end jumbotron -->
 
-<!-- /error/error -->

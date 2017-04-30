@@ -1,16 +1,11 @@
 <?php 
-/**
- * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
- * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
- */
 
 namespace DGIModule\Form;
 
-use DGIModule\Entity\Partner;
-use Zend\Form\Fieldset;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
+ use DGIModule\Entity\Partner;
+ use Zend\Form\Fieldset;
+ use Zend\InputFilter\InputFilterProviderInterface;
+ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
  class PartnerFieldset extends Fieldset implements InputFilterProviderInterface
  {
@@ -62,6 +57,7 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
              'options' => array(
                  'label' => 'Gendre: ',
                  'value_options' => [
+                     //0 => '--- please select your gendre ---', 
                      1 => "1-10", 
                      2 => "11-50",
                      3 => "51-500",
@@ -77,6 +73,7 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
          $this->add([
              'type' => 'Zend\Form\Element\Textarea',
              'name' => 'partActivity',
+             //'value' => null,
              'attributes' => array(
                  'required' => 'required',
                  'rows' => 2,
@@ -91,6 +88,7 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
          $this->add([
              'type' => 'Zend\Form\Element\Textarea',
              'name' => 'partPresentation',
+             //'value' => null,
              'attributes' => array(
                  'required' => 'required',
                  'rows' => 8,
@@ -108,6 +106,7 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
              'options' => array(
                  'label' => 'Gain: ',
                  'value_options' => [
+                     //0 => '--- please select your gendre ---',
                      1 => "<200k�",
                      2 => "200k�-2M�",
                      3 => "2M�-10M�",
@@ -128,6 +127,7 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
                  'label' => 'Website:',
              ),
              'attributes' => array(
+                 //'required' => 'required',
                  'class'=>'form-control text-change',
              ),
          ));
@@ -260,6 +260,7 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
                          'name'    => 'StringLength',
                          'options' => array(
                              'encoding' => 'UTF-8',
+                             //'min'      => 0,
                              'max'      => 500,
                          ),
                      ),
@@ -287,4 +288,3 @@ use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
          );
      }
  }
- 

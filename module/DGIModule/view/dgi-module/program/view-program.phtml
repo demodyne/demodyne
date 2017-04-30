@@ -1,4 +1,3 @@
-<!-- program/view-program -->
 
 <?php 
 
@@ -17,17 +16,8 @@ elseif (array_search($program->getProgLevel(), $levels)=='country') {
 
 ?>
 
+<?= $this->partial('partial/page-header.phtml', ['title' => '<img src="/img/icon-programme-33.svg" width="20">  '.sprintf($this->translate('View Program for %s'), $levelName)])?>
 
-
-<div class="modal-header-soft round5top ui-draggable-handle">
-	<a class="close" href="<?= $this->url($_SESSION['level']['level']);?>"><i
-		class="fa fa-home w"></i></a>
-	<button type="button" class="close" onclick="parent.history.back();">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	&nbsp; <span class="big" id="modal-dialog-title"><strong><?= sprintf($this->translate('View Program for %s'), $levelName)?>
-  </strong></span>
-</div>
 
 <div class="jumbotron"
 	style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
@@ -41,7 +31,18 @@ elseif (array_search($program->getProgLevel(), $levels)=='country') {
 						<div class="col-md-12">
 							<div class="bigblack bot10"><?= $program->getProgName() ?></div>
 							<p><div class="desc"><?= $program->getProgDescription() ?></div></p>
-							<hr>
+							
+							<div class="row"><div class="col-md-12">
+							<?= $this->partial('partial/social-links.phtml', [
+        					    'type' => 'program',
+        					    'url' => $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()), array('force_canonical' => true)),
+        					    'title' => $program->getProgName(),
+        					    'description' => $program->getProgDescription()
+        					]); ?> 
+                            </div>
+                            </div>
+                            <hr>
+							
 							<div class="row">
 								<div class="col-md-7">
 <?= $this->translate('Published by')?> <a
@@ -102,10 +103,8 @@ elseif (array_search($program->getProgLevel(), $levels)=='country') {
 	<!--/r-->
 </div>
 <!-- /j -->
-<script>
-	$(function () {
-		programViewProgramHandlers();
-	});
-</script>
-
-<!-- /program/view-program -->
+	<script>
+		$(function () {
+			programViewProgramHandlers();
+		});
+	</script>

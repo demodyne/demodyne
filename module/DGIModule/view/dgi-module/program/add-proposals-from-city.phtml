@@ -1,5 +1,3 @@
-<!-- program/add-proposals-from-city -->
-
 <?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('program', array('action'=>'add-proposals-from-city', 'id' => $program->getProgUUID())), 'add-city-proposals', $limit, $sort, $order, $filter); ?>
 
 <div id="program-add-proposals-from-city"
@@ -209,9 +207,7 @@
 </div>
 <!-- /jumbotron --> 
 <script type="text/javascript">
-    $(function () {
-    	programAddProposalsFromCityHandlers();
-    });
-</script>
-
-<!-- /program/add-proposals-from-city -->
+            $(function () {
+            	programAddProposalsFromCityHandlers();
+            });
+        </script>

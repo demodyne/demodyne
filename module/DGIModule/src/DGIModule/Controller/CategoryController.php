@@ -1,35 +1,52 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Controller;
 
+use DGIModule\Entity\User;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Form\Annotation\AnnotationBuilder;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 use DGIModule\Entity\Category;
 
+use Doctrine\ORM\EntityManager;
+use Zend\Mvc\I18n\Translator;
+
 class CategoryController extends AbstractActionController
 {
+
+    protected $entityManager;
+    protected $translator;
+    protected $config;
+
+    public function __construct(
+        array $config,
+        EntityManager $entityManager,
+        Translator $translator
+    )
+    {
+        $this->config = $config;
+        $this->entityManager = $entityManager;
+        $this->translator = $translator;
+    }
+    
     public function indexAction()
     {
-        $user = $this->identity();
-       
         $countryId = $this->params()->fromRoute('country', 73);
+
+        $countries = $this->entityManager->getRepository('DGIModule\Entity\Country')->getAllCountries();
+        $country = $this->entityManager->getRepository('DGIModule\Entity\Country')->findOneBy(['countryId' => $countryId]);
         
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
-        $countries = $entityManager->getRepository('DGIModule\Entity\Country')->getAllCountries();
-        $country = $entityManager->getRepository('DGIModule\Entity\Country')->findOneBy(['countryId' => $countryId]);
-        
-        $categories = $entityManager->getRepository('DGIModule\Entity\Category')->getMainCategoriesCountry($country);
-        
+        $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getMainCategoriesCountry($country);
+
         $request = $this->getRequest();
         if ($request->isPost()){
             $cityView = $this->params()->fromPost('city');
@@ -40,16 +57,16 @@ class CategoryController extends AbstractActionController
                 $mainCategory->setCatCity(array_key_exists($mainCategory->getCatId(), $cityView)?1:0);
                 $mainCategory->setCatRegion(array_key_exists($mainCategory->getCatId(), $regionView)?1:0);
                 $mainCategory->setCatCountry(array_key_exists($mainCategory->getCatId(), $countryView)?1:0);
-                $entityManager->merge($mainCategory);
+                $this->entityManager->merge($mainCategory);
                 foreach ($mainCategory->getSubCategories() as $category) {
                     $category->setCatCity(array_key_exists($category->getCatId(), $cityView)?1:0);
                     $category->setCatRegion(array_key_exists($category->getCatId(), $regionView)?1:0);
                     $category->setCatCountry(array_key_exists($category->getCatId(), $countryView)?1:0);
-                    $entityManager->merge($category);
+                    $this->entityManager->merge($category);
                 }
             }
-            $entityManager->flush();
-            $categories = $entityManager->getRepository('DGIModule\Entity\Category')->getMainCategoriesCountry($country);
+            $this->entityManager->flush();
+            $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getMainCategoriesCountry($country);
         }
 
 		return new ViewModel([
@@ -61,22 +78,18 @@ class CategoryController extends AbstractActionController
 	
     public function addAction()
     {
-        $user = $this->identity();
-        
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
         $id = $this->params()->fromRoute('id', 0);
         $countryId = $this->params()->fromRoute('country', 73);
-        
-        $parentCategory = ($id==0)?null:$entityManager->getRepository('DGIModule\Entity\Category')->findOneBy(array('catId' => $id));
-        $country = $entityManager->getRepository('DGIModule\Entity\Country')->findOneBy(['countryId' => $countryId]);
+
+        $parentCategory = ($id==0)?null:$this->entityManager->getRepository('DGIModule\Entity\Category')->findOneBy(array('catId' => $id));
+        $country = $this->entityManager->getRepository('DGIModule\Entity\Country')->findOneBy(['countryId' => $countryId]);
         
         $category = new Category();
         $builder    = new AnnotationBuilder();
         
         $form       = $builder->createForm($category);
         $form->get('submit')->setValue('Add');
-        $form->setHydrator(new DoctrineHydrator($entityManager,'DGIModule\Entity\Category'));
+        $form->setHydrator(new DoctrineHydrator($this->entityManager,'DGIModule\Entity\Category'));
         
         if (!$parentCategory) {
             $filename="catImage".time();
@@ -113,8 +126,9 @@ class CategoryController extends AbstractActionController
                 );
 
             $form->setData($post);
-            
+
             if ($form->isValid()){
+                // prepare data
                 $category->setCatCat($parentCategory)
                                ->setCountry($country);
                 if (!$parentCategory) {
@@ -124,8 +138,8 @@ class CategoryController extends AbstractActionController
                     $category->setCatImage($parentCategory->getCatImage());
                 }
                 
-                $entityManager->persist($category);
-                $entityManager->flush();
+                $this->entityManager->persist($category);
+                $this->entityManager->flush();
                 
                 $files   = $request->getFiles();
                 
@@ -140,13 +154,12 @@ class CategoryController extends AbstractActionController
                                             ->setCatDescription($otherCategoryName)
                                             ->setCountry($country)
                                             ->setCatImage($category->getCatImage());
-                    $entityManager->persist($otherCategory);
-                    $entityManager->flush();
+                    $this->entityManager->persist($otherCategory);
+                    $this->entityManager->flush();
                 }
                 
                 return $this->redirect()->toRoute('home/category', ['country' => $countryId]);
             }
-            print_r($form->getMessages());	
         }
          
         return array(
@@ -158,20 +171,16 @@ class CategoryController extends AbstractActionController
     
     public function editAction()
     {
-        $user = $this->identity();
-        
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-    
         $id = $this->params()->fromRoute('id', 0);
-    
-        $category = $entityManager->getRepository('DGIModule\Entity\Category')->findOneBy(array('catId' => $id));
+
+        /** @var \DGIModule\Entity\Category $category */
+        $category = $this->entityManager->getRepository('DGIModule\Entity\Category')->findOneBy(array('catId' => $id));
         $filename=$category->getCatImage();
     
         $builder    = new AnnotationBuilder();
     
         $form       = $builder->createForm($category);
-        $form->setHydrator(new DoctrineHydrator($entityManager,'DGIModule\Entity\Category'));
-        
+        $form->setHydrator(new DoctrineHydrator($this->entityManager,'DGIModule\Entity\Category'));
         
         $form->get('catName')->setValue($category->getCatName());
         $form->get('catDescription')->setValue($category->getCatDescription());
@@ -180,24 +189,25 @@ class CategoryController extends AbstractActionController
         $form->get('catCountry')->setValue($category->getCatCountry())->setAttribute('checked', $category->getCatCountry()?'checked':false);
         
         $form->get('submit')->setValue('Edit');
-        
-        
+
+        $filename="catImage".time();
         $filter = $form->getInputFilter();
-        $filter->add(array(
+        $filter->add([
             'name' => 'catImage',
             'required' => false,
             'filters' => [
                 [
                     'name'=>'Zend\Filter\File\RenameUpload', 
                     'options'=>[
-                        'target' => 'public/files/'.$category->getCatImage(), 
+                        'target' => 'public/files/'.$filename,
+                        'use_upload_extension'=>'true',
                         'overwrite '=>'true'
                     ]
                 ]
             ]
-        ));
+        ]);
         $form->setInputFilter($filter);
-       
+
         $request = $this->getRequest();
         if ($request->isPost()){
             $form->bind($category);
@@ -205,18 +215,26 @@ class CategoryController extends AbstractActionController
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
-            
-            
+
             $form->setData($post);
             if ($form->isValid()){
                 // prepare data
+                $filename = $filename.'.'.pathinfo($post["catImage"]["name"], PATHINFO_EXTENSION);
                 $category->setCatImage($filename);
-                
-                $entityManager->merge($category);
-                $entityManager->flush();
+
+                if (!$category->getCatCat()) {
+                    foreach ($category->getSubCategories() as $subCategory) {
+                        $subCategory->setCatImage($filename);
+                        $this->entityManager->merge($subCategory);
+                    }
+                }
+
+                $this->entityManager->merge($category);
+                $this->entityManager->flush();
                 
                 $files   = $request->getFiles();
-                return $this->redirect()->toRoute('home/category');
+
+                return $this->redirect()->toRoute('home/category', ['country'=>$category->getCountry()->getCountryId()]);
             }
         }
          
@@ -228,14 +246,9 @@ class CategoryController extends AbstractActionController
     
     public function deleteAction()
     {
-        
-        $user = $this->identity();
-        
-        
         $id = $this->params('id');
         
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $category = $entityManager->getRepository('DGIModule\Entity\Category')->findOneBy(array('catId' => $id));
+        $category = $this->entityManager->getRepository('DGIModule\Entity\Category')->findOneBy(array('catId' => $id));
         
         if (!$category) {
             return $this->redirect()->toRoute('home/category');
@@ -243,28 +256,27 @@ class CategoryController extends AbstractActionController
     
         $request = $this->getRequest();
     
-        $viewmodel = new ViewModel();
+        $viewModel = new ViewModel();
         //disable layout if request by Ajax
         $is_xmlhttprequest = $this->getRequest()->isXmlHttpRequest();
-        $viewmodel->setTerminal($is_xmlhttprequest);
-    
-    
+        $viewModel->setTerminal($is_xmlhttprequest);
+
         if ($request->isPost()) {
             if ($request->getPost()->get('del') == 'Yes') {
-               $entityManager->remove($category);
-               $entityManager->flush();
+               $this->entityManager->remove($category);
+               $this->entityManager->flush();
             }
     
             return $this->redirect()->toRoute('home/category');
         }
     
-        $viewmodel->setVariables(array(
+        $viewModel->setVariables(array(
             'id' => $id,
             'category' => $category,
             'is_xmlhttprequest' => $is_xmlhttprequest
         ));
     
-        return $viewmodel;
+        return $viewModel;
     }
     
     public function getCategoriesAction() {
@@ -281,10 +293,8 @@ class CategoryController extends AbstractActionController
         }
     
         if ($request->isPost()) {
-            
-            $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-    
-            $categories = $entityManager->getRepository('DGIModule\Entity\Category')->getMainCategories($user, $level);
+
+            $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getMainCategories($user, $level);
     
             $catList = array();
     
@@ -292,28 +302,53 @@ class CategoryController extends AbstractActionController
                 $catList["name"][] = $category->getCatName();
                 $catList["id"][] = $category->getCatId();
                 $catList["image"][] = '/files/'. $category->getCatImage();
-    
             }
-    
+
             return $response->setContent(\Zend\Json\Json::encode($catList));
         }
         else {
             $mainCategoryId = $this->params('id');
-    
-            $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-    
-            $categories = $entityManager->getRepository('DGIModule\Entity\Category')->getSubCategories($mainCategoryId);
+            $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getSubCategories($mainCategoryId);
     
             $catList = array();
     
             foreach ($categories as $category) {
                 $catList["name"][] = $category->getCatName();
                 $catList["id"][] = $category->getCatId();
-    
             }
-    
             return $response->setContent(\Zend\Json\Json::encode($catList));
         }
+    }
+
+    public function getAllCategoriesAction() {
+
+        $country = $this->params()->fromPost('country');
+
+        $country = $this->entityManager->getRepository('DGIModule\Entity\Country')->findOneBy(['countryCode'=>$country]);
+        if (!$country) {
+            return new JsonModel(array());
+        }
+
+        $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getMainCategoriesCountry($country);
+
+        $mainCat = [];
+
+        /** @var \DGIModule\Entity\Category $mainCategory */
+        foreach ($categories as $mainCategory) {
+            $mainCatItem = [];
+            $mainCatItem['name'] = $mainCategory->getCatName();
+            $mainCatItem['id'] = $mainCategory->getCatId();
+            $mainCatItem["image"] = '/files/' . $mainCategory->getCatImage();
+            $subCatItem = [];
+            foreach ($mainCategory->getSubCategories() as $category) {
+                $subCatItem['name'] = $category->getCatName();
+                $subCatItem['id'] = $category->getCatId();
+                $mainCatItem['subCategories'][] = $subCatItem;
+            }
+            $mainCat[] = $mainCatItem;
+        }
+
+        return new JsonModel($mainCat);
     }
     
     public function getSubcategoriesAction() {
@@ -328,38 +363,72 @@ class CategoryController extends AbstractActionController
         
         if ($request->isPost()) {
             $mainCategoryId = $this->params()->fromPost('main_category');
-    
-            
-            $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            
-            $categories = $entityManager->getRepository('DGIModule\Entity\Category')->getSubCategories($mainCategoryId, $level);
+            $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getSubCategories($mainCategoryId, $level);
     
             $catList = array();
             
             foreach ($categories as $category) {
                 $catList["name"][] = $category->getCatName();
                 $catList["id"][] = $category->getCatId();
-                
             }
-            
+
             return $response->setContent(\Zend\Json\Json::encode($catList));
         }
         else {
             $mainCategoryId = $this->params('id');
-        
-            $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
-            $categories = $entityManager->getRepository('DGIModule\Entity\Category')->getSubCategories($mainCategoryId);
+            $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getSubCategories($mainCategoryId);
         
             $catList = array();
         
             foreach ($categories as $category) {
                 $catList["name"][] = $category->getCatName();
                 $catList["id"][] = $category->getCatId();
-        
             }
-        
+
             return $response->setContent(\Zend\Json\Json::encode($catList));
         }
+    }
+
+    public function jsonListAction() {
+
+        $user = $this->identity();
+
+        $level = $this->params()->fromRoute('level');
+
+        if (!$level) {
+            return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied'));
+        }
+
+        if (!$user) {
+            $user = new User();
+            $user->setUsrId(0);
+        }
+        else {
+            $user = clone($user);
+        }
+
+        $city = $this->entityManager->getRepository('DGIModule\Entity\City')->findOneBy(['cityId' => 26241]);
+
+        if ($city) {
+            $user->setUsrId(0);
+            $user->setCountry($city->getCountry());
+            $user->setCity($city);
+        }
+        $categories = $this->entityManager->getRepository('DGIModule\Entity\Category')->getMainCategories($user, $level);
+
+        $cat = [];
+
+        foreach ($categories as $category) {
+            foreach ($category->getSubCategories() as $subCat) {
+                $cat[] = [
+                    'name' => $category->getCatName().': '.$subCat->getCatName(),
+                    'main' => $category->getCatName(),
+                    'sub' => $subCat->getCatName(),
+                    'id' => $subCat->getCatId(),
+                    'img' => $category->getCatImage(),
+                ];
+            }
+        }
+        return new JsonModel(array('results' => $cat));
     }
 }

@@ -1,6 +1,7 @@
-<!-- program/add-proposal-success -->
-
 <div id="program-add-proposal-success">
+
+
+
 
 	<div class="row">
 		<div class="col-md-12">
@@ -22,10 +23,12 @@
     
     <div class="row">
     	<div class="col-xs-12 text-right">
-            <a href="<?= $this->url('program', array('action' => 'view-program','id'=>$program->getProgUUID()));?>" class="btn btn-orange" id="program-add-proposal-success-goto-program"><i class="fa fa-object-group" id="add-proposal-goto-scenario-icon"></i> <?= $this->translate('Go to Program')?></a>  
+            <a href="<?= $this->url('program', array('action' => 'view-program','id'=>$program->getProgUUID()));?>" class="btn btn-orange" id="program-add-proposal-success-goto-program">
+            <img class="bot5" src="/img/icon-programme-33.svg" width="18" id="add-proposal-goto-scenario-icon">
+             <?= $this->translate('Go to Program')?></a>  
 			<button type="button" class="btn" 
 				id="program-add-proposal-success-close"
-				data-url="<?= $this->url('program', array( 'action'=>'add-remove-proposal', 'proposal'=>$proposal->getPropUUID(), 'id'=> $program->getProgUUID()));?>"
+				data-url="<?= $this->url('program', array( 'action'=>'add-remove-proposal', 'id'=>$proposal->getPropUUID()));?>"
 				data-remove-from-my-program="<?=$this->translate('Remove from my Program')?>"
 				data-id="<?=$proposal->getPropUUID()?>"
 			><i class="fa fa-ban"></i> <?= $this->translate('Close')?></button>
@@ -37,11 +40,8 @@
 	
 	
 <script type="text/javascript">
-	$(document).ready(function () {
-		programAddProposalSuccessHandlers();
-	});
-</script>
-
-<!-- /program/add-proposal-success -->
-	
+		$(document).ready(function () {
+			programAddProposalSuccessHandlers();
+		});
+	</script>
 	

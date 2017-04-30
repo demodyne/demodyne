@@ -1,12 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
-
+ 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Proposal;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,7 +32,7 @@ class Vote
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $voteId;
-    
+
     /**
      * @var integer
      *
@@ -44,13 +46,11 @@ class Vote
      * @ORM\Column(name="vote_priority", type="integer", nullable=false)
      */
     private $votePriority;
-    
-    
-    
+
     /**
      * @var string
      *
-     * @ORM\Column(name="vote_uuid", type="string",  length=36, nullable=true)
+     * @ORM\Column(name="vote_uuid", type="uuid",  length=36, nullable=true)
      */
     private $voteUUID;
     
@@ -59,12 +59,13 @@ class Vote
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="vote_created_date", type="datetime", nullable=false)
+     * @ORM\Column(name="vote_created_date", type="utcdatetime", nullable=false)
      */
     private $voteCreatedDate;
     
+
     /**
-     * @var \DGIModule\Entity\Proposal
+     * @var Proposal
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Proposal")
      * @ORM\JoinColumns({
@@ -74,7 +75,7 @@ class Vote
     private $prop;
 
     /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -82,6 +83,7 @@ class Vote
      * })
      */
     private $usr;
+
 
     public function nameVote() {
         $values = [-5=>"Opposed", -3=>"Unfavourable", 0=>"Neutral", 3=>"Favourable", 5=>"Highly Favourable"];
@@ -188,10 +190,10 @@ class Vote
     /**
      * Set prop
      *
-     * @param \DGIModule\Entity\Proposal $prop
+     * @param Proposal $prop
      * @return Vote
      */
-    public function setProp(\DGIModule\Entity\Proposal $prop = null)
+    public function setProp(Proposal $prop = null)
     {
         $this->prop = $prop;
 
@@ -201,7 +203,7 @@ class Vote
     /**
      * Get prop
      *
-     * @return \DGIModule\Entity\Proposal 
+     * @return Proposal
      */
     public function getProp()
     {
@@ -211,10 +213,10 @@ class Vote
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      * @return Vote
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -224,10 +226,21 @@ class Vote
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User 
+     * @return User
      */
     public function getUsr()
     {
         return $this->usr;
     }
+
+    /**
+     * @param string $voteUUID
+     * @return Vote
+     */
+    public function setVoteUUID($voteUUID)
+    {
+        $this->voteUUID = $voteUUID;
+        return $this;
+    }
+
 }

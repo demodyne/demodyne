@@ -1,0 +1,135 @@
+<div style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+	id="user-city"
+	data-getcities="<?= $this->url('location', array('action'=>'get-cities')); ?>"
+	data-write-postal-code="<?=$this->translate('Please write a postalcode first!')?>"
+	data-no-cities="<?=$this->translate('No cities for this postal code!')?>">
+
+	<?php if (isset($facebookLocation)):?>
+	<div class="row">
+		<div class="col-md-4">
+			<img src="<?=$this->basePath('/img/location-clipart.jpg')?>" width="100%">
+		</div>
+	
+		<div class="col-md-8">
+			<p><?=$this->translate('It\'s time to get involved in the governance of your city, region and country!')?></p>
+			<p><?=$this->translate('Your city of residence is required to enable your contribution in the relevant territories.')?> 
+			<?=$this->translate('We have taken the location from your Facebook account. Please verify that the postalcode and the city match your actual location.')?> </p>
+			<p><?=$this->translate('If you have problems founding your city, please send us an email to <a href="mailto:support@demodyne.org">support@demodyne.org</a> with your country, postalcode and city name, and we will manage your request.')?> </p>
+			<p class="red">
+			<?=$this->translate('Be aware: the city can be changed only once a month.')?> </p>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	<?php else:?>
+	<div class="row">
+		<div class="col-md-4">
+			<img src="<?=$this->basePath('/img/location-clipart.jpg')?>" width="100%">
+		</div>
+	
+		<div class="col-md-8">
+			<p><?=$this->translate('It\'s time to get involved in the governance of your city, region and country!')?></p>
+			<p><?=$this->translate('Your city of residence is required to enable your contribution in the relevant territories.')?> 
+			<?=$this->translate('Please fill your country, postalcode and choose your city.')?></p> 
+			<p><?=$this->translate('If you have problems founding your city, please send us an email to <a href="mailto:support@demodyne.org">support@demodyne.org</a> with your country, postalcode and city name, and we will manage your request.')?> </p>
+			<p class="red">
+			<?=$this->translate('Be aware: the city can be changed only once a month.')?> </p>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	<?php endif;?>
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	
+	
+	
+	<?php
+$form->prepare();
+$form->setAttribute('method', 'post'); 
+$form->setAttribute('action', $this->url('home/user-register', ['action'=>'user-city'])); ?>
+  
+<?=$this->form()->openTag($form);?>
+	<fieldset>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Country'); ?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('country'));?>
+						<span class="text-danger"><?= $this->formElementErrors($form->get('country'));?></span>
+					</div>
+				</div>
+				
+				
+			</div>
+			<!-- /6 -->
+		</div>
+		<!-- end row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Postal code'); ?></label>
+					<div class="col-md-8 bot5">
+						<div class="row">
+							<div class="col-md-6"><?= $this->formElement($form->get('usrPostalcode'));?></div>
+							<div class="col-md-6 top10">
+								<i class="fa s18 fa-spinner fa-pulse" id="cityLoad"
+									style="display: none"></i>
+							</div>
+							<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('usrPostalcode'));?></span>
+						</div>
+						<!-- /r -->
+					</div>
+					<!-- /8 -->
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('City'); ?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('city'));?>
+						<span class="text-danger"><?= $this->formElementErrors($form->get('city'));?></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+
+	</fieldset>
+
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+			
+			<button type="submit" class="btn btn-orange"
+				id="user-city-submit">
+				<i class="fa fa-save" aria-hidden="true"></i> <?= $this->translate('Save')?></button>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+	<?=  $this->form()->closeTag();?> 
+</div>
+
+
+
+<script type="text/javascript">
+
+$(function() {
+	userRegistrationUserCityHandlers();
+});    
+
+</script>

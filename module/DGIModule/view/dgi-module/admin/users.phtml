@@ -1,0 +1,156 @@
+<?php $paging = $this->sortingDivPaginationHelper($pagedUsers, $page, $this->url('admin', array('action'=>'users')), 'contact', $limit, $sort, $order); ?>
+<div id="admin-users"
+	data-url="<?= $this->url('admin', array('action'=>'users'), true);?>"
+	data-new-message=" <?= $this->translate('Send New Message')?>"
+     data-remove-contact="<?= $this->translate('Remove from Contacts')?>"
+     data-add-contact="<?= $this->translate('Add to Contacts')?>"
+>
+	<div class="row">
+		<div class="col-md-6 top10">
+            <button type="button" class="btn btn-orange" id="admin-users-new-message-selected"
+                    data-href="<?= $this->url('user/inbox', array('action'=>'new-message'));?>"><i
+                        class="fa fa-envelope-o"></i> <?= $this->translate('Send Message to Selected')?></button>
+            <span class="big"><?= sprintf($this->translate('%d Users'), $usersCount)?></span>
+		</div>
+		<div class="col-md-6">
+			
+			<div class="fltr">
+				<ul class="nav top10">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-down"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-contact" href="<?= $this->url('admin', array('action'=>'users', 'sort' => 'name', 'page'=>1, 'order'=>'desc'))?>"><?= $this->translate('Name')?></a></li>
+							
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr">
+				<ul class="nav top10">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-up"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-contact" href="<?= $this->url('admin', array('action'=>'users', 'sort' => 'name', 'page'=>1, 'order'=>'asc'))?>"><?= $this->translate('Name')?></a></li>
+							
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr right10 top15"><?= $this->translate('Sorted by')?> <?=$this->translate(ucfirst($sort))?>
+                    <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- /row -->
+	<hr />
+
+<?php foreach($pagedUsers as $index => $contact): ?>
+
+
+
+
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-4">
+			
+			<div class="pull-left" style="min-width: 62px!important">
+			<input type="checkbox" value="<?=$contact->getUsrName()?>">
+			<a
+				href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$contact->getUsrUUID()));?>"
+				><img src="<?=$this->basePath( $contact->getUsrPicture()) ?>"
+				valign="middle" width="45" height="45"
+				title="<?=$contact->getUsrName()?>" class="round5" /></a>
+	  </div>
+<div style="margin-left: 72px!important">	  
+			<a
+				href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$contact->getUsrUUID()));?>"
+				><span class="badge"><?=$contact->getUsrName()?></span></a><br /> <span
+				class="w">
+					<?php if ($contact->isAdministration()):?>
+						<?= $this->translate('Administration')?>
+					<?php elseif ($contact->isPartner()):?>
+						<?= $this->translate('Partner')?>
+					<?php else:?>
+						<?= $this->translate('Citizen')?>
+					<?php endif;?>
+				</span>
+</div>
+</div>
+    <div class="col-xs-12 col-sm-12 col-md-5">
+
+        <?php if ($contact->getCity()):?>
+            <strong><?= $this->translate('City:')?></strong> <?=$contact->getCity()->getCityName()?> (<?=$contact->getCity()->getCityPostalcode()?>)<br>
+            <strong><?= $this->translate('Region:')?></strong> <?=$contact->getCity()->getStateName()?><br>
+            <strong><?= $this->translate('Country:')?></strong> <?=$contact->getCountry()->getCountryName()?> <img
+                    src="<?= $this->basePath('img/flags/'.str_replace(' ', '-', $contact->getCountry()->getCountryName()).'.png') ?>"
+                    valign="middle" width="25" height="17" alt="<?=$contact->getCountry()->getCountryName()?>" />
+        <?php else:?>
+            <strong><?= $this->translate('City')?>:</strong> <?=$this->translate('No city chosen yet')?><br>
+        <? endif;?>
+    </div>
+<div class="col-xs-12 col-md-3 text-right">
+	<span class="right10"><a href="<?= $this->url('user/inbox', array('action'=>'new-message', 'to'=>$contact->getUsrName()));?>"	id="admin-users-send-message"><i
+				class="fa fa-envelope-o size15em" title="<?= $this->translate('Send Message')?>"></i></a></span>
+<span>                
+<?php if ($user->hasContact($contact)):?>
+    <a
+            href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$contact->getUsrUUID()));?>"
+
+            id="user-profile-mini-profile-add-remove-contact"
+            data-id="<?=$contact->getUsrUUID()?>"> <i class="fa fa-minus-circle" title="<?= $this->translate('Remove from Contacts')?>"></i></a>
+<?php else: ?>
+    <a
+            href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$contact->getUsrUUID()));?>"
+
+            id="user-profile-mini-profile-add-remove-contact"
+            data-id="<?=$contact->getUsrUUID()?>"> <i class="fa fa-plus-circle" title="<?= $this->translate('Add to Contacts')?>"></i></a>
+<?php endif;?>
+</span>
+  </div>
+
+</div>
+
+
+
+
+	<hr />
+
+<?php endforeach;?>
+
+
+
+
+
+		<div class="row">
+		<div class="col-md-12">
+
+				  <?= $paging; ?>
+
+			</div>
+		<!--/12-->
+	</div>
+	<!-- /row -->
+</div>
+<script type="text/javascript">
+
+
+
+	$(function(){
+
+
+
+        adminUsersHandlers();
+
+
+
+		
+
+});
+
+
+
+</script>
+
+        

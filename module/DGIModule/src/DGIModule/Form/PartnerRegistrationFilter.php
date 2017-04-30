@@ -1,18 +1,14 @@
 <?php
-/**
- * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
- * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
- */
-
 namespace DGIModule\Form;
 
+use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 
 class PartnerRegistrationFilter extends InputFilter
 {
-	public function __construct($sm)
+	public function __construct($entityManager)
 	{
+		// self::__construct(); // parnt::__construct(); - trows and error
 		$this->add(array(
 			'name'     => 'usrName',
 			'required' => true,
@@ -32,7 +28,7 @@ class PartnerRegistrationFilter extends InputFilter
 				array(
 					'name'		=> 'DoctrineModule\Validator\NoObjectExists',
 					'options' => array(
-						'object_repository' => $sm->get('doctrine.entitymanager.orm_default')->getRepository('DGIModule\Entity\User'),
+						'object_repository' => $entityManager->getRepository('DGIModule\Entity\User'),
 						'fields'            => 'usrName'
 					),
 				),
@@ -49,7 +45,7 @@ class PartnerRegistrationFilter extends InputFilter
 				array(
 					'name'		=> 'DoctrineModule\Validator\NoObjectExists',
 					'options' => array(
-						'object_repository' => $sm->get('doctrine.entitymanager.orm_default')->getRepository('DGIModule\Entity\User'),
+						'object_repository' => $entityManager->getRepository('DGIModule\Entity\User'),
 						'fields'            => 'usrEmail'
 					),
 				),
@@ -207,6 +203,7 @@ class PartnerRegistrationFilter extends InputFilter
 		        ),
 		    ),
 		));
+		
 		
 	}
 }

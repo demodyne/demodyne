@@ -1,10 +1,4 @@
 <?php
-/**
- * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
- * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
- */
-
 namespace DGIModule\Form;
 
 use Zend\Form\Form;
@@ -22,9 +16,19 @@ class PartnerRegistrationForm extends Form
         $this->setObject(new User());
         $this->setAttribute('class', 'form-horizontal');
         
+        /*$this->add(array(
+            'type' => 'DGIModule\Form\PartnerFieldset',
+            'options' => array(
+                'use_as_base_fieldset' => true,
+            ),
+        ));*/
+        
         $this->add(array(
             'type' => 'DGIModule\Form\PartnerFieldset',
             'name' => 'partner',
+            'options' => array(
+                //'label' => 'Partner',
+            ),
         ));
 
         $this->add(array(
@@ -65,6 +69,7 @@ class PartnerRegistrationForm extends Form
                 'class'=>'form-control text-change',
                 'id' => 'username',
                 'maxlength' => 20,
+//                 'size' => 50,
                 'required' => 'required',
             ),
             'options' => array(
@@ -133,6 +138,7 @@ class PartnerRegistrationForm extends Form
                 'label_generator' => function ($country) {
                     return $country->getCountryName();
                 },
+                //'empty_option' => '--- please choose ---',
                 'is_method' => true,
                 'required' => false,
                 'find_method' => array(
@@ -186,6 +192,9 @@ class PartnerRegistrationForm extends Form
 		        'size' => 50,
 		        'readonly' => 'readonly'
 		    ),
+		    'options' => array(
+		       // 'label' => 'Other city:',
+		    ),
 		));
 		
 		$this->add(array(
@@ -213,13 +222,14 @@ class PartnerRegistrationForm extends Form
 		);
 		$captchaImage->setImgDir($dirdata.'/captcha');
 		$captchaImage->setImgUrl('/captcha');
+		//var_dump($captchaImage);
 		
 		$this->add(array(
 		    'type' => 'Zend\Form\Element\Captcha',
 		    'name' => 'captcha',
 		    'options' => array(
 		        'label' => 'Please verify you are human:',
-		        'captcha' => $captchaImage
+		        'captcha' => $captchaImage//new \Zend\Captcha\Image(),
 		    ),
 		    'attributes' => [
 		        'id' => 'captcha',

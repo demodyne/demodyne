@@ -5,7 +5,7 @@
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
-$env = getenv('APP_ENV') ?getenv('APP_ENV'): 'production';
+$env = getenv('APP_ENV') ?: 'production';
 // Use the $env value to determine which modules to load
 $modules = array(
     'DoctrineModule',

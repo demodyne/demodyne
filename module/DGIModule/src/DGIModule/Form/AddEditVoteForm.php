@@ -1,20 +1,21 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Form;
 
 use Zend\Form\Form;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Hydrator\ClassMethods;
 use Zend\InputFilter\InputFilterProviderInterface;
 use DGIModule\Entity\Vote;
+use Zend\Mvc\I18n\Translator;
 
 class AddEditVoteForm extends Form implements InputFilterProviderInterface
 {
-    public function __construct()
+    public function __construct(Translator $translator)
     {
         parent::__construct('voteForm');
         $this->setObject(new Vote());
@@ -22,7 +23,8 @@ class AddEditVoteForm extends Form implements InputFilterProviderInterface
         $this->setHydrator(new ClassMethods());
         $this->setAttributes([
             'class' => 'form-horizontal',
-            'role'=> 'form'        ]);
+            'role'=> 'form'
+        ]);
 
         $this->add(array(
 		    'name' => 'voteVote',
@@ -35,14 +37,16 @@ class AddEditVoteForm extends Form implements InputFilterProviderInterface
 		    ),
             'options' => [
                 'value_options' => [
-                    5=>_("Highly Favourable"), 
-                    3=>_("Favourable"),  
-                    0=>_("Neutral"), 
-                    -3=>_("Unfavourable"), 
-                    -5=>_("Opposed")
+                    5=>$translator->translate("Highly Favourable", 'DGIModule'),
+                    3=>$translator->translate("Favourable", 'DGIModule'),
+                    0=>$translator->translate("Neutral", 'DGIModule'),
+                    -3=>$translator->translate("Unfavourable", 'DGIModule'),
+                    -5=>$translator->translate("Opposed", 'DGIModule')
                 ]
             ]
 		));
+		
+		
 		
     }
     

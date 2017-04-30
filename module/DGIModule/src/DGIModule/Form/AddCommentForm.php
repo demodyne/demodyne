@@ -1,14 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Form;
 
 use Zend\Form\Form;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Hydrator\ClassMethods;
 use Zend\InputFilter\InputFilterProviderInterface;
 
 class AddCommentForm extends Form  implements InputFilterProviderInterface
@@ -27,11 +27,8 @@ class AddCommentForm extends Form  implements InputFilterProviderInterface
                 'class'=>'form-control text-change',
                 'style' => 'display:none'
             ),
-            'options' => [
-                'label' => 'Comment: ',
-            ]
         ]);
-       
+
     }
     
     public function getInputFilterSpecification()

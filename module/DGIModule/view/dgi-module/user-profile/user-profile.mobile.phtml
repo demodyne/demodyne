@@ -1,0 +1,69 @@
+<div class="container" style="padding: 0px!important;">
+    <ul class="nav nav-tabs-mobile dunga">
+        <li class="active"><a href="#profile" data-toggle="tab">
+                <i class="fa fa-user" title="<?= $this->translate('Profile')?>"></i>
+            </a></li>
+        <li><a href="#photo" data-toggle="tab">
+                <i class="fa fa-camera" title="<?= $this->translate('Picture')?>"></i>
+            </a></li>
+        <li><a href="#account" data-toggle="tab">
+                <i class="fa fa-cog" title="<?= $this->translate('Account Settings')?>"></i>
+            </a></li>
+        <li><a href="#mailing" data-toggle="tab">
+                <i class="fa fa-paper-plane-o" title="<?= $this->translate('Mailing Settings')?>"></i>
+            </a></li>
+        <li><a href="#ratings" data-toggle="tab">
+                <i class="fa fa-star-half-o" title="<?= $this->translate('Ratings')?>"></i>
+            </a></li>
+
+    </ul>
+</div>
+
+
+
+<div class="jumbotron tab-content">
+
+<!-- PROFILE -->
+<div class="tab-pane active" id="profile" >
+<?= $this->presentationSection;?>
+</div>
+<!-- /PROFILE -->
+
+<!-- PHOTO -->
+<div class="tab-pane" id="photo">
+<?= $this->pictureSection?>
+</div><!-- /PHOTO -->
+
+<!-- SETTINGS -->
+<div class="tab-pane" id="account">
+<?= $this->settingsSection?>
+</div><!-- /SETTINGS -->
+
+<!-- RATINGS -->
+<div class="tab-pane" id="ratings">
+<?=$this->userNotesSection?>
+<?=$this->myActivitySection?>
+</div><!-- /ratings -->
+
+<!-- ACTIVITY -->
+<div class="tab-pane" id="mailing">
+    <?= $this->mailingSection?>
+</div><!-- /ACTIVITY -->
+
+</div>
+
+<script type="text/javascript">
+                $( function () {
+                    $('a#menu-profile').on('shown.bs.tab', function (e) {
+                        $('body').scrollTop( 0);
+                    });
+    //                $( '#menu' ).mmenu({
+    //                    "navbar":
+    //                        {
+    //                           'title': 'test'
+    //                        }
+    //
+    //                });
+                } );
+
+</script>

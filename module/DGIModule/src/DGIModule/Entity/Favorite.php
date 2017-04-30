@@ -1,12 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
-
+ 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Proposal;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -29,12 +31,12 @@ class Favorite
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_check_date", type="datetime", nullable=false)
+     * @ORM\Column(name="last_check_date", type="utcdatetime", nullable=false)
      */
     private $favLastCheckDate;
 
     /**
-     * @var \Import\Entity\Proposal
+     * @var Proposal
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Proposal")
      * @ORM\JoinColumns({
@@ -44,7 +46,7 @@ class Favorite
     private $prop;
 
     /**
-     * @var \Import\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -91,10 +93,10 @@ class Favorite
     /**
      * Set prop
      *
-     * @param \Import\Entity\Proposal $prop
+     * @param Proposal $prop
      * @return Favorite
      */
-    public function setProp(\DGIModule\Entity\Proposal $prop = null)
+    public function setProp(Proposal $prop = null)
     {
         $this->prop = $prop;
         $prop->addFavorite($this);
@@ -105,7 +107,7 @@ class Favorite
     /**
      * Get prop
      *
-     * @return \DGIModule\Entity\Proposal 
+     * @return Proposal
      */
     public function getProp()
     {
@@ -115,10 +117,10 @@ class Favorite
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      * @return Favorite
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
         $usr->addFavorite($this);
@@ -129,7 +131,7 @@ class Favorite
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User 
+     * @return User
      */
     public function getUsr()
     {

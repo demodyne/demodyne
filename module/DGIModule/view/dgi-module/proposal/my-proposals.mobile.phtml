@@ -1,0 +1,171 @@
+<?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('proposal', array('action'=>'my-proposals')), 'my-prop', $limit, $sort, $order, $filter); ?>
+
+
+<div class="jumbotron">
+
+<div class="title-mobile"><?= sprintf($this->translate('You own %s Proposals'), $totalProposals)?></div>
+
+<div>
+			<?php if ($user):?>
+			<button data-url="<?= $this->url('proposal', array('action'=>'add-proposal'));?>"
+				data-dialog-title="<?=$this->translate('Create New Proposal')?>"
+				class="btn btn-orange" id="proposal-my-proposals-new-proposal"> <i
+				class="fa fa-plus-circle"></i> <?= $this->translate('Create New Proposal')?>
+			</button> 
+			<?php else:?>
+			<button type="button" class="btn btn-orange"
+				data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
+				data-dialog-title="<?=$this->translate('Please register')?>"
+				id="please-register-button">
+				<i class="fa fa-plus-circle"></i> <?= $this->translate('Create New Proposal')?></button>
+			<?php endif;?>
+</div>
+
+
+
+<div class="btn-group" role="group" aria-label="...">
+			<a id="page-my-prop"
+				class="btn btn-sm <?= $filter=='none'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'filter'=>'none'));?>">
+				<?=$this->translate('All proposals')?> (<?=$totalProposals?>)</a>
+			<a id="page-my-prop"
+				class="btn btn-sm <?= $filter=='city'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort' => $sort=='level'?'created-date':$sort, 'filter'=>'city'));?>">
+				<?=$this->translate('City proposals')?> (<?=$cityProposals?>)</a>
+			<a id="page-my-prop"
+				class="btn btn-sm <?= $filter=='region'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort' => $sort=='level'?'created-date':$sort, 'filter'=>'region'));?>">
+				<?=$this->translate('Region proposals')?> (<?=$regionProposals?>)</a>
+			<a id="page-my-prop"
+				class="btn btn-sm <?= $filter=='country'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort' => $sort=='level'?'created-date':$sort, 'filter'=>'country'));?>">
+				<?=$this->translate('Country proposals')?> (<?=$countryProposals?>)</a>
+</div>		
+		
+	<div class="row">
+		<div class="col-xs-12">
+				<div class="fltr">
+				<ul class="nav top10">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-down"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'name', 'order'=>'desc'));?>"><?= $this->translate('Name')?></a></li>
+							<?php if ($filter=='none'):?>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'level', 'order'=>'desc'));?>"><?= $this->translate('Level')?></a></li>
+							<?php endif;?>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'category', 'order'=>'desc'));?>"><?= $this->translate('Category')?></a></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'status', 'order'=>'desc'));?>"><?= $this->translate('Status')?></a></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'draft', 'order'=>'desc'));?>"><?= $this->translate('Published / Draft')?></a></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'votes', 'order'=>'desc'));?>"><?= $this->translate('Votes')?></a></li>
+							<li class="divider"></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'created-date', 'order'=>'desc'));?>"><?= $this->translate('Creation	date')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr">
+				<ul class="nav top10">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-up"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'name', 'order'=>'asc'));?>"><?= $this->translate('Name')?></a></li>
+							<?php if ($filter=='none'):?>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'level', 'order'=>'asc'));?>"><?= $this->translate('Level')?></a></li>
+							<?php endif;?>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'category', 'order'=>'asc'));?>"><?= $this->translate('Category')?></a></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'status', 'order'=>'asc'));?>"><?= $this->translate('Status')?></a></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'draft', 'order'=>'asc'));?>"><?= $this->translate('Published / Draft')?></a></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'votes', 'order'=>'asc'));?>"><?= $this->translate('Votes')?></a></li>
+							<li class="divider"></li>
+							<li><a id="page-my-prop"
+								href="<?= $this->url('proposal', array('action'=>'my-proposals', 'page'=>1, 'sort'=>'created-date', 'order'=>'asc'));?>"><?= $this->translate('Creation	date')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div></div>
+													
+
+	<hr />
+	
+	
+	
+<?php if(count($pagedProposals)>0):?>
+  <?php foreach($pagedProposals as $index => $proposal): ?>
+  
+  
+  
+  
+  
+  
+  
+<!-- mobile view -->
+
+<div class="row">
+    <div class="col-xs-12">
+    
+    <div class="pull-left" style="min-width: 42px!important">
+    <img src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>" height="34" width="34" class="round5" title="<?= $this->escapeHtml($proposal->getCat()->getCatCat()->getCatName()) ?>">
+		</div>
+	<div style="margin-left: 42px!important">
+	<?php $proposalDescription = $this->escapeHtml(preg_replace('/(?:\r\n|\r|\n)/', '<br>', $proposal->getPropDescription())); 
+      $proposalDescription = (strlen($proposalDescription) > 150) ? substr($proposalDescription, 0, 150) . '...' : $proposalDescription;?>
+					<a
+						href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>"
+						title="<?= $proposalDescription ?>" id="my-proposals-list-item"
+						data-id="<?= $proposal->getPropUUID()?>"> <span class="big wbr"><?= $proposal->getPropSavedName() ?></span></a>
+                        <br>
+			<?=$this->translate('for')?> 
+			<?= $this->partial('partial/show-level.phtml', ['level' => $proposal->getPropLevel(), 'city'=>$proposal->getCity()]); ?>
+		</div>
+
+   <hr>
+    
+	</div>
+	</div>
+
+<!-- /mobile view -->  
+ 
+ 
+
+<?php endforeach; ?>
+		
+	<?= $paging; ?>
+		 
+<?php else:?>
+    <div class="row">
+    	<?php if ($filter=='none'):?>
+			<?= $this->translate("You don't have any proposals.")?>
+		<?php else:?>
+			<?= sprintf($this->translate("You don't have any proposals for your %s."), $this->translate($filter))?>
+		<?php endif;?>
+	</div>
+<?php endif;?>
+
+
+
+
+</div>
+
+
+<!-- /jumbotron -->
+<script type="text/javascript">
+$(function(){  
+	proposalMyProposalsHandlers();
+	});
+</script>

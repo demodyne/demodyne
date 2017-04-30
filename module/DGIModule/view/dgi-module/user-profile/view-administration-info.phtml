@@ -1,0 +1,120 @@
+<div id="user-profile-view-user-info" data-id="<?=$user->getUsrUUID()?>"
+     data-remove-contact="<?= $this->translate('Remove from Contacts')?>"
+     data-add-contact="<?= $this->translate('Add to Contacts')?>">
+    <h2 class="text-center">
+        <i class="fa fa-info-circle"></i> <?= sprintf($this->translate('%s\'s General Info'),  $user->getUsrName())?></h2>
+    <hr class="bot10" />
+    <h3 class="bot10 text-center">
+        <?if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.city')) {
+            $levelName = $user->getAdmin()->getAdminCity();
+        }
+        else if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.region')) {
+            $levelName = $user->getAdmin()->getAdminRegion()->getRegionName();
+        }
+        else if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.country')) {
+            $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$user->getCountry()->getCountryName() .'</span>';
+        }
+        ?>
+        <?=sprintf($this->translate('Public Administration for: %s'), $levelName)?></h3>
+    <div class="row">
+        <div class="col-md-4 col-md-offset-2">
+            <?php if ($user->getCity()):?>
+                <strong><?=$this->translate('Address:')?></strong> <?=$user->getAdmin()->getAdminAddress()?><br>
+                <strong><?= $this->translate('City')?>:</strong> <?=$user->getCity()->getCityName()?> (<?=$user->getCity()->getCityPostalcode()?>)<br>
+                <strong><?= $this->translate('Country')?>:</strong> <?=$user->getCountry()->getCountryName()?> <img
+                        src="<?= $this->basePath('img/flags/'.$user->getCountry()->getCountryName().'.png') ?>"
+                        valign="middle" width="25" height="17" alt="<?=$user->getCountry()->getCountryName()?>" />
+            <?php else:?>
+                <strong><?= $this->translate('City')?>:</strong> <?=$this->translate('No city chosen yet')?><br>
+            <? endif;?>
+            <hr>
+            <p>
+                <strong><?= $this->translate('Username')?>:</strong> <span
+                        class="orange"><?= $user->getUsrName() ?></span>
+            </p>
+            <p>
+                <strong><?= sprintf($this->translate("About %s:"), $user->getUsrName())?></strong><br>
+
+                <?= $user->getAdmin()->getAdminPresentation() ?>
+            </p>
+            <p>
+                <a href="<?= $user->getAdmin()->getAdminWebsite()?>" target="_blank"><?= $user->getAdmin()->getAdminWebsite()?></a>
+
+
+            </p>
+
+
+        </div>
+        <!--/6-->
+        <div class="col-md-4">
+            <span class="badge"><?=$totalProp?></span> <?= $this->translate('Measures Published/Validated:')?><br>
+            <span class="label label-success" title="<?= $this->translate('Implementation, Planning step')?>">&nbsp;P&nbsp;</span> <?= isset($propNo['plan'])?$propNo['plan']:0?> <?= $this->translate('in Planning phase')?><br>
+
+            <span class="label label-success" title="<?= $this->translate('Implementation, Execution step')?>">&nbsp;E&nbsp;</span> <?= isset($propNo['execute'])?$propNo['execute']:0?> <?= $this->translate('in Execution phase')?><br>
+
+            <span class="label label-success" title="<?= $this->translate('Implementation, Proposal Completed')?>">&nbsp;C&nbsp;</span> <?= isset($propNo['followup'])?$propNo['followup']:0?> <?= $this->translate('completed')?><br>
+
+            <!-- 						<hr> -->
+
+
+            <!--
+<?= $this->translate('Champion for')?> <span class="badge">x</span> <?= $this->translate('Proposals')?>
+
+
+
+<hr>
+
+
+<!-- 
+<?= $this->translate('Top 3 Categories of interest')?>: 
+
+<img src="<?php echo $this->basePath('img/environnement100x100.png') ?>" valign="middle" width="24" height="24" class="round5"> 
+<img src="<?php echo $this->basePath('img/famille100x100.png') ?>" valign="middle" width="24" height="24" class="round5"> 
+<img src="<?php echo $this->basePath('files/catImage1426170306.jpg') ?>" valign="middle" width="24" height="24" class="round5">
+ -->
+
+
+        </div>
+        <!--/6-->
+    </div>
+    <!--/r-->
+    <hr />
+    <div class="row">
+        <div class="col-md-4 col-md-offset-2">
+            <?php if ($me):?>
+                <button
+                        data-url="<?= $this->url('user/inbox', array('action'=>'new-message', 'to'=>$user->getUsrName()));?>"
+                        class="btn btn-orange" id="user-profile-view-user-info-new-message"
+                        data-dialog-title="<?=$this->translate('Send New Message')?>"> <i
+                            class="fa fa-envelope-o" id=""></i> <?= $this->translate('Send message')?>
+                </button>
+            <?php endif;?>
+        </div>
+        <div class="col-md-4">
+            <?php if ($me):?>
+                <?php if ($me->hasContact($user)):?>
+                    <a
+                            href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
+                            class="btn btn-primary"
+                            id="user-profile-view-user-info-add-remove-contact"
+                            data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-minus-circle"></i> <?= $this->translate('Remove from Contacts')?></a>
+                <?php else: ?>
+                    <a
+                            href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
+                            class="btn btn-orange"
+                            id="user-profile-mini-profile-add-remove-contact"
+                            data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-plus-circle"></i> <?= $this->translate('Add to Contacts')?></a>
+                <?php endif;?>
+            <?php endif;?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        userProfileViewUserInfoHandlers();
+    });
+</script>
+
+
+

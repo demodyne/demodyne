@@ -1,0 +1,95 @@
+<?
+$urlBase = $this->url('home', [], array('force_canonical' => true));
+
+setlocale(LC_ALL, $toUser->getCountry()->getCountryFormat());
+
+/** @var \DGIModule\Entity\Proposal $proposal */
+$user = $proposal->getUsr();
+$url = $this->url('proposal', array('action' => 'view', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true));
+//    $replayUrl= $this->url('proposal', array('action' => 'view', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true, 'fragment' => 'reply'));
+$buttonText = $this->translate('See Proposal');
+
+
+$levelName = '';$level=$proposal->getPropLevel();$city = $proposal->getCity();
+if ($level==$this->configItem('demodyne.level.city')) {
+    $levelName = sprintf($this->translate('For the city of <a href="%s">%s</a> (%s)'),
+        $this->url('browse', [
+                'country' => $city->getCountry()->getCountryName(),
+                'region'=> $city->getRegion()->getRegionName(),
+                'postalcode' => $city->getCityPostalcode(),
+                'cityname' => $city->getCityName()
+            ], array('force_canonical' => true)),
+        ($city->getFullCity()?($proposal->getPropFullCity()?$city->getFullCity()->getCityName().' ('.$this->translate('Full city').')':$city->getFullCity()->getCityName().' <span class="small"><i>'.$city->getDistrictName().'</i></span>'):$city->getCityName()),
+        $city->getCityPostalcode());
+}
+elseif ($level==$this->configItem('demodyne.level.region')) {
+    $levelName = sprintf($this->translate('For the region of <a href="%s">%s</a>'),
+        $this->url('browse', [
+                'country' => $city->getCountry()->getCountryName(),
+                'region'=> $city->getRegion()->getRegionName()
+            ], array('force_canonical' => true)),
+        $city->getRegion()->getRegionName());
+}
+else {
+    $levelName = sprintf($this->translate('For the country of <a href="%s">%s</a>'),
+        $this->url('browse', [
+            'country' => $city->getCountry()->getCountryName(),
+        ], array('force_canonical' => true)),
+        '<img src="'.$urlBase.'/img/flags/'.str_replace(' ', '-', $city->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$city->getCountry()->getCountryName() .'</span>');
+}
+
+?>
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("Proposal modified")?></h1>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px; text-align: center;">
+    <h3><?=sprintf($this->translate('Proposal <a href="%s">%s</a> has been modified'), $url, $proposal->getPropName())?></h3>
+
+
+
+    <hr style="height: 2px; background-color: #FFF; border:none">
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;">
+
+    <img style="webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; padding-right: 10px;" src="<?=$urlBase.$this->basePath() ?>/files/<?= $proposal->getCat()->getCatImage()?>" width="32" height="32" align="left">
+    <p>
+        <?=$levelName?> <br> <?=sprintf($this->translate('In category %s - %s'), $proposal->getCat()->getCatCat()->getCatName(), $proposal->getCat()->getCatName()) ?>
+    </p>
+
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;">
+
+    <img style="webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px; padding-right: 10px;" src="<?=$urlBase.$this->basePath($proposal->getUsr()->getUsrPicture()) ?>" width="32" height="32" align="left">
+    <p>
+        <?= sprintf($this->translate('Published by <a href="%s">%s</a><br> on %s'),
+            $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()), array('force_canonical' => true)),
+            $proposal->getUsr()->getUsrName(),
+            utf8_encode(strftime('%e %B %Y', strtotime($proposal->getPropPublishedDate()?$proposal->getPropPublishedDate()->format('d F Y'):(new DateTime())->format('d F Y'))))
+        )?>
+    </p>
+
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+
+
+
+
+
+    <hr style="height: 2px; background-color: #FFF; border:none">
+
+</div>
+
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <div style="Margin-bottom:20px;Margin-top:20px;text-align:center">
+        <center>
+            <a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$url?>"><?=$buttonText?></a>
+        </center>
+    </div>
+</div>
+
+

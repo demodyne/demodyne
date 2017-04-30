@@ -1,0 +1,171 @@
+<?php
+setlocale(LC_ALL, $user->getCountry()->getCountryFormat());
+//$from = $from->setTimezone(new DateTimeZone("Europe/Paris"));
+//$to = $to->setTimezone(new DateTimeZone("Europe/Paris"));
+
+$urlBase = $this->url('home', [], array('force_canonical' => true));
+
+$city = $user->getCity();
+
+$cityName = ($city->getFullCity()?$city->getFullCity()->getCityName().' <span class="small"><i>'.$city->getDistrictName().'</i></span>':$city->getCityName());
+$regionName = $city->getRegion()->getRegionName();
+$countryName = '<img src="'.$urlBase.'img/flags/'.str_replace(' ', '-', $city->getCountry()->getCountryName()).'.png" width="20" height="14"> <strong>'.$city->getCountry()->getCountryName() .'</strong></span>';
+
+$cityUrl = $this->url('browse',
+        [
+            'country' => $city->getCountry()->getCountryName(),
+            'postalcode' => $city->getCityPostalcode(),
+            'region'=> $city->getRegion()->getRegionName(),
+            'cityname' => $city->getCityName()
+        ], array('force_canonical' => true));
+
+$regionUrl = $this->url('browse',
+    ['country' => $city->getCountry()->getCountryName(),
+        'region'=> $city->getRegion()->getRegionName(),
+    ], array('force_canonical' => true));
+
+$countryUrl = $this->url('browse',
+    ['country' => $city->getCountry()->getCountryName(),
+    ], array('force_canonical' => true));
+
+$dateFrom = utf8_encode(strftime('%e %B %Y', strtotime($from->format('d F Y'))));
+?>
+
+<div style="text-align:left;color:#60666d;font-size:14px;line-height:23px;font-family:sans-serif;max-width:600px;min-width:320px;width:320px;width:calc(28000% - 167400px)">
+
+    <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+        <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:24px;font-family:sans-serif;text-align:center"><?=$this->translate('Demodyne Digest')?><br>
+            <span style="font-size: 16px!important">
+                <?if ($from->format('Y')!=$to->format('Y')):?>
+                    <?=utf8_encode(strftime('%e %B %Y', strtotime($from->format('d F Y'))))?>
+                <?elseif ($from->format('m')!=$to->format('m')):?>
+                    <?=utf8_encode(strftime('%e %B', strtotime($from->format('d F Y'))))?>
+                <?else:?>
+                    <?=$from->format('d')?>
+                <?endif;?>
+                -
+                <?=utf8_encode(strftime('%e %B %Y', strtotime($to->format('d F Y'))))?></span></h1>
+    </div>
+
+    <div style="Margin-left:20px;Margin-right:20px">
+        <?=sprintf($this->translate('Hi %s, here you have your personal Demodyne Digest.'), $user->getUsrName())?>
+    </div>
+
+    <? if (count($articles)):?>
+    <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+        <hr style="height: 2px; background-color: #FFF; border:none">
+        <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center"><?=sprintf($this->translate('%d New Highlights'), count($articles))?>&nbsp;</span> <?=sprintf($this->translate('since %s'), $dateFrom)?>
+
+    </div>
+
+    <div style="Margin-right:20px">
+        <ol>
+            <?foreach ($articles as $article):?>
+            <li><a href="<?=$this->url('blog', ['action' => 'article', 'id'=> $article->getArticleSlug()], array('force_canonical' => true))?>">
+                    <?=$article->getArticleTitle()?></a></li>
+            <?endforeach;?>
+        </ol>
+    </div>
+    <?endif;?>
+
+
+    <div style="Margin-left:20px;Margin-right:20px">
+
+        <?if (isset($proposals) && $proposals['total']):?>
+            <hr style="height: 2px; background-color: #FFF; border:none">
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center"><img src="<?=$urlBase?>img/academy-icon-proposals.png"> <?=sprintf($this->translate('%d New Proposals'), $proposals['total'])?>&nbsp;</span> <?=sprintf($this->translate('since %s'), $dateFrom)?>
+
+            <ul>
+                <?if ($proposals['city']):?>
+                <li><?=sprintf($this->translate('<a href="%s#allprop">%d New Proposals</a> for <strong>%s</strong>'), $cityUrl, $proposals['city'], $cityName)?></li>
+                <?endif;?>
+                <?if ($proposals['region']):?>
+                <li><?=sprintf($this->translate('<a href="%s#allprop">%d New Proposals</a> for <strong>%s</strong>'), $regionUrl, $proposals['region'], $regionName)?></li>
+                <?endif;?>
+                <?if ($proposals['country']):?>
+                <li><?=sprintf($this->translate('<a href="%s#allprop">%d New Proposals</a> for <strong>%s</strong>'), $countryUrl, $proposals['country'], $countryName)?></li>
+                <?endif;?>
+            </ul>
+        <?endif;?>
+
+        <?if (isset($measures) && $measures['total']):?>
+            <hr style="height: 2px; background-color: #FFF; border:none">
+
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center"><img src="<?=$urlBase?>img/icon-official-measures.png">  <?=sprintf($this->translate('%d New Official Measures'), $measures['total'])?>&nbsp;</span> <?=sprintf($this->translate('since %s'), $dateFrom)?>
+
+            <ul>
+                <?if ($measures['city']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#officialm">%d New Official Measures</a> for <strong>%s</strong>'), $cityUrl, $measures['city'], $cityName)?></li>
+                <?endif;?>
+                <?if ($measures['region']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#officialm">%d New Official Measures</a> for <strong>%s</strong>'), $regionUrl, $measures['region'], $regionName)?></li>
+                <?endif;?>
+                <?if ($measures['country']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#officialm">%d New Official Measures</a> for <strong>%s</strong>'), $countryUrl, $measures['country'], $countryName)?></li>
+                <?endif;?>
+            </ul>
+        <?endif;?>
+        <?if (isset($programs) && $programs['total']):?>
+            <hr style="height: 2px; background-color: #FFF; border:none">
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center"><img src="<?=$urlBase?>img/icon-programme-33.svg" width="25"> <?=sprintf($this->translate('%d New Programs'), $programs['total'])?>&nbsp;</span> <?=sprintf($this->translate('since %s'), $dateFrom)?>
+
+            <ul>
+                <?if ($programs['city']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#citizenp">%d New Programs</a> for <strong>%s</strong>'), $cityUrl, $programs['city'], $cityName)?></li>
+                <?endif;?>
+                <?if ($programs['region']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#citizenp">%d New Programs</a> for <strong>%s</strong>'), $regionUrl, $programs['region'], $regionName)?></li>
+                <?endif;?>
+                <?if ($programs['country']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#citizenp">%d New Programs</a> for <strong>%s</strong>'), $countryUrl, $programs['country'], $countryName)?></li>
+                <?endif;?>
+            </ul>
+        <?endif;?>
+
+        <?if (isset($sessions) && $sessions['total']):?>
+            <hr style="height: 2px; background-color: #FFF; border:none">
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center"><img src="<?=$urlBase?>img/academy-icon-sessions.png"> <?=sprintf($this->translate('%d New Sessions'), $sessions['total'])?>&nbsp;</span> <?=sprintf($this->translate('since %s'), $dateFrom)?>
+
+            <ul>
+                <?if ($sessions['city']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#all-events">%d New Sessions</a> for <strong>%s</strong>'), $cityUrl, $sessions['city'], $cityName)?></li>
+                <?endif;?>
+                <?if ($sessions['region']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#all-events">%d New Sessions</a> for <strong>%s</strong>'), $regionUrl, $sessions['region'], $regionName)?></li>
+                <?endif;?>
+                <?if ($sessions['country']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#all-events">%d New Sessions</a> for <strong>%s</strong>'), $countryUrl, $sessions['country'], $countryName)?></li>
+                <?endif;?>
+            </ul>
+        <?endif;?>
+
+        <?if (isset($events) && $events['total']):?>
+            <hr style="height: 2px; background-color: #FFF; border:none">
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center"><img src="<?=$urlBase?>img/academy-icon-events.png"> <?=sprintf($this->translate('%d New Events'), $events['total'])?>&nbsp;</span> <?=sprintf($this->translate('since %s'), $dateFrom)?>
+
+            <ul>
+                <?if ($events['city']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#all-events">%d New Events</a> for <strong>%s</strong>'), $cityUrl, $events['city'], $cityName)?></li>
+                <?endif;?>
+                <?if ($events['region']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#all-events">%d New Events</a> for <strong>%s</strong>'), $regionUrl, $events['region'], $regionName)?></li>
+                <?endif;?>
+                <?if ($events['country']):?>
+                    <li><?=sprintf($this->translate('<a href="%s#all-events">%d New Events</a> for <strong>%s</strong>'), $countryUrl, $events['country'], $countryName)?></li>
+                <?endif;?>
+            </ul>
+        <?endif;?>
+
+        <hr style="height: 2px; background-color: #FFF; border:none">
+    </div>
+
+
+
+    <div style="Margin-left:20px;Margin-right:20px; margin-top: 20px;">
+        <div style="Margin-bottom:20px;text-align:center">
+            <center><a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;padding:5px 0 4px 0;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:sans-serif; max-width: 200px;border:1px solid #da8105;" href="<?=$urlBase?>"><?=$this->translate('Go to your Account')?></a>
+            </center>
+        </div>
+    </div>
+
+</div>

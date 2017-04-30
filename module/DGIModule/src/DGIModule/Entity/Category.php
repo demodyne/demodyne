@@ -1,20 +1,24 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Country;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Zend\Form\Annotation;
 
 /**
  * Category
  *
  * @ORM\Table(name="dgi_categories", indexes={@ORM\Index(name="id_category_fk_cat_idx", columns={"cat_id_cat"}), @ORM\Index(name="country_category_fk_idx", columns={"country_id"})})
  * @ORM\Entity(repositoryClass="DGIModule\Entity\Repository\CategoryRepository")
+ * @Annotation\Hydrator("Zend\Stdlib\Hydrator\ClassMethods")
+ * @Annotation\Name("categoryForm")
  */
 class Category
 {
@@ -24,6 +28,7 @@ class Category
      * @ORM\Column(name="cat_id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Annotation\Exclude()
      */
     private $catId;
 
@@ -31,6 +36,11 @@ class Category
      * @var string
      *
      * @ORM\Column(name="cat_name", type="string", length=50, nullable=false)
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Filter({"name":"StripTags"})
+     * @Annotation\Validator({"name":"StringLength", "options":{"min":1, "max":50}})
+     * @Annotation\Attributes({"type":"text"})
+     * @Annotation\Options({"label":"Name:"})	 
      */
     private $catName;
 
@@ -38,13 +48,31 @@ class Category
      * @var string
      *
      * @ORM\Column(name="cat_description", type="string", length=2000, nullable=false)
+     * @Annotation\Type("Zend\Form\Element\Textarea")
+     * @Annotation\Filter({"name":"StringTrim"})
+     * @Annotation\Filter({"name":"StripTags"})
+     * @Annotation\Validator({"name":"StringLength", "options":{"min":0, "max":2000}})
+     * @Annotation\Options({"label":"Description:"})
      */
     private $catDescription;
     
+   // * @Annotation\Validator({"name":"\Category\Validators\Image", "options":{"minSize":"0","maxSize" : "1024","newFileName" : "newFileName2","uploadPath" : "public/files/"}})
+    //* @Annotation\Filter({"name":"Zend\Filter\File\RenameUpload", "options":{"target" : "public/files/", "use_upload_extension":"true","randomize":"true" }})
+     
+    
+
     /**
      * @var string
      *
      * @ORM\Column(name="cat_image", type="string", length=256, nullable=false)
+     * @Annotation\Type("Zend\Form\Element\File")
+     * @Annotation\Attributes({
+     *      "type":"file",
+     *      "accept":"image/*",
+     *      "class":"form-control text-change",
+     *      "id":"catImage"
+     * })
+    * @Annotation\Options({"label":"Image Upload:"})	 
      */
     private $catImage;
 
@@ -55,16 +83,18 @@ class Category
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cat_id_cat", referencedColumnName="cat_id")
      * })
+     * @Annotation\Exclude()
      */
     private $catCat;
     
     /**
-     * @var DGIModule\Entity\Country
+     * @var Country
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Country")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="country_id", referencedColumnName="country_id")
      * })
+     * @Annotation\Exclude()
      */
     private $country;
     
@@ -72,28 +102,47 @@ class Category
      * @var integer
      *
      * @ORM\Column(name="cat_city", type="integer", nullable=true)
+     * @Annotation\Type("Zend\Form\Element\Checkbox")
+     * @Annotation\Attributes({
+     *          "checked":"checked",
+     *          "id":"catCity"})	 
+     * @Annotation\Options({"label":"View City:"})	 
      */
-    private $catCity = 1;
+    private $catCity = '1';
     
     /**
      * @var integer
      *
      * @ORM\Column(name="cat_region", type="integer", nullable=true)
+     * @Annotation\Type("Zend\Form\Element\Checkbox")
+     * @Annotation\Attributes({"checked":"checked"})	 
+     * @Annotation\Options({"label":"View Region:"})	 
      * 
      */
-    private $catRegion = 1;
+    private $catRegion = '1';
     
     /**
      * @var integer
      *
      * @ORM\Column(name="cat_country", type="integer", nullable=true)
+     * @Annotation\Type("Zend\Form\Element\Checkbox")
+     * @Annotation\Attributes({"checked":"checked"})	 
+     * @Annotation\Options({"label":"View Country:"})	 
      */
-    private $catCountry = 1;
+    private $catCountry = '1';
+    
+    
+    /**
+     * @Annotation\Type("Zend\Form\Element\Submit")
+     * @Annotation\Attributes({"value":"Submit"})
+     */
+    public $submit;
     
     /**
      * @var \Doctrine\Common\Collections\Collection|Partners[]
      *
      * @ORM\ManyToMany(targetEntity="DGIModule\Entity\Partner", mappedBy="categories", cascade={"persist", "merge"})
+     * @Annotation\Exclude()
      */
      private $partners;
 
@@ -101,6 +150,7 @@ class Category
       * @var \Doctrine\Common\Collections\Collection|Category[]
       *
       * @ORM\OneToMany(targetEntity="DGIModule\Entity\Category", mappedBy="catCat",  cascade={"persist", "merge", "remove"})
+      * @Annotation\Exclude()
       */
      private $subCategories;
      
@@ -265,7 +315,7 @@ class Category
      * @param \DGIModule\Entity\Category $catCat
      * @return Category
      */
-    public function setCatCat(\DGIModule\Entity\Category $catCat = null)
+    public function setCatCat(Category $catCat = null)
     {
         $this->catCat = $catCat;
 
@@ -275,7 +325,7 @@ class Category
     /**
      * Get catCat
      *
-     * @return \DGIModule\Entity\Category 
+     * @return \DGIModule\Entity\Category
      */
     public function getCatCat()
     {
@@ -285,10 +335,10 @@ class Category
     /**
      * Set country
      *
-     * @param \DGIModule\Entity\Country $country
+     * @param Country $country
      * @return Category
      */
-    public function setCountry(\DGIModule\Entity\Country $country = null)
+    public function setCountry(Country $country = null)
     {
         $this->country = $country;
     
@@ -298,7 +348,7 @@ class Category
     /**
      * Get country
      *
-     * @return \DGIModule\Entity\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -319,8 +369,6 @@ class Category
     }
     
     public function removeCategory(Category $category) {
-        //$category->setCatCat($this);
-    
         // Si l'objet fait déjà partie de la collection on ne l'ajoute pas
         if (!$this->subCategories->contains($category)) {
             $this->subCategories->remove($category);

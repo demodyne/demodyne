@@ -1,0 +1,123 @@
+<div id="user-profile-user-settings"
+     data-url="<?= $this->url('user/profile', array('action' => 'user-settings'))?>"
+     data-delete-account="<?=$this->translate('Delete account')?>">
+
+     <div class="title-mobile"><?= $this->translate('Account Settings for')?> <?= $user->getUsrName() ?></div>
+     <span class="small"><?= $this->translate('Registered since')?> <?=$user->getUsrRegistrationDate()->format('d/m/Y')?></span>
+    <?php if ($refresh):?>
+        <span class="text-center" id="user-profile-user-settings-refresh"><?= $this->translate('Changing the language now. Please wait...')?></span>
+    <?php endif;?>
+    <hr />
+
+
+
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('user/profile', array('action' => 'user-settings')));
+    $form->setAttribute('id', 'user-settings-form');
+    $form->prepare();
+    ?>
+
+    <?= $this->form()->openTag($form);?>
+
+    <fieldset>
+
+<?= $this->translate('Change language')?>:
+
+<div class="form-group">
+        
+        <ul class="nav navbar-left">
+            <li class="dropdown" id="user-profile-user-settings-language-select"><a href="#" class="dropdown-toggle"
+                                                                                    data-toggle="dropdown" role="button" aria-expanded="true"><img
+                            src="<?= $this->basePath('img/flags/'.$currentLanguage->getLangFlag().'.png') ?>"
+                            style="margin-bottom: 4px;" width="25" height="17" alt="<?=$currentLanguage->getLangFlag()?>"
+                            id="user-profile-user-settings-current-language-image" /> <span id="user-profile-user-settings-current-language"><?= $currentLanguage->getLangName()?></span> <span
+                            class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+
+                    <?php foreach ($languages as $language):?>
+                        <li	><a
+                                    href="#account" data-lang="<?=$language->getLangId()?>" id="user-profile-user-settings-language">
+                                <img
+                                        src="<?= $this->basePath('img/flags/'.$language->getLangFlag().'.png') ?>"
+                                        valign="middle" width="25" height="17" alt="<?=$language->getLangFlag()?>" />
+                                <span><?=$language->getLangName()?></span>
+                            </a></li>
+                    <?php endforeach;?>
+
+                </ul></li>
+        </ul>
+        <?= $this->formElement($form->get('language'));?>
+    
+     </div>
+      
+
+<hr>
+<?= $this->translate('Change Password')?>:<br>
+  <div class="form-group">
+<?= $this->translate('Current')?>
+<?= $this->formElement($form->get('usrOldPassword'));?>
+    <?php if ($form->get('usrOldPassword')->getMessages()):?><br />
+        <span class="text-danger"><?= $this->formElementErrors($form->get('usrOldPassword'));?></span>
+    <?php endif;?>
+    <?= $this->translate('New')?>
+    <?= $this->formElement($form->get('usrNewPassword'));?>
+        <?php if ($form->get('usrNewPassword')->getMessages()):?><br />
+            <span class="text-danger"><?= $this->formElementErrors($form->get('usrNewPassword'));?></span>
+        <?php endif;?>
+        <?= $this->translate('Re-Type')?>
+        <?= $this->formElement($form->get('usrNewPasswordConfirm'));?>
+            <?php if ($form->get('usrNewPasswordConfirm')->getMessages()):?><br />
+                <span class="text-danger"><?= $this->formElementErrors($form->get('usrNewPasswordConfirm'));?></span>
+            <?php endif;?>
+            <?php if ($pass):?>
+                <div class="row form-group">
+                    <label class="col-md-4 col-xs-12 control-label"></label>
+                    <div class="col-md-8 col-xs-12 bot5"><span class="green"><?= $this->translate('Your password has been successuly changed')?></span>
+                    </div></div>
+            <?php endif;?>
+            
+      </div>
+
+
+
+      <hr>
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-orange" id="user-profile-user-settings-save"><i class="fa fa-floppy-o"></i> <?= $this->translate('Save Account Info')?></button>
+        <button type="button" class="btn btn-default" id="user-profile-user-settings-cancel"><i class="fa fa-undo"  id="cancelEditContactIcon"></i> <?= $this->translate('Cancel')?></button>
+      </div>
+
+
+
+      <div class="top10 bot10 small gray">
+        <a href="<?= $this->url('user/profile', array('action'=>'delete'));?>" id="user-profile-user-settings-delete"><?= $this->translate('Delete account')?></a>
+        <br />
+          <span class="small gray">
+            <?= $this->translate('Do you really want to delete your account?')?><br>
+            <?= $this->translate('You will loose all your data')?>.</span>
+          </div>
+
+
+
+    </fieldset>
+
+
+    <?=  $this->form()->closeTag();?>
+
+</div>
+<script type="text/javascript">
+
+    $(function () {
+
+
+
+        userProfileUserSettingsHandlers();
+
+
+
+
+
+    });
+
+</script>

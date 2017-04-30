@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>&#35;R&eacute;f&eacute;rendumPartout avec DEMODYNE</title>
+    <link rel="icon" href="/referendumpartout/images/favicon.ico" type="image/x-icon">
+
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="/referendumpartout/css/custom.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="/js/demodyne.common.js"></script>
+    <script src="/referendumpartout/js/referendum.js"></script>
+    <script src="/js/formvalidation/formValidation.min.js"></script>
+    <script src="/js/formvalidation/framework/bootstrap.js"></script>
+    <script src="/js/formvalidation/language/fr_FR.js"></script>
+
+    <!-- Include Bootstrap-select CSS, JS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <meta property="fb:app_id" content="220020655059875">
+    <meta property="og:url"           content="<?=$this->url('e-referendum', [], array('force_canonical' => true))?>" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="&#35;R&eacute;f&eacute;rendumPartout avec DEMODYNE" />
+    <meta property="og:description"   content="APPROUVEZ-VOUS LE PROJET D'INSTAURER UNE PREMIÈRE DÉMOCRATIE DE FRANCE DANS LAQUELLE LES CITOYENS VOTENT EUX-MÊMES LES LOIS ET ÉLABORENT LE PROGRAMME DES FRANÇAIS ?" />
+    <meta property="og:image" content="<?=$this->url('home', [], array('force_canonical' => true)).'img/facebook-referendumpartout.png'?>">
+
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:site" content="@demodyne">
+    <meta property="twitter:title" content="&#35;R&eacute;f&eacute;rendumPartout avec DEMODYNE">
+    <meta property="twitter:description" content="APPROUVEZ-VOUS LE PROJET D'INSTAURER UNE PREMIÈRE DÉMOCRATIE DE FRANCE DANS LAQUELLE LES CITOYENS VOTENT EUX-MÊMES LES LOIS ET ÉLABORENT LE PROGRAMME DES FRANÇAIS ?">
+    <meta property="twitter:creator" content="@demodyne">
+    <meta property="twitter:image" content="<?=$this->url('home', [], array('force_canonical' => true)).'img/facebook-referendumpartout.png'?>">
+    <meta property="twitter:domain" content="demodyne.org">
+
+
+
+</head>
+<body link="#0000ff" dir="ltr" lang="fr-FR">
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.9&appId=220020655059875";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+<script>window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+            t = window.twttr || {};
+        if (d.getElementById(id)) return t;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+
+        t._e = [];
+        t.ready = function(f) {
+            t._e.push(f);
+        };
+
+        return t;
+    }(document, "script", "twitter-wjs"));</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="jumbotron bluebg white marianne">
+
+                <div class="text-center">
+                    <h2 style="margin-bottom: 1px!important;">Initiative e-Referendum et e-Constituante</h2>
+                    <h3 style="margin-top: 1px!important;">Prenons l'initiative pour la rénovation de notre République !</h3>
+
+                    <p> <br/>  </p>
+                    <span class="alert alert-warning">
+		  <a href="http://referendumpartout.fr" target="_blank" class="title3"><span class="blue">#RéférendumPartout</span></a>
+			  </span>
+
+
+                    <div class="top20">
+                        avec la plateforme en ligne
+                        <a href="https://www.demodyne.org" target="_blank"><img src="/referendumpartout/images/dsimplu-text.svg" height="30" title="Demodyne"></a>
+                    </div>
+                </div>
+
+
+                <div class="bluebox topm20">
+
+                    <h3>Un constat partagé de plus en plus largement</h3>
+                    <p> <br/>  </p>
+                    <p> Une démocratie axée uniquement sur la représentation et la concentration des pouvoirs a montré ses limites, avec des risques de corruption mais aussi une incapacité structurelle à écouter et comprendre les besoins des citoyens.</p>
+                    <p> Par ailleurs, l'absence de reconnaissance du vote blanc empêche d'en faire une expression efficace de désaccord.</p>
+                    <p>
+                        De nombreuses voix s'élèvent en France pour demander une modification profonde de nos institutions et l'instauration d'une démocratie réelle, donnant aux citoyens des moyens directs d'expression et de co-décision.</p>
+                    <p> <br/>
+                    </p>
+                    <h3> Une action simple et claire</h3>
+                    <p> <br/>  </p>
+                    <p> Le collectif <a href="http://rectangleblanc.zici.fr/" target="_blank"><span style="color:#FDB913; background-color: #074065"> &nbsp;Rectangle Blanc </span></a>, qui a pour but d'instaurer une première démocratie de France, a donc décidé d'organiser un <strong>e-Référendum par et pour le peuple</strong> portant sur la question suivante&nbsp;:</p>
+
+                    <p align="center">
+                    <div class="alert alert-info"><h3 style="margin: 0!important;">
+                            &quot;APPROUVEZ-VOUS LE PROJET D'INSTAURER UNE PREMIÈRE DÉMOCRATIE DE FRANCE DANS LAQUELLE LES CITOYENS VOTENT EUX-MÊMES LES LOIS ET ÉLABORENT LE PROGRAMME DES FRANÇAIS ?&quot;</h3>
+                    </div></p>
+
+                    <p> Parce qu'en démocratie, le peuple est <strong>souverain</strong> et <strong>légitime</strong> pour prendre cette initiative. Rectangle Blanc a choisi de s'associer avec Demodyne, plateforme open source à but non-lucratif de gouvernance citoyenne. Demodyne servira également de support pour le processus de e-Constituante qui suivra le référendum.</p>
+                    <p> <br/>
+                    </p>
+
+                    <h4 align="center">Nous sommes toutes et tous concerné(e)s&nbsp;!<br>
+                        Il est possible de peser sur le débat politique en dehors des urnes</h4>
+
+                    <p><br/></p>
+                    <p>Françaises et Français, quelle que soit votre sensibilité politique, que vous soyez partisan du vote blanc ou abstentionnistes, cette initiative est une première étape pour retrouver notre voix citoyenne, dans son sens véritable.</p>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="row top20">
+                    <div class="col-lg-12 text-center">
+                        <p><a class="btn btn-success btn-lg" href="#formulaire" role="button">JE PARTICIPE!</a></p>
+                        <p>Partager sur:</p>
+					</div>
+                        
+                        
+                        <div class="col-lg-12">
+                        <div class="col-md-6 text-right">
+                        	<a class="twitter-share-button"
+                           href="https://twitter.com/intent/tweet?url=<?=$this->url('e-referendum', [], array('force_canonical' => true))?>"
+                           data-size="large">
+                            Tweet</a>
+                        </div>
+                        <div class="col-md-6">
+                        	<div class="fb-share-button" data-href="<?=$this->url('e-referendum', [], array('force_canonical' => true))?>" data-layout="button" data-size="large" data-mobile-iframe="true">
+                            <a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fwww.demodyne.org%2Fe-referendum&amp;src=sdkpreparse">Share</a></div>
+                        </div>
+
+                        
+                    </div>
+                </div>
+
+
+
+
+
+            </div><!--/j-->
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container" style="padding: 200px 10px 30px 10px;">
+
+
+    <a name="formulaire"></a>
+
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-8">
+            <h2 class="lightblue">Initiative e-Referendum et e-Constituante<br>Je participe!</h2>
+            <p><br/></p>
+        </div>
+    </div>
+
+
+    <div>
+        <?=$this->registerSection?>
+    </div>
+
+
+</div>
+
+<hr>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <a href="https://www.demodyne.org" target="_blank"><img src="/referendumpartout/images/dsimplu-text.svg" height="50" title="Demodyne"></a><br>
+            <span style="padding-left: 22px;"><a href="mailto:support@demodyne.org">support@demodyne.org</a></span>
+            <p><br></p>
+            <a href="https://www.facebook.com/demodyne" target="_blank"><i class="fa fa-facebook fa-2x orange"></i></a>&nbsp;&nbsp;&nbsp;
+            <a href="https://www.linkedin.com/company/demodyne" target="_blank"><i class="fa fa-linkedin fa-2x orange"></i></a>&nbsp;&nbsp;&nbsp;
+            <a href="https://twitter.com/demodyne" target="_blank"><i class="fa fa-twitter fa-2x orange"></i></a>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<footer class="text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <p>© 2017 par DEMODYNE. Tous droits réservés.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

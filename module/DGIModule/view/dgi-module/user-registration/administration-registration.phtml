@@ -1,5 +1,3 @@
-<!-- user-registration/administration-registration -->
-
 <?php 
 $title = 'Administration registration';
 $this->headTitle($title);
@@ -10,18 +8,23 @@ $this->headTitle($title);
 
 
 <div class="modal-header-soft round5top ui-draggable-handle topm20">
-<a type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></a>
-<a class="close" href="pages/help#administration-registration" id="administration-registration"><i class="fa fa-question-circle w right10"></i></a>&nbsp;
-  <span class="big" id="modal-dialog-title"><a href="../"><img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> - <strong><?= $this->translate('Administration Registration')?></strong></span>
+	<a type="button" class="close" id="history-back"><i
+		class="fa fa-arrow-circle-left w right10"></i></a> <a class="close"
+		href="page/help#administration-registration"
+		id="administration-registration"><i
+		class="fa fa-question-circle w right10"></i></a>&nbsp; <span
+		class="big" id="modal-dialog-title"><a href="../"><img
+			src="<?= $this->basePath('img/logo30.png') ?>" valign="middle"
+			width="140" height="30" alt="DEMODYNE - Shape your Society" /></a> -
+		<strong><?= $this->translate('Request an account as Public Administration')?></strong></span>
 </div>
 
 
 <div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;" id="administration-register"
 		data-getcities="<?= $this->url('location', array('action'=>'get-cities')); ?>"
-		data-getregions="<?= $this->url('location', array('action'=>'get-regions')); ?>">
-        
-        
-        
+		data-getregions="<?= $this->url('location', array('action'=>'get-regions')); ?>"
+		data-write-postal-code="<?=$this->translate('Please write a postalcode first!')?>"
+		data-no-cities="<?=$this->translate('No cities for this postal code!')?>">
         
         
 
@@ -45,7 +48,7 @@ $administration=  $form->get('admin');
 
          
 
-                <ul class="nav navbar-left">
+          <ul class="nav navbar-left">
 							<li class="dropdown"><a href="#" class="dropdown-toggle"
 								data-toggle="dropdown" role="button" aria-expanded="false"><img
 									src="<?= $this->basePath('img/flags/'.$currentLanguage->getLangFlag().'.png') ?>"
@@ -65,10 +68,10 @@ $administration=  $form->get('admin');
 									
 								</ul></li>
 						</ul>
-					<hr></div>
+					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Administration name')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Administration name')?> *</label>
 					<div class="col-md-8"><?= $this->formElement($administration->get('adminName'));?> 
                     <?php if ($administration->get('adminName')->getMessages()):?>
                     	<br /> <span class="text-danger"><?= $this->formElementErrors($administration->get('adminName'));?></span>
@@ -81,7 +84,7 @@ $administration=  $form->get('admin');
 					<div class="col-md-8"><?= $this->translate('Select your administered area')?></div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Level')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Level')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($administration->get('adminLevel'));?> 
                     <?php if ($administration->get('adminLevel')->getMessages()):?>
                     	<br /> <span class="text-danger"><?= $this->formElementErrors($administration->get('adminLevel'));?></span>
@@ -89,7 +92,7 @@ $administration=  $form->get('admin');
                     </div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Country')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Country')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('country'));?> 
 <?php if ($form->get('country')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('country'));?></span>
@@ -98,7 +101,7 @@ $administration=  $form->get('admin');
 				</div>
 				<div class="form-group" style="display: none;"
 					id="administration-register-administrated-region">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Region')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Region')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($administration->get('adminRegion'));?> 
 <?php if ($administration->get('adminRegion')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($administration->get('adminRegion'));?></span>
@@ -108,7 +111,7 @@ $administration=  $form->get('admin');
 				<div id="administration-register-administrated-city"
 					style="display: none;">
 					<div class="form-group">
-						<label class="col-md-4 control-label text-right"><?= $this->translate('Postal code')?></label>
+						<label class="col-md-4 control-label text-right"><?= $this->translate('Postal code')?> *</label>
 						<div class="col-md-8 bot5">
 							<div style="width: 45%"><?= $this->formElement($administration->get('adminPostalcode'));?></div> 
 <?php if ($administration->get('adminPostalcode')->getMessages()):?>
@@ -117,7 +120,7 @@ $administration=  $form->get('admin');
 </div>
 					</div>
 					<div class="form-group">
-						<label class="col-md-4 control-label text-right"><?= $this->translate('City')?></label>
+						<label class="col-md-4 control-label text-right"><?= $this->translate('City')?> *</label>
 						<div class="col-md-8 bot5"><?= $this->formElement($administration->get('adminCity'));?> 
 <?php if ($administration->get('adminCity')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($administration->get('adminCity'));?></span>
@@ -126,7 +129,7 @@ $administration=  $form->get('admin');
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Presentation')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Presentation')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($administration->get('adminPresentation'));?> 
 <?php if ($administration->get('adminPresentation')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($administration->get('adminPresentation'));?></span>
@@ -144,7 +147,7 @@ $administration=  $form->get('admin');
 			</div>
 			<div class="col-md-6">
 				<div class="form-group top30">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Contact first name')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Contact first name')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrFirstname'));?> 
 <?php if ($form->get('usrFirstname')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('usrFirstname'));?></span>
@@ -152,7 +155,7 @@ $administration=  $form->get('admin');
 </div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Contact last name')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Contact last name')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrLastname'));?> 
 <?php if ($form->get('usrLastname')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('usrLastname'));?></span>
@@ -160,7 +163,7 @@ $administration=  $form->get('admin');
 </div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Address')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Address')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($administration->get('adminAddress'));?> 
 <?php if ($administration->get('adminAddress')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($administration->get('adminAddress'));?></span>
@@ -168,7 +171,7 @@ $administration=  $form->get('admin');
 </div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Postal code')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Postal code')?> *</label>
 					<div class="col-md-8 bot5">
 						<div style="width: 45%"><?= $this->formElement($form->get('usrPostalcode'));?></div> 
 <?php if ($form->get('usrPostalcode')->getMessages()):?>
@@ -177,7 +180,7 @@ $administration=  $form->get('admin');
 </div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('City')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('City')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('city'));?> 
 <?php if ($form->get('city')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('city'));?></span>
@@ -185,7 +188,7 @@ $administration=  $form->get('admin');
 </div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('Phone')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Phone')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPhone'));?> 
 <?php if ($form->get('usrPhone')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('usrPhone'));?></span>
@@ -201,7 +204,7 @@ $administration=  $form->get('admin');
 </div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label text-right"><?= $this->translate('E-mail')?></label>
+					<label class="col-md-4 control-label text-right"><?= $this->translate('E-mail')?> *</label>
 					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrEmail'));?> 
 <?php if ($form->get('usrEmail')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('usrEmail'));?></span>
@@ -225,7 +228,7 @@ $administration=  $form->get('admin');
 	<div class="row">
 		<div class="col-md-6">
 			<div class="form-group">
-				<label class="col-md-4 control-label text-right"><?= $this->translate('Username')?></label>
+				<label class="col-md-4 control-label text-right"><?= $this->translate('Username')?> *</label>
 				<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrName'));?> 
 <?php if ($form->get('usrName')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('usrName'));?></span>
@@ -233,7 +236,7 @@ $administration=  $form->get('admin');
 </div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-4 control-label text-right"><?= $this->translate('Password')?></label>
+				<label class="col-md-4 control-label text-right"><?= $this->translate('Password')?> *</label>
 				<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPassword'));?> 
 <?php if ($form->get('usrPassword')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('usrPassword'));?></span>
@@ -241,13 +244,22 @@ $administration=  $form->get('admin');
 </div>
 			</div>
 			<div class="form-group">
-				<label class="col-md-4 control-label text-right"><?= $this->translate('Confirm password')?></label>
+				<label class="col-md-4 control-label text-right"><?= $this->translate('Confirm password')?> *</label>
 				<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPasswordConfirm'));?> 
 <?php if ($form->get('usrPasswordConfirm')->getMessages()):?>
 <span class="text-danger"><?= $this->formElementErrors($form->get('usrPasswordConfirm'));?></span>
 <?php endif;?>
 </div>
 			</div>
+            
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"></label>
+					<div class="col-md-8 bot5"> <span class="red small"><?= $this->translate('* mandatory'); ?></span>
+					</div>
+				</div>
+            
+            
+            
 		</div>
 		<!-- /6 -->
 		<div class="col-md-6">
@@ -288,5 +300,24 @@ $administration=  $form->get('admin');
 
 
 
-<script type="text/javascript">$(document).ready(function() {	userRegistrationAdministrationRegistrationHandlers();});    </script>
-<!-- /user-registration/administration-registration -->
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	userRegistrationAdministrationRegistrationHandlers();
+    
+
+});    
+
+
+</script>
+

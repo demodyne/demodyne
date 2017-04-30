@@ -1,0 +1,161 @@
+
+<div class="modal-header-soft round5top ui-draggable-handle">
+    <a class="close" href="/"><i class="fa fa-home w"></i></a>
+
+    <button type="button" class="close" onclick="parent.history.back();"> <i class="fa fa-arrow-circle-left w right10"></i> </button>
+    &nbsp; <span class="big" id="modal-dialog-title"><strong>
+  <?= sprintf($this->translate('Create new blog article for %s'), $user->getCountry()->getCountryName())?>
+  </strong></span> </div>
+<div id="blog-add-article" class="jumbotron"
+     style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+<?php $article = isset($article)?$article:null; ?>
+
+	
+<?php $form->prepare(); ?>
+<?php $form->setAttribute('method', 'post'); ?>
+<?php //$form->setAttribute('id', 'blog-add-article-form'); ?>
+
+<?= $this->form()->openTag($form);?>
+	
+	
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+
+			<div class="row form-group">
+				<label class="col-sm-3 control-label"><?= $this->translate('Title:')?></label>
+				<div class="col-sm-9 bot5">
+							<?= $this->formElement($form->get('articleTitle'));?>
+							<?php if ($form->get('articleTitle')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('articleTitle'));?></span>
+                    <?php endif;?>
+						</div>
+			</div>
+			
+			
+			<div class="row form-group">      
+
+            <label class="col-sm-3"><?= $this->translate('Article:')?></label>
+            
+            <div class="col-sm-9 bot5">
+            
+            <div class="bot5" id="edit-description">
+
+                <button class="btn btn-mini btn-default" type="button"
+                        id="textbox-format-button"
+                        data-contenteditable-id="blog-add-article-textbox"
+                        data-format="bold">
+                    <strong><i class="fa fa-times"></i> <?=$this->translate('Bold')?></strong>
+                </button>
+                <button class="btn btn-mini btn-default" type="button"
+                        id="textbox-format-button"
+                        data-contenteditable-id="blog-add-article-textbox"
+                        data-format="italic">
+                    <i><i class="fa fa-times"></i> <?=$this->translate('Italic')?></i>
+                </button>
+                <button class="btn btn-mini btn-default" type="button"
+                        id="textbox-format-button"
+                        data-contenteditable-id="blog-add-article-textbox"
+                        data-format="underline">
+                    <u><i class="fa fa-times"></i> <?=$this->translate('Underline')?></u>
+                </button>
+            
+            </div>
+            
+            <div class="form-control " contenteditable="true" id="blog-add-article-textbox" style="width:100%; min-height:100px; overflow-y: scroll; height:200px;"><?=$article?$article->getArticleDescription():''?></div>
+            
+            <?= $this->formElement($form->get('articleDescription'));?>
+            
+            <?php if ($form->get('articleDescription')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('articleDescription'));?></span>
+                    <?php endif;?>
+            
+            </div>
+            
+            </div><!-- end row -->
+			
+			<div class="row form-group">
+				<label class="col-sm-3 control-label"><?= $this->translate('Article Image:')?></label>
+				<div class="col-sm-9 bot5 form-inline">
+						<?= $this->formElement($form->get('picture-file'));?>
+						<?php if ($form->get('picture-file')->getMessages()):?>
+                    	<br /> <span class="text-danger"><?= $this->formElementErrors($form->get('picture-file'));?></span>
+                    <?php endif;?>
+					</div>
+			</div>
+			<div class="row form-group">
+				<label class="col-sm-3 control-label"><?= $this->translate('Tag:')?></label>
+                <div class="col-sm-9 bot5 form-inline">
+                    <?= $this->formElement($form->get('articleCategory'));?>
+                    <?php if ($form->get('articleCategory')->getMessages()):?>
+                        <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('articleCategory'));?></span>
+                    <?php endif;?>
+                </div>
+			</div>
+            <div class="row form-group">
+                <label class="col-sm-3 control-label"><?= $this->translate('Featured:')?></label>
+                <div class="col-sm-9 bot5 form-inline">
+                    <?= $this->formElement($form->get('articleFeatured'));?>
+                    <?php if ($form->get('articleFeatured')->getMessages()):?>
+                        <br /> <span class="text-danger"><?= $this->formElementErrors($form->get('articleFeatured'));?></span>
+                    <?php endif;?>
+                </div>
+            </div>
+
+		</div>
+
+	</div>
+    <div class="row">
+        <div class="col-xs-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <span class="big"><strong><?= $this->translate('Article Layout Preview')?></strong></span>
+            <hr>
+
+            <?= $this->partial('dgi-module/blog/article.phtml', ['article'=>$article, 'user'=>$user]); ?>
+        </div>
+    </div>
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+            <?if (!$article || !$article->getArticlePublishedDate()):?>
+			<button type="submit" class="btn btn-orange"
+				id="blog-add-article-save-button">
+				<i class="fa fa-floppy-o"></i> <?= $this->translate('Save as Draft')?></button>
+            <?endif;?>
+			<button type="button" class="btn btn-success"
+				id="blog-add-article-publish-button">
+				<i class="fa fa-share-square-o"></i> <?= $this->translate('Publish article')?></button>
+            <?if ($action=='add'):?>
+			<a href="<?=$this->url('blog', array('action'=>'list-articles'))?>" class="btn btn-default">
+				<i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></a>
+            <?else:?>
+                <a href="<?=$this->url('blog', array('action'=>'article', 'id'=>$article->getArticleSlug()))?>" class="btn btn-default" >
+                    <i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></a>
+            <?endif;?>
+		</div>
+	</div><!-- /r -->
+
+
+<?=$this->form()->closeTag();?>
+
+ 
+
+
+
+
+	<script type="text/javascript">
+
+		$(function () {
+
+            blogAddArticleHandlers();
+
+		});
+
+	</script>

@@ -1,50 +1,57 @@
-<!-- pages/legal-en -->
-<?php if ($user = $this->identity()):?>
-<div class="modal-header-soft round5top ui-draggable-handle">
-<button type="button" class="close">
-        <?php if ($_SESSION['level']['level']=='city'):?>
-        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
-        <?php elseif ($_SESSION['level']['level']=='country'):?>
-        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
-        <?php endif;?>
-    </button>
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title"><strong><?= $this->translate('Legal')?></strong></span>
-</div>
-<?php else:?>
-<div class="modal-header-soft round5top ui-draggable-handle topm20">
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title">
-<!--
-    <a href="../"><img
-			src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30"
-			alt="DEMODYNE - Shape your Society" /></a> -
--->
-      <strong><?= $this->translate('Legal')?></strong></span>
-</div>
-<?php endif;?>
+<?= $this->partial('partial/page-header.phtml', ['title' => $this->translate('Legal')])?>
+
 <div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
 <div class="row">
 <div class="col-md-12">
-    <p>
-    La plateforme web DEMODYNE est pilotée et éditée par l'association à but non-lucratif Direct Governance Initiative (loi 1908, code civil local Alsace-Moselle) dont le siège est au 1, rue de la Fontaine 68300 Saint-Louis.</p>
+
+
+
+
+    <p>The web platform DEMODYNE is managed and published by the non-profit association Direct Governance Initiative (law 1908, local civil code Alsace-Moselle) whose registered office is at 1, rue de la Fontaine 68300 Saint-Louis.</p>
+    
+    <h3>Contact</h3><hr>
+
     <p>Email&nbsp;:  <a href="mailto:contact@demodyne.org">contact (at) demodyne.org</a><br>
-    Téléphone&nbsp;:  03 69 01 09 43 (entre 10h et 17h, hors weekend et fériés)<br>
-    Directeur  de publication&nbsp;: Quentin Desvigne  </p>
-    <p>Le  site est hébergé par la société OVH :<br>
-    SAS  au capital de 10 069 020 € <br>
+
+    Phone&nbsp;:  03 69 01 09 43 (10h - 17h, except weekends and legal holidays)<br>
+
+    Publishing Director: Quentin Desvigne  </p>
+    
+    <h3>Hosting</h3><hr>
+
+    <p>Hosting for the site is provided by OVH :<br>
+
+    SAS capital of 10 069 020 € <br>
+
     RCS  Lille Métropole 424 761 419 00045<br>
+
     Code  APE 2620Z<br>
-    N°  TVA : FR 22 424 761 419<br>
-Siège  social : 2 rue Kellermann - 59100 Roubaix - France.  </p>
-    <p>L'ensemble de ce site relève des législations françaises et internationales sur le droit d'auteur et la propriété intellectuelle. Tous les droits de reproduction sont réservés, y compris pour les documents iconographiques et photographiques, à l'exception du contenu créé ou déposé par les utilisateurs.</p>
-    <p>Le site utilise des cookies pour l'identification (login) et le bon fonctionnement des sessions utilisateurs. Aucune information traitée par les cookies n'est utilisée pour extraire des données personnelles ou dans un but commercial.</p>
-    <p>En utilisant la plateforme DEMODYNE, l'utilisateur accepte implicitement les cookies et l'utilisation qui en est faite par le site.</p>
+
+    VAT# : FR 22 424 761 419<br>
+
+Head Office : 2 rue Kellermann - 59100 Roubaix - France.  </p>
+    
+    <p>&nbsp;</p>
+
+    <p>The whole of this site falls under the French and international laws on the copyright and the intellectual property. All rights of reproduction are reserved, including for iconographic and photographic documents, with the exception of content created or deposited by users.</p>
+
+    <p>The site uses cookies for login and user sessions. No information processed by cookies is used to extract personal data or for commercial purposes.</p>
+
+    <p>By using the DEMODYNE platform, the user implicitly accepts cookies used by the site.</p>
+
 </div><!-- end column -->
+
+
+
 </div><!-- end row -->
+
+
+
+
+
+
+
 </div><!-- end jumbotron -->
-<!-- /pages/legal-en -->

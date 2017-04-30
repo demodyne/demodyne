@@ -1,0 +1,10 @@
+<? $mobile = isset($_SESSION['mobile']) && $_SESSION['mobile'];?>
+<? if ($mobile):?>
+    <div class="dunga" style="padding-top: 10px;"><div class="title-mobile"><?= $this->title ?></div></div>
+<?else:?>
+<div class="modal-header-soft round5top ui-draggable-handle">
+    <a href="/" class="close"><i class="fa fa-home w"></i></a>
+    <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+    &nbsp; <span class="big"><strong><?= $this->title ?></strong></span>
+</div>
+<?endif;?>

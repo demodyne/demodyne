@@ -1,37 +1,91 @@
-<!-- pages/support-en -->
-<?php if ($user = $this->identity()):?> 
-<div class="modal-header-soft round5top ui-draggable-handle">
-<button type="button" class="close">
-        <?php if ($_SESSION['level']['level']=='city'):?>
-        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
-        <?php elseif ($_SESSION['level']['level']=='country'):?>
-        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
-        <?php endif;?>
-    </button>
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title"><strong><?= $this->translate('Support us')?></strong></span>
-</div>
-<?php else:?>
-<div class="modal-header-soft round5top ui-draggable-handle topm20">
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title"><a href="../"><img
-			src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30"
-			alt="DEMODYNE - Shape your Society" /></a> - <strong><?= $this->translate('Support us')?></strong></span>
-</div>
-<?php endif;?>
+<?= $this->partial('partial/page-header.phtml', ['title' => $this->translate('Support us')])?>
+
 <div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<div class="row">
-		<div class="col-md-12 text-center">
-			<img src="<?= $this->basePath('img/uc.png') ?>">
-			<p>The page <span class="orange big">DEMODYNE / <?= $this->translate('Support us')?></span> <?= $this->translate('is under construction')?>.<br />
-<?= $this->translate('Please come back later. Thank you')?>!</p>
-			<p>&nbsp;</p>
+
+		<div class="col-md-12">
+		
+		
+<h3>Support Demodyne!</h3>
+<hr>
+
+<p>If you clicked on this link, it is probably that for you the improvement of our democratic processes and tools deserves at least the price of some coffees ... and even more if you have the capacity :)</p>
+
+<p>Demodyne is run by a non-profit association and its development requires multiple and varied funding to preserve its independence - for us, there is no question of being dependent on a particular grant or sponsor.</p>
+
+<p>The Partners accounts will ultimately provide, we hope, a steady income to cover the fixed costs of the platform (server and domain fees, small global development team, maintenance and communication with the community). But in the immediate future we do not monetize the platform which is open beta.</p>
+
+<p>We have decided to launch regular small crowdfundings to finance the successive waves of new features under development. Pending the formalization of this process and a more detailed financial plan for the second half of 2016, we estimate our needs at about 5,000 euros for the quarter following the launch of the beta - by mid-July.</p>
+
+<p>The association is young and has not yet asked for recognition of public utility (planned this year), so you can not benefit from the partial tax exemption of your direct donations. No worries, they just give less, we will be equally grateful :)</p>
+
+<p>Send your donations by check with your contact information and message to:<br>
+Association "Direct Governance Initiative"<br>
+1, rue de la Fontaine<br>
+68300 Saint-Louis</p>
+
+<p>Brick by brick, with your help, we will be able to build a solid structure for the real democracy of tomorrow.</p>
+
+<p>Thank you in advance for your support,
+The DEMODYNE Team</p>
+
+
+			
+
 		</div>
+
 	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div><!-- end jumbotron -->
 
-<!-- /pages/support-en -->
+
+
+
+
+
+
+
+
+
+

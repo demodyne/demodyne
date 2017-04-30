@@ -1,0 +1,109 @@
+<?php 
+$this->headMeta()->appendProperty('fb:app_id', '220020655059875')
+                ->appendProperty('og:type', 'demodyne:'.$this->type)
+                ->appendProperty('og:url', $this->url)
+                ->appendProperty('og:title', $this->title)
+                ->appendProperty('og:description', preg_replace('/<[^>]*>/', ' ', preg_replace("/\r\n|\r|\n/",' ',$this->description)))
+                ->appendProperty('og:image', $this->url('home', [], array('force_canonical' => true)).'img/demodyne-facebook-square.png')
+                // twitter
+                ->appendProperty('twitter:card', 'summary_large_image')
+                ->appendProperty('twitter:site', '@demodyne')
+                ->appendProperty('twitter:title', $this->title)
+                ->appendProperty('twitter:description', preg_replace('/<[^>]*>/', ' ', preg_replace("/\r\n|\r|\n/",' ',$this->description)))
+                ->appendProperty('twitter:creator', '@demodyne')
+                ->appendProperty('twitter:image', $this->url('home', [], array('force_canonical' => true)).'img/demodyne-facebook-square.png')
+                ->appendProperty('twitter:domain', 'demodyne.org')
+;
+?>
+<div>
+<div class="top10">
+<span style="float:left;" class="btn-o right5"><a href="#"
+								id="share-facebook"
+								title="<?= $this->translate('Share on Facebook')?>">
+                                <img	src="<?= $this->basePath()?>/img/share-facebook.png" height="20" width="60" title="facebook"></a> 
+                                </span>
+<span style="float:left;">
+<?php 
+if ($this->type=='proposal') 
+    $message = $this->translate('Citizen Proposal @demodyne:');
+elseif ($this->type=='program') 
+    $message = $this->translate('Citizen Program @demodyne:');
+elseif ($this->type=='measure')
+    $message = $this->translate('Official Measure @demodyne:');
+elseif ($this->type=='event')
+    $message = $this->translate('Event @demodyne:');
+elseif ($this->type=='session')
+    $message = $this->translate('Live Session @demodyne:');
+elseif ($this->type=='article')
+    $message = $this->translate('Blog Article @demodyne:');
+
+?>
+<a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=<?=urlencode($message.' '.$this->title)?>">Tweet</a>
+</span>
+
+</div>
+
+<script>
+
+// facebook integration
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '220020655059875',
+      xfbml      : true,
+      status     : true,    // check login status
+      cookie     : true,    // enable cookies to allow the
+                            // server to access the session
+      version    : 'v2.7'
+    });
+
+
+    
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+<script>
+// twitter integration
+window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+<script type="text/javascript">
+            $(function () {
+
+          		$('#share-facebook').click(function() {	
+
+          			FB.ui({
+            			  method: 'share_open_graph',
+            			  action_type: 'demodyne:share',
+            			  action_properties: JSON.stringify({
+            			    '<?=$this->type?>':'<?=$this->url?>',
+            			   
+            			  })
+            			}, function(response){
+            			});
+
+          			return false;
+          		});
+                
+            });
+        </script>
+</div>

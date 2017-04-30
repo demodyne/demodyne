@@ -1,4 +1,3 @@
-<!-- event/delete-event -->
 
 <div id="event-delete-event">
 	<div class="row">
@@ -24,7 +23,7 @@
 		<div class="col-xs-12 text-right">
 			<button type="button" class="btn btn-orange"
 				id="event-delete-event-yes"
-				data-href="<?= $this->url('city/event', array('action'=>'delete-event', 'id' => $event->getEventUUID()));?>">
+				data-href="<?= $this->url('event', array('action'=>'delete-event', 'id' => $event->getEventUUID()));?>">
 				<i class="fa fa-trash"></i> <?= $this->translate('Delete')?></button>
 			<button type="button" class="btn" data-dismiss="modal"><i class="fa fa-ban"></i> <?= $this->translate('Cancel')?></button>
 		</div>
@@ -32,9 +31,12 @@
 	<!-- /r -->
 </div>
 <script type="text/javascript">
-	$(function () {
-		eventDeleteEventHandlers();
-	});
-</script> 
 
-<!-- /event/delete-event -->
+		$(function () {
+
+			eventDeleteEventHandlers();
+			
+
+		});
+
+	</script> 

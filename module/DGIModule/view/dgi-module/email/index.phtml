@@ -1,0 +1,23 @@
+
+<?php
+$title = 'Email - Admin';
+?>
+
+<div class="jumbotron">
+<h2>Email templates</h2>
+
+    <p>Email validation : <a href="<?= $this->url('email', array('action'=>'email-validation', 'email'=>'false'), array('force_canonical' => true));?>">Email validation</a></p>
+
+    <p>User digest : <a href="<?= $this->url('email', array('action'=>'user-digest', 'email'=>'false'), array('force_canonical' => true));?>">User digest</a></p>
+
+    <p>Admin digest : <a href="<?= $this->url('email', array('action'=>'admin-digest', 'email'=>'false'), array('force_canonical' => true));?>">Admin digest</a></p>
+
+    <p>Password change: <a href="<?= $this->url('email', array('action'=>'change-password', 'email'=>'false'), array('force_canonical' => true));?>">Password change</a></p>
+
+    <p>Activation remainder: <a href="<?= $this->url('email', array('action'=>'activation-remainder', 'email'=>'false'), array('force_canonical' => true));?>">Activation remainder</a></p>
+
+    <p>Activate administration account: <a href="<?= $this->url('email', array('action'=>'activate-administration-account', 'email'=>'false'), array('force_canonical' => true));?>">Activate administration account</a></p>
+
+
+
+</div>

@@ -1,14 +1,9 @@
 <?php
-/**
- * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
- * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
- */
-
 namespace DGIModule\Form;
 
 use Zend\Form\Form;
 use Zend\Stdlib\Hydrator\ClassMethods;
+use Zend\Captcha\Image as CaptchaImage;
 
 class UserRegistrationForm extends Form
 {
@@ -18,6 +13,7 @@ class UserRegistrationForm extends Form
         $this->setAttribute('method', 'post');
         $this->setHydrator(new ClassMethods());
         $this->setAttribute('class', 'form-horizontal');
+        
 
         $this->add(array(
 		    'name' => 'usrFirstname',
@@ -126,6 +122,7 @@ class UserRegistrationForm extends Form
                 'label_generator' => function ($country) {
                     return $country->getCountryName();
                 },
+                //'empty_option' => '--- please choose ---',
                 'is_method' => true,
                 'required' => false,
                 'find_method' => array(
@@ -140,4 +137,6 @@ class UserRegistrationForm extends Form
 		
     }
   
+    
+
 }

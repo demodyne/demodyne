@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -28,7 +28,7 @@ class Phone extends Element implements InputProviderInterface
 	{
 		if (null === $this->validator) {
 			$validator = new RegexValidator('/^\+?\d{10,11}$/');
-			$validator->setMessage('Please enter 10 or 11 digits only!',
+			$validator->setMessage(_('Please enter 10 or +11 digits only!'),
 					RegexValidator::NOT_MATCH);
 
 			$this->validator = $validator;
@@ -41,7 +41,7 @@ class Phone extends Element implements InputProviderInterface
 	 * Sets the validator to use for this element
 	 *
 	 * @param  ValidatorInterface $validator
-	 * @return Application\Form\Element\Phone
+	 * @return Phone
 	 */
 	public function setValidator(ValidatorInterface $validator)
 	{

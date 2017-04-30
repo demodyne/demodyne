@@ -1,14 +1,5 @@
-<!-- error/access-denied -->
 
-<div class="modal-header-soft round5top ui-draggable-handle">
-
-<a href="<?= $this->url($_SESSION['level']['level']);?>" class="close"><i class="fa fa-home w"></i></a>
-  <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
-  &nbsp; <span class="big" id="modal-dialog-title"><strong>
-  <?= $this->translate('Access denied to this ressource.')?>
-  </strong></span>
-</div>
-
+<?= $this->partial('partial/page-header.phtml', ['title' => $this->translate('Access denied to this ressource.')])?>
 
 <div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
 
@@ -25,6 +16,4 @@
 
 
 </div><!-- end jumbotron -->
-
-<!-- /error/access-denied -->
 

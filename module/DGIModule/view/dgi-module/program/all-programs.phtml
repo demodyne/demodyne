@@ -1,5 +1,3 @@
-<!-- program/all-programs -->
-
 <?php
 $level = $_SESSION['level']['level'];
 $levelName = '';
@@ -34,7 +32,7 @@ elseif ($level=='country') {
 	<hr>
 	
 	<div class="row ">
-		<div class="col-md-6">
+		<div class="col-md-6 col-xs-12">
 			<?php if (!$user->isAdministration()):?>
 				<?php if ($myProgram = $user->getProgramForLevel($_SESSION['level']['levelValue'])):?>
     			<button data-url="<?= $this->url('program', array('action' => 'view-program','id'=>$myProgram->getProgUUID()));?>"
@@ -42,29 +40,33 @@ elseif ($level=='country') {
 					class="btn btn-success">
     				<i class="fa fa-eye"></i> <?= $this->translate('View my Program')?></button>
     			<?php else:?>
-    			<?php 
-    			 if ($level=='city') {
-    			     $createProgram = sprintf($this->translate('Create my Program for my city, %s'), $levelName);
-    			 }
-    			 if ($level=='region') {
-    			     $createProgram = sprintf($this->translate('Create my Program for my region, %s'), $levelName);
-    			 }
-    			 if ($level=='country') {
-    			     $createProgram = sprintf($this->translate('Create my Program for my country, %s'), $levelName);
-    			 }
-    			 
-    			?>
-    			<button type="button" class="btn btn-orange"
-    				id="program-all-programs-add-new-program" 
-    				data-url="<?= $this->url('program', array('action'=>'add-program', 'level'=>$level))?>"
-    				data-dialog-title="<?= $createProgram ?>">
-    				<i class="fa fa-plus-circle"></i> <?= $this->translate('Create my Program')?></button>
+    			<?php
+                    if ($user->getUsrId()) :
+                        if ($level=='city') {
+                             $createProgram = sprintf($this->translate('Create my Program for my city, %s'), $levelName);
+                        }
+                        if ($level=='region') {
+                            $createProgram = sprintf($this->translate('Create my Program for my region, %s'), $levelName);
+                        }
+                        if ($level=='country') {
+                            $createProgram = sprintf($this->translate('Create my Program for my country, %s'), $levelName);
+                        }
+
+                        ?>
+                        <button type="button" class="btn btn-orange"
+                            id="program-all-programs-add-new-program"
+                            data-url="<?= $this->url('program', array('action'=>'add-program', 'level'=>$level))?>"
+                            data-dialog-title="<?= $createProgram ?>">
+                            <i class="fa fa-plus-circle"></i> <?= $this->translate('Create my Program')?></button>
+                    <?else:?>
+                        <?= $this->partial('partial/please-register-button.phtml', ['text' => '<i class="fa fa-plus-circle"></i> '.$this->translate('Create my Program')]); ?>
+                    <?endif;?>
 				<?php endif;?>
 			<?php endif;?>
-			<span class="big" title="<?=$this->translate('Only Programs with included Proposal/Measures')?>"><?= sprintf($this->translate('%d Programs for %s'), $programsCount, $levelNameFlag?$levelNameFlag:$levelName)?></span>
+			<span class="big nobr" title="<?=$this->translate('Only Programs with included Proposal/Measures')?>"><?= sprintf($this->translate('%d Programs for %s'), $programsCount, $levelNameFlag?$levelNameFlag:$levelName)?></span>
 		</div>
 		<!-- /6 -->
-		<div class="col-md-6">
+		<div class="col-md-6 col-xs-12">
 			<div class="fltr">
 				<ul class="nav">
 					<li class="dropdown"><a class="dropdown-toggle"
@@ -112,12 +114,12 @@ elseif ($level=='country') {
 	<hr>
 	<?php if (count($pagedPrograms)):?>
 		<?php foreach($pagedPrograms as $index => $program): ?>
-    		
-        	<div class="table-layout">
-        		<div class="table-cell">
-        			<div class="row">
-        				<div class="col-md-6 col-xs-12">
-        					<?php $programDescription = $this->escapeHtml($program->getProgDescription()); ?>
+   		
+   		
+   		
+   		<div class="row">
+   			<div class="col-md-4 col-xs-12">
+   				        					<?php $programDescription = $this->escapeHtml($program->getProgDescription()); ?>
         					<a
         						href="<?= $this->url('program', array('action' => 'view-program','id'=>$program->getProgUUID()));?>"
         						id="city-program-list-item"
@@ -133,22 +135,16 @@ elseif ($level=='country') {
                             <br> <?= $this->translate('Last updated')?> <i
         						class="fa fa-clock-o"></i> 
         					<?= $program->getProgSavedDate()->format('d/m/Y')?>
-        				</div>
-        				<div class="col-md-6">
-                        	<?= $this->{"categories-$index"}?>
-                        </div>
-        			</div>
-        			<!-- /row -->
-        		</div>
-        		<div class="table-cell fixed-width-150 text-right">
-        			<a target="_parent"
-        				href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
-        				title="<?= $this->translate('Number of Proposals & Official Measures in this Program')?>"><?= count($program->getProposals())?> <?= $this->translate('Items')?></a>
-        			<br /> <a
-        				href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"><i
-        				class="fa fa-comments"></i> <?= count($program->getComments())?> <?= $this->translate('Comments')?></a>
-        		</div>
-        	</div>
+   			</div>
+   			<div class="col-md-6 col-xs-12">
+   				<?= $this->{"categories-$index"}?>
+   			</div>
+   			<div class="col-md-2 col-xs-12 text-right">
+                <?= $this->partial('partial/program-actions.phtml', ['program' => $program, 'user'=>$user]); ?>
+   			</div>
+   		</div>
+   		
+
         	<hr />
         	
     	<?php endforeach; ?>
@@ -172,10 +168,8 @@ elseif ($level=='country') {
 	<?php endif;?>
 </div>
 <!-- /jumbotron -->
-<script type="text/javascript">
-	$(document).ready(function () {
-		programAllProgramsHandlers();
-	});
-</script>
-
-<!-- /program/all-programs -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			programAllProgramsHandlers();
+		});
+	</script>

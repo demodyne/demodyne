@@ -1,14 +1,18 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Program;
+use DGIModule\Entity\Proposal;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Criteria;
+
 
 /**
  * Comment
@@ -41,14 +45,14 @@ class Comment
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="com_created_date", type="datetime", nullable=false)
+     * @ORM\Column(name="com_created_date", type="utcdatetime", nullable=false)
      */
     private $comCreatedDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="com_uuid", type="string", length=36, nullable=true)
+     * @ORM\Column(name="com_uuid", type="uuid", length=36, nullable=true)
      */
     private $comUUID;
 
@@ -63,7 +67,7 @@ class Comment
     private $com = null;
 
     /**
-     * @var \DGIModule\Entity\Proposal
+     * @var Proposal
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Proposal")
      * @ORM\JoinColumns({
@@ -73,7 +77,7 @@ class Comment
     private $prop = null;
 
     /**
-     * @var \DGIModule\Entity\Program
+     * @var Program
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Program")
      * @ORM\JoinColumns({
@@ -83,7 +87,35 @@ class Comment
     private $prog = null;
 
     /**
-     * @var \DGIModule\Entity\DgiUsers
+     * @var \DGIModule\Entity\Article
+     *
+     * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Article")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="article_id", referencedColumnName="article_id")
+     * })
+     */
+    private $article = null;
+
+    /**
+     * @return Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
+
+    /**
+     * @param Article $article
+     * @return Comment
+     */
+    public function setArticle($article)
+    {
+        $this->article = $article;
+        return $this;
+    }
+
+    /**
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -134,7 +166,7 @@ class Comment
     /**
      * Set comCreated
      *
-     * @param \DateTime $comCreated
+     * @param \DateTime $comCreatedDate
      * @return Comment
      */
     public function setComCreatedDate($comCreatedDate)
@@ -147,7 +179,7 @@ class Comment
     /**
      * Get comCreated
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getComCreatedDate()
     {
@@ -167,10 +199,10 @@ class Comment
     /**
      * Set comCom
      *
-     * @param \DGIModule\Entity\Comment $comCom
+     * @param \DGIModule\Entity\Comment $com
      * @return Comment
      */
-    public function setCom(\DGIModule\Entity\Comment $com = null)
+    public function setCom(Comment $com = null)
     {
         $this->com = $com;
 
@@ -190,10 +222,10 @@ class Comment
     /**
      * Set comProp
      *
-     * @param \DGIModule\Entity\Proposal $comProp
+     * @param Proposal $prop
      * @return Comment
      */
-    public function setProp(\DGIModule\Entity\Proposal $prop = null)
+    public function setProp(Proposal $prop = null)
     {
         $this->prop = $prop;
 
@@ -203,7 +235,7 @@ class Comment
     /**
      * Get comProp
      *
-     * @return \DGIModule\Entity\Proposal 
+     * @return Proposal
      */
     public function getProp()
     {
@@ -213,10 +245,10 @@ class Comment
     /**
      * Set comScn
      *
-     * @param \DGIModule\Entity\Program $comScn
+     * @param Program $prog
      * @return Comment
      */
-    public function setProgram(\DGIModule\Entity\Program $prog = null)
+    public function setProgram(Program $prog = null)
     {
         $this->prog = $prog;
 
@@ -226,7 +258,7 @@ class Comment
     /**
      * Get comScn
      *
-     * @return \DGIModule\Entity\Program 
+     * @return Program
      */
     public function getProgram()
     {
@@ -236,10 +268,10 @@ class Comment
     /**
      * Set comUsr
      *
-     * @param \DGIModule\Entity\User $comUsr
+     * @param User $usr
      * @return Comment
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -249,7 +281,7 @@ class Comment
     /**
      * Get comUsr
      *
-     * @return \DGIModule\Entity\User 
+     * @return User
      */
     public function getUsr()
     {
@@ -276,5 +308,15 @@ class Comment
         $criteria->where(Criteria::expr()->eq('usr', $user));
         return count($this->thumbs->matching($criteria))>0;
     }
+    /**
+     * @param string $comUUID
+     * @return Comment
+     */
+    public function setComUUID($comUUID)
+    {
+        $this->comUUID = $comUUID;
+        return $this;
+    }
+
     
 }

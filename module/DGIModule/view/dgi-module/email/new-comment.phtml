@@ -1,0 +1,73 @@
+<?
+$urlBase = $this->url('home', [], array('force_canonical' => true));
+
+if ($comment->getProp()){
+
+    $proposal =$comment->getProp();
+    $user = $comment->getUsr();
+    $url = $this->url('proposal', array('action' => 'view', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true));
+//    $replayUrl= $this->url('proposal', array('action' => 'view', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true, 'fragment' => 'reply'));
+    $buttonText = $this->translate('See Comments');
+    $title = sprintf($this->translate('%s commented on Proposal <a href="%s">%s</a>'), $comment->getUsr()->getUsrName(), $url, $proposal->getPropName());
+}
+elseif ($comment->getProgram()){
+
+    $program =$comment->getProgram();
+    $user = $comment->getUsr();
+    $url = $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()), array('force_canonical' => true));
+    $buttonText = $this->translate('See Comments');
+$title = sprintf($this->translate('%s commented on Program <a href="%s">%s</a>'), $comment->getUsr()->getUsrName(), $url, $program->getProgName());
+}
+elseif ($comment->getArticle()){
+
+    $article =$comment->getArticle();
+    $user = $comment->getUsr();
+    $url = $this->url('blog', array('action' => 'article', 'id'=>$article->getArticleSlug()), array('force_canonical' => true));
+    $buttonText = $this->translate('See Comments');
+$title = sprintf($this->translate('%s commented on Article <a href="%s">%s</a>'), $comment->getUsr()->getUsrName(), $url, $article->getArticleTitle());
+}
+
+?>
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("New comment")?></h1>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">
+   
+   
+   
+           <table style="Margin-top:30px;Margin-bottom:20px;">
+        	<tr>
+        		<td style="width: 60px;"><a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()), array('force_canonical' => true));?>">
+                        <img style="webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;" src="<?=$urlBase.$this->basePath($user->getUsrPicture())?>" valign="middle" width="45" height="45" /></a>
+        		</td>
+        		<td>
+
+<?=$title?>
+    <?
+    setlocale(LC_ALL, $user->getCountry()->getCountryFormat());
+    ?>
+       		<br>
+       		<?= utf8_encode(strftime('%e %B %Y %R', strtotime($comment->getComCreatedDate()->format('d F Y H:i'))))?>
+        		</td>
+        	</tr>
+        </table>
+
+    <hr style="height: 2px; background-color: #FFF; border:none">
+    
+    <p style="Margin-top:10px;Margin-bottom:10px;" id="comment-list-text"><?= $comment->getComText() ?></p>
+    <hr style="height: 2px; background-color: #FFF; border:none">
+
+</div>
+
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <div style="Margin-bottom:20px;text-align:center">
+        <center>
+
+            <a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$url?>#comment-list"><?=$buttonText?></a>
+        </center>
+    </div>
+</div>
+
+

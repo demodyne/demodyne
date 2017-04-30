@@ -1,78 +1,108 @@
-<!-- index/loggedin -->
+<?php
+if ($currentLanguage->getLangId()=='fr') {
+    $aboutUsLink = 'https://forum.demodyne.org/showthread.php?tid=231';
+    $supportUsLink = 'https://forum.demodyne.org/showthread.php?tid=9';
+    $forumLink = 'https://forum.demodyne.org';
+}
+elseif ($currentLanguage->getLangId()=='ro') {
+    $aboutUsLink = 'https://forum.demodyne.org/showthread.php?tid=28';
+    $supportUsLink = 'https://forum.demodyne.org/showthread.php?tid=27';
+    $forumLink = 'https://forum.demodyne.org/forumdisplay.php?fid=12';
+}
+else {
+    $aboutUsLink = 'http://forum.demodyne.org/showthread.php?tid=230';
+    $supportUsLink = 'https://forum.demodyne.org/showthread.php?tid=9';
+    $forumLink = 'https://forum.demodyne.org';
+}
+
+?>
+
+
 
 <div class="jumbotron round5top" id="logged-in">
 
-<div class="row">
-<div class="col-md-12  col-xs-12 ">
 
-<?php if ($user->isAdministration()):?>
-<?= $this->partial('administration-steps.phtml', array('user' => $user)); ?>
-<?php else:?>
-<?= $this->partial('user-steps.phtml', array('user' => $user)); ?>
-<?php endif;?>			
-					
-					
-					
-					<!-- ------------------------------------------------------------------ -->
-					<!-- ------------------------------------------------------------------ -->
-					<!-- ------------------------------------------------------------------ -->
-					<!-- ------------------------------------------------------------------ -->
-					<!-- ------------------------------------------------------------------ -->
-					<!-- ------------------------------------------------------------------ -->
-					<!-- ------------------------------------------------------------------ -->
-					<div class="row top20">
-						<div class="col-md-12 text-center">
-							<hr />
-						</div>
-						<!-- /12 -->
-					</div>
-					<!-- /row -->
-					<div class="row">
-						<div class="col-xs-3 text-center">
-							<a href="http://forum.demodyne.org/showthread.php?tid=6" class="gray" target="_blank"><i
-								class="fa fa-info-circle fa-3x"></i>
-								<h5 class="big"><?= $this->translate('About us')?></h5></a>
-						</div>
-						<div class="col-xs-3 text-center">
-							<a
-								href="https://www.vimeo.com/demodyne"
-								target="_blank" class="gray"><i class="fa fa-film s38"></i>
-								<h5 class="big"><?= $this->translate('Videos & Tutorials')?></h5></a>
-						</div>
-						<div class="col-xs-3 text-center">
-							<a href="http://forum.demodyne.org" target="_blank" class="gray" target="_blank"><i
-								class="fa fa-comments-o fa-3x"></i>
-								<h5 class="big"><?= $this->translate('Forum')?></h5></a>
-						</div>
-						<div class="col-xs-3 text-center">
-							<a href="http://forum.demodyne.org/forumdisplay.php?fid=11" class="gray" target="_blank"><i
-								class="fa fa-rocket fa-3x"></i>
-								<h5 class="big"><?= $this->translate('Support us')?>!</h5></a>
-						</div>
-					</div>
-					<!-- /row -->
-</div><!--/col-->
+
+    <div class="row">
+        <div class="col-md-12  col-xs-12 ">
 
 
 
-				
 
 
-			</div>
-			<!-- end row -->
+            <?php if ($user->isAdministration()):?>
+                <?= $this->partial('administration-steps.phtml', array('user' => $user)); ?>
+            <?php else:?>
+                <?= $this->partial('user-steps.phtml', array('user' => $user, 'count'=>$count)); ?>
+            <?php endif;?>
+
+
+
+            <!-- ------------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------------ -->
+            <!-- ------------------------------------------------------------------ -->
+            <div class="row top20">
+                <div class="col-md-12 text-center">
+                    <hr />
+                </div>
+                <!-- /12 -->
+            </div>
+            <!-- /row -->
+
+
+
+
+            <div class="row">
+                <div class="col-xs-3 text-center">
+                    <a href="<?=$this->url('home/pages', ['page'=>'about']);?>" class="gray" target="_blank">
+                        <img class="icon" src="/img/icons-site-about.svg" title="<?= $this->translate('About us')?>"><br>
+                        <h5 class="big"><?= $this->translate('About us')?></h5></a>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <a
+                            href="https://www.vimeo.com/demodyne"
+                            target="_blank" class="gray">
+                        <img class="icon" src="/img/icons-site-video.svg" title="<?= $this->translate('Videos & Tutorials')?>"><br>
+                        <h5 class="big"><?= $this->translate('Videos & Tutorials')?></h5></a>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <a href="<?=$forumLink?>" target="_blank" class="gray" target="_blank">
+                        <img class="icon" src="/img/icons-site-forum.svg" title="<?= $this->translate('Forum')?>"><br>
+                        <h5 class="big"><?= $this->translate('Forum')?></h5></a>
+                </div>
+                <div class="col-xs-3 text-center">
+                    <a href="<?=$this->url('home/pages', ['page'=>'support']);?>" class="gray" target="_blank">
+                        <img class="icon" src="/img/icons-site-support.svg" title="<?= $this->translate('Support us')?>"><br>
+                        <h5 class="big"><?= $this->translate('Support us')?>!</h5></a>
+                </div>
+            </div>
+            <!-- /row -->
+        </div><!--/col-->
+
+
+    </div>
+    <!-- end row -->
+
+
+
+
+
+
+
+
+
+
 
 </div><!-- /j -->
 
 
-<script type="text/javascript">
 
-
-$(function(){
-
-	homeLoggedinHandlers();
-		
-});
-
+<script>
+    $(function(){
+        homeLoggedinHandlers();
+    });
 </script>
-
-<!-- /index/loggedin -->

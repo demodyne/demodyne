@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 75 75" style="enable-background:new 0 0 75 75;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#EFE3D5;}
+	.st1{opacity:0.1;}
+	.st2{fill:#E24B35;}
+	.st3{fill-opacity:0.14;}
+	.st4{fill:#FFFFFF;}
+	.st5{fill-opacity:0.1;}
+</style>
+<g id="fundal">
+	<g id="Layer_1_1_">
+		<g>
+			<circle class="st0" cx="37.8" cy="37.8" r="35.5"/>
+		</g>
+	</g>
+	<path class="st1" d="M37.8,4.7v66.2c18.3,0,33.1-14.8,33.1-33.1S56.1,4.7,37.8,4.7z"/>
+</g>
+<g id="video">
+	<g>
+		<path id="Shape" class="st2" d="M57.8,50.1c0,1.4-1.2,2.6-2.6,2.6l0,0H20.4c-1.4,0-2.6-1.2-2.6-2.6l0,0V24.9
+			c0-1.4,1.2-2.6,2.6-2.6h34.8c1.4,0,2.6,1.2,2.6,2.6V50.1z"/>
+		<path id="shadow" class="st3" d="M32.7,29.4L17.8,44.4v5.7c0,1.4,1.1,2.6,2.6,2.6c0,0,0,0,0,0h10.7l14.9-15l0,0l-13.2,8.1
+			L32.7,29.4"/>
+		<path id="Shape-2" class="st4" d="M32.6,29.4v16.3l13.3-8.1L32.6,29.4z"/>
+		<path id="shadow-2" class="st5" d="M57.8,37.5h-40v12.6c0,1.4,1.2,2.6,2.6,2.6l0,0h34.8c1.4,0,2.6-1.2,2.6-2.6l0,0V37.5"/>
+	</g>
+</g>
+</svg>

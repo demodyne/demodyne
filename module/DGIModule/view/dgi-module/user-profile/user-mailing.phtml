@@ -1,0 +1,188 @@
+<div id="user-profile-user-mailing"
+     data-url="<?= $this->url('user/profile', array('action' => 'user-mailing'))?>"
+     data-delete-account="<?=$this->translate('Delete account')?>">
+
+    <h2 class="text-center"><i class="fa fa-paper-plane-o"></i> <?= sprintf($this->translate('Mailing Settings for %s'), $user->getUsrName())?></h2>
+    <hr />
+
+
+
+    <?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('user/profile', array('action' => 'user-mailing')));
+    $form->setAttribute('id', 'user-mailing-form');
+    $form->prepare();
+    ?>
+
+    <?= $this->form()->openTag($form);?>
+
+
+
+
+    <fieldset>
+
+        <div class="row top10">
+            <div class="col-md-2 col-xs-12"></div>
+            <div class="col-md-8 col-xs-12">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="form-group bot5">
+                    <label class="col-md-4 col-xs-12 control-label bot5"> </label>
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <h4><?= $this->translate('Email alerts')?> <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('You can choose whether you will receive email alerts, and how frequently, for each of the following: <br>
+- private messages from other users <br>
+- major updates of proposals/measures/programs that you have published or tagged as favorites: changes to the description, progress to the next phase... <br>
+- new comments on proposals/measures/programs that you have published or tagged as favorites
+')?>"></i></h4>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+
+                    <label class="col-md-4 col-xs-12 control-label"><?= $this->translate('Private messages')?></label>
+
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <?= $this->formElement($form->get('privateMessagesAlert'));?>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+
+                    <label class="col-md-4 col-xs-12 control-label"><?= $this->translate('Major updates')?></label>
+
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <?= $this->formElement($form->get('updatesAlert'));?>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+
+                    <label class="col-md-4 col-xs-12 control-label"><?= $this->translate('New Comments')?></label>
+
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <?= $this->formElement($form->get('commentsAlert'));?>
+                    </div>
+                </div>
+
+
+
+<hr />
+
+                <div class="form-group bot5">
+                    <label class="col-md-4 col-xs-12 control-label bot5"> </label>
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <h4><?= $this->translate('Reminders')?> <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('You can choose whether you will receive email reminders, and how many days before, for each of the following:<br>- Status change of a proposal or measure you have published to tagged as a favorite: for instance, when a proposal goes from debate phase to voting phase<br>- An event or live session you organize or in which you will participate')?>"></i></h4>
+                    </div>
+                </div>
+
+
+                <div class="row form-group">
+
+                    <label class="col-md-4 col-xs-12 control-label"><?= $this->translate('Reminders status change')?></label>
+
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <?= $this->formElement($form->get('statusAlert'));?>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+
+                    <label class="col-md-4 col-xs-12 control-label"><?= $this->translate('Reminders events & sessions')?></label>
+
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <?= $this->formElement($form->get('eventsAlert'));?>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group bot5">
+                    <label class="col-md-4 col-xs-12 control-label bot5"> </label>
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <h4><?= $this->translate('Email digest')?> <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('You can choose whether you will receive email digests, and how frequently.<br>Digests summarize new content on Demodyne in your city, region and country:<br>- new citizen proposals, official measures, citizen programs<br>- new events and live sessions')?>"></i></h4>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+
+                    <label class="col-md-4 col-xs-12 control-label"><?= $this->translate('Frequency')?></label>
+
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <?= $this->formElement($form->get('freq'));?>
+                    </div>
+                </div>
+
+                <div class="row form-group">
+
+                    <label class="col-md-4 col-xs-12 control-label"><?= $this->translate('Content')?></label>
+
+                    <div class="col-md-8 col-xs-12 bot5">
+                        <?= $this->formElement($form->get('highlight'));?> <label for="highlight"> <?=$this->translate('Highlights')?></label><br>
+                        <?= $this->formElement($form->get('proposals'));?> <label for="proposals"> <?=$this->translate('New Proposals/Official Measures/Programs')?></label><br>
+                        <?= $this->formElement($form->get('events'));?> <label for="events"> <?=$this->translate('New Events/Sessions')?></label><br>
+                        <!-- <?= $this->formElement($form->get('academy'));?> <label for="academy"> <?=$this->translate('Demodyne Academy')?></label><br> -->
+
+                    </div>
+                </div>
+
+
+
+<hr />
+
+
+
+                <div class="row form-group bot5">
+                    <label class="col-md-4 col-xs-12 control-label"> </label>
+                    <div class="col-md-8 col-xs-12">
+
+                        <button type="submit" class="btn btn-orange" id="user-profile-user-mailing-save"><i class="fa fa-floppy-o"></i> <?= $this->translate('Save')?></button>
+                        <button type="button" class="btn btn-default" id="user-profile-user-mailing-cancel"><i class="fa fa-undo"  id="cancelEditContactIcon"></i> <?= $this->translate('Cancel')?></button>
+                    </div></div>
+
+
+
+
+
+
+            </div>
+            <div class="col-md-2 col-xs-12"></div>
+        </div><!--/r-->
+
+    </fieldset>
+
+
+    <?=  $this->form()->closeTag();?>
+
+</div>
+<script type="text/javascript">
+
+    $(function () {
+
+
+
+        userProfileUserMailingHandlers();
+
+
+
+
+
+    });
+
+</script>

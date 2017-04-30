@@ -1,0 +1,25 @@
+<ol class="tree">
+
+<?php foreach ($list as $countryName => $country):?>
+ <li class="tree top10">
+    <label for="folder1">
+    <a href="<?=$this->url('browse', ['country' => $countryName])?>">
+    <span class="big" style="padding-top: 2px;">
+    <img src="/img/flags/<?=str_replace(' ', '-', $countryName)?>.png" style="vertical-align: text-top; margin-top: 5px;" width="25" height="17" alt="<?=$countryName?>"> <?=$countryName?></span></a>
+    </label> <input type="checkbox" checked  id="folder1" style="margin-top:11px !important;" /><hr class="thin">
+    <ol>
+	<?php foreach ($country as $regionName => $region):?>
+	    <li class="tree">
+        <label for="subfolder1"><a href="<?=$this->url('browse', ['country' => $countryName, 'region'=> $regionName])?>"><?=$regionName?></a></label> <input type="checkbox" id="subfolder1" />
+        <ol>
+        <?php foreach ($region as $postalcode => $cityName):?>
+        	<li class="file"><a href="<?=$this->url('browse', ['country' => $countryName, 'region'=> $regionName, 'postalcode' => $postalcode, 'cityname' => $cityName])?>">- <?=$cityName?></a></li>
+		<?php endforeach;?>
+        </ol>
+  		</li>
+    <?php endforeach;?>
+    </ol>
+  </li>
+
+<?php endforeach;?>
+</ol>

@@ -1,0 +1,85 @@
+<div class="jumbotron" id="user-profile-view-user-info" data-id="<?=$user->getUsrUUID()?>"
+     data-remove-contact="<?= $this->translate('Remove from Contacts')?>"
+     data-add-contact="<?= $this->translate('Add to Contacts')?>">
+     
+     
+     
+     
+    <div class="title-mobile"><?= sprintf($this->translate('%s\'s General Info'),  $user->getUsrName())?></div>
+    
+    <div>
+    	            <?php if ($user->getCity()):?>
+                <strong><?= $this->translate('City:')?></strong> <?=$user->getCity()->getCityName()?> (<?=$user->getCity()->getCityPostalcode()?>)<br>
+                <strong><?= $this->translate('Region:')?></strong> <?=$user->getCity()->getStateName()?><br>
+                <strong><?= $this->translate('Country:')?></strong> <?=$user->getCountry()->getCountryName()?> <img
+                        src="<?= $this->basePath('img/flags/'.$user->getCountry()->getCountryName().'.png') ?>"
+                        valign="middle" width="25" height="17" alt="<?=$user->getCountry()->getCountryName()?>" />
+            <?php else:?>
+                <strong><?= $this->translate('City')?>:</strong> <?=$this->translate('No city chosen yet')?><br>
+            <? endif;?>
+            <hr>    
+            <strong><?= $this->translate('Username')?>:</strong>
+				<span class="orange"><?= $user->getUsrName() ?></span>
+				<hr>
+				<strong><?= sprintf($this->translate("About %s:"), $user->getUsrName())?></strong><br>
+
+                <?= $user->getUsrPresentation() ?>	
+                
+                <hr>
+            <span class="badge"><?=$totalProp?></span> <?= $this->translate('Proposals Published:')?><br>
+            <span class="label label-success"
+                  title="<?= $this->translate('Debate step, NO implementation yet')?>">&nbsp;D&nbsp;</span> <?= isset($propNo['debate'])?$propNo['debate']:0?> <?= $this->translate('in Debate phase')?><br>
+            <span class="label label-success"
+                  title="<?= $this->translate('Voting step, NO implementation yet')?>">&nbsp;V&nbsp;</span> <?= isset($propNo['vote'])?$propNo['vote']:0?> <?= $this->translate('in Voting phase')?><br>
+
+            <span class="label label-success" title="<?= $this->translate('Implementation, Planning step')?>">&nbsp;P&nbsp;</span> <?= isset($propNo['plan'])?$propNo['plan']:0?> <?= $this->translate('in Planning phase')?><br>
+
+            <span class="label label-success" title="<?= $this->translate('Implementation, Execution step')?>">&nbsp;E&nbsp;</span> <?= isset($propNo['execute'])?$propNo['execute']:0?> <?= $this->translate('in Execution phase')?><br>
+
+            <span class="label label-success" title="<?= $this->translate('Implementation, Proposal Completed')?>">&nbsp;C&nbsp;</span> <?= isset($propNo['followup'])?$propNo['followup']:0?> <?= $this->translate('completed')?><br>
+                
+    </div>
+    
+
+    
+        <hr />
+        
+    <div class="row">
+        <div class="col-md-4 col-md-offset-2">
+            <?php if ($me):?>
+                <button
+                        data-url="<?= $this->url('user/inbox', array('action'=>'new-message', 'to'=>$user->getUsrName()));?>"
+                        class="btn btn-orange" id="user-profile-view-user-info-new-message"
+                        data-dialog-title="<?=$this->translate('Send New Message')?>"> <i
+                            class="fa fa-envelope-o" id=""></i> <?= $this->translate('Send message')?>
+                </button>
+            <?php endif;?>
+        </div>
+        <div class="col-md-4">
+            <?php if ($me):?>
+                <?php if ($me->hasContact($user)):?>
+                    <a
+                            href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
+                            class="btn btn-primary white"
+                            id="user-profile-view-user-info-add-remove-contact"
+                            data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-minus-circle"></i> <?= $this->translate('Remove from Contacts')?></a>
+                <?php else: ?>
+                    <a
+                            href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
+                            class="btn btn-orange"
+                            id="user-profile-mini-profile-add-remove-contact"
+                            data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-plus-circle"></i> <?= $this->translate('Add to Contacts')?></a>
+                <?php endif;?>
+            <?php endif;?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        userProfileViewUserInfoHandlers();
+    });
+</script>
+
+
+

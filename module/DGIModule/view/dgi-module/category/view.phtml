@@ -1,0 +1,7 @@
+<h1><?= $this->translate('Scenarios for the user')?> <?= $user->getUsrName()?></h1>
+
+<p><a href="<?= $this->url('scenario', array('action'=>'add'));?>"><?= $this->translate('Add new scenario')?></a></p>
+
+<?php foreach ($scenarios as $scenario): ?>
+    <p> <?= $scenario->getScnName() ?> </p>
+<?php endforeach;?>

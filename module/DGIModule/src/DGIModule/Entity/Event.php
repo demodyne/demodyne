@@ -1,14 +1,19 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\City;
+use DGIModule\Entity\Country;
+use DGIModule\Entity\Region;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * Event
@@ -58,42 +63,42 @@ class Event
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="event_start_date", type="datetime", nullable=false)
+     * @ORM\Column(name="event_start_date", type="utcdatetime", nullable=false)
      */
     private $eventStartDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="event_end_date", type="datetime", nullable=false)
+     * @ORM\Column(name="event_end_date", type="utcdatetime", nullable=false)
      */
     private $eventEndDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="event_created_date", type="datetime", nullable=true)
+     * @ORM\Column(name="event_created_date", type="utcdatetime", nullable=true)
      */
     private $eventCreatedDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="event_published_date", type="datetime", nullable=true)
+     * @ORM\Column(name="event_published_date", type="utcdatetime", nullable=true)
      */
     private $eventPublishedDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="event_canceled_date", type="datetime", nullable=true)
+     * @ORM\Column(name="event_canceled_date", type="utcdatetime", nullable=true)
      */
     private $eventCanceledDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="event_uuid", type="string", length=36, nullable=true)
+     * @ORM\Column(name="event_uuid", type="uuid", length=36, nullable=true)
      */
     private $eventUUID;
 
@@ -131,9 +136,23 @@ class Event
      * @ORM\Column(name="event_full_city", type="integer", nullable=true)
      */
     private $eventFullCity = 0;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="event_session", type="boolean", nullable=true)
+     */
+    private $eventSession = 0;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="event_session_completed", type="boolean", nullable=true)
+     */
+    private $eventSessionCompleted = 0;
 
     /**
-     * @var \DGIModule\Entity\City
+     * @var City
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\City")
      * @ORM\JoinColumns({
@@ -143,7 +162,7 @@ class Event
     private $city;
 
     /**
-     * @var \DGIModule\Entity\Country
+     * @var Country
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Country")
      * @ORM\JoinColumns({
@@ -153,7 +172,7 @@ class Event
     private $country;
 
     /**
-     * @var \DGIModule\Entity\Region
+     * @var Region
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Region")
      * @ORM\JoinColumns({
@@ -163,7 +182,7 @@ class Event
     private $region;
 
     /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -187,11 +206,81 @@ class Event
      * )
      */
     private $attendees;
+    
+    /**
+     * @var \Doctrine\Common\Collections\Collection|User[]
+     *
+     * @ORM\ManyToMany(targetEntity="DGIModule\Entity\User", inversedBy="invitationsForEvents", cascade={"persist", "merge","remove"})
+     * @ORM\JoinTable(
+     *  name="dgi_events_invitations",
+     *  joinColumns={
+     *      @ORM\JoinColumn(name="event_id", referencedColumnName="event_id")
+     *  },
+     *  inverseJoinColumns={
+     *      @ORM\JoinColumn(name="usr_id", referencedColumnName="usr_id")
+     *  }
+     * )
+     */
+    private $invitations;
+    
+    /** @ORM\OneToMany(targetEntity="DGIModule\Entity\Idea", mappedBy="event") */
+    private $ideas;
+    
+    /**
+     * @var \DGIModule\Entity\Chat
+     *
+     * @ORM\OneToOne(targetEntity="DGIModule\Entity\Chat", cascade={"persist", "merge", "remove"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="chat_id", referencedColumnName="chat_id")
+     * })
+     */
+    private $chat;
 
     public function __construct()
     {
         $this->attendees = new ArrayCollection();
+        $this->invitations = new ArrayCollection();
+        $this->ideas = new ArrayCollection();
     }
+    
+    public function getInvitations()
+    {
+        return $this->invitations;
+    }
+    
+    public function hasInvitation(User $user)
+    {
+        return $this->invitations->contains($user);
+    }
+
+
+    /**
+     * @param User $user
+     */
+    public function addInvitation(User $user)
+    {
+        if ($this->invitations->contains($user)) {
+            return;
+        }
+        $this->invitations->add($user);
+    }
+
+    /**
+     * @param User $user
+     */
+    public function removeInvitation(User $user)
+    {
+        if (!$this->invitations->contains($user)) {
+            return;
+        }
+        $this->invitations->removeElement($user);
+    
+    }
+    
+    public function clearInvitations() {
+        $this->invitations->clear();
+    }
+    
     
     public function getAttendees()
     {
@@ -199,11 +288,14 @@ class Event
     }
     
     public function hasAttendee(User $user) {
-        return $this->attendees->contains($user);
+        foreach ($this->attendees as $att)
+        	if ($att==$user)
+        	    return true;
+    	return false;
     }
-    
+
     /**
-     * @param Link $link
+     * @param User $user
      */
     public function addAttendee(User $user)
     {
@@ -212,18 +304,16 @@ class Event
         }
         $this->attendees->add($user);
     }
-    
+
     /**
-     * @param Link $link
+     * @param User $user
      */
     public function removeAttendee(User $user)
     {
         if (!$this->attendees->contains($user)) {
             return;
         }
-    
         $this->attendees->removeElement($user);
-    
     }
     
     public function clearAttendees() {
@@ -436,7 +526,7 @@ class Event
     /**
      * Set eventCancelDate
      *
-     * @param \DateTime $eventCancelDate
+     * @param \DateTime $eventCanceledDate
      *
      * @return Event
      */
@@ -587,14 +677,54 @@ class Event
         return $this->eventFullCity;
     }
     
+    public function isSession() {
+        return $this->eventSession==1;
+    }
+    
+    /**
+     * @return boolean $eventSession
+     */
+    public function getEventSession()
+    {
+        return $this->eventSession;
+    }
+    
+    /**
+     * @param boolean $eventSession
+     * @return Event
+     */
+    public function setEventSession($eventSession)
+    {
+        $this->eventSession = $eventSession;
+        return $this;
+    }
+    
+    /**
+     * @return boolean $eventSessionCompleted
+     */
+    public function getEventSessionCompleted()
+    {
+        return $this->eventSessionCompleted;
+    }
+    
+    /**
+     * @param boolean $eventSessionCompleted
+     * @return Event
+     */
+    public function setEventSessionCompleted($eventSessionCompleted)
+    {
+        $this->eventSessionCompleted = $eventSessionCompleted;
+        return $this;
+    }
+    
     /**
      * Set city
      *
-     * @param \DGIModule\Entity\City $city
+     * @param City $city
      *
      * @return Event
      */
-    public function setCity(\DGIModule\Entity\City $city = null)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
 
@@ -604,7 +734,7 @@ class Event
     /**
      * Get city
      *
-     * @return \DGIModule\Entity\City
+     * @return City
      */
     public function getCity()
     {
@@ -614,11 +744,11 @@ class Event
     /**
      * Set country
      *
-     * @param \DGIModule\Entity\Country $country
+     * @param Country $country
      *
      * @return Event
      */
-    public function setCountry(\DGIModule\Entity\Country $country = null)
+    public function setCountry(Country $country = null)
     {
         $this->country = $country;
 
@@ -628,7 +758,7 @@ class Event
     /**
      * Get country
      *
-     * @return \DGIModule\Entity\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -638,11 +768,11 @@ class Event
     /**
      * Set region
      *
-     * @param \DGIModule\Entity\Region $region
+     * @param Region $region
      *
      * @return Event
      */
-    public function setRegion(\DGIModule\Entity\Region $region = null)
+    public function setRegion(Region $region = null)
     {
         $this->region = $region;
 
@@ -652,7 +782,7 @@ class Event
     /**
      * Get region
      *
-     * @return \DGIModule\Entity\Region
+     * @return Region
      */
     public function getRegion()
     {
@@ -662,11 +792,11 @@ class Event
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      *
      * @return Event
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -676,10 +806,60 @@ class Event
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User
+     * @return User
      */
     public function getUsr()
     {
         return $this->usr;
     }
+    /**
+     * @return ArrayCollection $ideas
+     */
+    public function getIdeas()
+    {
+        return $this->ideas;
+    }
+
+    public function getIdeasCount()
+    {
+        return count($this->ideas);
+    }
+    public function getValidatedIdeasCount()
+    {
+        $count = 0;
+        foreach ($this->ideas as $idea) {
+            if ($idea->getIdeaValidated()) 
+                $count++;
+        }
+        return $count;
+    }
+    /**
+     * @return Chat $chat
+     */
+    public function getChat()
+    {
+        return $this->chat;
+    }
+
+    /**
+     * @param \DGIModule\Entity\Chat $chat
+     * @return Event
+     */
+    public function setChat($chat)
+    {
+        $this->chat = $chat;
+        return $this;
+    }
+    /**
+     * @param string $eventUUID
+     * @return Event
+     */
+    public function setEventUUID($eventUUID)
+    {
+        $this->eventUUID = $eventUUID;
+        return $this;
+    }
+
+
+    
 }

@@ -1,345 +1,459 @@
-<!-- event/all-events -->
+<?php
 
-<?php 
+$city = $user->getCity();
 if ($_SESSION['level']['level']=='city') {
-    $levelName = ($user->getCity()->getFullCity()?$user->getCity()->getFullCity()->getCityName():$user->getCity()->getCityName());
+    $levelName = ($city->getFullCity()?$city->getFullCity()->getCityName():$city->getCityName());
+    $levelUrl = $this->url('browse', [
+        'country' => $city->getCountry()->getCountryName(),
+        'postalcode' => $city->getCityPostalcode(),
+        'region'=> $city->getRegion()->getRegionName(),
+        'cityname' => $city->getCityName()
+    ], array('force_canonical' => true));
 }
 elseif ($_SESSION['level']['level']=='region') {
-    $levelName = $user->getCity()->getRegion()->getRegionName();
+    $levelName = $city->getRegion()->getRegionName();
+    $levelUrl = $this->url('browse',
+        ['country' => $city->getCountry()->getCountryName(),
+            'region'=> $city->getRegion()->getRegionName(),
+        ], array('force_canonical' => true));
 }
 elseif ($_SESSION['level']['level']=='country') {
-    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14" alt="'. $user->getCountry()->getCountryName() .'"> '.$user->getCountry()->getCountryName();
-} 
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $city->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14" alt="'. $city->getCountry()->getCountryName() .'"> '.$city->getCountry()->getCountryName();
+    $levelUrl = $this->url('browse', ['country' => $city->getCountry()->getCountryName()]);
+}
 else {
-        
+
 }
 ?>
 
 <?php $paging = $this->sortingDivPaginationHelper($pagedEvents, $page, $this->url('event', array('action'=>'all-events')), 'all-events', $limit, $sort, $order, null, $month?'/date/'.$month.'/'.$year:''); ?>
 <div class="jumbotron" id="event-all-events"
-	data-attend="<?= $this->translate('Attend Event')?>"
-	data-decline="<?= $this->translate('Cancel attendance')?>"
-	data-edit-event="<?=$this->translate('Edit Event')?>"
-	data-add-event="<?=$this->translate('Add New Event')?>"
-	data-cancel-event="<?=$this->translate('Cancel Event')?>"
-	data-url="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit))?>">
-	<div class="row">
-		<div class="col-md-6"> 
+     data-attend-event="<?= $this->translate('Attend Event')?>"
+     data-attend-session="<?= $this->translate('Attend Session')?>"
+     data-decline="<?= $this->translate('Cancel attendance')?>"
+     data-add-event="<?=$this->translate('Add New Event')?>"
+     data-cancel-event="<?=$this->translate('Cancel Event')?>"
+     data-url="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit))?>"
+     data-loading-text="<?= $this->translate('Loading ...')?>">
 
-      <?php if ($user->isAdministration()):?>
 
-      <button
-				data-href="<?= $this->url('event', array('action'=>'add-event')); ?>"
-				class="btn btn-orange" id="event-all-events-add-new-event">
-				<i class="fa fa-plus-circle"></i>
+    <div class="panel panel-default panel-body orangebackground">
+        <?= sprintf($this->translate('You can find here Events such as conferences, gatherings and working sessions taking place in <a href="%s">%s</a>.'), $levelUrl, $levelName)?>
+        <br>
+        <?= $this->translate('Live sessions are a specific type of event to work in groups on the proposals and programs, usually with a defined theme and scope.')?> <br>
+        <?= $this->translate('A dedicated interface is available on Demodyne to create Live sessions and capture citizen\'s input directly during the session, to make it available online for subsequent work.')?>
 
-      	<?= $this->translate('Create Event')?>
+    </div>
 
-      </button>
 
-      <?php endif;?>
+    <div class="row">
+        <div class="col-md-6">
 
-      <span class="big"><?=$eventsCount?> <?= $this->translate('Upcoming Events for')?> <?= $levelName?></span>
-		</div>
-		<div class="col-md-6">
-			<div class="fltr">
-				<ul class="nav">
-					<li class="dropdown"><a class="dropdown-toggle"
-						data-toggle="dropdown" href="#" aria-expanded="false"> <span
-							class="label label-default"><i class="fa fa-caret-down"></i> </span>
-					</a>
-						<ul class="dropdown-menu dropdown-menu-right">
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>">
+            <?php if ($user->isAdministration()):?>
 
-                <?=$this->translate('Name')?>
+                <button
+                        data-href="<?= $this->url('event', array('action'=>'add-event')); ?>"
+                        class="btn btn-orange" id="event-all-events-add-new-event">
+                    <i class="fa fa-plus-circle"></i>
 
-                </a></li>
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'status', 'page'=>1, 'order'=>'desc'), true);?>">
+                    <?= $this->translate('Create Event')?>
 
-                <?=$this->translate('Status')?>
+                </button>
 
-                </a></li>
-							<li class="divider"></li>
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'desc'), true);?>">
+            <?php endif;?>
 
-                <?=$this->translate('Start date')?>
 
-                </a></li>
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'desc'), true);?>">
+                <?php if ($user->getUsrId()):?>
+                    <button
+                            data-href="<?= $this->url('session', array('action'=>'add-edit-session')); ?>"
+                            data-dialog-title="<?=$this->translate('Create New Session')?>"
+                            class="btn btn-orange" id="event-all-events-add-new-session">
+                        <i class="fa fa-plus-circle"></i> <?= $this->translate('Create Session')?>
+                    </button>
+                <?php else:?>
+                    <?= $this->partial('partial/please-register-button.phtml', ['text' => '<i class="fa fa-plus-circle"></i> '.$this->translate('Create Session')]); ?>
+                <?php endif;?>
 
-                <?=$this->translate('End date')?>
 
-                </a></li>
-						</ul></li>
-				</ul>
-			</div>
-			<div class="fltr">
-				<ul class="nav">
-					<li class="dropdown"><a class="dropdown-toggle"
-						data-toggle="dropdown" href="#" aria-expanded="false"> <span
-							class="label label-default"><i class="fa fa-caret-up"></i> </span>
-					</a>
-						<ul class="dropdown-menu dropdown-menu-right">
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>">
+            <span class="big"><?=$eventsCount?> <?= $this->translate('Upcoming Events for')?> <?= $levelName?></span>
+        </div>
+        <div class="col-md-6">
+            <div class="fltr">
+                <ul class="nav">
+                    <li class="dropdown"><a class="dropdown-toggle"
+                                            data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                    class="label label-default"><i class="fa fa-caret-down"></i> </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>">
 
-                <?=$this->translate('Name')?>
+                                    <?=$this->translate('Name')?>
 
-                </a></li>
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'status', 'page'=>1, 'order'=>'asc'), true);?>">
+                                </a></li>
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'status', 'page'=>1, 'order'=>'desc'), true);?>">
 
-                <?=$this->translate('Status')?>
+                                    <?=$this->translate('Status')?>
 
-                </a></li>
-							<li class="divider"></li>
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'asc'), true);?>">
+                                </a></li>
+                            <li class="divider"></li>
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'desc'), true);?>">
 
-                <?=$this->translate('Start date')?>
+                                    <?=$this->translate('Start date')?>
 
-                </a></li>
-							<li><a id="page-all-events"
-								href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'asc'), true);?>">
+                                </a></li>
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'desc'), true);?>">
 
-                <?=$this->translate('End date')?>
+                                    <?=$this->translate('End date')?>
 
-                </a></li>
-						</ul></li>
-				</ul>
-			</div>
-			<div class="fltr right10 top5"><?= $this->translate('Sorted by')?>
+                                </a></li>
+                        </ul></li>
+                </ul>
+            </div>
+            <div class="fltr">
+                <ul class="nav">
+                    <li class="dropdown"><a class="dropdown-toggle"
+                                            data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                    class="label label-default"><i class="fa fa-caret-up"></i> </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>">
 
-        <?php if ($sort=='start_date'):?>
+                                    <?=$this->translate('Name')?>
 
-        <?=$this->translate('Start date')?>
+                                </a></li>
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'status', 'page'=>1, 'order'=>'asc'), true);?>">
 
-        <?php elseif ($sort=='end_date'):?>
+                                    <?=$this->translate('Status')?>
 
-        <?=$this->translate('End date')?>
+                                </a></li>
+                            <li class="divider"></li>
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'start_date', 'page'=>1, 'order'=>'asc'), true);?>">
 
-        <?php else:?>
+                                    <?=$this->translate('Start date')?>
 
-        <?=$this->translate(ucfirst($sort))?>
+                                </a></li>
+                            <li><a id="page-all-events"
+                                   href="<?= $this->url('event', array('action'=>'all-events', 'sort'=>'end_date', 'page'=>1, 'order'=>'asc'), true);?>">
 
-        <?php endif;?>
+                                    <?=$this->translate('End date')?>
 
-        <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?>
+                                </a></li>
+                        </ul></li>
+                </ul>
+            </div>
+            <div class="fltr right10 top5"><?= $this->translate('Sorted by')?>
 
-      </div>
-		</div>
-	</div>
-	<hr>
-	<div class="row">
-		<div class="col-md-2 col-xs-4">
-			<button type="button"
-				class="btn <?=($month || $searchTerms)?'btn-default':'btn-success'?>"
-				data-url="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
-				id="event-all-events-see-all"><?= $this->translate('All upcoming')?></button>
-		</div>
-		<div class="col-md-7 col-xs-8">
-			<div class="fltl right10">
-				<button type="button"
-					class="btn <?=$month?'btn-success':'btn-default'?>"
-					data-url="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit, 'month' => $month?$month:date('n'), 'year' => $year?$year:date('Y')))?>"
-					id="event-all-events-see-month"><?= $this->translate('By month')?></button>
-			</div>
-			<div class='input-group date col-md-3 fltl'
-				id='event-all-events-month'>
-				<input style="max-height: 37px !important;" type="text"
-					name="event-all-events-start-month"
-					id="event-all-events-start-month" class="form-control" value=""> <span
-					class="input-group-addon" style="padding-bottom: 5px;"> <span
-					class="glyphicon glyphicon-calendar"></span>
+                <?php if ($sort=='start_date'):?>
+
+                    <?=$this->translate('Start date')?>
+
+                <?php elseif ($sort=='end_date'):?>
+
+                    <?=$this->translate('End date')?>
+
+                <?php else:?>
+
+                    <?=$this->translate(ucfirst($sort))?>
+
+                <?php endif;?>
+
+                <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?>
+
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-9 col-xs-12 top5">
+            <div class="btn-group fltl right10" role="group" aria-label="...">
+
+                <a type="button"
+                   class="btn btn-sm <?=($month || $searchTerms)?'btn-default':'btn-success'?>"
+                   data-url="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
+                   id="event-all-events-see-all"><?= $this->translate('All upcoming')?></a>
+
+                <a type="button"
+                   class="btn btn-sm <?=$month?'btn-success':'btn-default'?>"
+                   data-url="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit, 'month' => $month?$month:date('n'), 'year' => $year?$year:date('Y')))?>"
+                   id="event-all-events-see-month"><?= $this->translate('By month')?></a>
+
+                <div class="fltl" style="padding:5px 0 0 20px;">
+                    <?php
+                    $month = $month?:date('n');
+                    $nextYear =  $prevYear =  $year = $year?:date('Y');
+                    if ($month==1) {
+                        $prevMonth = 12;
+                        $prevYear = $year-1;
+                    }
+                    else {
+                        $prevMonth = $month - 1;
+                    }
+                    if ($month==12) {
+                        $nextMonth = 1;
+                        $nextYear = $year + 1;
+                    }
+                    else {
+                        $nextMonth = $month + 1;
+
+                    }
+                    ?>
+                    <a href="<?=$this->url('event', array('action'=>'all-events', 'page'=>1, 'month' => $prevMonth, 'year' => $prevYear))?>" id="page-all-events" title="<?=$this->translate('Previous month')?>"><i class="fa fa-arrow-left"></i></a>
+                </div>
+            </div>
+            <div class='input-group date col-md-3 fltl'
+                 id='event-all-events-month'>
+                <input type="text"
+                       name="event-all-events-start-month"
+                       id="event-all-events-start-month" class="form-control" value=""> <span
+                        class="input-group-addon" style="padding-bottom: 5px;"> <span
+                            class="glyphicon glyphicon-calendar"></span>
 				</span>
-			</div>
-		</div>
-		<form
-			action="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
-			method="post" id="event-all-events-search-form">
-			<div class="col-md-3 col-xs-12">
-				<div class="form-group input-group">
-					<input style="max-height: 37px !important;" type="text"
-						class="form-control"
-						placeholder="<?= $this->translate('Search')?>" required="required"
-						name="searchTerms" <?=$searchTerms?'value="'.$searchTerms.'"':''?>>
-					<span class="input-group-btn">
+                <div class="fltl" style="padding:0 0 5px 10px;">
+                    <a href="<?=$this->url('event', array('action'=>'all-events', 'page'=>1, 'month' => $nextMonth, 'year' => $nextYear))?>" id="page-all-events" title="<?=$this->translate('Next month')?>"><i class="fa fa-arrow-right"></i></a>
+                </div>
+            </div>
+
+        </div>
+
+        <form
+                action="<?=$this->url('event', array('action'=>'all-events', 'sort'=>$sort, 'page'=>1, 'order'=>$order, 'results' => $limit))?>"
+                method="post" id="event-all-events-search-form">
+
+            <div class="col-md-3 col-xs-12 top5">
+                <div class="form-group input-group">
+                    <input style="max-height: 37px !important;" type="text"
+                           class="form-control"
+                           placeholder="<?= $this->translate('Search')?>" required="required"
+                           name="searchTerms" <?=$searchTerms?'value="'.$searchTerms.'"':''?>>
+                    <span class="input-group-btn">
 						<button type="submit"
-							class="btn <?=$searchTerms?'btn-success':'btn-default'?>">
+                                class="btn <?=$searchTerms?'btn-success':'btn-default'?>">
 							<i class="fa fa-search fa-fw"></i>
-
-          <?= $this->translate('Search')?>
-
           </button>
 					</span>
-				</div>
-			</div>
-		</form>
-	</div>
-	<hr>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <div id="event-all-events-results">
+        <?php if (count($pagedEvents)):?>
 
-	<?php if (count($pagedEvents)):?>
+            <?php /** @var \DGIModule\Entity\Event $event */
+            foreach ($pagedEvents as $event):?>
 
-  <?php foreach ($pagedEvents as $event):?>
+                <?php
+                if ($event->isSession()) {
+                    $viewUrl = $this->url('session', array('action'=>'view-session', 'id'=> $event->getEventUUID()));
+                }
+                else {
+                    $viewUrl = $this->url('event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));
+                }
+                ?>
 
-	<div class="table-layout">
-		<div class="table-cell fixed-width-120">
-			<img
-				src="<?=$event->getEventImage()?$this->basePath($event->getEventImage()):$this->basePath('/img/events/noimage.png')?>"
-				width="110" height="83" title="<?=$event->getEventName()?>">
-		</div>
-		<div class="table-cell">
-			<div class="row">
-				<div class="col-md-5 col-xs-12">
-					<a
-						href="<?= $this->url('event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));?>"><span
-						class="big">
+
+
+
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-12 col-md-5 wbr">
+
+                        <div class="pull-left" style="min-width: 80px!important">
+                            <img src="<?=$event->getEventImage()?$this->basePath($event->getEventImage()):$this->basePath('/img/events/noimage.png')?>"
+                                 height="57" width="75" class="round5" title="<?=$event->getEventName()?>">
+                        </div>
+                        <div style="margin-left: 80px!important">
+                            <a
+                                    href="<?= $viewUrl?>"><span
+                                        class="big">
 
           <?=$event->getEventName()?> <?=$event->getUsr()==$user?'(owner)':''?>
 
-          </span></a> <br>
+          </span></a>
+                            <?php
+                            $now = new \DateTime();
+                            if ($event->getEventStartDate()<$now && $event->getEventEndDate()>$now):?>
+                                <span class="right5">
+								<span class="green"><i class="fa fa-circle size15em" title="<?= $this->translate('Ongoing')?>"></i>
+								</span>
+							</span>
+                            <?php endif;?>
 
-          <?php $eventDescription = preg_replace('/<[^>]*>/', ' ', $event->getEventDescription());
+                            <br>
 
-      $eventDescription = (strlen($eventDescription) > 150) ? substr($eventDescription, 0, 150) . '...' : $eventDescription;?>
+                            <?php $eventDescription = preg_replace('/<[^>]*>/', ' ', $event->getEventDescription());
 
-          <?=$eventDescription?>
+                            $eventDescription = (strlen($eventDescription) > 150) ? substr($eventDescription, 0, 150) . '...' : $eventDescription;?>
 
-        </div>
-				<div class="col-md-3 col-xs-12">
-					<span class="glyphicon glyphicon-calendar"></span> <?= $this->translate('Start Date')?>: <?=$event->getEventStartDate()->format('d/m/Y H:i')?><br>
-					<span class="glyphicon glyphicon-calendar"></span> <?= $this->translate('End Date')?>: <?=$event->getEventEndDate()->format('d/m/Y H:i')?>
+                            <?=$eventDescription?>
+                        </div>
+                    </div>
 
-        </div>
-				<div class="col-md-2 col-xs-12">
-					<i class="fa fa-map-marker"></i> <?=$event->getEventLocation()?>
+                    <?php
+                    $eventStartDate = $event->getEventStartDate();//->setTimezone(new DateTimeZone($city->getRegion()->getRegionTimezone()));
+                    $eventEndDate = $event->getEventEndDate();//->setTimezone(new DateTimeZone($city->getRegion()->getRegionTimezone()));
+                    $countryFormat = $event->getCity()->getCountry()->getCountryFormat();
+                    ?>
+                    <div class="col-xs-12 col-sm-5 col-md-3">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        <?=$this->dateFormat(
+                            $eventStartDate,
+                            IntlDateFormatter::MEDIUM, // date
+                            IntlDateFormatter::SHORT, // time
+                            $countryFormat
+                        );?>
+                        <i class="fa fa-arrow-right"></i>
+                        <?=$eventEndDate->format('d/m/Y') == $event->getEventStartDate()->format('d/m/Y')?
+                            $this->dateFormat(
+                                $eventEndDate,
+                                IntlDateFormatter::NONE, // date
+                                IntlDateFormatter::SHORT, // time
+                                $countryFormat
+                            )
+                            :
+                            $this->dateFormat(
+                                $eventEndDate,
+                                IntlDateFormatter::MEDIUM, // date
+                                IntlDateFormatter::SHORT, // time
+                                $countryFormat
+                            )?><br>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-2">
+                        <i class="fa fa-map-marker"></i> <?=$event->getCity()->getCityName()?> (<?=$event->getCity()->getCityPostalcode()?>)<br>
+                        <?=$event->getEventLocation()?>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-2 text-right text-xs-left">
+	  <span class="right5"><a
+                  href="<?= $viewUrl?>"
+                  id="event-all-events-view-attendees" title="<?=count($event->getAttendees())?> <?= $this->translate('Attendees')?>"><i class="fa fa-users size15em"></i> <span id="event-all-events-attendees-count"><?=count($event->getAttendees())?></span></a></span>
 
-        </div>
-				<div class="col-md-2 col-xs-12 text-right">
-					<a
-						href="<?= $this->url('event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));?>"
-						id="event-all-events-view-attendees"><i class="fa fa-users"></i> <span id="event-all-events-attendees-count"><?=count($event->getAttendees())?></span> <?= $this->translate('Attendees')?></a><br>     
+                        <?php if ($event->getUsr()==$user): // user is the owner?>
 
-      <?php if ($event->getUsr()==$user): // user is the owner?>
+                            <span class="right5">					<a
+                                        href="<?= $event->isSession()?$this->url('session', array('action'=>'add-edit-session', 'id'=> $event->getEventUUID())):$this->url('event', array('action'=>'edit-event', 'id'=> $event->getEventUUID()));?>"
+                                        id="event-all-events-edit" title="<?= $event->isSession()?$this->translate('Edit Session'):$this->translate('Edit Event')?>"
+                                        data-dialog-title="<?=$event->isSession()?$this->translate('Edit Session'):$this->translate('Edit Event')?>"
+                                ><i class="fa fa-pencil-square-o size15em"></i></a></span>
 
-					<a
-						href="<?= $this->url('event', array('action'=>'edit-event', 'id'=> $event->getEventUUID()));?>"
-						id="event-all-events-edit"><i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit Event')?></a><br>
+                            <?php if (!$event->getEventCanceledDate()):?>
 
-                        <?php if (!$event->getEventCanceledDate()):?>
+                                <span class="right5">
+                                    <a href="<?= $this->url('event', array('action'=>'cancel-event', 'id'=> $event->getEventUUID()));?>"
+                                       id="event-all-events-cancel"
+                                       title="<?= $event->isSession()?$this->translate('Cancel Session'):$this->translate('Cancel Event')?>"
+                                       data-dialog-title="<?=$event->isSession()?$this->translate('Cancel Session'):$this->translate('Cancel Event')?>"
+                                    ><i class="fa fa-times-circle size15em"></i></a></span>
 
-                    		<a
-						href="<?= $this->url('event', array('action'=>'cancel-event', 'id'=> $event->getEventUUID()));?>"
-						id="event-all-events-cancel"><i class="fa fa-share-square-o"></i> <?= $this->translate('Cancel Event')?></a><br>
+                            <?php endif;?>
+
+
+
+                            <span class="right5">					<a
+                                        href="<?= $this->url('event', array('action'=>'duplicate-event', 'id'=> $event->getEventUUID()));?>"
+                                        id="event-all-events-duplicate"
+                                        title="<?= $event->isSession()?$this->translate('Duplicate Session'):$this->translate('Duplicate Event')?>"
+                                        data-dialog-title="<?= $event->isSession()?$this->translate('Duplicate Session'):$this->translate('Duplicate Event')?>">
+            <img src="/img/icon-duplicate-violet.svg" width="18" class="violet"></a></span>
+
+                        <?php elseif ($user->getUsrId() && !$event->getEventCanceledDate()):?>
+                            <? $now = new \DateTime();?>
+                            <?php if ($event->getEventStartDate()>$now && $event->getEventEndDate()<$now):?>
+                                <span class="right5">
+								<span class="green"><i class="fa fa-circle size15em" title="<?= $event->isSession()?$this->translate('Session Started'):$this->translate('Event Started')?>"></i>
+								</span>
+							</span>
+                            <?php endif;?>
+
+                            <a
+                                    href="<?= $this->url('event', array('action'=>'attend-event', 'id' => $event->getEventUUID()));?>"
+                                    data-event="<?=$event->isSession()?'false':'true'?>"
+                                    id="event-all-events-attend">
+
+
+                                <?php if (!$event->hasAttendee($user)):?>
+
+                                    <i class="fa fa-check-circle-o size15em" title="<?= $event->isSession()?$this->translate('Attend Session'):$this->translate('Attend Event')?>"></i>
+
+                                <?php else:?>
+                                <i class="fa fa-times-circle size15em" title="<?= $this->translate('Cancel attendance')?>"></i><?php endif;?></a><br>
 
                         <?php endif;?>
 
-                        
+                        <?php if ($event->getEventCanceledDate()):?>
 
-                        <a
-						href="<?= $this->url('event', array('action'=>'duplicate-event', 'id'=> $event->getEventUUID()));?>"><i
-						class="fa fa-calendar-plus-o"></i> <?= $this->translate('Duplicate Event')?></a><br>
+                            <span class="red"><strong><?= $this->translate('CANCELED')?></strong></span>
 
-      <?php elseif ($user->getUsrId() && !$event->getEventCanceledDate()):?>
-
-          <a
-						href="<?= $this->url('event', array('action'=>'attend-event', 'id' => $event->getEventUUID()));?>"
-						title="<?= $this->translate('Attend Event')?>"
-						id="event-all-events-attend">
-
-              <?php if (!$event->hasAttendee($user)):?>
-
-              <i class="fa fa-check-circle-o"></i>
-
-              <?= $this->translate('Attend Event')?>
-
-              <?php else:?>
-
-              <i class="fa fa-times-circle-o"></i>
-
-              <?= $this->translate('Cancel attendance')?>	
-
-              <?php endif;?>
-
-          </a><br>
-
-      <?php endif;?>        
-
-      <?php if ($event->getEventCanceledDate()):?>
-
-      	 <span class="red"><strong><?= $this->translate('CANCELED')?></strong></span>
-
-      <?php endif;?>        
-
-        </div>
-			</div>
-		</div>
-	</div>
-	<hr>
-
-  
-
-  
-
-  <?php endforeach;?>
-
-<div class="row">
-		<div class="col-md-12">
-				<?= $paging; ?>
-			</div>
-		<!--/12-->
-	</div>
-	<!-- /row -->
+                        <?php endif;?>
+                    </div>
+                </div>
 
 
-  <?php else:?>
-  <div class="row">
-		<div class="col-md-12">
-				<?php if (!$searchTerms):?>
-            		<?=$this->translate('No events planned this month.')?>
-            	<?php else:?>
-            		<?=$this->translate('No events matching your search terms.')?>
-            	<?php endif;?>
-			</div>
-		<!--/12-->
-	</div>
-	<!-- /row -->
-	
-  <?php endif;?>
-
-  
-
-   <?php $lang = $this->plugin('translate')->getTranslator()->getLocale();?>
-
-  <script type="text/javascript">
-
-var month = ("<?=$this->translate('January')?> <?=$this->translate('February')?> <?=$this->translate('March')?> <?=$this->translate('April')?> <?=$this->translate('May')?> <?=$this->translate('June')?> <?=$this->translate('July')?> <?=$this->translate('August')?> <?=$this->translate('September')?> <?=$this->translate('October')?> <?=$this->translate('November')?> <?=$this->translate('December')?>").split(" ");
-
-	var now = new Date();
-
-$(function() {
-
-	<?php if ($month):?>
-
-	$('#event-all-events-start-month').val(month[<?=$month-1?>] + " " + <?=$year?>);
-
-	<?php else:?>
-
-	$('#event-all-events-start-month').val(month[now.getMonth()] + " " + now.getFullYear());
-
-	<?php endif;?>
-
-	eventAllEventsHandlers('<?=$lang?>');
-
-});
+                <hr>
 
 
 
-</script>
+
+
+            <?php endforeach;?>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $paging; ?>
+                </div>
+                <!--/12-->
+            </div>
+            <!-- /row -->
+
+
+        <?php else:?>
+            <div class="row">
+                <div class="col-md-12">
+                    <?php if (!$searchTerms):?>
+                        <?=$this->translate('No events planned this month.')?>
+                    <?php else:?>
+                        <?=$this->translate('No events matching your search terms.')?>
+                    <?php endif;?>
+                </div>
+                <!--/12-->
+            </div>
+            <!-- /row -->
+
+        <?php endif;?>
+    </div>
+
+
+    <?php $lang = $this->plugin('translate')->getTranslator()->getLocale();?>
+
+    <script type="text/javascript">
+
+        var month = ("<?=$this->translate('January')?> <?=$this->translate('February')?> <?=$this->translate('March')?> <?=$this->translate('April')?> <?=$this->translate('May')?> <?=$this->translate('June')?> <?=$this->translate('July')?> <?=$this->translate('August')?> <?=$this->translate('September')?> <?=$this->translate('October')?> <?=$this->translate('November')?> <?=$this->translate('December')?>").split(" ");
+
+        var now = new Date();
+
+        $(function() {
+
+            <?php if ($month):?>
+
+            $('#event-all-events-start-month').val(month[<?=$month-1?>] + " " + <?=$year?>);
+
+            <?php else:?>
+
+            $('#event-all-events-start-month').val(month[now.getMonth()] + " " + now.getFullYear());
+
+            <?php endif;?>
+
+            eventAllEventsHandlers('<?=$lang?>');
+
+        });
+
+
+
+    </script>
 </div>
-
-<!-- /event/all-events -->

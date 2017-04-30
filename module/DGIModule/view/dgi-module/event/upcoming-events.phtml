@@ -1,7 +1,6 @@
-<!-- event/upcoming-events -->
 
 <div class="panel panel-default" id="event-upcoming-events"
-	data-url="<?=$this->url('city/event', array('action'=>'upcoming-events'))?>">
+	data-url="<?=$this->url('event', array('action'=>'upcoming-events'))?>">
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-12">
@@ -24,7 +23,7 @@
  					  $eventDate = $event->getEventStartDate() < $now ? $now : $event->getEventStartDate();
  					  
 				    ?>
-							<tr>
+                    <tr>
 								<td class="agenda-date">
 									<div class="dayofweek fltl" style="min-width: 30px;">
 										<strong><?=strtoupper($eventDate->format('M'))?><br><?=$eventDate->format('Y')?></strong>
@@ -33,14 +32,19 @@
 								</td>
 								<td class="agenda-events">
 									<div class="agenda-event">
-                            <?php $eventDescription = $this->escapeHtml($event->getEventDescription()); 
+                            <?php $eventDescription = preg_replace('/<[^>]*>/', ' ', $event->getEventDescription()); 
       $eventDescription = (strlen($eventDescription) > 150) ? substr($eventDescription, 0, 150) . '...' : $eventDescription;?>
-                            <a
-											href="<?= $this->url('city/event', array('action'=>'view-event', 'id'=> $event->getEventUUID()));?>"
-											title="<?=$eventDescription?>"><span class="big"><?=$event->getEventName()?></span></a><br>
-										<!-- <span class="small"><?=strtoupper($event->getEventEndDate()->format('D'))?> <i
-											class="fa fa-clock-o"></i> <?=$event->getEventEndDate()->format('H:i')?></span> -->
-									</div>
+                            <a href="<?= $this->url($event->getEventSession()?'session':'event', array( 'id'=> $event->getEventUUID()));?>"
+											title="<?=$eventDescription?>"><span class="big"><?=$event->getEventName()?></span></a>
+
+                                        <?php if ($event->getEventStartDate()<$now && $event->getEventEndDate()>$now):?>
+                                            <span class="right5">
+								<span class="green"><i class="fa fa-circle size15em" title="<?= $this->translate('Ongoing')?>"></i>
+								</span>
+							</span>
+                                        <?php endif;?>
+
+                                    </div>
 								</td>
 							</tr>
 					<?php endforeach;?>
@@ -65,5 +69,3 @@ $(function() {
 });
 
 </script>
-
-<!-- /event/upcoming-events -->

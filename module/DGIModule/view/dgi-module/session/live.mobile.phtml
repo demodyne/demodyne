@@ -1,0 +1,350 @@
+<?= $this->doctype(); ?>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans'
+	rel='stylesheet' type='text/css'>
+<?= $this->headTitle($this->translate('Demodyne'))->setSeparator(' - ')->setAutoEscape(false) ?>
+<?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+<!-- Le styles -->
+<?= $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                        //->prependStylesheet($this->basePath() . '/css/font-awesome-4.3.0/css/font-awesome.min.css')
+                        ->appendStylesheet($this->basePath() . 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+                        //->prependStylesheet($this->basePath() . '/css/font-awesome-4.3.0/css/font-awesome-animation.css')
+                        //->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
+                        //->prependStylesheet($this->basePath() . '/css/bootstrap.min.css')
+                        ->appendStylesheet($this->basePath() . '/css/demodyne.bootstrap.css')
+                        ->appendStylesheet($this->basePath() . '/css/bootstrap-extend.min.css')
+                        //->prependStylesheet($this->basePath() . '/jqueryUI/themes/smoothness/jquery-ui.css')
+                        ->appendStylesheet('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css')
+                        ->appendStylesheet($this->basePath() . '/css/bootstrap-datepicker3.min.css')
+                        ->appendStylesheet($this->basePath() . '/js/formvalidation/formValidation.min.css')
+                        ->appendStylesheet($this->basePath() . '/fonts/web-icons/web-icons.css')
+                        ->appendStylesheet($this->basePath() . '/js/jsgrid/jsgrid.css')
+                        ->appendStylesheet($this->basePath() . '/js/jsgrid/jsgrid-theme.css')
+	                        ->appendStylesheet($this->basePath() . '/css/demodyne.m.css')
+                        ;
+                     //   ->prependStylesheet($this->basePath() . '/css/core.css');
+         ?>
+         
+<!-- Scripts -->
+<?= $this->headScript()
+            ->prependFile('https://code.jquery.com/jquery-2.2.4.min.js')
+            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+           ->appendFile('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js')
+            ->appendFile('https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js')
+            ->appendFile($this->basePath() . '/js/jquery.uitimebomb.min.js')
+            ->appendFile($this->basePath() . '/js/jquery.matchHeight-min.js')
+            ->appendFile($this->basePath() . '/js/jquery.blockUI.js')
+            ->appendFile($this->basePath() . '/js/jquery.print.js')
+            ->appendFile($this->basePath() . '/js/formvalidation/formValidation.min.js')
+            ->appendFile($this->basePath() . '/js/formvalidation/framework/bootstrap.min.js')
+            ->appendFile($this->basePath() . '/js/jsgrid/jsgrid.js')
+            ->appendFile($this->basePath() . '/js/demodyne.common.js')
+            ->appendFile($this->basePath() . '/js/demodyne.js')
+            ->appendFile($this->basePath() . '/js/jsgrid.types.js')
+            //->appendFile($this->basePath() . '/js/demodyne.work.js')
+        ; ?>
+        <?php $lang = $this->plugin('translate')->getTranslator()->getLocale()?>
+        
+        
+        
+  
+</head>
+<body>
+
+<div class="jumbotron" style="margin: 15px;">
+
+<div class="title-mobile"><?= $event->getEventPublishedDate()?$this->translate('Live Public Session'):$this->translate('Live Private Session')?>
+<span class="green"> <i class="fa fa-circle size15em"></i></span><br>
+"<?=$event->getEventName()?>"
+</div>
+
+<hr>
+<?= $this->translate('Time remaining')?>: <span id="timer" class="big green"></span>
+<hr>
+<?php if ($user == $event->getUsr()):?>
+					<a href="<?= $this->url('session', array('action'=>'prolong-session', 'id'=> $event->getEventUUID(), 'page' => 1));?>"
+                       class="no-u" id="add-more-time"
+                        data-dialog-title="<?=$this->translate('Prolong session')?>"
+                    >
+                        <span class="label label-success size1em"><i
+							class="fa fa-plus-circle"></i> <?= $this->translate('Add more time')?></span></a>
+						<?php endif;?>
+
+	<div class="title-mobile"><?= $this->translate('Ideas list')?></div>
+<?php 
+$ideaListOwnerHelp[] = $this->translate('In this list you can find your ideas and the suggested ideas.');
+$ideaListOwnerHelp[] = $this->translate('As owner of the live session, you can edit or delete the ideas. The suggested ideas must be validated prior to edition.');
+$ideaListOwnerHelp[] = $this->translate('If you want to discuss about an idea you can click on the comment icon. Don\'t forget to click again to change the discussion to general.');
+$ideaListExternalHelp[] = $this->translate('In this list you can find the validated ideas and the suggested ideas (like ideas proposed by you).');
+$ideaListExternalHelp[] = $this->translate('If you want to discuss about an idea you can click on the comment icon. Don\'t forget to click again to change the discussion to general.');
+?>
+
+<div class="panel panel-default">
+<div class="panel-body" 
+data-sort-ideas="<?= $this->url('session', array('action'=>'sort-ideas', 'id'=> $event->getEventUUID()));?>"
+data-idea-list="<?= $this->url('session', array('action'=>'idea-list', 'id'=> $event->getEventUUID()));?>"
+data-owner="<?=$event->getUsr()->getUsrUUID()?>"
+data-suggested-by="<?=$this->translate('Suggested by $user$')?>"
+data-mini-profile-title="<?=$this->translate('%username%\'s mini profile')?>"
+data-delete-idea="<?=$this->translate('Do you really want to delete this idea?')?>"
+data-no-validated-ideas="<?=$this->translate('No validated ideas yet. Use the form below to suggest an Idea.')?>"
+data-no-suggested-ideas="<?=$this->translate('No suggested ideas yet. Use the form below to suggest an Idea.')?>"
+data-validated-idea-header="<?=$this->translate('Validated Ideas')?>"
+data-suggested-idea-header="<?=$this->translate('Suggested Ideas')?>"
+data-comment-idea="<?=$this->translate('Comment this idea')?>"
+data-validate-idea="<?=$this->translate('Validate this idea')?>"
+data-session-ended="<?= $this->translate('Session ended')?>"
+>
+
+<div id="idea-list" style="z-index: 1!important"></div>
+<div id="suggested-idea-list"></div>
+
+</div>
+</div>
+
+
+
+
+	<div class="title-mobile"><?= $this->translate('New Idea')?></div>
+<?php 
+								$newIdeaHelp[] = $this->translate('To add a new Idea please enter the title below and chose the related category.');
+								$newIdeaHelp[] = $this->translate('If you wish to add a description, please add a column (:) character after title and enter the description.');
+								$newIdeaHelp[] = $this->translate("Don't forget to click save button to submit your Idea.");
+								?>
+
+
+									<form id="add-new-idea-form" method="post"
+										class="form-horizontal"
+										action="<?= $this->url('session', array('action'=>'add-idea', 'id'=> $event->getEventUUID()));?>">
+							<?php $categories = $event->getCity()->getCountry()->getMainCategories($event->getEventLevel()); $tr=0;//var_dump($categories);?>
+                   		
+                   		
+                   		
+
+                   		
+                   		                   		
+                   		                   		                   		                   		
+                   		
+                    		
+							<div class="table-layout">
+
+											<div class="table-cell  fixed-width-50">
+												<div class="dropdown" id="category-select">
+													<a href="javascript:void(0)" class="dropdown-toggle"
+														id="ideaCategoryDropdown" data-toggle="dropdown"
+														aria-expanded="true"> <img
+														src="<?= $this->basePath('files/'.$categories[0]->getCatImage())?>"
+														height="34" width="34"
+														data-id="<?= $categories[0]->getCatId()?>"
+														title="<?= $categories[0]->getCatName()?>"></a>
+													<div class="dropdown-menu"
+														aria-labelledby="ideaCategoryDropdown" role="menu" style="z-index:1000!important; margin-top: -50px!important;">
+														<table class="table">
+															<tbody>
+																<tr>
+                    		<?php $c = 7; foreach ($categories as $indexCat => $category):?>
+                    			<?php if ($indexCat % $c == 0):?>
+                    				<?php if ($indexCat / $c > 0):?>
+                    					</tr>
+                    					<?php if ($indexCat / $c<count($categories) / $c):?>
+                        				<tr val="<?=$indexCat?>">
+                        				<?php endif;?>
+                					<?php endif;?>
+                    				
+                				<?php endif;?>
+                					<td style="padding: 3px!important; border-top: none!important; width: 40px!important;"><a
+																		class="dropdown-item"
+																		style="margin: 0 !important; padding: 0 !important;"
+																		href="javascript:void(0)" role="menuitem"
+																		id="category-menu-item"
+																		data-category-id="<?=$category->getCatId()?>"> <img
+																			src="<?= $this->basePath('files/'.$category->getCatImage())?>"
+																			height="34" width="34"
+																			title="<?= $category->getCatName()?>"
+																			data-id="<?= $category->getCatId()?>"
+																			data-title="<?= $category->getCatName()?>"></a></td>
+                				<?php if ($category==end($categories) && $indexCat % $c<$c-1):?>
+                					<?php for($td=$c-1-$indexCat % $c;$td>0;$td--):?>
+            							<td style="border-top: none !important"><a
+																		class="dropdown-item" href="javascript:void(0)"
+																		role="menuitem"></a></td>
+            						<?php endfor;?>	
+                				<?php endif;?>
+            				<?php endforeach;?>
+            				
+            				</tr>
+															</tbody>
+														</table>
+														
+													</div>
+												</div>
+											</div>
+											<div class="table-cell form-group">
+												<input style="width: 75%; margin-left: 20px;" name="ideaTitle" id="idea-title" 
+													class="form-control form-control-lg input-group"
+													placeholder="<?= $this->translate('Title : Description')?>"
+													data-empty-error="<?=$this->translate('Please provide at least the <b>title</b> of the Idea')?>"
+													data-regexp-error="<span>
+													<?=$this->translate('Please provide the Idea by <b>title<i>:description</i></b>')?></span>"
+												> <input type="hidden" name="ideaCategory"
+													id="ideaCategory" value="<?=$categories[0]->getCatId()?>">
+											</div>
+
+
+											&nbsp;
+											<div class="table-cell  fixed-width-40">
+
+												<button type="button" class="btn btn-orange"
+													id="add-new-idea-submit-button">
+													<i class="fa fa-plus-circle"></i> <span><?= $event->getUsr()==$user?$this->translate('Add'):$this->translate('Suggest')?></span>
+												</button>
+											</div>
+										</div>
+									</form>
+
+
+
+
+<div><?=$this->chat?></div>
+
+							<hr>
+
+			<div class="row top10 bot20">
+				<div class="col-md-12 text-center">
+					<?php if ($user == $event->getUsr()):?>
+					<button type="button" class="btn btn-orange"
+						id="session-live-invite"
+						data-dialog-title="<?= $this->translate('Add attendees')?>"
+						data-url="<?= $this->url('event', array('action'=>'invite-attendees', 'id' => $event->getEventUUID()));?>">
+						<i class="fa fa-plus-circle size15em"></i> <?= $this->translate('Add attendees')?>
+                	</button>
+					<button type="button" 
+						data-url="<?= $this->url('session', array('action'=>'end-session', 'id'=> $event->getEventUUID()));?>"
+						data-dialog-title="<?= $this->translate('End session')?>"
+						class="btn btn-success" id="session-live-close-button"> <i
+						class="fa fa-share-square-o"></i> <?= $this->translate('End session')?>
+					</button>
+					<?php endif;?>
+					<a href="<?= $this->url($_SESSION['level']['level']);?>" class="btn btn-default">
+						<i class="fa fa-ban"></i> <?= $this->translate('Exit session')?></a>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+	<div class="container">
+		<footer>
+			<div class="row graylight">
+				<div class="col-xs-12 text-center bot10">&copy; 2015 - <?= date('Y') ?>
+        <?= $this->translate('by') ?>
+        <a href="<?= $this->url('home')?>"><span class="orange">DEMODYNE</span></a>. <?= $this->translate('All rights reserved.') ?>
+      </div>
+				<div class="col-xs-12 text-center">
+					<span class="right20"> <a href="https://www.facebook.com/demodyne"
+						target="_blank"><i class="fa fa-facebook size15em orange"></i></a>&nbsp;&nbsp;
+						<a href="https://www.linkedin.com/company/demodyne"
+						target="_blank"><i class="fa fa-linkedin size15em orange"></i></a>&nbsp;&nbsp;
+						<a href="https://twitter.com/demodyne" target="_blank"><i
+							class="fa fa-twitter size15em orange"></i></a>&nbsp;
+					</span> <span class="right20"> </span> <span class="right20"><a
+						href="<?= $this->url('home/pages', array('page'=>'legal'))?>"><span
+							class="orange"><?= $this->translate('Legal') ?></span></a></span>
+		<?php if ($lang=='en')
+                    $link = 'https://forum.demodyne.org/showthread.php?tid=4'; 
+                elseif ($lang=='fr')
+                    $link = 'https://forum.demodyne.org/showthread.php?tid=8';
+                elseif ($lang=='ro')
+                    $link = 'https://forum.demodyne.org/showthread.php?tid=26';
+                    
+              ?>
+					<a href="<?=$link?>" target="_blank"><span class="orange"><?= $this->translate('Terms & Conditions') ?></span></a>
+
+				</div>
+			</div>
+		</footer>
+	</div>
+
+<?php 
+$eventStartDate = $event->getEventStartDate()->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+$eventEndDate = $event->getEventEndDate()->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+?>
+
+
+	<!-- /container -->
+	
+
+
+<?= $this->inlineScript() ?>
+
+
+		<script>
+		"use strict";
+		jQuery(function($){
+
+			var timer = $.uiTimeBomb({
+				date:new Date( <?=$event->getEventEndDate()->format('U') * 1000?> )
+				,localTime:false
+				,onStart:function(){
+					console.log("Start");
+				}
+				,onComplete:function(){
+                    modalDialog('session-ended-dialog', '<?=$this->translate('The Session has ended')?>',
+                        '<?= $this->url('session', array('action'=>'session-ended', 'id'=> $event->getEventUUID()));?>', 'modal-md', false);
+
+				}
+				,onUpdate:function(ui){
+					var data = ui.get("hours");
+					var str = ui.supplant("{h}h, {i}m",data);
+					var el = document.getElementById("timer");
+					el.innerHTML = str;
+					<? if ($user==$event->getUsr()):?>
+					if (data.i===10 && !data.y && !data.m && !data.d && !data.h && !data.s) {
+                        modalDialog('prolong-session-dialog', '<?=$this->translate('The Session will end soon')?>',
+                            '<?= $this->url('session', array('action'=>'prolong-session', 'id'=> $event->getEventUUID()));?>', 'modal-md', true
+                            );
+                    }
+                    <?else:?>
+                    if (data.i===5 && !data.y && !data.m && !data.d && !data.h && !data.s) {
+                        modalDialog('end-session-dialog', '<?=$this->translate('The Session will end soon')?>',
+                            '<?= $this->url('session', array('action' => 'prolong-session', 'id' => $event->getEventUUID()));?>', 'modal-md', true);
+                    }
+                    <?endif;?>
+				}
+			});
+
+            sessionLiveHandlers("<?= $user->getUsrUUID()?>", timer);
+
+		});
+		</script>
+
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>&#35;R&eacute;f&eacute;rendumPartout avec DEMODYNE</title>
+<link rel="icon" href="/referendumpartout/images/favicon.ico" type="image/x-icon">
+
+<!-- Bootstrap -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+<link rel="stylesheet" href="/referendumpartout/css/custom.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed --> 
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body link="#0000ff" dir="ltr" lang="fr-FR">
+
+
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="jumbotron bluebg white marianne">
+		  
+		  <div class="text-center">
+		  <h2 style="margin-bottom: 1px!important;">Initiative e-Referendum et e-Constituante</h2>
+		  <h3 style="margin-top: 1px!important;">Page de vote</h3>
+		  
+		  <div class="top20">
+		  	avec la plateforme en ligne 
+        <a href="https://www.demodyne.org" target="_blank"><img src="/referendumpartout/images/dsimplu-text.svg" height="30" title="Demodyne"></a>
+		  </div>
+		  </div>
+
+
+       <div class="bluebox topm20">
+
+		   <p align="center">
+			   <div class="alert alert-info"><h3 style="margin: 0!important;">
+        &quot;APPROUVEZ-VOUS LE PROJET D'INSTAURER UNE PREMIÈRE DÉMOCRATIE DE FRANCE DANS LAQUELLE LES CITOYENS VOTENT EUX-MÊMES LES LOIS ET ÉLABORENT LE PROGRAMME DES FRANÇAIS ?&quot;</h3>
+		   </div></p>
+
+       </div>
+       
+              
+       <div class="row top20">
+          <div class="col-lg-12 text-center">
+<h3>
+    Merci pour votre vote !
+    <br>
+    <br>
+    <span style="color: orange;">Total de votants : <?=$voteResults['total']?></span>
+    <br>
+    <br>
+</h3>
+           
+           
+<div class="row justify-content-md-center">
+    <div class="col col-lg-2">
+    </div>
+    <div class="col-12 col-md-auto">
+     <h3>
+     	<span class="alert alert-success">OUI: <?=round(($voteResults['oui'] / $voteResults['total'])*100, 0, PHP_ROUND_HALF_UP)?>%</span>
+     	&nbsp;
+     	<span class="alert alert-danger">NON: <?=round(($voteResults['non'] / $voteResults['total'])*100, 0, PHP_ROUND_HALF_DOWN)?>%</span>
+     </h3>
+    </div>
+    <div class="col col-lg-2">
+    </div>
+  </div>
+
+           
+
+          </div>
+        </div>
+
+
+          <div class="row top20">
+              <div class="col-lg-12 text-center">
+                  <h4>
+                      Votre vote pour le Référendum sur la 1ère Démocratie de France a bien
+                      été pris en compte.
+                      Vous pouvez à présent poursuivre vers Demodyne pour expérimenter la
+                      co-construction de programme directement par les citoyens.</h4>
+                  <br>
+                  <a href="<?=$this->url('home', [], array('force_canonical' => true))?>" class="btn btn-success btn-lg">Continuer</a>
+              </div>
+          </div>
+
+
+
+
+
+      </div><!--/j-->
+    </div>
+  </div>
+</div>
+
+
+
+
+	
+
+
+<hr>
+
+<div class="container">
+  <div class="row">
+<div class="col-lg-12 text-center">
+     <a href="https://www.demodyne.org" target="_blank"><img src="/referendumpartout/images/dsimplu-text.svg" height="50" title="Demodyne"></a><br>
+      <span style="padding-left: 22px;"><a href="mailto:support@demodyne.org">support@demodyne.org</a></span>
+	<p><br></p>
+    <a href="https://www.facebook.com/demodyne" target="_blank"><i class="fa fa-facebook fa-2x orange"></i></a>&nbsp;&nbsp;&nbsp;
+	<a href="https://www.linkedin.com/company/demodyne" target="_blank"><i class="fa fa-linkedin fa-2x orange"></i></a>&nbsp;&nbsp;&nbsp;
+	<a href="https://twitter.com/demodyne" target="_blank"><i class="fa fa-twitter fa-2x orange"></i></a>
+       </div>
+    </div>
+    </div>
+
+  <hr>
+
+ <footer class="text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <p>© 2017 par DEMODYNE. Tous droits réservés.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

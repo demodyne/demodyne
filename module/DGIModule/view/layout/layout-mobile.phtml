@@ -1,0 +1,255 @@
+<?php
+/** @var \DGIModule\Entity\User $user */
+$user = $this->identity();
+?>
+
+<nav id="menu">
+		<ul>
+		<li>
+            <form action="<?=$this->url('search', array('action'=>'reset-search'))?>" id="layout-search-form" method="post">
+				<span class="input-group"><br>
+     <span class="input-group-btn" style="float: left; padding-left: 20px;">
+     <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+     </span>	
+				<input type="text" class="form-control" name="searchKeywords"  id="layout-search-keywords" required="required" placeholder="<?= $this->translate('Search for...'); ?>" style="float: left; margin-left: 35px; height: 37px; max-width: 200px;">
+				</span>
+				<!-- /input-group -->
+            </form>
+			</li>
+			<li><a href="/"><i class="fa fa-home violetlink"></i> <?= $this->translate('Home'); ?></a>
+			</li>
+			<li><a href="<?=$this->url('browse', ['action'=> 'browse-dialog'])?>"
+                       data-dialog-title="<?=$this->translate('Browse Demodyne')?>"
+                       id="layout-browse"><i class="fa fa-globe violetlink" aria-hidden="true"></i> <?= $this->translate('Browse'); ?></a>
+			</li>
+			<?php if ($user):?>
+            <li><span><img src="<?= $this->basePath('img/icon-workspace-violet.svg') ?>" width="16"> <?= $this->translate('Workspace'); ?></span>
+				<ul><br>
+					<li><a href="<?=$this->url('user/workspace')?>#inbox"><i class="fa fa-envelope-o violetlink"></i> <?= $this->translate('My Inbox'); ?> <span class="green">(<?=$_SESSION['unread']?>)</span></a>
+					</li>
+					<li><a href="<?=$this->url('user/workspace')?>#mycontacts"><i class="fa fa-book violetlink"></i> <?= $this->translate('My Contacts'); ?></a>
+					</li>
+					<li><a href="<?=$this->url('user/workspace')?>#favorites"><i class="fa fa-heart-o violetlink"></i> <?= $this->translate('My Favorites'); ?></a>
+					</li>
+					<li><a href="<?=$this->url('user/workspace')?>#myprop2"><i class="fa fa-bullhorn violetlink"></i> <?= $this->translate('My Proposals'); ?></a>
+					</li>
+					<li><a href="<?=$this->url('user/workspace')?>#myprog"><img src="/img/icon-programme-violet.svg" width="20"> <?= $this->translate('My Programs'); ?></a>
+					</li>
+					<li><a href="<?=$this->url('user/workspace')?>#my-sessions"><i class="fa fa-users violetlink"></i> <?= $this->translate('My Sessions'); ?></a>
+					</li>
+				</ul>
+			</li>
+			<li><span><a href=""><i class="fa fa-pencil-square-o violetlink"></i> <?= $this->translate('Profile & Settings'); ?></a></span>
+				<ul><br>
+					<li><a target="_parent" href="<?=$this->url('user/profile', ['action'=>'user-profile'], array('force_canonical' => true))?>#profile"
+                        id="menu-profile"><i class="fa fa-user violetlink" title="Profile"></i> <?= $this->translate('Profile'); ?></a>
+					</li>
+					<li><a target="_parent" href="<?=$this->url('user/profile', ['action'=>'user-profile'], array('force_canonical' => true))?>#photo"
+                           id="menu-profile"><i class="fa fa-camera violetlink"></i> <?= $this->translate('Picture'); ?></a>
+					</li>
+					<li><a target="_parent" href="<?=$this->url('user/profile', ['action'=>'user-profile'], array('force_canonical' => true))?>#account"
+                           id="menu-profile"><i class="fa fa-cog violetlink"></i> <?= $this->translate('Account Settings'); ?></a>
+					</li>
+					<li><a target="_parent" href="<?=$this->url('user/profile', ['action'=>'user-profile'], array('force_canonical' => true))?>#mailing"
+                           id="menu-profile"><i class="fa fa-paper-plane-o violetlink"></i> <?= $this->translate('Mailing settings'); ?></a>
+					</li>
+					<li><a target="_parent" href="<?=$this->url('user/profile', ['action'=>'user-profile'], array('force_canonical' => true))?>#ratings"
+                           id="menu-profile"><i class="fa fa-star-half-o violetlink"></i> <?= $this->translate('Activity'); ?></a>
+					</li>
+				</ul>
+			</li>
+            <?php endif;?>
+			<li><span><a href=""><img src="<?= $this->basePath('img/icon-demodyne-violet.svg') ?>" width="16"> Demodyne</a></span>
+				<ul><br>
+<!--					<li><a href=""><i class="fa fa-graduation-cap"></i> --><?//= $this->translate('Academy'); ?><!--</a>-->
+<!--					</li>-->
+					<li><a href="<?=$this->url('blog', ['action'=>'articles'])?>"><i class="fa fa-coffee violetlink"></i> <?= $this->translate('Blog'); ?></a>
+					</li>
+
+                    <?php
+                    $lang = $this->plugin('translate')->getTranslator()->getLocale();
+                    if ($lang=='fr') {
+                        $forumLink = 'https://forum.demodyne.org';
+                    }
+                    elseif ($lang=='ro') {
+                        $forumLink = 'https://forum.demodyne.org/forumdisplay.php?fid=12';
+                    }
+                    else {
+                        $forumLink = 'https://forum.demodyne.org';
+                    }
+                    ?>
+
+					<li><a href="<?=$forumLink?>"><i class="fa fa-comments-o violetlink"></i> <?= $this->translate('Forum'); ?></a>
+					</li>
+					<li><a href="<?=$this->url('home/pages', ['page'=>'about']);?>"><i class="fa fa-info-circle violetlink"></i> <?= $this->translate('About us'); ?></a>
+					</li>
+					<li><a href="<?=$this->url('home/pages', ['page'=>'support']);?>"><i class="fa fa-rocket violetlink"></i> <?= $this->translate('Support us'); ?></a>
+					</li>
+					<li><a href="<?= $this->url('home/pages', array('page'=>'legal'))?>"><?= $this->translate('Legal'); ?></a>
+					</li>
+					<li><a href="<?= $this->url('home/pages', array('page'=>'terms'))?>"><?= $this->translate('Terms & Conditions'); ?></a>
+					</li>
+				</ul>
+			</li>
+
+            <?php if ($user):?>
+            <li><a href="<?= $this->url('home/login', array( 'action' => 'logout'));?>">
+				<i class="fa fa-sign-out violetlink"></i> <?= $this->translate('Logout'); ?></a>
+			</li>
+           <?php else:?>
+           <li><a href="<?= $this->url('home/login');?>"><i class="fa fa-sign-in violetlink"></i> <?= $this->translate('Login'); ?></a></li>
+           <li><a id="homepage-user-registration" href="<?= $this->url('home/user-register');?>" data-dialog-title="<?=$this->translate('Register as Citizen on Demodyne')?>"><i class="fa fa-pencil-square-o violetlink"></i> <?= $this->translate('Register'); ?></a></li>
+            <?php endif;?>
+
+        </ul>
+	</nav>
+
+
+
+
+
+
+
+
+	<div id="page">
+		<div class="header">
+            <a href="/"><img src="<?= $this->basePath('img/dsimplu.svg') ?>" alt="" width="30" class="bot5"> <span class="white">DEMODYNE</span></a>
+			<a href="#menu" class="menutop"><span></span></a>
+            <?php if ($user):?>
+            <span class="fltr right10"><a href="<?=$this->url('user/workspace')?>#inbox" class="white" id="layout-unread-messages"><i class="fa fa-envelope-o size15em"></i> <?=$_SESSION['unread']?></a></span>
+            <?php endif;?>
+		</div>
+        
+
+        <?php
+        /** @var \DGIModule\Entity\City $city */
+        $city = null;
+        if (isset($_SESSION['level']) && isset($_SESSION['level']['city'])) {
+            $city = $this->getHelperPluginManager()->getServiceLocator()->get('doctrine.entitymanager.orm_default')->getRepository('DGIModule\Entity\City')->findOneBy(['cityId'=>$_SESSION['level']['city']]);
+        }
+        ?>
+
+
+        <?php if ($city):?>
+<!-- LEVEL -->
+		<div>
+			<ul class="nav nav-tabs-mobile dunga-levels" id="levelTabs">
+                <li <?=isset($_SESSION['level'])&&$_SESSION['level']['level']=='country'?'class="active"':''?>>
+                    <a href="<?=$this->url('browse', ['country'=> $city->getCountry()->getCountryName()])?>"><img src="/img/flags/<?=str_replace(' ', '-', ucfirst($city->getCountry()->getCountryName()))?>.png" style="padding-bottom: 5px;" width="20"> <span class="alb"><?=$city->getCountry()->getCountryCode()?></span></a>
+                </li>
+                <?php if (isset($_SESSION['level'])&&$_SESSION['level']['levelValue']<=$this->configItem('demodyne.level.region') ||
+                    ($user && !$user->isAdministration() && $city->getRegion() === $user->getCity()->getRegion()) ||
+                    ($user && $user->isAdministration() && ($city===$user->getAdmin()->getAdminCity() || $city->getRegion()===$user->getAdmin()->getAdminRegion()))):?>
+                    <li <?=isset($_SESSION['level'])&&$_SESSION['level']['level']=='region'?'class="active"':''?>>
+                        <a href="<?=$this->url('browse', ['country'=> $city->getCountry()->getCountryName(), 'region' => $city->getRegion()->getRegionName()])?>"> <span class="alb"><?=$city->getRegion()->getRegionName()?></span></a>
+                    </li>
+                    <?php if (isset($_SESSION['level'])&&$_SESSION['level']['levelValue']<=$this->configItem('demodyne.level.city') ||
+                        ($user && !$user->isAdministration() && $city === $user->getCity()) ||
+                        ($user && $user->isAdministration() && ($city===$user->getAdmin()->getAdminCity()))):?>
+                        <li <?=isset($_SESSION['level'])&&$_SESSION['level']['level']=='city'?'class="active"':''?>>
+                            <a href="<?=$this->url('browse', ['country'=> $city->getCountry()->getCountryName(),
+                                'region' => $city->getRegion()->getRegionName(),
+                                'postalcode' => $city->getCityPostalcode(),
+                                'cityname' => $city->getCityName()
+                            ])?>">
+                                <span class="alb"><?=$city->getCityName()?></span></a>
+                        </li>
+                    <?php endif;?>
+                    <?php if ($user && $user->getUsrlId() == $this->configItem('demodyne.account.type.partner')):?>
+                        <li><a href="<?= $this->url('partner/dashboard') ?>">
+                                <span class="alb"><?= $this->translate('Dashboard');?></span>
+                            </a></li>
+                    <?php endif;?>
+                <?php endif;?>
+
+
+			</ul>
+		</div>
+<!-- /LEVEL -->
+        <?php endif;?>
+
+    </div>
+
+
+
+        <script type="text/javascript">
+//            $( function () {
+//                $( '#menu' ).mmenu({
+//                    "navbar":
+//                        {
+//                           'title': 'test'
+//                        }
+//
+//                });
+//            } );
+
+
+
+$(function() {
+    $("#menu")
+        .mmenu({
+            navbar: {
+                title: "<?= $this->translate('Hi'); ?> <?=$user?$user->getUsrName():'there'?>!"
+            },
+            navbars: [{
+				content: ["prev", "title"]
+			}, {	
+                content: ['<img src="<?=$user?$this->basePath($user->getUsrPicture()):$this->basePath('/img/avatar/avatar.png') ?>" />'],
+                height: 2
+//            }, {
+//                content: ['<a href="#/email" class="fa fa-envelope"></a>', '<a href="#/twitter" class="fa fa-twitter"></a>', '<a href="#/facebook" class="fa fa-facebook"></a>']
+            }],
+//            counters: true,
+            extensions: {
+                "all": ["effect-menu-slide"],
+//                "(min-width: 650px)": ["widescreen"]
+            }
+        }, {
+        }).on( 'click',
+        'a#menu-profile',
+        function() {
+            API.close();
+//            console.log($(this).attr('href'));
+//            window.location.href = $(this).attr('href');
+//            location.reload();
+//            return false;
+        }
+    );
+    var API = $("#menu").data( "mmenu" );
+
+});
+
+
+        </script>
+        
+        
+
+        
+
+<style type="text/css">
+    .mm-navbar img {
+        /*background: #fb0; width: 50px; height: 50px; margin: 0 auto; padding: 4px 2px 0; border-radius: 50px; border: 1px solid #fb0; position: relative; top: 10px;*/
+        width: 80px; margin: 0 auto; padding: 4px 2px 0; border-radius: 50px; top: 10px;
+    }
+    .mm-navbar-size-2 {
+        height: 90px;
+    }
+    /*.header { background: #fb0; }*/
+    .mm-menu { background: #fff7ef; }
+    .mm-listview .fa { color: rgba( 0, 0, 0, 0.3 ); }
+    .mm-navbar .fa { font-size: 18px; }
+    /*.fa-envelope { color: #e34545 !important; }
+    .fa-twitter { color: #5bc5ff !important; }
+    .fa-facebook { color: #3a5795 !important; }*/
+</style>
+
+<style type="text/css">
+    /*@media all and (min-width: 650px) {*/
+        /*a[href="#menu"] {*/
+            /*display: none;*/
+        /*}*/
+        /*.content {*/
+            /*background: none;*/
+        /*}*/
+    /*}*/
+</style>

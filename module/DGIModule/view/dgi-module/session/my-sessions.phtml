@@ -1,0 +1,67 @@
+
+
+<div id="session-my-sessions"
+	data-add-session="<?=$this->translate('Add New Session')?>"
+	data-url="<?=$this->url('session', array('action'=>'my-sessions'))?>">
+	<div class="row">
+		<div class="col-md-8 top5">
+		<?php if ($user):?>
+			<button
+				data-href="<?= $this->url('session', array('action'=>'add-edit-session')); ?>"
+				data-dialog-title="<?=$this->translate('Create New Session')?>"
+				class="btn btn-orange" id="session-my-sessions-add-new-session">
+				<i class="fa fa-plus-circle"></i> <?= $this->translate('Create Session')?>
+			</button>
+			<?php else:?>
+                <?= $this->partial('partial/please-register-button.phtml', ['text' => '<i class="fa fa-plus-circle"></i> '.$this->translate('Create Session')]); ?>
+			<?php endif;?>
+			<?= sprintf($this->translate('You have <span class="badge">%d</span> not completed Sessions and <span class="badge">%d</span> completed Sessions'), $countNotCompletedSessions, $countCompletedSessions)?>
+
+
+
+		</div>
+		<div class="col-md-4 top5">
+			<form
+				action="<?=$this->url('session', array('action'=>'my-sessions'))?>"
+				method="post" id="session-my-sessions-search-form">
+
+					<div class="form-group input-group">
+						<input style="max-height: 37px !important;" type="text"
+							class="form-control"
+							placeholder="<?= $this->translate('Search')?>"
+							required="required" name="searchTerms"
+							<?=$searchTerms?'value="'.$searchTerms.'"':''?>> <span
+							class="input-group-btn ">
+							<button type="submit"
+								class="btn <?=$searchTerms?'btn-success':'btn-default'?>">
+								<i class="fa fa-search fa-fw"></i>
+          </button>
+						</span>
+					</div>
+
+			</form>
+		</div>
+	</div>
+	<hr>
+
+
+	<div class="row">
+		<div class="col-md-12"><?= $this->sessionsSection ?></div>
+	</div>
+
+
+
+	<?php $lang = $this->plugin('translate')->getTranslator()->getLocale();?>
+	<script type="text/javascript">
+
+
+
+$(function() {
+		sessionMySessionsHandlers('<?=$lang?>');
+
+});
+
+
+
+</script>
+</div>

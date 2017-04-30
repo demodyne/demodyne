@@ -1,0 +1,102 @@
+
+<?php 
+
+$levels = $this->configItem('demodyne.level');
+$levelName = '';
+if (array_search($program->getProgLevel(), $levels)=='city') {
+    $levelName = $program->getCity()->getFullCity()?$program->getCity()->getFullCity()->getCityName():$program->getCity()->getCityName();
+}
+elseif (array_search($program->getProgLevel(), $levels)=='region') {
+    $levelName = $program->getCity()->getRegion()->getRegionName();
+}
+elseif (array_search($program->getProgLevel(), $levels)=='country') {
+    $levelName = $program->getCity()->getCountry()->getCountryName();
+}
+
+
+?>
+
+<?= $this->partial('partial/page-header.phtml', ['title' => '<span class="left10"><img src="/img/icon-programme-33.svg" width="20"></span>  '.sprintf($this->translate('View Program for %s'), $levelName)])?>
+
+
+<div class="jumbotron-mobile"
+	style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+    data-url="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
+	id="program-view-program">
+	<div class="row equal">
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="title-mobile bot10"><?= $program->getProgName() ?></div>
+							<p><div class="desc"><?= $program->getProgDescription() ?></div></p>
+							
+							<div class="row"><div class="col-md-12">
+							<?= $this->partial('partial/social-links.phtml', [
+        					    'type' => 'program',
+        					    'url' => $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()), array('force_canonical' => true)),
+        					    'title' => $program->getProgName(),
+        					    'description' => $program->getProgDescription()
+        					]); ?> 
+                            </div>
+                            </div>
+                            <hr>
+							
+							<div class="row">
+								<div class="col-xs-12">
+<?= $this->translate('Published by')?> <a
+										href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$program->getUsr()->getUsrUUID()));?>"
+										id="viewProfile"><span class="badge"><?= $program->getUsr()->getUsrName() ?></span></a>
+									<i class="fa fa-clock-o"></i> <?= $program->getProgCreatedDate()->format('d/m/Y') ?>
+</div>
+							</div>
+                            <hr>
+							<?php if ($user==$program->getUsr()):?>
+							<div class="row">
+								<div class="col-md-12">
+									<button type="button"
+										class="btn btn-orange"
+										id="program-view-program-edit"
+										data-url="<?= $this->url('program', array('action' => 'edit-program', 'id'=>$program->getProgUUID()));?>"
+										data-dialog-title="<?=sprintf($this->translate('Edit my Program for %s'), $levelName)?>"><i class="fa fa-floppy-o"></i> <?=$this->translate('Edit')?></button>
+									<button type="button" class="btn btn-danger"
+                    					id="program-view-program-delete"
+                    					data-dialog-title="<?=sprintf($this->translate('Delete my Program for %s'), $levelName)?>"
+                    					data-url="<?= $this->url('program', array('action'=>'delete-program', 'id'=>$program->getProgUUID()));?>">
+                    					<i class="fa fa-trash"></i> <?= $this->translate('Delete')?></button>
+								</div>
+							</div>
+							<?php endif;?>
+							<!--/r-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--/panel-->
+		</div>
+		<!-- /6 -->
+		<div class="col-md-6">
+			<div class="panel panel-default">
+				<div class="panel-body">
+<?= $this->proposalsSection?>
+ </div>
+			</div>
+			<!--/panel-->
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- row -->
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+      <?= $this->commentsSection;?>
+    </div>
+	</div>
+	<!--/r-->
+</div>
+<!-- /j -->
+	<script>
+		$(function () {
+			programViewProgramHandlers();
+		});
+	</script>

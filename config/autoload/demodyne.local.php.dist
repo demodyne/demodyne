@@ -22,5 +22,9 @@ return [
         'email' => [
             'validation' => 'validation@demodyne.org'
         ]
+    ],
+    'facebook' => [
+        'app_id' => '123456789012345',
+        'app_secret' => '12345678901234567890123456789012'
     ]
 ];

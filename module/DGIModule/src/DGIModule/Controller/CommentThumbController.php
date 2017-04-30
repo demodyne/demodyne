@@ -1,42 +1,51 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Controller;
 
+use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
-use DGIModule\Entity\Comment;
 use DGIModule\Entity\CommentThumb;
+use Doctrine\ORM\EntityManager;
 
 class CommentThumbController extends AbstractActionController
 {
-    
+    protected $entityManager;
+
+    public function __construct(
+        EntityManager $entityManager
+    )
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    /// @todo move this action to CommentController
     public function addAction()
     {
-        $request = $this->getRequest();
         $response = $this->getResponse();
         
         $user = $this->identity();
         
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
         $type = $this->params()->fromRoute('type', 'down');
         $UUID = $this->params()->fromRoute('id', 0);
-        
-        $comment = $entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(['comUUID'=>$UUID]); 
+
+        $comment = $this->entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(['comUUID'=>$UUID]); 
         
         $success = 0;
         
-        if ($comment==NULL) return $response->setContent(\Zend\Json\Json::encode($success)); // TODO: do nothing and return number 0
+        if ($comment==NULL) {
+            return $response->setContent(Json::encode($success));
+        }
         
         // search if thumb already registered
-        $commentThumb = $entityManager->getRepository('DGIModule\Entity\CommentThumb')->findOneBy(['com'=>$comment, 'usr'=>$user]); 
+        $commentThumb = $this->entityManager->getRepository('DGIModule\Entity\CommentThumb')->findOneBy(['com'=>$comment, 'usr'=>$user]); 
         
         if ($commentThumb) {
-            return $response->setContent(\Zend\Json\Json::encode($success));
+            return $response->setContent(Json::encode($success));
         }
         else {
         
@@ -46,16 +55,13 @@ class CommentThumbController extends AbstractActionController
                          ->setUsr($user)
                          ->setUp(($type=='up')?1:0);
         
-                
-            $entityManager->persist($commentThumb);
-            $entityManager->flush();
+            $this->entityManager->persist($commentThumb);
+            $this->entityManager->flush();
             
             $success = 1;
             
-            return $response->setContent(\Zend\Json\Json::encode($success));
-            
+            return $response->setContent(Json::encode($success));
         }
-                
     }
     
 }

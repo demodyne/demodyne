@@ -1,14 +1,16 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use DGIModule\Entity\Country;
+use DGIModule\Entity\Region;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * City
@@ -88,28 +90,28 @@ class City
      *
      * @ORM\Column(name="city_latitude", type="decimal", precision=10, scale=0, nullable=true)
      */
-    private $cityLatitude = '0';
+    private $cityLatitude = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="city_longitude", type="decimal", precision=10, scale=0, nullable=true)
      */
-    private $cityLongitude = '0';
+    private $cityLongitude = 0;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="accuracy", type="integer", nullable=true)
      */
-    private $accuracy = '1';
+    private $accuracy = 1;
 
     /**
      * @var integer
      *
      * @ORM\Column(name="city_population", type="integer", nullable=true)
      */
-    private $cityPopulation = 0;
+    private $cityPopulation =0;
     
     /**
      * @var string
@@ -123,10 +125,10 @@ class City
      *
      * @ORM\Column(name="district_code", type="integer", nullable=true)
      */
-    private $districtCode = '0';
+    private $districtCode = 0;
 
     /**
-     * @var \DGIModule\Entity\Country
+     * @var Country
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Country")
      * @ORM\JoinColumns({
@@ -156,7 +158,7 @@ class City
     private $proposals;
 
     /**
-     * @var \DGIModule\Entity\Region
+     * @var Region
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Region")
      * @ORM\JoinColumns({
@@ -164,6 +166,16 @@ class City
      * })
      */
     private $region;
+    
+    /**
+     * @var \DGIModule\Entity\Department
+     *
+     * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Department")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="dep_id", referencedColumnName="dep_id")
+     * })
+     */
+    private $dep;
 
     
     public function __construct() {
@@ -519,11 +531,11 @@ class City
     /**
      * Set country
      *
-     * @param \DGIModule\Entity\Country $country
+     * @param Country $country
      *
      * @return City
      */
-    public function setCountry(\DGIModule\Entity\Country $country = null)
+    public function setCountry(Country $country = null)
     {
         $this->country = $country;
 
@@ -533,7 +545,7 @@ class City
     /**
      * Get country
      *
-     * @return \DGIModule\Entity\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -547,7 +559,7 @@ class City
      *
      * @return City
      */
-    public function setFullCity(\DGIModule\Entity\City $fullCity = null)
+    public function setFullCity(City $fullCity = null)
     {
         $this->fullCity = $fullCity;
     
@@ -571,11 +583,11 @@ class City
     /**
      * Set region
      *
-     * @param \DGIModule\Entity\Region $region
+     * @param Region $region
      *
-     * @return DgiCities
+     * @return City
      */
-    public function setRegion(\DGIModule\Entity\Region $region = null)
+    public function setRegion(Region $region = null)
     {
         $this->region = $region;
     
@@ -585,10 +597,31 @@ class City
     /**
      * Get region
      *
-     * @return \DGIModule\Entity\Region
+     * @return Region
      */
     public function getRegion()
     {
         return $this->region;
     }
+    /**
+     * @return Department $department
+     */
+    public function getDep()
+    {
+        return $this->dep;
+    }
+
+    /**
+     * @param \DGIModule\Entity\Department $department
+     */
+    public function setDep($department)
+    {
+        $this->dep = $department;
+    }
+
+    public function __toString()
+    {
+        return $this->cityName;
+    }
+
 }

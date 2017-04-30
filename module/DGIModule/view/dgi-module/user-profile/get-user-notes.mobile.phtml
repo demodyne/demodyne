@@ -1,0 +1,55 @@
+<div class=”jumbotron”>
+    <div class="title-mobile">
+        <?php if ($me!=$user):?><?= sprintf($this->translate('%s\'s Activity'), $user->getUsrName())?>
+        <?php else:?>
+            <?= $this->translate('Activity for')?> <?= $user->getUsrName() ?>
+        <?php endif;?>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-xs-12">
+            <h4><?= $this->translate('Commitment Score')?>
+                <?php for ($i=0;$i<5;$i++):?>
+                    <?php $commitment--?>
+                    <?php if ($commitment>=0):?>
+                        <i class="fa fa-star orange size2em"></i>
+                    <?php elseif ($commitment==-0.5):?>
+                        <i class="fa fa-star-half-o orange size2em"></i>
+                    <?php else:?>
+                        <i class="fa fa-star-o gri size2em"></i>
+                    <?php endif;?>
+                <?php endfor;?></h4>
+            <span class="badge"><?=round($commitmentTotal)?></span> - <?= $this->translate('max is')?> 200
+            <div style="text-align: left !important;">
+                <mark><?= $this->translate('Reflects the time and energy invested by the User in the Demodyne community. Derived from')?>:</mark><br>
+                - <?= $this->translate('Proposals made in the last 90 days')?><br>
+                - <?= $this->translate('Comments made in the last 30 days')?><br>
+                - <?= $this->translate('Hours executed for Demodyne Community Service (DCS) in the last 90 days')?>
+            </div>
+        </div></div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h4><?= $this->translate('Relevance Score')?>
+                <?php for ($i=0;$i<5;$i++):?>
+                    <?php $relevance--?>
+                    <?php if ($relevance>=0):?>
+                        <i class="fa fa-star orange size2em"></i>
+                    <?php elseif ($relevance==-0.5):?>
+                        <i class="fa fa-star-half-o orange size2em"></i>
+                    <?php else:?>
+                        <i class="fa fa-star-o gri size2em"></i>
+                    <?php endif;?>
+                <?php endfor;?></h4>
+            <span class="badge"><?=round($relevanceTotal)?></span> - <?= $this->translate('max is 200')?>
+            <div style="text-align: left !important;">
+                <mark><?= $this->translate('Reflects the quality of the User input and work for the Demodyne community. Derived from')?>:</mark><br>
+                - <?= $this->translate('Number of "thumbs up" vs "thumbs down"')?><br>
+                - <?= $this->translate('Average score of proposals made by the user')?><br>
+                - <?= $this->translate('Average rating of DCS work completed')?>
+            </div>
+        </div>
+    </div>
+</div>
+
+

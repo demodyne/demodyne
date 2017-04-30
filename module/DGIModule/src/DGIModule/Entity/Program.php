@@ -1,12 +1,15 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\City;
+use DGIModule\Entity\Proposal;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -51,14 +54,14 @@ class Program
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="prog_created_date", type="datetime", nullable=false)
+     * @ORM\Column(name="prog_created_date", type="utcdatetime", nullable=false)
      */
     private $progCreatedDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prog_uuid", type="string", length=36, nullable=true)
+     * @ORM\Column(name="prog_uuid", type="uuid", length=36, nullable=true)
      */
     private $progUUID;
 
@@ -79,14 +82,14 @@ class Program
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="prog_saved_date", type="datetime", nullable=true)
+     * @ORM\Column(name="prog_saved_date", type="utcdatetime", nullable=true)
      */
     private $progSavedDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="prog_deleted_date", type="datetime", nullable=true)
+     * @ORM\Column(name="prog_deleted_date", type="utcdatetime", nullable=true)
      */
     private $progDeletedDate;
 
@@ -98,7 +101,7 @@ class Program
     private $progDeletedUsr;
 
     /**
-     * @var \DGIModule\Entity\City
+     * @var City
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\City")
      * @ORM\JoinColumns({
@@ -108,7 +111,7 @@ class Program
     private $city;
 
     /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -376,11 +379,11 @@ class Program
     /**
      * Set city
      *
-     * @param \DGIModule\Entity\City $city
+     * @param City $city
      *
      * @return Program
      */
-    public function setCity(\DGIModule\Entity\City $city = null)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
 
@@ -390,7 +393,7 @@ class Program
     /**
      * Get city
      *
-     * @return \DGIModule\Entity\City
+     * @return City
      */
     public function getCity()
     {
@@ -400,11 +403,11 @@ class Program
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      *
      * @return Program
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -414,7 +417,7 @@ class Program
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User
+     * @return User
      */
     public function getUsr()
     {
@@ -439,7 +442,7 @@ class Program
         return $proposals;
     }
     
-    public function hasProposal(\DGIModule\Entity\Proposal $proposal) {
+    public function hasProposal(Proposal $proposal) {
         
         foreach ($this->programProposals as $proposalProgram) {
             $propItem = $proposalProgram->getProp();
@@ -459,4 +462,15 @@ class Program
     public function getComments() {
         return $this->comments;
     }
+    
+    /**
+     * @param string $progUUID
+     * @return Program
+     */
+    public function setProgUUID($progUUID)
+    {
+        $this->progUUID = $progUUID;
+        return $this;
+    }
+
 }

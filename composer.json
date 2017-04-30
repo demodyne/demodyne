@@ -4,9 +4,14 @@
   "require" : {
     "php" : ">=5.3.3",
     "zendframework/zendframework" : ">=2.3.0",
-    "doctrine/doctrine-orm-module" : "0.8.*",
+    "doctrine/doctrine-orm-module" : ">=0.8.0",
     "beberlei/DoctrineExtensions" : ">=v1.0.1",
-    "zendframework/zend-developer-tools": "dev-master" 
+    "zendframework/zend-developer-tools": "dev-master",
+    "facebook/graph-sdk": "^5.3",
+    "ramsey/uuid": "^3.5",
+    "ramsey/uuid-doctrine": "^1.2",
+    "html2text/html2text": "^4.0",
+    "bugbuster/mobiledetection": "^3.5" 
   },
   "keywords" : [ "demodyne", "zf2" ],
   "license" : "GNU AFFERO 3",

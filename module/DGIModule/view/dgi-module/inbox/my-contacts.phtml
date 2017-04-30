@@ -1,1 +1,143 @@
-<!-- inbox/my-contacts --><?php $paging = $this->sortingDivPaginationHelper($contacts, $page, $this->url('user/inbox', array('action'=>'my-contacts')), 'contact', $limit, $sort, $order); ?><div id="inbox-my-contacts"	data-url="<?= $this->url('user/inbox', array('action'=>'my-contacts'), true);?>"	data-new-message=" <?= $this->translate('Send New Message')?>">	<div class="row">		<div class="col-md-6 top10">			<button type="button" class="btn btn-orange" <?= $totalResults?'id="inbox-my-contacts-new-message-selected"':'disabled="disabled"'?>				data-href="<?= $this->url('user/inbox', array('action'=>'new-message'));?>"><i				class="fa fa-envelope-o"></i> <?= $this->translate('Send Message to Selected')?></button> 			<span class="big"><?= $this->translate('You have')?> <?=$totalResults?> <?= $this->translate('Contacts')?></span> 		</div>		<div class="col-md-6">			<div class="fltr">				<ul class="nav top10">					<li class="dropdown"><a class="dropdown-toggle"						data-toggle="dropdown" href="#" aria-expanded="false"> <span							class="label label-default"><i class="fa fa-caret-down"></i> </span>					</a>						<ul class="dropdown-menu dropdown-menu-right">							<li><a id="page-contact" href="<?= $this->url('user/inbox', array('action'=>'my-contacts', 'sort' => 'name', 'page'=>1, 'order'=>'desc'))?>"><?= $this->translate('Name')?></a></li>						</ul></li>				</ul>			</div>			<div class="fltr">				<ul class="nav top10">					<li class="dropdown"><a class="dropdown-toggle"						data-toggle="dropdown" href="#" aria-expanded="false"> <span							class="label label-default"><i class="fa fa-caret-up"></i> </span>					</a>						<ul class="dropdown-menu dropdown-menu-right">							<li><a id="page-contact" href="<?= $this->url('user/inbox', array('action'=>'my-contacts', 'sort' => 'name', 'page'=>1, 'order'=>'asc'))?>"><?= $this->translate('Name')?></a></li>						</ul></li>				</ul>			</div>			<div class="fltr right10 top15"><?= $this->translate('Sorted by')?> <?=$this->translate(ucfirst($sort))?>                    <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>		</div>		<!-- /6 -->	</div>	<!-- /row -->	<hr /><?php foreach($contacts as $index => $contact): ?><div class="table-layout">		<div class="table-cell fixed-width-20" style="padding-top: 7px;">			<input type="checkbox" value="<?=$contact->getUsrName()?>">		</div>		<div class="table-cell fixed-width-60">			<a				href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$contact->getUsrUUID()));?>"				><img src="<?=$this->basePath( $contact->getUsrPicture()) ?>"				valign="middle" width="45" height="45"				title="<?=$contact->getUsrName()?>" class="round5" /></a>		</div>		<div class="table-cell fixed-width-150">			<a				href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$contact->getUsrUUID()));?>"				><span class="badge"><?=$contact->getUsrName()?></span></a><br /> <span				class="w">					<?php if ($contact->isAdministration()):?>						<?= $this->translate('Administration')?>					<?php elseif ($contact->isPartner()):?>						<?= $this->translate('Partner')?>					<?php else:?>						<?= $this->translate('Citizen')?>					<?php endif;?>				</span>		</div>		<div class="table-cell"></div>		<div class="table-cell fixed-width-150 text-right">			<a href="<?= $this->url('user/inbox', array('action'=>'new-message', 'to'=>$contact->getUsrName()));?>"				id="inbox-my-contacts-send-message"><i				class="fa fa-envelope-o"></i> <?= $this->translate('Send Message')?></a> <br /> 			<a href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$contact->getUsrUUID()));?>"				id="inbox-my-contacts-add-remove-contact"				data-id="<?=$contact->getUsrUUID()?>"><i				class="fa fa-times-circle"></i> <?= $this->translate('Remove Contact')?></a>		</div>	</div>	<hr /><?php endforeach;?>		<div class="row">		<div class="col-md-12">				  <?= $paging; ?>			</div>		<!--/12-->	</div>	<!-- /row --></div><script type="text/javascript">	$(function(){  		inboxMyContactsHandlers();	});</script>        <!-- /inbox/my-contacts -->        
+<?php $paging = $this->sortingDivPaginationHelper($contacts, $page, $this->url('user/inbox', array('action'=>'my-contacts')), 'contact', $limit, $sort, $order); ?>
+
+
+<div class="row visible-xs">
+<div class="col-xs-12">
+<span class="big"><?= $this->translate('You have')?> <?=$totalResults?> <?= $this->translate('Contacts')?></span> <br>
+<button type="button" class="btn btn-orange" <?= $totalResults?'id="inbox-my-contacts-new-message-selected"':'disabled="disabled"'?>
+				data-href="<?= $this->url('user/inbox', array('action'=>'new-message'));?>"><i
+				class="fa fa-envelope-o"></i> <?= $this->translate('Send to Selected')?></button> 
+</div>
+</div>
+
+
+<div id="inbox-my-contacts"
+	data-url="<?= $this->url('user/inbox', array('action'=>'my-contacts'), true);?>"
+	data-new-message=" <?= $this->translate('Send New Message')?>">
+	<div class="row">
+		<div class="col-md-6 top10 hidden-xs">
+			
+			<button type="button" class="btn btn-orange" <?= $totalResults?'id="inbox-my-contacts-new-message-selected"':'disabled="disabled"'?>
+				data-href="<?= $this->url('user/inbox', array('action'=>'new-message'));?>"><i
+				class="fa fa-envelope-o"></i> <?= $this->translate('Send Message to Selected')?></button> 
+			
+			<span class="big"><?= $this->translate('You have')?> <?=$totalResults?> <?= $this->translate('Contacts')?></span> 
+		</div>
+		<div class="col-md-6">
+			
+			<div class="fltr">
+				<ul class="nav top10">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-down"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-contact" href="<?= $this->url('user/inbox', array('action'=>'my-contacts', 'sort' => 'name', 'page'=>1, 'order'=>'desc'))?>"><?= $this->translate('Name')?></a></li>
+							
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr">
+				<ul class="nav top10">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-up"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-contact" href="<?= $this->url('user/inbox', array('action'=>'my-contacts', 'sort' => 'name', 'page'=>1, 'order'=>'asc'))?>"><?= $this->translate('Name')?></a></li>
+							
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr right10 top15 hidden-xs"><?= $this->translate('Sorted by')?> <?=$this->translate(ucfirst($sort))?>
+                    <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- /row -->
+	<hr />
+
+<?php foreach($contacts as $index => $contact): ?>
+
+
+
+
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-9">
+			
+			<div class="pull-left" style="min-width: 62px!important">
+			<input type="checkbox" value="<?=$contact->getUsrName()?>">
+			<a
+				href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$contact->getUsrUUID()));?>"
+				><img src="<?=$this->basePath( $contact->getUsrPicture()) ?>"
+				valign="middle" width="45" height="45"
+				title="<?=$contact->getUsrName()?>" class="round5" /></a>
+	  </div>
+<div style="margin-left: 72px!important">	  
+			<a
+				href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$contact->getUsrUUID()));?>"
+				><span class="badge"><?=$contact->getUsrName()?></span></a><br /> <span
+				class="w">
+					<?php if ($contact->isAdministration()):?>
+						<?= $this->translate('Administration')?>
+					<?php elseif ($contact->isPartner()):?>
+						<?= $this->translate('Partner')?>
+					<?php else:?>
+						<?= $this->translate('Citizen')?>
+					<?php endif;?>
+				</span>
+</div>
+</div>
+<div class="col-xs-12 col-md-3 text-right">
+	<span class="right10"><a href="<?= $this->url('user/inbox', array('action'=>'new-message', 'to'=>$contact->getUsrName()));?>"	id="inbox-my-contacts-send-message"><i
+				class="fa fa-envelope-o size15em" title="<?= $this->translate('Send Message')?>"></i></a></span>
+<span>                
+<a href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$contact->getUsrUUID()));?>"  id="inbox-my-contacts-add-remove-contact"	data-id="<?=$contact->getUsrUUID()?>"><i class="fa fa-times-circle size15em" title="<?= $this->translate('Remove Contact')?>"></i></a>
+</span>
+  </div>
+
+</div>
+
+
+
+
+	<hr />
+
+<?php endforeach;?>
+
+
+
+
+
+		<div class="row">
+		<div class="col-md-12">
+
+				  <?= $paging; ?>
+
+			</div>
+		<!--/12-->
+	</div>
+	<!-- /row -->
+</div>
+<script type="text/javascript">
+
+
+
+	$(function(){  
+
+	  
+
+		inboxMyContactsHandlers();
+
+
+
+		
+
+});
+
+
+
+</script>
+
+        

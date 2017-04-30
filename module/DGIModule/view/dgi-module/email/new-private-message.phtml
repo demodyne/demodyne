@@ -1,0 +1,41 @@
+<?
+$urlBase = $this->url('home', [], array('force_canonical' => true));
+$user = $inboxMessage->getFromUsr();
+setlocale(LC_ALL, $inboxMessage->getToUsr()->getCountry()->getCountryFormat());
+?>
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("New private message")?></h1>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px">      
+        
+        <table style="Margin-top:30px;Margin-bottom:20px;">
+        	<tr>
+        		<td style="width: 60px;"><a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()), array('force_canonical' => true));?>"><img style="webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;" src="<?=$urlBase.$this->basePath($user->getUsrPicture())?>" valign="middle" width="45" height="45" /></a>
+        		</td>
+        		<td>
+        			<?=sprintf($this->translate('%s sent you a private message'), $user->getUsrName())?><br>
+        			<?= utf8_encode(strftime('%e %B %Y %R', strtotime($inboxMessage->getIbxCreatedDate()->format('d F Y H:i'))))?><br />
+    <strong><?=sprintf($this->translate('Subject: %s'), $inboxMessage->getIbxTitle()) ?></strong>
+        		</td>
+        	</tr>
+        </table>
+
+    <hr style="height: 2px; background-color: #FFF; border:none">
+
+    <p style="Margin-top:10px;Margin-bottom:10px;"><?= $inboxMessage->getIbxText() ?></p>
+    <hr style="height: 2px; background-color: #FFF; border:none">
+
+</div>
+
+
+<div style="Margin-left:20px;Margin-right:20px">
+    <div style="Margin-bottom:20px;text-align:center">
+        <center>
+
+            <a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;line-height:24px;padding:12px 24px 13px 24px;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:Roboto,sans-serif; max-width: 200px;" href="<?=$this->url('user/inbox', array('action'=>'view-message', 'id'=>$inboxMessage->getIbxUUID()), array('force_canonical' => true));?>"><?=$this->translate('See the private message')?></a>
+        </center>
+    </div>
+</div>
+
+

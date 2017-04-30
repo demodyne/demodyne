@@ -1,0 +1,197 @@
+<div class="panel panel-default" id="inbox-view-message"
+     data-message-id="<?=$message->getIbxUUID()?>"
+     data-url="<?= $this->url('user/inbox', array( 'action'=>'view', 'id'=>$message->getIbxUUID(), 'type'=>$type));?>">
+    <?php if (($type=='received' && $message->getIbxToTrashDate()) || ($type=='sent' && $message->getIbxFromTrashDate()) ||
+        ($type=='trash' && ($user==$message->getToUsr() && $message->getIbxToDeletedDate() || $user==$message->getFromUsr() && $message->getIbxFromDeletedDate() ))):?>
+        <div class="panel-body" style="min-height:450px !important;text-align: center;vertical-align: middle;line-height: 450px; ">
+            <div class="row">
+                <div class="col-md-12 col-xs-12"><?= $this->translate('Please select a message to view.')?>
+                </div>
+            </div>
+        </div>
+        <!--/panel-body-->
+
+    <?php else:?>
+
+        <!-- <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-eye"></i> View</h3></div> -->
+        <div class="panel-body" style="min-height: 450px !important;">
+
+            <?php $messageType = $this->configItem('demodyne.inbox.type'); ?>
+
+
+
+            <div class="row text-right">
+                <div class="col-md-12 col-xs-12 nobr">
+
+                    <?php if ($user!=$message->getFromUsr() || $message->getIbxType()==$messageType['new_comment']):?>
+
+                        <a type="button"
+                           data-url="<?= $this->url('user/inbox', array('action'=>'reply', 'id' => $message->getIbxUUID()));?>"
+                           id="inbox-view-message-reply"
+                           title="<?= $this->translate('Reply')?>"
+                           data-dialog-title="<?=$this->translate('Reply to')?>"
+                           data-type="<?= $message->getIbxType()==1?$this->translate('comment'):$this->translate('message')?>">
+					<img src="/img/icon-reply.svg" width="32"></a>
+
+                    <?php endif;?>
+
+                    <?php if ($message->getIbxType()!=$messageType['new_comment'] && $message->getIbxType()!=$messageType['invitation']):?>
+
+                        <a type="button"
+                           data-url="<?= $this->url('user/inbox', array('action'=>'reply-all', 'id' => $message->getIbxUUID()));?>"
+                           id="inbox-view-message-reply-all"
+                           title="<?= $this->translate('Reply All')?>"
+                           data-dialog-title="<?=$this->translate('Reply to All')?>">
+                           <img src="/img/icon-reply-all.svg" width="32"></a>
+
+                    <?php endif;?>
+
+                    <?php if ($message->getIbxType()!=$messageType['invitation']):?>
+
+                        <a type="button"
+                           data-url="<?= $this->url('user/inbox', array('action'=>'forward', 'id' => $message->getIbxUUID()));?>"
+                           id="inbox-view-message-forward"
+                           title="<?= $this->translate('Forward')?>"
+                           data-dialog-title="<?=$this->translate('Forward message')?>">
+					<img src="/img/icon-forward.svg" width="32"></a>
+                    <?php endif;?>
+                    <a type="button"
+                       id="inbox-view-message-print"
+                       title="<?= $this->translate('Print')?>">
+					<img src="/img/icon-print.svg" width="32"></a>
+                    <a type="button"
+                       id="inbox-view-message-report"
+                       data-url="<?= $this->url('home/report', array('action'=>'add-report', 'type'=>'inbox', 'id' => $message->getIbxUUID()));?>"
+                       title="<?= $this->translate('Report as innapropiate')?>"
+                       data-dialog-title="<?=$this->translate('Report message as innapropriate')?>">
+					<img src="/img/icon-report.svg" width="32"></a>
+                    <a type="button"
+                       data-url="<?= $this->url('user/inbox', array('action'=>'delete-one', 'id' => $message->getIbxUUID(), 'type' => $type));?>"
+                       id="inbox-view-message-delete-one"
+                       data-message="<?=$this->translate('Please select a message to view.')?>"
+                       title="<?= $this->translate('Delete')?>">
+                       <img src="/img/icon-delete.svg" width="32"></a>
+                </div>
+            </div>
+
+            <hr />
+            <div class="row" id="inbox-view-message-print-zone">
+                <div class="col-md-12 col-xs-12">
+
+
+
+                    <?php if ($message->getIbxType()==$messageType['new_comment']): // 1 ?>
+
+                        <i class="fa fa-comments-o size15em violet"></i> <?= $this->translate('Comment by'); ?>
+
+                    <?php elseif ($message->getIbxType()==$messageType['new_step']): // 2 ?>
+
+                        <i class="fa fa-gears size15em violet"></i> <?= $this->translate('Implementation step for Proposal:'); ?>
+
+                    <?php elseif ($message->getIbxType()==$messageType['champion_news']): // 3 ?>
+
+                        <i class="fa fa-trophy size15em gold"></i> <?= $this->translate('Champion News for Proposal:'); ?>
+
+                    <?php elseif ($message->getIbxType()==$messageType['private_message']): // 4 ?>
+
+                        <i class="fa fa-envelope-o size15em orange"></i> <?= $this->translate('Private message by'); ?>
+
+                    <?php elseif ($message->getIbxType()==$messageType['newsletter']): // 5 ?>
+
+                        <i class="fa fa-newspaper-o size15em blue"></i> <?= $this->translate('Newsletter by'); ?>
+
+                    <?php elseif ($message->getIbxType()==$messageType['invitation']): // 6 ?>
+
+                        <i class="fa fa-paper-plane size15em blue"></i> <?= $this->translate('Invitation from'); ?>
+
+                    <?php endif;?>
+
+                    <a
+                            href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$message->getFromUsr()->getUsrUUID()));?>"
+                            data-title="<?= $message->getFromUsr()->getUsrName() ?>'s mini profile"
+                            data-id="<?=$message->getFromUsr()->getUsrUUID()?>"
+                            id="inbox-view-message-view-profile"> <span class="badge"><?= $message->getFromUsr()->getUsrName() ?></span></a>&nbsp;<i
+                            class="fa fa-clock-o"></i>
+
+                    <?= $message->getIbxCreatedDate()->format("d/m/Y H:i")?>
+
+                    <?php if ($message->getIbxType()!=$messageType['newsletter'] && $message->getIbxType()!=$messageType['invitation']):?>
+
+                        <br>
+
+                        <?php if ($message->getIbxType()!=$messageType['new_comment']):?>
+
+                            <?= $this->translate('Subject:'); ?> <?= $message->getIbxTitle()?>
+
+                        <?php else:?>
+
+                            <?php if ($message->getCom()->getProp()):?>
+
+                                <span class="big"><?= $this->translate('Proposal')?>: <a
+                                            href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$message->getCom()->getProp()->getPropUUID()));?>"><?= $message->getCom()->getProp()->getPropName()?></a></span>
+
+                            <?php elseif ($message->getCom()->getProgram()):?>
+
+                                <span class="big"><?= $this->translate('Program')?>: <a
+                                            href="<?= $this->url('program', array('action'=>'view-program', 'id'=>$message->getCom()->getProgram()->getProgUUID()));?>"><?= $message->getCom()->getProgram()->getProgName()?></a></span>
+
+                            <?php elseif ($message->getCom()->getArticle()):?>
+
+                                <span class="big"><?= $this->translate('Article')?>: <a
+                                            href="<?= $this->url('blog', array('action'=>'article', 'id'=>$message->getCom()->getArticle()->getArticleSlug()));?>"><?= $message->getCom()->getArticle()->getArticleTitle()?></a></span>
+
+                            <?php endif;?>
+
+                        <?php endif;?>
+                    <?php endif;?>
+
+                    <br>
+
+                    <?php if ($message->getIbxType()!=$messageType['newsletter']):?>
+                        <?= $this->translate('To:'); ?>
+
+                        <?php foreach ($toUsers as $toUser):?>
+
+                            <a
+                                    href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$toUser->getUsrUUID()));?>"
+                                    data-title="<?= $toUser->getUsrName() ?>'s mini profile"
+                                    data-id="<?=$toUser->getUsrUUID()?>"
+                                    id="inbox-view-message-view-profile"> <span class="badge"><?= $toUser->getUsrName() ?></span></a>
+
+                        <?php endforeach;?>
+                    <?php endif;?>
+
+                    <hr />
+                    <div class="bw">
+                        <?php if ($message->getIbxType()==$messageType['newsletter']):?>
+                            <?= $this->partial('dgi-module/newsletter/view-newsletter.mobile.phtml', ['newsletter'=>$message->getNewsletter()]); ?>
+                        <?php elseif ($message->getIbxType()==$messageType['invitation']):?>
+                            <?= $this->partial('dgi-module/inbox/view-invitation.mobile.phtml', ['message'=>$message, 'user'=>$user]); ?>
+                        <?php else:?>
+                            <?= $message->getIbxText()?>
+                        <?php endif;?>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script type="text/javascript">
+
+                $(function () {
+
+                    inboxViewHandlers(<?=$unreadMessage?>);
+
+                });
+
+
+
+            </script>
+
+
+        </div>
+        <!--/panel-body-->
+
+    <?php endif;?>
+</div>
+<!-- end panel -->

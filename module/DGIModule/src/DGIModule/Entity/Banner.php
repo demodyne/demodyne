@@ -1,13 +1,16 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Administration;
+use DGIModule\Entity\City;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * Banner
@@ -50,7 +53,7 @@ class Banner
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="banner_created_date", type="datetime", nullable=true)
+     * @ORM\Column(name="banner_created_date", type="utcdatetime", nullable=true)
      */
     private $bannerCreatedDate;
 
@@ -78,12 +81,12 @@ class Banner
     /**
      * @var string
      *
-     * @ORM\Column(name="banner_uuid", type="string", length=36, nullable=true)
+     * @ORM\Column(name="banner_uuid", type="uuid", length=36, nullable=true)
      */
     private $bannerUUID;
 
     /**
-     * @var \DGIModule\Entity\Administration
+     * @var Administration
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Administration")
      * @ORM\JoinColumns({
@@ -109,7 +112,7 @@ class Banner
     
 
     /**
-     * @var \DGIModule\Entity\City
+     * @var City
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\City")
      * @ORM\JoinColumns({
@@ -320,11 +323,11 @@ class Banner
     /**
      * Set admin
      *
-     * @param \DGIModule\Entity\Administration $admin
+     * @param Administration $admin
      *
      * @return Banner
      */
-    public function setAdmin(\DGIModule\Entity\Administration $admin = null)
+    public function setAdmin(Administration $admin = null)
     {
         $this->admin = $admin;
 
@@ -334,7 +337,7 @@ class Banner
     /**
      * Get admin
      *
-     * @return \DGIModule\Entity\Administration
+     * @return Administration
      */
     public function getAdmin()
     {
@@ -346,7 +349,7 @@ class Banner
      *
      * @param integer $bannerLevel
      *
-     * @return DgiBanners
+     * @return Banner
      */
     public function setBannerLevel($bannerLevel)
     {
@@ -371,7 +374,7 @@ class Banner
      *
      * @param integer $bannerFullCity
      *
-     * @return DgiBanners
+     * @return Banner
      */
     public function setBannerFullCity($bannerFullCity)
     {
@@ -394,11 +397,11 @@ class Banner
     /**
      * Set city
      *
-     * @param \DGIModule\Entity\City $city
+     * @param City $city
      *
-     * @return DgiBanners
+     * @return Banner
      */
-    public function setCity(\DGIModule\Entity\City $city = null)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
     
@@ -408,10 +411,20 @@ class Banner
     /**
      * Get city
      *
-     * @return \Import\Entity\City
+     * @return City
      */
     public function getCity()
     {
         return $this->city;
     }
+    /**
+     * @param string $bannerUUID
+     * @return Banner
+     */
+    public function setBannerUUID($bannerUUID)
+    {
+        $this->bannerUUID = $bannerUUID;
+        return $this;
+    }
+
 }

@@ -1,0 +1,70 @@
+
+<div class="title-mobile top20"><?= $this->translate('Content Activity')?></div>
+
+<div class="bot20">
+<span class="title-mobile"><?=$totalProp?> <?= $this->translate('Proposals')?></span>
+<hr>
+
+<ul>
+<li><span class="badge"><?= isset($propNo['debate'])?$propNo['debate']:0?></span> <?= $this->translate('in Debate')?></li>
+<li><span class="badge"><?= isset($propNo['vote'])?$propNo['vote']:0?></span> <?= $this->translate('in Vote')?></li>
+<li><span class="badge"><?= isset($propNo['plan'])?$propNo['plan']:0?></span> <?= $this->translate('in Planning')?></li>
+<li><span class="badge"><?= isset($propNo['execute'])?$propNo['execute']:0?></span> <?= $this->translate('in Execution')?></li>
+<li><span class="badge bgdarkgreen"><?= isset($propNo['followup'])?$propNo['followup']:0?></span> <?= $this->translate('Completed')?></li>
+</ul>
+
+</div>
+
+
+
+<div>
+<span class="title-mobile"><?=count($user->getPrograms())?> <?= $this->translate('Programs')?></span>
+<hr>
+
+
+
+<ul>
+
+
+<?php
+    $programs = [];
+    foreach ($myPrograms as $program) {
+        $programs[$program->getProgLevel()] = $program;
+    }
+    ksort($programs);
+    $levels = $this->configItem('demodyne.level');
+    ?>
+
+    <?php foreach ($programs as $program):?>
+    <?php
+                $levelName = '';
+                $level = '';
+                if (array_search($program->getProgLevel(), $levels)=='city') {
+                    $levelName = $program->getCity()->getCityName();
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='region') {
+                    $levelName = $program->getCity()->getRegion()->getRegionName();
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='country') {
+                    $levelName = $program->getCity()->getCountry()->getCountryName();
+                    $level='country';
+                }
+
+
+                $programDescription = $program->getProgDescription();
+                $programDescription = (strlen($programDescription) > 150) ? substr($programDescription, 0, 150) . '...' : $programDescription
+
+                ?>
+    <li>
+    <?php if ($level=='country'):?>
+<img src="/img/flags/<?= str_replace(' ', '-', $levelName)?>.png" style="margin-bottom: 4px;" width="25" height="17">
+						<?php endif;?>
+    <?= $levelName?><br>
+    <a href="<?= $this->url('program', array('action' =>'view-program', 'id'=>$program->getProgUUID()));?>"><span class="big"><?=$program->getProgName()?></span></a>
+</li>
+
+    <?php endforeach;?>
+
+
+    </ul>
+</div>

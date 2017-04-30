@@ -1,5 +1,3 @@
-<!-- program/view-aggregated-program -->
-
 <?php 
 
     $level = $_SESSION['level']['level'];
@@ -16,15 +14,7 @@
 ?>
 
 <?php if (!$limit):?>
-<div class="modal-header-soft round5top ui-draggable-handle">
-	<a class="close" href="<?= $this->url($_SESSION['level']['level']);?>"><i
-		class="fa fa-home w"></i></a>
-	<button type="button" class="close" onclick="parent.history.back();">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	&nbsp; <span class="big" id="modal-dialog-title"><strong><?= sprintf($this->translate('View Aggregated Program for %s'), $levelName)?>
-  </strong></span>
-</div>
+    <?= $this->partial('partial/page-header.phtml', ['title' => '<img src="/img/icon-programme-33.svg" width="20">  '.sprintf($this->translate('View Aggregated Program for %s'), $levelName)])?>
 <?php endif;?>
 
 <div <?= $limit?'class="panel panel-default panel-body parent orangebackground"':'class="jumbotron parent" style="border-top-left-radius: 0px; border-top-right-radius: 0px;"' ?>
@@ -35,7 +25,7 @@
 	data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
 
 <?php if ($limit):?>
-<div class="bigblack"><strong><?= $this->translate('Aggregated Program')?></strong></div><hr style="border-top: 1px solid #cccccc;">
+<div class="bigblack"><strong><?= $this->translate('Aggregated Program')?></strong></div><hr style="border-top: 2px solid #887c70;">
 <?php else:?>
 <div class="panel panel-default panel-body orangebackground">
 
@@ -51,7 +41,7 @@
 <?=$this->translate('The mean <strong>Priority rank</strong> allocated by the Citizens to a proposal/measure in their individual program (<i>Importance</i> criterion)')?>
 </li>
 </ul>
-<?=$this->translate('With the aggregated program, a transparent and concrete expression of the citizen’s will is available to elaborate policies.')?>
+<?=$this->translate('With the aggregated program, a transparent and concrete expression of the citizens will is available to elaborate policies.')?>
 
 </div>
 <?php endif;?>
@@ -59,17 +49,30 @@
 <?php if(count($aggregatedProposals)>0):?>
 
                 <?php foreach($aggregatedProposals as $index => $proposal): ?>
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+<div class="row">
 
-	<div class="table-layout">
-		<div class="table-cell fixed-width-20">
-			<span class="big"><?=$index+1?></span>
+  <div class="col-xs-12 col-sm-12 col-md-4">
 			
-		</div>
-		
-		<div class="table-cell fixed-width-40">
+			<div class="pull-left" style="min-width: 15px!important">
+			<span class="big"><?=$index+1?></span>
+			</div>
+			<div class="pull-left" style="min-width: 42px!important">
 			<img
 				src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
-				height="34" width="34"
+				height="34" width="34" class="round5" 
 				title="<?= $proposal->getCat()->getCatCat()->getCatName() ?>"><br>
 			<?php if ($proposal->getMeasure()):?>
 			<span style="font-size: 1.2em;line-height: 2em;"
@@ -80,24 +83,19 @@
 				title="<?= $this->translate('Proposal')?>"><i
 				class="fa fa-bullhorn size15em"></i></span>
 			<?php endif;?>
-		</div>
-		
-		<div class="table-cell">
-			<div class="row">
-				<div class="col-md-5 col-xs-12">
-
-
-
-<?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription()); 
+	  </div>
+	  
+	  <div style="margin-left: 57px!important">
+	  <?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription()); 
 
       $proposalDescription = (strlen($proposalDescription) > 200) ? substr($proposalDescription, 0, 200) . '...' : $proposalDescription;?>
 
 
 
 <a
-						href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>"
+						href="<?= $this->url($proposal->isMeasure()?'measure':'proposal', array('id'=>$proposal->getPropUUID()));?>"
 						title="<?= $proposalDescription ?>" id="country-proposal-item"
-						data-id="<?= $proposal->getPropUUID()?>"><span class="big"><?= $proposal->getPropSavedName() ?></span></a> 
+						data-id="<?= $proposal->getPropUUID()?>"><span class="big"><?= $proposal->getPropSavedName() ?></span></a> <!--<?=$proposal->getPropAggregatedScore()?>-->
 					<br>
 
 <?= $this->translate('in')?> <?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName()?>
@@ -113,73 +111,36 @@
 					<i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()->format('d/m/Y') ?>
 					<br /> <?= $this->translate('Last updated')?> <i
 						class="fa fa-clock-o"></i> <?= $proposal->getPropSavedDate()->format('d/m/Y')?> 
+						
+	  </div>
+	  
+	  </div>
 
-</div>
-				
-				<div class="col-md-2 col-xs-12">
-					<?= sprintf($this->translate('Included by <strong>%d Citizens</strong> in their ideal program'), count($proposal->getProposalPrograms()))?><br /> 
-					
-				</div>
-				
-				<div class="col-md-2 col-xs-12">
-					<?= sprintf($this->translate('Mean Priority rank: %d'), round($proposal->getMeanPriority()))?>
-				</div>
-				
-				
-				<div class="col-md-3 col-xs-12">        
 
-<?= $this->{"status-details-$index"}?>
-</div>
-			</div>
-		</div>
-		<div class="table-cell fixed-width-150 text-right">
-			<?php if ($user->getUsrId()):?>
-			<a
-				href="<?= $this->url('proposal', array('action'=>'favorite', 'id'=>$proposal->getPropUUID()));?>"
-				alt="Favorite Proposal" id="favorite"
-				data-favorite="<?= $proposal->getPropUUID()?>"><?php if (in_array($user, $proposal->getUsers())):?><i class="fa fa-heart"
-    				title="<?= $this->translate('Remove Favorite')?>"></i> <?= $this->translate('Remove Favorite')?><?php else:?><i
-    				class="fa fa-heart-o" title="<?= $this->translate('Add Favorite')?>"></i> <?= $this->translate('Add Favorite')?><?php endif;?></a><br /> 
-			
-			<?php 
-			     $showAddToProgram = false;
-			     $me = $this->identity();
-			     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.city') && $me->getCity()==$proposal->getCity()) {
-			         $showAddToProgram = true;
-			     }
-			     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.region') && $me->getCity()->getRegion()==$proposal->getCity()->getRegion()) {
-			         $showAddToProgram = true;
-			     }
-			     if ($proposal->getPropLevel()==$this->configItem('demodyne.level.country') && $me->getCountry()==$proposal->getCity()->getCountry()) {
-			         $showAddToProgram = true;
-			     }
-			
-			?>
-    		<?php if ($showAddToProgram):?>			
-    				
-        		<?php $program = $user->getProgramForLevel($proposal->getPropLevel())?>
-        		<?php if (!$program || !$program->hasProposal($proposal)):?>
-        			<a
-        				href="<?= $this->url('program', array( 'action'=>'add-proposal', 'id'=>$proposal->getPropUUID()));?>"
-        				data-id="<?= $proposal->getPropUUID()?>"
-        				id="add-to-program"><i class="fa fa-link"></i> <?= $this->translate('Add to my Program')?></a><br />
-        		<?php else:?>
-        			<a
-        				href="<?= $this->url('program', array( 'action'=>'add-remove-proposal', 'id'=>$proposal->getPropUUID()));?>"
-        				data-id="<?= $proposal->getPropUUID()?>"
-        				id="remove-from-program"><i class="fa fa-unlink"></i> <?= $this->translate('Remove from my Program')?></a><br /> 
-        		<?php endif;?>
-		
-			<?php endif;?>
-				
-		<?php endif;?>
-			<a target="_parent"
-				href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>#comment-list"
-				title="<?= $this->translate('Comments')?>"><i class="fa fa-comments"></i> <?= sprintf($this->translate('%d Comments'), count($proposal->getComments()))?></a>
-		
-		</div>
+<div class="col-xs-12 col-sm-6 col-md-2">
+	<?= sprintf($this->translate('Included by <strong>%d Citizens</strong> in their ideal program'), count($proposal->getProposalPrograms()))?>
+  </div>
+
+<div class="col-xs-12 col-sm-6 col-md-2">
+	<?= sprintf($this->translate('Mean Priority rank: %d'), round($proposal->getMeanPriority()))?>
+  </div>
+  
+  
+   <div class="col-xs-5 col-sm-5 col-md-2">
+	<?= $this->{"status-details-$index"}?>
+   </div>
+    <div class="col-xs-7 col-sm-7 col-md-2 text-right">
+
+			<?= $this->partial('partial/proposal-actions.phtml', ['user' => $user, 'proposal' => $proposal])?>
 	</div>
-	<hr style="border-top: 1px solid #cccccc;">
+</div>     
+                
+                
+                
+	                
+                
+
+	<hr style="border-top: 1px solid #CCC;">
 
 
 
@@ -206,7 +167,7 @@
 <div class="row">
 <div class="col-md-12 text-right">
 				<a href="<?= $this->url('program', array( 'action'=>'view-aggregated-program'));?>" class="btn btn-orange"> <i
-					class="fa fa-eye"></i> <?= $this->translate('View All')?></a>
+					class="fa fa-eye"></i> <?= $this->translate('View full Program')?></a>
 				
 			</div>
 </div> 
@@ -214,6 +175,13 @@
 </div>
 
 
-<script type="text/javascript">    $(function () {    	programViewAggregatedProgramHandlers();    });</script>
 
-<!-- /program/view-aggregated-program -->
+        <script type="text/javascript">
+
+            $(function () {
+
+            	programViewAggregatedProgramHandlers();
+
+            });
+
+        </script>

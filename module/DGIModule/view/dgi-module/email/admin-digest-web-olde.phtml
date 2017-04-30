@@ -1,0 +1,209 @@
+ 
+<?php
+$title = 'Admin digest';
+
+//$this->plugin("dateFormat")->setTimezone("Europa/Paris")->setLocale("fr_FR");
+
+?>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:40px;font-family:Roboto,sans-serif;text-align:center"><?=$this->translate("Admin digest")?></h1>
+</div>
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;"><?=$this->translate("New Users registered in last 24h")?></h2>
+    <? if (count($users)):?>
+        <? foreach ($users as $user):?>
+            <p><a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()), array('force_canonical' => true));?>">
+                    <strong><?=$user->getUsrName()?></strong></a><br>
+                <span style="font-size:12px;">
+                    <strong><?=$this->translate('For:')?></strong>
+                    <?if ($user->getCity()):?>
+                        <?= $this->partial('partial/show-level.phtml', ['level' => $this->configItem('demodyne.level.city'), 'city'=>$user->getCity(), 'email' => 'true']); ?>
+
+                    <?else:?>
+                        <?=$this->translate('No city chosen yet')?>
+                    <?endif;?>
+                    <br>
+                    <strong><?=$this->translate('Date:')?></strong>
+                    <?= $this->dateFormat(
+                        $user->getUsrRegistrationDate()->setTimezone(new DateTimeZone('Europe/Paris')),
+                        IntlDateFormatter::MEDIUM, // date
+                        IntlDateFormatter::SHORT, // time
+                        'fr_FR'
+                    )?>
+                    <br>
+                    <strong><?=$this->translate('Email validated:')?></strong>
+                    <?= $user->getUsrEmailConfirmed()?$this->translate('YES'):$this->translate('NO')?>
+<?php // TODO Facebook profile ?>
+                </span>
+
+            </p>
+        <?endforeach;?>
+    <?else:?>
+        <p><?=$this->translate('No new users')?></p>
+    <?endif;?>
+</div>
+
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;"><?=$this->translate("New Proposals published in last 24h")?></h2>
+    <? if (count($proposals)):?>
+        <? foreach ($proposals as $proposal):?>
+            <p><a href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true));?>">
+                    <strong><?=$proposal->getPropSavedName()?></strong></a><br>
+                <span style="font-size:12px;">
+                    <strong><?= $this->translate('By:')?></strong>
+                    <a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$proposal->getUsr()->getUsrUUID()), array('force_canonical' => true));?>">
+                    <?= $proposal->getUsr()->getUsrName() ?></a> |
+
+                    <strong><?=$this->translate('For:')?></strong>
+                    <?= $this->partial('partial/show-level.phtml', ['level' => $proposal->getPropLevel(), 'city'=>$proposal->getCity(), 'email' => 'true']); ?><br>
+
+                    <strong><?= $this->translate('In:')?></strong> <?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName()?> |
+
+                    <strong><?=$this->translate('Date:')?></strong> <?= $this->dateFormat(
+                        $proposal->getPropPublishedDate()->setTimezone(new DateTimeZone('Europe/Paris')),
+                        IntlDateFormatter::MEDIUM, // date
+                        IntlDateFormatter::SHORT, // time
+                        'fr_FR'
+                    )?>
+
+                </span>
+                <br>
+                <?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription());
+
+                $proposalDescription = (strlen($proposalDescription) > 200) ? substr($proposalDescription, 0, 200) . '...' : $proposalDescription;?>
+                <span style="font-size:14px;line-height: 10px;">
+                 <?= $proposalDescription ?>
+                </span>
+            </p>
+        <?endforeach;?>
+    <?else:?>
+        <p><?=$this->translate('No new proposals')?></p>
+    <?endif;?>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;"><?=$this->translate("New Measures submitted in last 24h")?></h2>
+    <? if (count($measures)):?>
+        <? foreach ($measures as $proposal):?>
+            <p><a href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()), array('force_canonical' => true));?>">
+                    <strong><?=$proposal->getPropSavedName()?></strong></a><br>
+                <span style="font-size:12px;">
+                    <?= $this->translate('By:')?>
+                    <a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$proposal->getUsr()->getUsrUUID()), array('force_canonical' => true));?>">
+                    <?= $proposal->getUsr()->getUsrName() ?></a>&nbsp;&nbsp;&nbsp;
+
+                    <?=$this->translate('For:')?>
+                    <?= $this->partial('partial/show-level.phtml', ['level' => $proposal->getPropLevel(), 'city'=>$proposal->getCity(), 'email' => 'true']); ?><br>
+
+                    <?= $this->translate('In:')?> <?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName()?>&nbsp;&nbsp;&nbsp;
+
+                    <?=$this->translate('Date:')?> <?= $this->dateFormat(
+                        $proposal->getPropPublishedDate()->setTimezone(new DateTimeZone('Europe/Paris')),
+                        IntlDateFormatter::MEDIUM, // date
+                        IntlDateFormatter::SHORT, // time
+                        'fr_FR'
+                    )?>
+
+                </span>
+                <br>
+                <?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription());
+
+                $proposalDescription = (strlen($proposalDescription) > 200) ? substr($proposalDescription, 0, 200) . '...' : $proposalDescription;?>
+                <span style="font-size:14px;line-height: 10px;">
+                 <?= $proposalDescription ?>
+                </span>
+            </p>
+        <?endforeach;?>
+    <?else:?>
+        <p><?=$this->translate('No new measures')?></p>
+    <?endif;?>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;"><?=$this->translate("New Events published in last 24h")?></h2>
+    <? if (count($events)):?>
+        <? foreach ($events as $event):?>
+            <p><a href="<?= $this->url('event', array('action'=>'view-event', 'id'=> $event->getEventUUID()), array('force_canonical' => true));?>">
+                    <strong><?=$event->getEventName()?></strong></a><br>
+                <span style="font-size:12px;">
+                    <?= $this->translate('By:')?>
+                    <a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$event->getUsr()->getUsrUUID()), array('force_canonical' => true));?>">
+                    <?= $event->getUsr()->getUsrName() ?></a>&nbsp;&nbsp;&nbsp;
+
+                    <?=$this->translate('For:')?>
+                    <?= $this->partial('partial/show-level.phtml', ['level' => $event->getEventLevel(), 'city'=>$event->getCity(), 'email' => 'true']); ?><br>
+
+                    <?=$this->translate('Start date:')?> <?= $this->dateFormat(
+                        $event->getEventStartDate()->setTimezone(new DateTimeZone('Europe/Paris')),
+                        IntlDateFormatter::MEDIUM, // date
+                        IntlDateFormatter::SHORT, // time
+                        'fr_FR'
+                    )?>
+                    |
+                    <?=$this->translate('End date:')?> <?= $this->dateFormat(
+                        $event->getEventEndDate()->setTimezone(new DateTimeZone('Europe/Paris')),
+                        IntlDateFormatter::MEDIUM, // date
+                        IntlDateFormatter::SHORT, // time
+                        'fr_FR'
+                    )?>
+                </span>
+                <br>
+                <?php $eventDescription = preg_replace('/<[^>]*>/', ' ', $event->getEventDescription());
+
+                $eventDescription = (strlen($eventDescription) > 150) ? substr($eventDescription, 0, 150) . '...' : $eventDescription;?>
+
+                <span style="font-size:14px;line-height: 10px;">
+                 <?= $eventDescription ?>
+                </span>
+            </p>
+        <?endforeach;?>
+    <?else:?>
+        <p><?=$this->translate('No new events')?></p>
+    <?endif;?>
+</div>
+
+<div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+    <h2 style="Margin-top:0;font-style:normal;font-weight:normal;color:#3b3e42;font-size:20px;line-height:30px;font-family:Roboto,sans-serif;"><?=$this->translate("New Sessions published in last 24h")?></h2>
+    <? if (count($sessions)):?>
+        <? foreach ($sessions as $event):?>
+            <p><a href="<?= $this->url('session', array('action'=>'view-session', 'id'=> $event->getEventUUID()), array('force_canonical' => true));?>">
+                    <strong><?=$event->getEventName()?></strong></a><br>
+                <span style="font-size:12px;">
+                    <strong><?= $this->translate('By:')?></strong>
+                    <a href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$event->getUsr()->getUsrUUID()), array('force_canonical' => true));?>">
+                    <?= $event->getUsr()->getUsrName() ?></a>
+                    |
+                    <strong><?=$this->translate('For:')?></strong>
+                    <?= $this->partial('partial/show-level.phtml', ['level' => $event->getEventLevel(), 'city'=>$event->getCity(), 'email' => 'true']); ?><br>
+
+                    <strong><?=$this->translate('Start date:')?></strong> <?= $this->dateFormat(
+                        $event->getEventStartDate()->setTimezone(new DateTimeZone('Europe/Paris')),
+                        IntlDateFormatter::MEDIUM, // date
+                        IntlDateFormatter::SHORT, // time
+                        'fr_FR'
+                    )?>
+                    |
+                    <strong><?=$this->translate('End date:')?></strong> <?= $this->dateFormat(
+                        $event->getEventEndDate()->setTimezone(new DateTimeZone('Europe/Paris')),
+                        IntlDateFormatter::MEDIUM, // date
+                        IntlDateFormatter::SHORT, // time
+                        'fr_FR'
+                    )?>
+
+                </span>
+                <br>
+                <?php $eventDescription = preg_replace('/<[^>]*>/', ' ', $event->getEventDescription());
+
+                $eventDescription = (strlen($eventDescription) > 150) ? substr($eventDescription, 0, 150) . '...' : $eventDescription;?>
+
+                <span style="font-size:14px;line-height: 10px;">
+                 <?= $eventDescription ?>
+                </span>
+            </p>
+        <?endforeach;?>
+    <?else:?>
+        <p><?=$this->translate('No new events')?></p>
+    <?endif;?>
+</div>

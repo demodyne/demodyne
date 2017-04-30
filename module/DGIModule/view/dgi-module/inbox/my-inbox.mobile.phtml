@@ -1,0 +1,35 @@
+<div class="jumbotron">
+
+<div class="title-mobile"><?= $this->translate('My Inbox')?></div>
+
+
+<div id="inbox-my-inbox">
+
+<div class="row">
+
+	<div class="col-md-12">
+
+<div>
+
+<?= $this->partial('dgi-module/inbox/inbox-partial-menu.phtml', ['user'=>$user]); ?>
+
+</div>
+
+<div id="inbox-my-inbox-list">
+
+<?= $this->listReceivedSection;     ?>
+
+
+
+</div>
+
+	</div>
+
+
+
+</div>
+
+</div>
+
+
+</div>

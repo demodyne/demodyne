@@ -1,0 +1,233 @@
+<div class="modal-header-soft round5top ui-draggable-handle">
+    <span class="big">Demodyne <strong> <?= $this->translate('Blog Listing')?></strong></span>
+
+    <a class="close" href="/"><i class="fa fa-home w"></i></a>
+    <button type="button" class="close" onclick="parent.history.back();"> <i class="fa fa-arrow-circle-left w right10" title="<?= $this->translate('Back')?>"></i> </button>
+    &nbsp; <span class="big close" id="modal-dialog-title"></span>
+</div>
+
+
+<div class="jumbotron" id="article-list" style="background-image: url('/img/header-art-blog.png'); background-repeat: no-repeat; background-attachment: top; background-position: top;"> 
+
+    <? if (count($featuredArticles)):?>
+    <div class="row bot20">
+        <div class="col-md-12">
+
+
+
+            <!-- Slider -->
+            <div class="row" id="main_area">
+                <div class="col-md-12" id="slider">
+                    <!-- Top part of the slider -->
+                    <div class="row">
+                        <div class="col-md-8" id="carousel-bounding-box">
+                            <div class="carousel slide" id="myCarousel">
+                                <!-- Carousel items -->
+                                <div class="carousel-inner">
+                                    <?foreach ($featuredArticles as $index => $article):?>
+                                    <div class="<?=!$index?'active':''?> item" data-slide-number="<?=$index?>">
+                                        <img src="<?=$this->basePath($article->getArticleImage())?>" class="round5"></div>
+                                    <?endforeach;?>
+                                </div><!-- Carousel nav -->
+                                <?if (count($featuredArticles)>1):?>
+                                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                                    <span class="glyphicon glyphicon-chevron-left orange"></span>
+                                </a>
+                                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                                    <span class="glyphicon glyphicon-chevron-right orange"></span>
+                                </a>
+                                <?endif;?>
+                            </div>
+                            <!-- Bottom Carousel Indicators -->
+                            <ol class="carousel-indicators">
+                                <?foreach ($featuredArticles as $index => $article):?>
+                                <li data-target="#myCarousel" data-slide-number="<?=$index?>" <?=!$index?'class="active"':''?>></li>
+                                <?endforeach;?>
+                            </ol>
+                        </div>
+
+                        <div class="col-md-4" id="carousel-text"></div>
+
+                        <div id="slide-content" style="display: none;">
+                            <?foreach ($featuredArticles as $index => $article):?>
+                            <div id="slide-content-<?=$index?>">
+                                <h2><?=$article->getArticleTitle()?></h2>
+                                <p>
+                                    <?php $articleDescription = preg_replace('/<[^>]*>/', ' ', $article->getArticleDescription());
+
+                                    $articleDescription = (strlen($articleDescription) > 150) ? substr($articleDescription, 0, 300) . '...' : $articleDescription;?>
+
+                                    <?=$articleDescription?></p>
+                                <p class="sub-text">
+                                    <i class="fa fa-user"></i> <?=$article->getUsr()->getUsrName()?> |
+                                    <i class="fa fa-tag"></i> <?= $this->translate('Tag')?> - <?=$this->translate(ucfirst(array_search($article->getArticleCategory(), $this->configItem('demodyne.blog.category'))))?> |
+                                    <i class="fa fa-clock-o"></i> <?=$this->dateFormat($article->getArticlePublishedDate(), IntlDateFormatter::MEDIUM,  IntlDateFormatter::NONE, $article->getCountry()->getCountryFormat())?> |
+                                </p>
+                                <p><button type="button" class="btn btn-orange" id="event-upcoming-events-see-all">
+                                        <i class="fa fa-eye"></i> See all</button></p>
+                            </div>
+                            <?endforeach;?>
+
+                        </div>
+                    </div>
+                </div>
+            </div><!--/Slider-->
+
+
+
+
+
+        </div>
+    </div>
+    <?endif;?>
+
+
+    <div class="row bot10">
+        <div class="col-md-9">
+            <div class="fltl top10 right10"><?= $this->translate('View Articles from')?>: </div>
+            <div class="fltl">
+                <select name="country" required class="form-control text-change" id="country">
+                    <?php foreach ($countries as $country):?>
+                        <option value="<?= $this->url('blog', array('action' => 'articles', 'country'=>$country->getCountryCode())) ?>" <?= ($country==$selectedCountry)?'selected="selected"':'' ?>><?= $country->getCountryName() ?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+            <div class="btn-group fltl top10 right10 left10">Select Articles by Tags:</div>
+            <div class="fltl right10">
+                <select name="tags" required class="form-control text-change" id="tags">
+                    <option value="0" ><?= $this->translate('All')?></option>
+                    <option value="1" ><?= $this->translate('Features')?></option>
+                    <option value="2" ><?= $this->translate('News')?></option>
+                </select>
+            </div>
+
+
+
+        </div>
+        <form
+            action="<?=$this->url('blog', array('action'=>'list', 'page'=>1))?>"
+            method="post" id="article-list-search-form">
+
+            <div class="col-md-3 col-xs-12">
+                <div class="form-group input-group">
+                    <input style="max-height: 37px !important;" type="text"
+                           class="form-control"
+                           placeholder="<?= $this->translate('Search')?>" required="required"
+                           name="searchTerms" <?=$searchTerms?'value="'.$searchTerms.'"':''?>>
+                    <span class="input-group-btn">
+                        <button type="submit"
+                                class="btn <?=$searchTerms?'btn-success':'btn-default'?>">
+                            <i class="fa fa-search fa-fw"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+
+    <hr>
+
+
+
+
+
+    <?php if ($user && $user->getUsrId() && $user->getUsrlId()==$this->configItem('demodyne.account.type.admin')):?>
+        <div class="row">
+            <div class="col-md-9 col-xs-12">
+                <div class="btn-group fltl right10 top5" role="group" aria-label="...">
+
+                    <button type="button"
+                            class="btn btn-sm btn-success"
+                            id="article-list-see-published"><?= $this->translate('Published')?></button>
+
+                    <button type="button"
+                            class="btn btn-sm btn-default"
+                            id="article-list-see-draft"><?= $this->translate('Draft')?></button>
+
+                </div>
+
+
+            </div>
+            <div class="col-md-3 text-right">
+                <a
+                    href="<?= $this->url('blog', array('action'=>'add-article'));?>"
+                    id="add-new-article"
+                    class="btn btn-orange">
+                    <i class="fa fa-plus-circle"></i> <?= $this->translate('Create New Article')?>
+
+                </a>
+            </div>
+        </div>
+        <hr>
+
+    <?php endif;?>
+
+    <div>
+        <?=$this->publishedArticles?>
+    </div>
+
+    <div>
+        <?=$this->draftArticles?>
+    </div>
+    <script type="text/javascript">
+
+        $(function() {
+
+            $('#country').on('change', function () {
+                var url = $(this).val(); // get selected value
+                if (url) { // require a URL
+                    window.location = url; // redirect
+                }
+                return false;
+            });
+
+            blogListHandlers();
+
+        });
+
+
+
+    </script>
+
+
+    <!-- SLIDESHOW SCRIPT -->
+    <script>
+        jQuery(document).ready(function($) {
+
+            $('#myCarousel').carousel({
+                interval: 5000
+            });
+
+            $('#carousel-text').html($('#slide-content-0').html());
+
+            //Handles the carousel thumbnails
+            $('[id^=carousel-selector-]').click( function(){
+                var id = this.id.substr(this.id.lastIndexOf("-") + 1);
+                var id = parseInt(id);
+                $('#myCarousel').carousel(id);
+            });
+
+
+            // When the carousel slides, auto update the text
+            $('#myCarousel').on('slid.bs.carousel', function (e) {
+                var id = $('.item.active').data('slide-number');
+                $('#carousel-text').html($('#slide-content-'+id).html());
+            });
+        });
+
+
+
+        // When the DOM is ready, run this function
+        $(document).ready(function() {
+            //Set the carousel options
+            $('#quote-carousel').carousel({
+                pause: true,
+                interval: 4000,
+            });
+        });
+
+    </script>
+
+</div>

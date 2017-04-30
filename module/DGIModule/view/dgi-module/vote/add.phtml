@@ -1,5 +1,3 @@
-<!-- vote/add -->
-
 <?php if ($proposal->getPropStatus()>= $this->configItem('demodyne.proposal.status.type.vote') || $proposal->isMeasure()):?>
 <div id="add-change-vote-div">
 <?php if ((!$owner || $proposal->isMeasure()) && (!$user || (!$user->isPartner() && !$user->isAdministration()))): ?>
@@ -11,12 +9,23 @@
     <div class="col-md-12">
     	<div class="form-group">
     		<label for="voteVote" class="col-md-3 control-label big"><?= $this->translate('My vote:')?></label>
-    		<div class="col-md-4">
-    			<?= $this->formElement($voteForm->get('voteVote'));?>
+    		<div class="col-md-4 top5">
+    			<!--<?= $this->formElement($voteForm->get('voteVote'));?>-->
+    			
+<select name="voteVote" required class="form-control" id="vote">
+<option value="5" <?=$vote->getVoteVote()==5?'selected="selected"':''?> style="background-color: #9FC05A;"><?= $this->translate('Highly Favourable')?></option>
+<option value="3" <?=$vote->getVoteVote()==3?'selected="selected"':''?> style="background-color: #ADD633;"><?= $this->translate('Favourable')?></option>
+<option value="0" <?=$vote->getVoteVote()==0?'selected="selected"':''?> style="background-color: #FFD834;"><?= $this->translate('Neutral')?></option>
+<option value="-3" <?=$vote->getVoteVote()==-3?'selected="selected"':''?> style="background-color: #FFB234;"><?= $this->translate('Unfavourable')?></option>
+<option value="-5" <?=$vote->getVoteVote()==-5?'selected="selected"':''?> style="background-color: #FF8B5A;"><?= $this->translate('Opposed')?></option>
+</select>
+    			
+    			
     		</div>
-    		<div class="col-md-5">
+    		<div class="col-md-5 top5">
     			<?php if ($user):?>    	
-    				<?php if (($proposal->getPropLevel()==$this->configItem('demodyne.proposal.level.city') && ( $proposal->getCity()==$user->getCity() || $proposal->getCity()==$user->getCity()->getFullCity() || ($proposal->getCity()->getDistrictCode()==$user->getCity()->getDistrictCode() && $proposal->getCity()->getFullCity()==$user->getCity()->getFullCity()) || ($proposal->getPropFullCity() && $proposal->getCity()->getFullCity()==$user->getCity()->getFullCity())) || 
+    				<?php if (($proposal->getPropLevel()==$this->configItem('demodyne.proposal.level.city') && 
+    				    ( $proposal->getCity()==$user->getCity() || $proposal->getCity()==$user->getCity()->getFullCity() || ($proposal->getCity()->getDistrictCode()==$user->getCity()->getDistrictCode() && $proposal->getCity()->getFullCity()==$user->getCity()->getFullCity()) || ($proposal->getPropFullCity() && $proposal->getCity()->getFullCity()==$user->getCity()->getFullCity())) || 
     				          ($proposal->getPropLevel()==$this->configItem('demodyne.proposal.level.region') && $proposal->getCity()->getRegion()==$user->getCity()->getRegion()) ||
     			               $proposal->getPropLevel()==$this->configItem('demodyne.proposal.level.country') && $proposal->getCity()->getCountry()==$user->getCountry()  )):?>	
             			<?php if (!$voted):?>
@@ -66,5 +75,3 @@ $(function () {
   	<div>
 	<span class="big"><?= $this->translate('Vote section')?>:</span> <?= sprintf($this->translate('Please wait for the discussion step to end in %d  days'), $proposal->getPropDebatePeriod() - (new \DateTime())->diff($proposal->getPropPublishedDate())->days)?>.</div>
 <?php endif; ?>
-
-<!-- /vote/add -->

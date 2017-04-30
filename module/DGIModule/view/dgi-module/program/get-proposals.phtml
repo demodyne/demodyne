@@ -1,5 +1,3 @@
-<!-- program/get-proposals -->
-
 <?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('program', array('action'=>'get-proposals', 'id'=>$program->getProgUUID())), 'prog-prop', $limit, $sort, $order); ?>
 
 <div id="program-get-proposals"
@@ -180,13 +178,13 @@
 				title="<?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName();?>"> </div>
     <div class="table-cell"> <a
 
-				href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>"
+				href="<?= $this->url($proposal->isMeasure()?'measure':'proposal', array('id'=>$proposal->getPropUUID()));?>"
 
 				style="text-decoration: none !important;"
 
 				id="program-get-proposals-list-item"> <span class="big">
       <?= $proposal->getPropSavedName() ?>
-      </span></a> <br>
+      </span></a> <?= $proposal->getPropAggregatedScore() ?><br>
       <?= $this->translate('Published by')?>
       <a
 
@@ -254,6 +252,3 @@
 	});
 
 </script> 
-
-<!-- /program/get-proposals -->
-

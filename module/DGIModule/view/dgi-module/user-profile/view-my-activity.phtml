@@ -1,9 +1,6 @@
-<!-- user-profile/view-my-activity -->
 
-<h2 class="text-center"><i class="fa fa-paper-plane-o"></i> <?= $this->translate('Activity')?><br />
-<span class="small"><?= $this->translate('Your Demodyne Activity')?></span></h2> 
+<h2 class="text-center"><?= $this->translate('Content Activity')?></h2> 
 
-<hr class="bot20" />
 
 
 <div class="row">
@@ -11,19 +8,19 @@
 <div class="col-md-2 col-xs-0"></div>
 
 <div class="animated flipInY col-md-4 col-xs-12 text-center">
-<h4><strong><?= $this->translate('Proposals')?></strong></h4>
-<span class="s32"><strong><?=$totalProp?></strong></span>
+<h4><span class="s32"><strong><?=$totalProp?></strong></span> <?= $this->translate('Proposals')?></h4>
+
 <div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['debate'])?$propNo['debate']:0?></span> <?= $this->translate('in Debate')?></button></div>
 <div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['vote'])?$propNo['vote']:0?></span> <?= $this->translate('in Vote')?></button></div>
 <div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['plan'])?$propNo['plan']:0?></span> <?= $this->translate('in Planning')?></button></div>
 <div class="bot5"><button type="button" class="btn btn-default" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['execute'])?$propNo['execute']:0?></span> <?= $this->translate('in Execution')?></button></div>
-<div class="bot5"><button type="button" class="btn btn-success" style="width:150px; text-align:left !important;"><span class="badge"><?= isset($propNo['followup'])?$propNo['followup']:0?></span> <?= $this->translate('Completed')?></button></div>
+<div class="bot5"><button type="button" class="btn btn-success" style="width:150px; text-align:left !important;"><span class="badge badge-info white"><?= isset($propNo['followup'])?$propNo['followup']:0?></span> <?= $this->translate('Completed')?></button></div>
 <a href="<?= $this->url($_SESSION['level']['level'])?>#myprop2" class="btn btn-orange"><i class="fa fa-eye"></i> <?= $this->translate('View All')?></a>
 </div>
 
 <div class="animated flipInY col-md-4 col-xs-12 text-center">
-<h4><strong><?= $this->translate('Programs')?></strong></h4>
-<span class="s32"><strong><?=count($user->getPrograms())?></strong></span>
+<h4><span class="s32"><strong><?=count($user->getPrograms())?></strong></span> <?= $this->translate('Programs')?></h4>
+
 <hr>
 <?php 
     $programs = [];
@@ -80,4 +77,27 @@
 <hr style="width:75%;" />
 
 
-<!-- /user-profile/view-my-activity -->
+<!-- 
+<div class="row text-center">
+
+<div class="col-sm-offset-1 col-sm-10 text-center">
+
+<h4><strong><?= $this->translate('Top 3 Categories of interest')?></strong></h4>
+
+<img src="<?=$this->basePath('/img/environnement100x100.png') ?>" valign="middle" width="45" height="45" title="Economie - Production agricole locale"/ class="round5"> 
+
+<img src="<?=$this->basePath('/img/famille100x100.png') ?>" valign="middle" width="45" height="45" title="Famille" class="round5"> 
+
+</div>
+
+</div>
+ -->
+
+
+
+
+
+
+
+
+

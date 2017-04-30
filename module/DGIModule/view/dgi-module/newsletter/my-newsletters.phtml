@@ -1,115 +1,119 @@
-<!-- newsletter/my-newsletters -->
-
-  <?php $paging = $this->sortingDivPaginationHelper($pagedNewsletters, $page, $this->url('administration/newsletter', array('action'=>'my-newsletters')), 'my-newsletters', $limit, $sort, $order); ?>
+<?php $paging = $this->sortingDivPaginationHelper($pagedNewsletters, $page, $this->url('administration/newsletter', array('action'=>'my-newsletters')), 'my-newsletters', $limit, $sort, $order); ?>
 <div id="newsletter-my-newsletters"
-	data-edit-newsletter="<?=$this->translate('Edit Newsletter')?>"
-	data-url="<?=$this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit))?>">
-	<div class="row bot20">
-		<div class="col-md-6">
-			<button type="button"
-				data-url="<?= $this->url('administration/newsletter', array('action'=>'add-newsletter')); ?>"
-				data-dialog-title="<?=$this->translate('Add New Newsletter')?>"
-				class="btn btn-orange"
-				id="newsletter-my-newsletters-add-new-newsletter"> <i
-				class="fa fa-plus-circle"></i> <?= $this->translate('Create Newsletter')?>
-			</button> <?= $this->translate('You have')?> <span class="big"><?=$newslettersCount?> <?= $this->translate('Newsletters')?></span>
-			
-		</div>
-		<div class="col-md-6">
-		<div class="fltr">
-				<ul class="nav">
-					<li class="dropdown"><a class="dropdown-toggle"
-						data-toggle="dropdown" href="#" aria-expanded="false"> <span
-							class="label label-default"><i class="fa fa-caret-down"></i> </span>
-					</a>
-						<ul class="dropdown-menu dropdown-menu-right">
-							<li><a id="page-my-newsletters"
-								href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Name')?></a></li>
-							<li><a id="page-my-newsletters"
-								href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'status', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Status')?></a></li>
-							<li class="divider"></li>
-							<li><a id="page-my-newsletters"
-								href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'created_date', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Created date')?></a></li>
-						</ul></li>
-				</ul>
-			</div>
-			<div class="fltr">
-				<ul class="nav">
-					<li class="dropdown"><a class="dropdown-toggle"
-						data-toggle="dropdown" href="#" aria-expanded="false"> <span
-							class="label label-default"><i class="fa fa-caret-up"></i> </span>
-					</a>
-						<ul class="dropdown-menu dropdown-menu-right">
-							<li><a id="page-my-newsletters"
-								href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Name')?></a></li>
-							<li><a id="page-my-newsletters"
-								href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'status', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Status')?></a></li>
-							<li class="divider"></li>
-							<li><a id="page-my-newsletters"
-								href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'created_date', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Created date')?></a></li>
-						</ul></li>
-				</ul>
-			</div>
-			<div class="fltr right10 top5"><?= $this->translate('Sorted by')?> <?php if ($sort=='created_date'):?><?=$this->translate('Created date')?><?php else:?><?=$this->translate(ucfirst($sort))?><?php endif;?> 
-                    <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
-		</div>
-	</div>
+     data-edit-newsletter="<?=$this->translate('Edit Newsletter')?>"
+     data-duplicate-newsletter="<?=$this->translate('Duplicate Newsletter')?>"
+     data-delete-newsletter="<?=$this->translate('Delete Newsletter')?>"
+     data-url="<?=$this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit))?>">
+    <div class="row bot20">
+        <div class="col-md-6">
+            <button type="button"
+                    data-url="<?= $this->url('administration/newsletter', array('action'=>'add-newsletter')); ?>"
+                    data-dialog-title="<?=$this->translate('Add New Newsletter')?>"
+                    class="btn btn-orange"
+                    id="newsletter-my-newsletters-add-new-newsletter"> <i
+                        class="fa fa-plus-circle"></i> <?= $this->translate('Create Newsletter')?>
+            </button> <?= $this->translate('You have')?> <span class="big"><?=$newslettersCount?> <?= $this->translate('Newsletters')?></span>
 
-	<table class="table table-condensed table-hover">
-		<colgroup>
-			<col width="15%" />
-			<col width="35%" />
-			<col width="15%" />
-			<col width="15%" />
-			<col width="20%" />
-		</colgroup>
-		
-		<tbody>
+        </div>
+        <div class="col-md-6">
+            <div class="fltr">
+                <ul class="nav">
+                    <li class="dropdown"><a class="dropdown-toggle"
+                                            data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                    class="label label-default"><i class="fa fa-caret-down"></i> </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a id="page-my-newsletters"
+                                   href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'name', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Name')?></a></li>
+                            <li><a id="page-my-newsletters"
+                                   href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'status', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Status')?></a></li>
+                            <li class="divider"></li>
+                            <li><a id="page-my-newsletters"
+                                   href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'created_date', 'page'=>1, 'order'=>'desc'), true);?>"><?=$this->translate('Created date')?></a></li>
+                        </ul></li>
+                </ul>
+            </div>
+            <div class="fltr">
+                <ul class="nav">
+                    <li class="dropdown"><a class="dropdown-toggle"
+                                            data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                    class="label label-default"><i class="fa fa-caret-up"></i> </span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a id="page-my-newsletters"
+                                   href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'name', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Name')?></a></li>
+                            <li><a id="page-my-newsletters"
+                                   href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'status', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Status')?></a></li>
+                            <li class="divider"></li>
+                            <li><a id="page-my-newsletters"
+                                   href="<?= $this->url('administration/newsletter', array('action'=>'my-newsletters', 'sort'=>'created_date', 'page'=>1, 'order'=>'asc'), true);?>"><?=$this->translate('Created date')?></a></li>
+                        </ul></li>
+                </ul>
+            </div>
+            <div class="fltr right10 top5"><?= $this->translate('Sorted by')?> <?php if ($sort=='created_date'):?><?=$this->translate('Created date')?><?php else:?><?=$this->translate(ucfirst($sort))?><?php endif;?>
+                <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?></div>
+        </div>
+    </div>
 
-<?php foreach ($pagedNewsletters as $newsletter):?>
-<tr>
-				<td>
+    <table class="table table-condensed table-hover">
+        <colgroup>
+            <col width="15%" />
+            <col width="35%" />
+            <col width="15%" />
+            <col width="15%" />
+            <col width="20%" />
+        </colgroup>
 
-<?php $categories = $newsletter->getCategories();?>
-<?php foreach ($categories as $category):?>
-<img width="24" height="24" title="<?=$category->getCatName()?>"
-					src="<?= $this->basePath()?>/files/<?= $category->getCatImage() ?>">&nbsp;
-<?php endforeach;?>
-</td>
-<?php $newsletterInfo = $this->escapeHtml($newsletter->getNlDescription()); 
-      $newsletterInfo = (strlen($newsletterInfo) > 150) ? substr($newsletterInfo, 0, 150) . '...' : $newsletterInfo;?>
-				<td class="big"><a href="<?=$this->url('administration/newsletter', array('action'=>'edit-newsletter', 'id' => $newsletter->getNlUUID()))?>" 
-									id="newsletter-my-newsletters-edit" title="<?=$newsletterInfo?>"><?=$newsletter->getNlName()?></a></td>
-				<td>
-					<?php if ($newsletter->getNlSentDate()):?>
-						<i class="fa fa-paper-plane-o"></i> <?= $newsletter->getNlSentDate()->format('d/m/Y')?></td>
-					<?php else:?>
-						<i class="fa fa-lock"></i> <?= $this->translate('Draft')?></td>
-					<?php endif;?>
-				<td><i class="fa fa-clock-o"></i> <?= $newsletter->getNlCreatedDate()->format('d/m/Y') ?></td>
-				<td>
-				<?= $this->translate('Delete newslette')?>r<br>
-				<?= $this->translate('Duplicate newsletter')?>
-				
-				</td>
-				
-			</tr>
-<?php endforeach;?>
+        <tbody>
 
-</tbody>
-	</table>
-	<hr>
+        <?php foreach ($pagedNewsletters as $newsletter):?>
+            <tr>
+                <td>
 
-<?= $paging; ?>
+                    <?php $categories = $newsletter->getCategories();?>
+                    <?php foreach ($categories as $category):?>
+                        <img width="24" height="24" title="<?=$category->getCatName()?>"
+                             src="<?= $this->basePath()?>/files/<?= $category->getCatImage() ?>">&nbsp;
+                    <?php endforeach;?>
+                </td>
+                <?php $newsletterInfo = $this->escapeHtml($newsletter->getNlDescription());
+                $newsletterInfo = (strlen($newsletterInfo) > 150) ? substr($newsletterInfo, 0, 150) . '...' : $newsletterInfo;?>
+                <td class="big"><a href="<?=$this->url('administration/newsletter', array('action'=>'edit-newsletter', 'id' => $newsletter->getNlUUID()))?>"
+                                   id="newsletter-my-newsletters-edit" title="<?=$newsletterInfo?>"><?=$newsletter->getNlName()?></a></td>
+                <td>
+                    <?php if ($newsletter->getNlSentDate()):?>
+                    <i class="fa fa-paper-plane-o"></i> <?= $newsletter->getNlSentDate()->format('d/m/Y')?></td>
+            <?php else:?>
+                <i class="fa fa-lock"></i> <?= $this->translate('Draft')?></td>
+            <?php endif;?>
+                <td><i class="fa fa-clock-o"></i> <?= $newsletter->getNlCreatedDate()->format('d/m/Y') ?></td>
+                <td>
+                    <?if (!$newsletter->getNlSentDate()):?>
+                    <a href="<?=$this->url('administration/newsletter', array('action'=>'delete-newsletter', 'id' => $newsletter->getNlUUID()))?>"
+                       id="newsletter-my-newsletters-delete">
+                        <?= $this->translate('Delete newsletter')?></a>
+                    <br>
+                    <?endif;?>
+                    <a href="<?=$this->url('administration/newsletter', array('action'=>'duplicate-newsletter', 'id' => $newsletter->getNlUUID()))?>"
+                       id="newsletter-my-newsletters-duplicate">
+                        <?= $this->translate('Duplicate newsletter')?></a>
+                </td>
+
+            </tr>
+        <?php endforeach;?>
+
+        </tbody>
+    </table>
+    <hr>
+
+    <?= $paging; ?>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-$(function() {
-	newsletterMyNewslettersHandlers();
-});
+        $(function() {
+            newsletterMyNewslettersHandlers();
+        });
 
-</script>
+    </script>
 </div>
-
-<!-- /newsletter/my-newsletters -->

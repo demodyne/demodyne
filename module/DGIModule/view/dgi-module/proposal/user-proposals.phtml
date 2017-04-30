@@ -1,5 +1,3 @@
-<!-- proposal/user-proposals -->
-
 <?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID())), 'user-proposals', $limit, $sort, $order, $filter); ?>
 <div id="proposal-user-proposals"
 	class="parent" 
@@ -10,7 +8,12 @@
 		<div class="col-md-3"></div>
 		<div class="col-md-6">
 			<h2 class="text-center">
-				<i class="fa fa-bullhorn"></i> <?= sprintf($this->translate('%s\'s Proposals'), $user->getUsrName())?></h2>
+                <?if (!$user->isAdministration()):?>
+				    <i class="fa fa-bullhorn"></i> <?= sprintf($this->translate('%s\'s Proposals'), $user->getUsrName())?>
+                <?else:?>
+                    <img src="/img/icon-official-measures-33.svg" width="24"> <?= sprintf($this->translate('%s\'s Measures'), $user->getUsrName())?>
+                <?endif;?>
+            </h2>
 		</div>
 		<!-- /6 -->
 		<div class="col-md-3"></div>
@@ -18,8 +21,12 @@
 	<hr />
 	<div class="row">
 		<div class="col-md-12">
-			<span class="big"><strong>
-			<?= sprintf($this->translate('%s has <span class="badge big">%d</span> Proposals'), $user->getUsrName(), $noProposals)?></strong></span>
+
+                <?if (!$user->isAdministration()):?>
+                    <span class="big"><strong><?= sprintf($this->translate('%s has <span class="badge big">%d</span> Proposals'), $user->getUsrName(), $noProposals)?></strong></span>
+                <?else:?>
+                    <span class="big"><strong><?= sprintf($this->translate('%s has <span class="badge big">%d</span> Measures'), $user->getUsrName(), $noProposals)?></strong></span>
+                <?endif;?>
 		</div>
 		
 		<!--/12-->
@@ -28,8 +35,8 @@
 	<hr>
 	<div class="row">
 		<div class="col-md-8">
-
-<div class="btn-group" role="group" aria-label="...">
+            <? if (!$user->isAdministration()):?>
+            <div class="btn-group" role="group" aria-label="...">
 			<a id="page-user-proposals"
 				class="btn btn-sm <?= $filter=='none'?'btn-success':'btn-default'?>"
 				href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'filter'=>'none'));?>">
@@ -46,7 +53,8 @@
 				class="btn btn-sm <?= $filter=='country'?'btn-success':'btn-default'?>"
 				href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'sort' => $sort=='level'?'published':$sort, 'filter'=>'country'));?>">
 				<?=$this->translate('Country proposals')?> (<?=$countryProposals?>)</a>
-</div>
+            </div>
+            <?endif;?>
 		</div>
 		<!-- /6 -->
 		<div class="col-md-4">
@@ -107,7 +115,7 @@
 	<hr />
             <?php if(count($pagedProposals)>0):?>
                 <?php foreach($pagedProposals as $index => $proposal): ?>
-                        <div class="row">
+	<div class="row">
 		<div class="col-md-1" style="max-width: 60px;">
 			<img
 				src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
@@ -123,38 +131,26 @@
                                 <?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName()?>
                                         <br /> <a
 				href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>"
-				title="<?=$proposalDescription?>"
-				id="city-proposal-item" data-id="<?= $proposal->getPropUUID()?>"> <span
-				class="big"><?= $proposal->getPropSavedName() ?></span>
+				title="<?=$proposalDescription?>" id="city-proposal-item"
+				data-id="<?= $proposal->getPropUUID()?>"> <span class="big"><?= $proposal->getPropSavedName() ?></span>
 			</a> <br />
 			<?= $this->translate('Created')?> <i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()->format('d/m/Y') ?>
+			<br>
+			<?=$this->translate('for')?> 
+			<?= $this->partial('partial/show-level.phtml', ['level' => $proposal->getPropLevel(), 'city'=>$proposal->getCity()]); ?>
                             </div>
 		<!-- /4 -->
 		<div class="col-md-3">
 			<?= $this->translate('Current Status')?>:<br /> 
-                                <?= $this->{"status-$index"}?><br />
+                                <?= $this->partial('partial/proposal-status.phtml', ['proposal' => $proposal])?><br />
 			<?= $this->translate('Last updated')?> <i class="fa fa-clock-o"></i> <?= $proposal->getPropSavedDate()->format('d/m/Y')?> 
                     		</div>
 		<div class="col-md-2">        
                             	<?= $this->{"status-details-$index"}?>
                             </div>
 		<!-- /2 -->
-		<div class="col-md-2">
-			<a
-				href="<?= $this->url('proposal', array('action'=>'favorite', 'id'=>$proposal->getPropUUID()));?>"
-				alt="Favorite Proposal" id="proposal-user-proposals-favorite"
-				data-favorite="<?= $proposal->getPropUUID()?>"><?php if (in_array($user, $proposal->getUsers())):?><i class="fa fa-heart"></i> <span
-				class="small"><?= $this->translate('Remove Favorite')?></span><?php else:?><i class="fa fa-heart-o"></i> 
-				<span class="small"><?= $this->translate('Add Favorite')?></span><?php endif;?></a> <br /> 
-				
-			<?= $this->partial('partial/add-proposal-to-program.phtml', ['proposal' => $proposal]); ?>
-            	
-	
-			<span class="small"><a target="_parent"
-				href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>"><span
-					class="big"><i class="fa fa-comments"></i></span>
-                                <?= count($proposal->getComments()) ?> <?= $this->translate('Comments')?></a>
-			</span>
+		<div class="col-md-2 text-right">
+			<?= $this->partial('partial/proposal-actions.phtml', ['user' => $me, 'proposal' => $proposal])?>
 		</div>
 		<!-- /2 -->
 	</div>
@@ -177,9 +173,7 @@
         </div>
 <!-- /jumbotron -->
 <script type="text/javascript">
-	$(function () {
-		proposalUserProposalsHandlers();
-    });
-</script>
-
-<!-- /proposal/user-proposals -->
+        	$(function () {
+        		proposalUserProposalsHandlers();
+            });
+        </script>

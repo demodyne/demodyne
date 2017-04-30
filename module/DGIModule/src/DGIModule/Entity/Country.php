@@ -1,13 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Country
@@ -43,6 +44,20 @@ class Country
     /**
      * @var string
      *
+     * @ORM\Column(name="country_format", type="string", length=5, nullable=false)
+     */
+    private $countryFormat = '';
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country_region_name", type="string", length=45, nullable=true)
+     */
+    private $regionName = null;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="country_currency", type="string", length=4, nullable=true)
      */
     private $countryCurrency = '';
@@ -53,6 +68,14 @@ class Country
      * @ORM\Column(name="country_other_category", type="string", length=100, nullable=true)
      */
     private $countryOtherCategory = '';
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="country_postalcode", type="integer", nullable=true)
+     */
+    private $countryPostalcode = 5;
+    
     
     /**
      * @var integer
@@ -70,7 +93,13 @@ class Country
     
     /** @ORM\OneToMany(targetEntity="DGIModule\Entity\Banner", mappedBy="country") */
     private $banners;
+    
+    /** @ORM\OneToMany(targetEntity="DGIModule\Entity\Category", mappedBy="country") */
+    private $categories;
 
+    public function __construct() {
+        $this->categories = new ArrayCollection();
+    }
 
 
     /**
@@ -127,6 +156,29 @@ class Country
     public function getCountryName()
     {
         return $this->countryName;
+    }
+    
+    /**
+     * Set regionName
+     *
+     * @param string $regionName
+     * @return Country
+     */
+    public function setRegionName($regionName)
+    {
+        $this->regionName = $regionName;
+    
+        return $this;
+    }
+    
+    /**
+     * Get regionName
+     *
+     * @return string
+     */
+    public function getRegionName()
+    {
+        return $this->regionName;
     }
     
     /**
@@ -217,6 +269,7 @@ class Country
     
     public function getLevelBanners($level) {
         $banners= [];
+        /** @var \DGIModule\Entity\Banner $banner */
         foreach ($this->banners as $banner) {
             if ($banner->getBannerLevel()==$level) {
                 $banners[] = $banner;
@@ -224,4 +277,49 @@ class Country
         }
         return $banners;
     }
+
+    /**
+     * @param Category $a
+     * @param Category $b
+     * @return int
+     */
+    private static function compareCategoriesByName($a, $b)
+    {
+        if (strtolower($a->getCatName()) == strtolower($b->getCatName())) {
+            return 0;
+        }
+        return (strtolower($a->getCatName()) < strtolower($b->getCatName())) ? -1 : 1;
+    }
+    
+    public function getMainCategories($level=null) {
+        $mainCategories = [];
+        foreach ($this->categories as $category) {
+            $levels = [
+                1 => $category->getCatCity(), 
+                2 => $category->getCatRegion(), 
+                3 => $category->getCatCountry()
+            ];
+            if (!$category->getCatCat() && (!$level || $levels[$level])) {
+                $mainCategories[] = $category;
+            }
+        }
+        usort($mainCategories, array('\DGIModule\Entity\Country','compareCategoriesByName'));
+        return $mainCategories;
+    }
+    /**
+     * @return string $countryPostalcode
+     */
+    public function getCountryPostalcode()
+    {
+        return $this->countryPostalcode;
+    }
+    /**
+     * @return string $countryFormat
+     */
+    public function getCountryFormat()
+    {
+        return $this->countryFormat;
+    }
+
+
 }

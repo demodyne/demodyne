@@ -1,0 +1,69 @@
+<div class="jumbotron" id="program-user-programs">
+
+
+<div class="title-mobile">
+<?= sprintf($this->translate('%s has %d Programs'), $user->getUsrName(), count($programs))?>               
+</div>
+
+
+<hr>
+
+
+<?php if ($programs):?>
+<?php $levels = $this->configItem('demodyne.level');?>
+	<?php foreach ($programs as $program):?>
+
+		
+		<?php $index = $program->getProgLevel();?>
+
+			<div class="row">
+			<?php
+                $levelName = '';
+                $level = '';$levelNameFlag=null;
+                if (array_search($program->getProgLevel(), $levels)=='city') {
+                    $levelName = $program->getCity()->getCityName();
+                    $level='city';
+                    $programLevel=$this->translate('Program for City');
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='region') {
+                    $levelName = $program->getCity()->getRegion()->getRegionName();
+                    $level='region';
+                    $programLevel=$this->translate('Program for Region');
+                }
+                elseif (array_search($program->getProgLevel(), $levels)=='country') {
+                    $levelName = $program->getCity()->getCountry()->getCountryName();
+                    $levelNameFlag = '<img src="/img/flags/'.str_replace(' ', '-', $levelName).'.png" style="margin-bottom: 4px;" width="25" height="17"> '.$levelName;
+                    $level='country';
+                    $programLevel=$this->translate('Program for Country');
+                }
+                
+           
+                $programDescription = $program->getProgDescription(); 
+                $programDescription = (strlen($programDescription) > 150) ? substr($programDescription, 0, 150) . '...' : $programDescription
+           
+                ?>
+
+				<div class="col-xs-12">
+					<span class="big"><a
+						href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>"
+						id="program-user-programs-item"
+						title="<?= $programDescription ?>"><?= $program->getProgName(); ?></a></span><br>
+						
+				<?= $programLevel?>
+				<?= $this->partial('partial/show-level.phtml', ['level' => $program->getProgLevel(), 'city'=>$program->getCity()]); ?>
+				<br>
+				<div class="top5"><?= $this->translate('Published')?> <i class="fa fa-clock-o"></i> <?= $program->getProgCreatedDate()->format("d/m/Y") ?></div>
+            <div><?= $this->{"categories-$index"}?></div>
+            </div>
+				
+			</div>
+
+
+
+	<hr>
+	<div class="bot10"></div>
+	<?php endforeach;?>
+            <?php else:?>
+                <?= $this->translate('No program created yet')?>.
+                <?php endif;?>
+</div>

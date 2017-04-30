@@ -1,0 +1,131 @@
+
+<div class="container" style="padding: 0px!important;" id="dashboard">
+
+  <ul class="nav nav-tabs-mobile dunga">
+    <li class="active"><a href="#news" data-toggle="tab">
+            <img src="/img/icon-news.svg" width="20">
+      </a></li>
+    <li><a href="#allprop" data-toggle="tab">
+            <i class="fa fa-bullhorn gri33"></i>
+      </a></li>
+    <li><a href="#citizenp" data-toggle="tab">
+            <img src="/img/icon-programme-33.svg" width="20">
+      </a></li>
+    <li><a href="#officialm" data-toggle="tab">
+            <img src="/img/icon-official-measures-33.svg" width="20">
+      </a></li>
+    <li><a href="#all-events" data-toggle="tab">
+            <img src="/img/icon-events-33.svg" width="20">
+      </a></li>
+  </ul>
+</div>
+
+
+  <div id="myTabContent" class="tab-content">
+
+    <!-- tab news -->
+
+    <div class="tab-pane active in" id="news">
+        <?= $this->newsSection ?>
+    </div>
+    <!-- endtab -->
+
+    <!-- tab content allscn -->
+
+    <div class="tab-pane " id="citizenp">
+      <?= $this->allProgramsSection ?>
+    </div>
+
+    <!-- end tab content allscn -->
+
+    <!-- tab content allprop -->
+
+    <div class="tab-pane " id="allprop">
+      <?= $this->allProposalsSection ?>
+    </div>
+
+    <!-- end tab content allprop -->
+
+    <!-- tab content OFFICIAL MEASURES -->
+
+    <div class="tab-pane " id="officialm">
+      <?= $this->allMeasuresSection?>
+    </div>
+
+    <!-- end tab content officialm -->
+
+    <!-- tab content City Events -->
+
+    <div class="tab-pane " id="all-events">
+      <?= $this->allEventsSection?>
+    </div>
+
+    <!-- end tab content all-events -->
+
+  </div>
+  
+  <!-- end tab section --> 
+  
+
+
+
+<script>
+//updateContextualHelp('#news');
+$(function(){
+
+    if(window.location.hash) {
+        var hash = window.location.hash;//.substring(1); //Puts hash in variable, and removes the # character
+        var a = $('#mobile-view-dropdown').find('a[href="'+hash+'"]');
+        if (a.length) {
+            $('#mobile-view-dropdown-button').text(a.text());
+        }
+        else {
+            $('#mobile-view-dropdown-button').text( $('#mobile-view-dropdown').find('a[href="#myspace"]').text());
+        }
+        // hash found
+    } else {
+        // No hash found
+    }
+
+$('#mobile-view-dropdown').find('a').click(function() {
+    $('#mobile-view-dropdown-button').text($(this).text());
+    $('#mobile-view-dropdown').find('li').removeClass('active');
+});
+// 	$('#city-dashboard-all-measures-add-measure').click(function(){
+//   	    modalDialog('new-measure-dialog', 'Add New Measure', $(this).attr("href"), true);
+//   	    return false; 
+//   	});
+  	
+//     $('[rel="popover"]').popover({
+
+// 		trigger: "hover" ,
+
+//         container: 'body',
+
+// 		width: '400px',
+
+//         html: true,
+
+//         content: function () {
+
+//             var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');
+
+//             return clone;
+
+//         }
+
+//     }).click(function(e) {
+
+//         e.preventDefault();
+
+//     });
+
+});
+
+
+	
+	
+	
+
+
+    </script> 

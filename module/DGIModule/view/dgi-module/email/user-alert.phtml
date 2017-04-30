@@ -1,0 +1,207 @@
+<?php
+/** @var \DGIModule\Entity\User $user */
+$user = $alert['user'];
+setlocale(LC_ALL, $user->getCountry()->getCountryFormat());
+//$from = $from->setTimezone(new DateTimeZone("Europe/Paris"));
+//$to = $to->setTimezone(new DateTimeZone("Europe/Paris"));
+
+$urlBase = $this->url('home', [], array('force_canonical' => true));
+
+$city = $user->getCity();
+
+$cityName = ($city->getFullCity()?$city->getFullCity()->getCityName().' <span class="small"><i>'.$city->getDistrictName().'</i></span>':$city->getCityName());
+$regionName = $city->getRegion()->getRegionName();
+$countryName = '<img src="'.$urlBase.'img/flags/'.str_replace(' ', '-', $city->getCountry()->getCountryName()).'.png" width="20" height="14"> <strong>'.$city->getCountry()->getCountryName() .'</strong></span>';
+
+$cityUrl = $this->url('browse',
+        [
+            'country' => $city->getCountry()->getCountryName(),
+            'postalcode' => $city->getCityPostalcode(),
+            'region'=> $city->getRegion()->getRegionName(),
+            'cityname' => $city->getCityName()
+        ], array('force_canonical' => true));
+
+$regionUrl = $this->url('browse',
+    ['country' => $city->getCountry()->getCountryName(),
+        'region'=> $city->getRegion()->getRegionName(),
+    ], array('force_canonical' => true));
+
+$countryUrl = $this->url('browse',
+    ['country' => $city->getCountry()->getCountryName(),
+    ], array('force_canonical' => true));
+
+//$dateFrom = utf8_encode(strftime('%e %B %Y', strtotime($from->format('d F Y'))));
+
+?>
+
+<div style="text-align:left;color:#60666d;font-size:14px;line-height:23px;font-family:sans-serif;max-width:600px;min-width:320px;width:320px;width:calc(28000% - 167400px)">
+
+    <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+        <h1 style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:24px;line-height:24px;font-family:sans-serif;text-align:center"><?=$this->translate('Demodyne Alert')?></h1>
+    </div>
+
+    <div style="Margin-left:20px;Margin-right:20px">
+        <?=sprintf($this->translate('Hi %s, here you have your personal Demodyne Alert.'), $user->getUsrName())?>
+    </div>
+
+    <? if (isset($alert['privateMessages']) && $alert['privateMessages']):?>
+    <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+        <hr style="height: 2px; background-color: #FFF; border:none">
+        <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center"><?=sprintf($this->translate('%d Unread Private Messages'), $alert['privateMessages'])?></span>
+
+    </div>
+
+    <div style="Margin-left:20px;Margin-right:20px">
+        <? if ($alert['privateMessagesWeek']):?>
+            <?=sprintf($this->translate('You have %d unread Private Messages in the last week.'), $alert['privateMessages'])?>
+        <?else:?>
+            <?=sprintf($this->translate('You have %d unread Private Messages in the last day.'), $alert['privateMessages'])?>
+        <?endif;?>
+    </div>
+
+        <div style="Margin-left:20px;Margin-right:20px; margin-top: 20px;">
+            <div style="Margin-bottom:20px;text-align:center">
+                <center><a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;padding:5px 0 4px 0;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:sans-serif; max-width: 200px;border:1px solid #da8105;" href="<?=$this->url('country', [], array('force_canonical' => true))?>#inbox"><?=$this->translate('Go to my Inbox')?></a>
+                </center>
+            </div>
+        </div>
+    <?endif;?>
+
+    <? if (isset($alert['proposals']) && count($alert['proposals'])):?>
+        <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+            <hr style="height: 2px; background-color: #FFF; border:none">
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center">
+                <?if (count($alert['proposals'])>1):?>
+                    <?=sprintf($this->translate('%d Updated Proposals/Official Measures'), count($alert['proposals']))?>
+                <?else:?>
+                    <?=$this->translate('One Updated Proposal/Official Measure')?>
+                <?endif;?>
+            </span>
+        </div>
+
+        <div style="Margin-left:20px;Margin-right:20px">
+            <?if (count($alert['proposals'])>1):?>
+                <?=sprintf($this->translate('%d Proposals and/or Official Measures of your own, in your Favorite list or included in your Programs have updates.'), count($alert['proposals']))?>
+            <?else:?>
+                <?=$this->translate('One Proposal or Official Measure of your own, in your Favorite list or included in your Programs has updates.')?>
+            <?endif;?>
+        </div>
+
+
+        <? /** @var \DGIModule\Entity\Proposal $proposal */
+        foreach ($alert['proposals'] as $proposalItem):?>
+            <?$proposal = $proposalItem['proposal']?>
+            <div style="Margin-left:20px;Margin-right:20px">
+                <img src="<?=$urlBase?>img/<?=$proposal->isMeasure()?'icon-official-measures-33.svg':'academy-icon-proposals.png'?>" width="24">
+                <a href="<?=$this->url('proposal', ['action'=>'view', 'id'=>$proposal->getPropUUID()], array('force_canonical' => true))?>"
+                   style="Margin-top:0;Margin-bottom:0px;font-style:normal;font-weight:normal;font-size:18px;line-height:20px;font-family:sans-serif;text-align:center"><?=$proposal->getPropName()?></a><br>
+                <ul>
+                    <?if (isset($proposalItem['comments'])):?>
+                        <li><?=sprintf($this->translate('%d new Comments'), $proposalItem['comments'])?></li>
+                    <?endif;?>
+                    <?if (isset($proposalItem['status'])):?>
+                        <li><?=sprintf($this->translate('%d days to Vote state'), $proposalItem['status'])?></li>
+                    <?endif;?>
+
+                </ul>
+            </div>
+        <?endforeach;?>
+
+    <?endif;?>
+
+    <? if (isset($alert['programs']) && count($alert['programs'])):?>
+        <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+            <hr style="height: 2px; background-color: #FFF; border:none">
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center">
+                <?if (count($alert['programs'])>1):?>
+                    <?=sprintf($this->translate('%d Updated Programs'), count($alert['proposals']))?>
+                <?else:?>
+                    <?=$this->translate('One Updated Program')?>
+                <?endif;?>
+            </span>
+        </div>
+
+        <div style="Margin-left:20px;Margin-right:20px">
+            <?if (count($alert['programs'])>1):?>
+                <?=sprintf($this->translate('%d of your Programs have updates.'), count($alert['proposals']))?>
+            <?else:?>
+                <?=$this->translate('One of your Programs has updates.')?>
+            <?endif;?>
+        </div>
+
+
+        <? /** @var \DGIModule\Entity\Program $program */
+        foreach ($alert['programs'] as $programItem):?>
+            <?$program = $programItem['program']?>
+            <div style="Margin-left:20px;Margin-right:20px">
+                <img src="<?=$urlBase?>img/academy-icon-programs.png" width="24">
+                <a href="<?=$this->url('program', ['action'=>'view', 'id'=>$program->getProgUUID()], array('force_canonical' => true))?>"
+                   style="Margin-top:0;Margin-bottom:0px;font-style:normal;font-weight:normal;font-size:18px;line-height:20px;font-family:sans-serif;text-align:center"><?=$program->getProgName()?></a><br>
+                <ul>
+                    <?if (isset($programItem['comments'])):?>
+                        <li><?=sprintf($this->translate('%d new Comments'), $programItem['comments'])?></li>
+                    <?endif;?>
+                </ul>
+            </div>
+        <?endforeach;?>
+
+    <?endif;?>
+
+
+
+    <? if (isset($alert['events']) && count($alert['events'])):?>
+        <div style="Margin-left:20px;Margin-right:20px;Margin-top:24px">
+            <hr style="height: 2px; background-color: #FFF; border:none">
+            <span style="Margin-top:0;Margin-bottom:20px;font-style:normal;font-weight:normal;color:#3b3e42;font-size:21px;line-height:40px;font-family:sans-serif;text-align:center">
+                <?if (count($alert['events'])>1):?>
+                    <?=sprintf($this->translate('%d Events/Sessions to start soon'), count($alert['events']))?>
+                <?else:?>
+                    <?=$this->translate('One Event/Session to start soon')?>
+                <?endif;?>
+            </span>
+        </div>
+
+        <div style="Margin-left:20px;Margin-right:20px">
+            <?if (count($alert['events'])>1):?>
+                <?=sprintf($this->translate('%d Events and/or Sessions of your own, you are invited to or you wish to attend to will start soon.'), count($alert['events']))?>
+            <?else:?>
+                <?=$this->translate('One Event or Session of your own, you are invited to or you wish to attend to will start soon.')?>
+            <?endif;?>
+        </div>
+
+
+        <? /** @var \DGIModule\Entity\Event $event */
+        foreach ($alert['events'] as $eventItem):?>
+            <?$event = $eventItem['event']?>
+            <div style="Margin-left:20px;Margin-right:20px">
+                <img src="<?=$urlBase?>img/<?=$event->isSession()?'academy-icon-sessions.png':'academy-icon-events.png'?>">
+                <a href="<?=$this->url($event->isSession()?'session':'event', ['id'=>$event->getEventUUID()], array('force_canonical' => true))?>"
+                   style="Margin-top:0;Margin-bottom:0px;font-style:normal;font-weight:normal;font-size:18px;line-height:20px;font-family:sans-serif;text-align:center"><?=$event->getEventName()?></a><br>
+                <ul>
+                    <li>
+                        <?if ($event->isSession()):?>
+                            <?=sprintf($this->translate('This session will start in %d days'), $eventItem['start'])?>
+                        <?else:?>
+                            <?=sprintf($this->translate('This event will start in %d days'), $eventItem['start'])?>
+                        <?endif;?>
+                    </li>
+                </ul>
+            </div>
+        <?endforeach;?>
+
+    <?endif;?>
+
+
+    <div style="Margin-left:20px;Margin-right:20px; margin-top: 20px;">
+        <hr style="height: 2px; background-color: #FFF; border:none">
+        <div style="Margin-bottom:20px;">
+            <?=$this->translate('If you want to change your alert settings, click on the following button')?>
+
+        </div>
+        <div style="Margin-bottom:20px;text-align:center">
+            <center><a style="border-radius:4px;display:block;font-size:14px;font-weight:normal;padding:5px 0 4px 0;text-align:center;text-decoration:none!important;color:#000;background-color:#fa9c18;font-family:sans-serif; max-width: 200px;border:1px solid #da8105;" href="<?= $this->url('user/profile',  ['action'=>'user-profile'], array('force_canonical' => true))?>#account"><?=$this->translate('View my Alert Settings')?></a>
+            </center>
+        </div>
+    </div>
+
+</div>

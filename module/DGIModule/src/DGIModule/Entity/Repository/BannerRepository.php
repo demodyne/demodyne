@@ -1,23 +1,26 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity\Repository;
 
+use DGIModule\Entity\Administration;
+use DGIModule\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class BannerRepository extends EntityRepository
 {
-    
+
     /**
-     * Get the count of administration banners 
-     * @param \DGIModule\Entity\User $user
+     * Get the count of administration banners
+     * @param Administration $admin
+     * @return mixed
      */
-    public function countBanners(\DGIModule\Entity\Administration $admin)
+    public function countBanners(Administration $admin)
     {
         $q = $this->createQueryBuilder('b')
                         ->select('count(distinct b.bannerId) as total')
@@ -26,13 +29,7 @@ class BannerRepository extends EntityRepository
         return $q->getQuery()->getOneOrNullResult();
     }
     
-    /**
-     * Get the count of inactive banners
-     * 
-     * @param \DGIModule\Entity\Administration $admin
-     * @return mixed|NULL|\Doctrine\DBAL\Driver\Statement
-     */
-    public function countInactiveBanners(\DGIModule\Entity\Administration $admin)
+    public function countInactiveBanners(Administration $admin)
     {
         $q = $this->createQueryBuilder('b')
                     ->select('count(distinct b.bannerId) as total')
@@ -42,13 +39,7 @@ class BannerRepository extends EntityRepository
         return $q->getQuery()->getOneOrNullResult();
     }
     
-    /**
-     * Get the count of active banners 
-     * 
-     * @param \DGIModule\Entity\Administration $admin
-     * @return mixed|NULL|\Doctrine\DBAL\Driver\Statement
-     */
-    public function countActiveBanners(\DGIModule\Entity\Administration $admin)
+    public function countActiveBanners(Administration $admin)
     {
         $q = $this->createQueryBuilder('b')
                     ->select('count(distinct b.bannerId) as total')
@@ -57,18 +48,8 @@ class BannerRepository extends EntityRepository
                     ->setParameter('admin', $admin);
         return $q->getQuery()->getOneOrNullResult();
     }
-    
-    /**
-     * Get inactive banners 
-     * 
-     * @param \DGIModule\Entity\Administration $admin
-     * @param number $offset
-     * @param number $limit
-     * @param unknown $sort
-     * @param unknown $order
-     * @return \Doctrine\ORM\Tools\Pagination\Paginator
-     */
-    public function getAdminInactiveBanners(\DGIModule\Entity\Administration  $admin, $offset = 0, $limit = 10, $sort, $order) {
+
+    public function getAdminInactiveBanners(Administration  $admin, $offset = 0, $limit = 10, $sort, $order) {
         $sorts = [];
         // variable tranformation
         switch ($sort) {
@@ -97,14 +78,7 @@ class BannerRepository extends EntityRepository
         return $paginator;
     }
     
-    /**
-     * Get administration's active banners
-     * 
-     * @param \DGIModule\Entity\Administration $admin
-     */
-    public function getAdminActiveBanners(\DGIModule\Entity\Administration  $admin) {
-        
-    
+    public function getAdminActiveBanners(Administration  $admin) {
         $q = $this->createQueryBuilder('b')
                 ->where('b.admin = :admin')
                 ->andWhere('b.bannerPublished = 1')
@@ -115,14 +89,8 @@ class BannerRepository extends EntityRepository
         return $q->getQuery()->getResult();
     }
     
-    /**
-     * Get active banners for user viewed level for caroussel 
-     * 
-     * @param \DGIModule\Entity\User $user
-     * @param string $level
-     * @param unknown $levels
-     */
-    public function getActiveBanners(\DGIModule\Entity\User  $user, $level='city', $levels) {
+    public function getActiveBanners(User  $user, $level='city', $levels) {
+    
     
         $q = $this->createQueryBuilder('b')
                     ->leftJoin('b.city', 'city')
@@ -134,13 +102,14 @@ class BannerRepository extends EntityRepository
         if ($level=='city') {
             $city = $user->getCity();
             if ($city->getFullCity()) {
-                $q->andWhere('city = :city OR city.fullCity = :fullCity')
+                $q->andWhere('city = :city OR city = :fullCity OR (city.districtCode = :districtCode AND city.fullCity=:fullCity) OR (b.bannerFullCity = 1 AND city.fullCity = :fullCity)')
                   ->setParameter('city', $city)
+                  ->setParameter('districtCode', $city->getDistrictCode())
                   ->setParameter('fullCity', $city->getFullCity());
             }
             else {
                 $q->andWhere('city = :city')
-                ->setParameter('city', $city);
+                  ->setParameter('city', $city);
         
             }
         }

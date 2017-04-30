@@ -1,0 +1,342 @@
+
+<!-- results -->
+<?php $paging = $this->sortingDivPaginationHelperWithTotal($totalEntities, $entities, $page, $this->url('search', array('action'=>'search-results')), 'all-entities', $limit, $sort, $order, null); ?>
+
+
+
+
+
+
+
+
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+    <a href="/" class="close"><i class="fa fa-home w"></i></a>
+    <button type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></button>
+    <span class="big" id="modal-dialog-title"><strong><?= $this->translate('Search results')?></strong></span>
+</div>
+
+
+<div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;"  id="search-search-results" data-url="<?=$this->url('search', array('action'=>'search-results'))?>">
+
+
+
+
+    <div class="row bot10">
+        <div class="col-md-10 col-xs-12 text-xs-center">
+            <? if (count($keywords)):?>
+
+            <h5 style="line-height:1.7em;"><?=$this->translate('Search by keywords:')?>
+                <?foreach ($keywords as $keyword):?>
+                    <span class="badge badge-default"><span id="keyword"><?=$keyword?></span> <a href="<?=$this->url('search', array('action'=>'search-results', 'type'=>'keyword', 'id'=>$keyword, 'page'=>1))?>" class="white" id="removeKeyword"><i class="fa fa-times-circle"></i></a> </span>
+                <?endforeach;?>
+            </h5>
+            <?endif;?>
+
+            <? if (count($countries)):?>
+                        <h5 style="line-height:1.7em;"><?=$this->translate('Search in National level content:')?>
+                            <?foreach ($countries as $country):?>
+                                <span class="badge badge-default" id="search-level"><?=$country['name']?> <img src="<?=$this->basePath('img/flags/'.str_replace(' ', '-', $country['name']))?>.png" style="margin-bottom: 4px;" width="18" height="12"> <a href="<?=$this->url('search', array('action'=>'search-results', 'type'=>'country', 'id'=>$country['code'], 'page'=>1))?>" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a> </span>
+                            <?endforeach;?>
+                        </h5>
+
+            <?endif;?>
+
+
+            <? if (count($regions)):?>
+                        <h5 style="line-height:1.7em;"><?=$this->translate('Search in Regional level content:')?>
+                            <?foreach ($regions as $region):?>
+                                <span class="badge badge-default" id="search-level"><?=$region['name']?> <a href="<?=$this->url('search', array('action'=>'search-results', 'type'=>'region', 'id'=>$region['id'], 'page'=>1))?>" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a> </span>
+                            <?endforeach;?>
+                        </h5>
+            <?endif;?>
+
+            <? if (count($cities)):?>
+                        <h5 style="line-height:1.7em;"><?=$this->translate('Search in City level content:')?>
+                            <?foreach ($cities as $city):?>
+                                <span class="badge badge-default" id="search-level"><?=$city['name']?> <a href="<?=$this->url('search', array('action'=>'search-results', 'type'=>'city', 'id'=>$city['id'], 'page'=>1))?>" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a> </span>
+                            <?endforeach;?>
+                        </h5>
+            <?endif;?>
+
+            <? if (count($categories)):?>
+                        <h5 style="line-height:1.7em;"><?=$this->translate('Search by categories:')?>
+                            <?foreach ($categories as $category):?>
+                                <span class="badge badge-default" id="search-level"><img width="18px" height="18px" src='<?=$category['image']?>'> <?=$category['name']?> <a href="<?=$this->url('search', array('action'=>'search-results', 'type'=>'category', 'id'=>$category['id'], 'page'=>1))?>" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a> </span>
+                            <?endforeach;?>
+                        </h5>
+            <?endif;?>
+
+
+        </div>
+        <div class="col-md-2 col-xs-12 text-right text-xs-center">
+            <a href="<?=$this->url('search', array('action'=>'search'))?>" class="btn btn-orange" id="search-again" data-dialog-title="Advanced Search">
+                <i class="fa fa-search"></i> <?= $this->translate('Modify search')?></a>
+        </div>
+
+
+    </div>
+
+
+    <!-- results -->
+    <div>
+        <div class="row" data-url="<?=$this->url('search', array('action'=>'search-results'))?>">
+            <div class="col-md-8 hidden-xs nobr">
+                <span class="big "><?= sprintf($this->translate('Found %d results'), $totalEntities)?></span>
+                <div class="btn-group right10 bot5" role="group">
+                    <button data-url="<?=$this->url('search', array('action'=>'search-results', 'type'=>'entity', 'id'=>'proposal', 'page'=>1))?>" class="btn btn-sm <?=$entityType['proposal']?'btn-success':'btn-default'?>"  id="entity-type-button"><i class="fa <?=$entityType['proposal']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Proposals')?></button>
+                    <button data-url="<?=$this->url('search', array('action'=>'search-results', 'type'=>'entity', 'id'=>'measure', 'page'=>1))?>" class="btn btn-sm <?=$entityType['measure']?'btn-success':'btn-default'?>"  id="entity-type-button"><i class="fa <?=$entityType['measure']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Measures')?></button>
+                    <button data-url="<?=$this->url('search', array('action'=>'search-results', 'type'=>'entity', 'id'=>'program', 'page'=>1))?>" class="btn btn-sm <?=$entityType['program']?'btn-success':'btn-default'?>"  id="entity-type-button"><i class="fa <?=$entityType['program']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Programs')?></button>
+                    <button data-url="<?=$this->url('search', array('action'=>'search-results', 'type'=>'entity', 'id'=>'event', 'page'=>1))?>" class="btn btn-sm <?=$entityType['event']?'btn-success':'btn-default'?>"  id="entity-type-button"><i class="fa <?=$entityType['event']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Events')?></button>
+                    <button data-url="<?=$this->url('search', array('action'=>'search-results', 'type'=>'entity', 'id'=>'session', 'page'=>1))?>" class="btn btn-sm <?=$entityType['session']?'btn-success':'btn-default'?>"  id="entity-type-button"><i class="fa <?=$entityType['session']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Sessions')?></button>
+                    <button data-url="<?=$this->url('search', array('action'=>'search-results', 'type'=>'entity', 'id'=>'user', 'page'=>1))?>" class="btn btn-sm <?=$entityType['user']?'btn-success':'btn-default'?>"  id="entity-type-button"><i class="fa <?=$entityType['user']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Users')?></button>
+                </div>
+            </div>
+            <!-- /6 -->
+            <div class="col-md-4">
+                <div class="fltr">
+                    <ul class="nav">
+                        <li class="dropdown"><a class="dropdown-toggle"
+                                                data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                        class="label label-default"><i class="fa fa-caret-down"></i> </span>
+                                <!--  by <span class="caret"></span> -->
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'name', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('Name')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'type', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('Type')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'date', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('Date')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'username', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('User')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'level', 'order'=>'desc', 'results'=>$limit));?>"><?= $this->translate('Level')?></a></li>
+                            </ul></li>
+                    </ul>
+                </div>
+                <div class="fltr">
+                    <ul class="nav">
+                        <li class="dropdown"><a class="dropdown-toggle"
+                                                data-toggle="dropdown" href="#" aria-expanded="false"> <span
+                                        class="label label-default"><i class="fa fa-caret-up"></i> </span>
+                                <!-- by <span class="caret"></span> -->
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'name', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Name')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'type', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Type')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'date', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Date')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'username', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('User')?></a></li>
+                                <li><a id="page-all-proposals"
+                                       href="<?= $this->url('search', array('action'=>'search-results', 'page'=>1, 'sort'=>'level', 'order'=>'asc', 'results'=>$limit));?>"><?= $this->translate('Level')?></a></li>
+                            </ul></li>
+                    </ul>
+                </div>
+                <div class="fltr right10 top5 hidden-xs">
+
+                    <?= $this->translate('Sorted by')?>
+                    <?php if ($sort=='username'):?><?= $this->translate('User')?>
+                    <?php else:?><?=$this->translate(ucfirst($sort))?>
+                    <?php endif;?>
+
+                    <?=$order=='asc'?'<i class="fa fa-arrow-up"></i>':'<i class="fa fa-arrow-down"></i>'?>
+
+                </div>
+            </div>
+            <!--/6-->
+        </div>
+        <!-- /row -->
+
+        <div class="row bot10" style="display: none" id="entityTypeNoSelectionError">
+            <div class="col-md-12">
+                <span class="red"><?=$this->translate('You must have at least one entity type in search criteria.')?></span>
+            </div>
+        </div>
+
+        <table class="table table-hover hidden-xs" style="background-color: white">
+            <thead>
+            <tr>
+                <td style="width: 50px;"></td>
+                <td></td>
+                <td style="width: 400px;"></td>
+                <td style="width: 115px;"></td>
+                <td style="width: 140px;" class="text-right"></td>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <? if (count($entities)): ?>
+            <? /** @var \DGIModule\Entity\SearchEntity $entity */
+            foreach ($entities as $entity):?>
+
+                <?php $entityDescription = preg_replace('/<[^>]*>/', ' ', $entity->getDescription());
+                $entityDescription = (strlen($entityDescription) > 200) ? substr($entityDescription, 0, 200) . '...' : $entityDescription;?>
+
+                <tr>
+                    <td class="text-center">
+                        <?if ($entity->getType()=='proposal'):?>
+                            <i class="fa fa-bullhorn size17em" title="<?= $this->translate('Proposal')?>"></i>
+                        <?elseif ($entity->getType()=='measure'):?>
+                            <img src="/img/icon-official-measures-33.svg" width="24" title="<?= $this->translate('Official Measure')?>">
+                        <?elseif ($entity->getType()=='program'):?>
+                            <img src="<?=$this->basePath('img/icon-programme.svg')?>" width="25" title="<?= $this->translate('Program')?>">
+                        <?elseif ($entity->getType()=='event'):?>
+                            <img src="<?=$this->basePath('img/icon-event.svg')?>" width="25" title="<?= $this->translate('Event')?>">
+                        <?elseif ($entity->getType()=='session'):?>
+                            <i class="fa fa-users size17em" title="<?= $this->translate('Live Session')?>"></i>
+                        <?elseif ($entity->getType()=='user'):?>
+                            <i class="fa fa-user size17em" title="<?= $this->translate('User')?>"></i>
+                        <?endif;?>
+                    </td>
+                    <td>
+                        <div class="pull-left" style="min-width: 35px!important">
+                            <?if ($entity->getType()=='proposal' || $entity->getType()=='measure'):?>
+                                <img src="<?=$this->basePath('files/'.$entity->getImg())?>" height="24" width="24" title="<?= $entity->getImgTitle()?>">
+                            <?elseif ($entity->getType()=='user'):?>
+                                <img src="<?=$this->basePath($entity->getImg())?>" height="24" width="24" title="<?= $entity->getImgTitle()?>">
+                            <?endif?>
+                        </div>
+                        <div style="margin-left: 35px!important">
+                            <a href="<?= $this->url($entity->getType()=='user'?'user/profile':$entity->getType(), array('id'=>$entity->getUuid()));?>" title="<?=$entityDescription?>">
+                                <span class="big"><?=$entity->getName()?></span></a>
+                            <br>
+                            <i class="fa fa-map-marker size15em"></i>
+                            <?if ($entity->getLevel()<=$this->configItem('demodyne.level.city')):?>
+                                <?=$entity->getCityName()?> (<?=$entity->getPostalCode()?>) -
+                            <?endif;?>
+                            <?if ($entity->getLevel()<=$this->configItem('demodyne.level.region')):?>
+                                <?=$entity->getRegionName()?> -
+                            <?endif;?>
+                            <?if ($entity->getLevel()<=$this->configItem('demodyne.level.country')):?>
+                                <img src="<?=$this->basePath('img/flags/'.str_replace(' ', '-', $entity->getCountryName()))?>.png" style="margin-bottom: 4px;" width="18" height="12"> <?=$entity->getCountryName()?>
+                            <?endif;?>
+                        </div>
+                    </td>
+                    <td><?=$entityDescription?></td>
+                    <td>
+                        <?if ($entity->getType()=='proposal' || $entity->getType()=='measure'):?>
+                            <?=$this->translate('Published date')?>
+                        <?elseif ($entity->getType()=='program'):?>
+                            <?=$this->translate('Created date')?>
+                        <?elseif ($entity->getType()=='event' || $entity->getType()=='session'):?>
+                            <?=$this->translate('Start date')?>
+                        <?elseif ($entity->getType()=='user'):?>
+                            <?=$this->translate('Demonaut since')?>
+                        <?endif;?>
+                        <br>
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        <?=$this->dateFormat(
+                            $entity->getDate(),
+                            IntlDateFormatter::MEDIUM, // date
+                            IntlDateFormatter::NONE, // time
+                            $user?$user->getCountry()->getCountryFormat():'fr_FR'
+                        );?> </td>
+                    <td class="text-center">
+                        <?if ($entity->getType()!='user'):?>
+                            <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$entity->getUserUUID()));?>"
+                               data-title="<?=sprintf($this->translate("%s's mini profile"), $entity->getUsername())?>"
+                               data-id="<?=$entity->getUserUUID()?>"
+                               id="search-results-view-profile">
+                                <img src="<?=$this->basePath($entity->getUserPicture())?>" width="24" height="24" alt="<?= $entity->getUsername()?>" title="<?= $entity->getUsername()?>" class="round5" id="layout-picture"><br>
+                                <span class="badge"><?=$entity->getUsername()?></span></a>
+                        <?endif;?>
+                    </td>
+                </tr>
+
+
+
+            <?endforeach;?>
+
+            <? else: ?>
+            <tr>
+                <td colspan="5">
+                    <?=$this->translate('No results. Please review your search criteria.')?>
+                </td>
+            </tr>
+            <? endif; ?>
+
+
+            </tbody>
+        </table>
+
+
+        <hr>
+
+        <?= $paging; ?>
+    </div>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $('a#removeKeyword').click(function () {
+
+                if ($('a#removeKeyword').length==1) {
+                    $('#noKeywordsError').slideToggle().delay(4000).slideToggle();
+                    return false;
+                }
+
+//                $("#search-search-results").parent().load($(this).attr('href'));
+                $(this).parent().remove();
+//                return false;
+            });
+//            $('a#remove-criteria').click(function () {
+//
+//                $("#search-search-results").parent().load($(this).attr('href'));
+//                $(this).parent().remove();
+//                return false;
+//            });
+
+
+        });
+
+    </script>
+
+
+</div><!-- end jumbotron -->
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        userMiniProfilePopover($('a#search-results-view-profile'));
+
+        $("a#page-all-entities").click(function(){
+            $("#search-search-results").parent().load($(this).attr("href"));
+            return false;
+        });
+
+        $("button#entity-type-button").click(function() {
+            if ($('button#entity-type-button.btn-success').length == 1 && $(this).hasClass('btn-success')) {
+                $('#entityTypeNoSelectionError').slideToggle().delay(4000).slideToggle();
+                return false;
+            }
+            else {
+                $("#search-search-results").parent().load($(this).data('url'));
+            }
+        });
+
+        $('a#search-again').click(function() {
+            modalDialog('search-again-dialog', $(this).data('dialog-title'), $(this).attr("href"), true);
+            return false; // cancel original event to prevent form submitting
+        });
+
+    });
+
+</script>
+
+

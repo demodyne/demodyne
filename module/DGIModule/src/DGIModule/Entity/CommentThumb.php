@@ -1,12 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Comment;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,7 +36,7 @@ class CommentThumb
     private $up = '0';
 
     /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -44,7 +46,7 @@ class CommentThumb
     private $usr;
 
     /**
-     * @var \DGIModule\Entity\Comment
+     * @var Comment
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Comment")
      * @ORM\JoinColumns({
@@ -92,11 +94,11 @@ class CommentThumb
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      *
      * @return CommentThumb
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -106,7 +108,7 @@ class CommentThumb
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User
+     * @return User
      */
     public function getUsr()
     {
@@ -116,11 +118,11 @@ class CommentThumb
     /**
      * Set com
      *
-     * @param \DGIModule\Entity\Comment $com
+     * @param Comment $com
      *
      * @return CommentThumb
      */
-    public function setCom(\DGIModule\Entity\Comment $com = null)
+    public function setCom(Comment $com = null)
     {
         $this->com = $com;
 
@@ -130,7 +132,7 @@ class CommentThumb
     /**
      * Get com
      *
-     * @return \DGIModule\Entity\Comment
+     * @return Comment
      */
     public function getCom()
     {

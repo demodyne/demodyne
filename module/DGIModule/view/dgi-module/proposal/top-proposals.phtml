@@ -1,4 +1,4 @@
-<!-- proposal/top-proposals -->
+
 
 <div class="panel panel-default">
 <div class="panel-body">
@@ -8,17 +8,18 @@
 
 <?php if (count($topProposals)):?>
 <?php foreach ($topProposals as $index => $proposal): ?>
-<?php if ($index==5) break;$proposal = $proposal['proposal'];?>
+<?php if ($index==5) break;
+$proposal = $proposal['proposal'];?>
 
 <div class="row">
 
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 <div class="media">
   <div class="media-left media-top">
-<img src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage()?>" height="36" width="36" title="<?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName() ?>">
+<img src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage()?>" height="34" width="34" class="round5" title="<?= $proposal->getCat()->getCatCat()->getCatName() ?> - <?= $proposal->getCat()->getCatName() ?>">
   </div>
   <div class="media-body">
-<span class="bigsmall"><a href="<?= $this->url('proposal', array('id'=>$proposal->getPropUUID()));?>" style="text-decoration:none !important;" id="city-top-proposal-list-item" data-id="<?= $proposal->getPropUUID()?>"> <?= $proposal->getPropName() ?></a></span><br>
+<span class="bigsmall"><a href="<?= $this->url($proposal->isMeasure()?'measure':'proposal', array('id'=>$proposal->getPropUUID()));?>" style="text-decoration:none !important;" id="city-top-proposal-list-item" data-id="<?= $proposal->getPropUUID()?>"> <?= $proposal->getPropName() ?></a></span><br>
 <?= $this->{"vote-$index"}?><hr>
   </div>
 </div>
@@ -40,4 +41,30 @@
 
 </div></div><!-- end panel -->
 
-<!-- /proposal/top-proposals -->
+
+
+<script type="text/javascript">
+
+
+
+         $(function () {
+
+               
+
+                /*$("a#city-top-proposal-list-item").click(function () {
+
+                	showInside($(this).attr("href"));
+
+                    return false;
+
+                });*/
+
+
+
+
+
+            });
+
+           
+
+        </script>

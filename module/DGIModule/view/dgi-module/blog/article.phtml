@@ -1,0 +1,89 @@
+<?php /** @var \DGIModule\Entity\Article $article */
+$article = $this->article; $user=$this->user; $now = new \DateTime();?>
+
+
+<?= $this->partial('partial/page-header.phtml', ['title' => '<a href="'.$this->url('blog', array('action'=>'articles')).'"><i class="fa fa-coffee size15em w" title="'.$this->translate('Go To Blog').'"></i></a>  '.$this->translate('Blog Article')])?>
+
+
+<div class="jumbotron" id="blog-view-article"
+     style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+
+
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 col-xs-12 col-xs-offset-0">
+
+            <span class="blog-title" id="blog-view-article-articleTitle"><?= $article?$article->getArticleTitle():'Title'?></span>
+            <hr>
+            <?if (!$article || $article->getArticleImage()):?>
+                <img id="blog-view-article-preview" style="min-width: 200px!important; max-width: 100%;" src="<?=$article?$article->getArticleImage():''?>" title="<?=$this->translate('Article Image')?>">
+                <hr>
+            <?endif;?>
+
+            <?if ($article && $article->getUsr()):?>
+            <a
+                    href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$article->getUsr()->getUsrUUID()));?>"
+                    data-title="<?= $article->getUsr()->getUsrName() ?>'s mini profile"
+                    data-id="<?=$article->getUsr()->getUsrUUID()?>"
+                    id="blog-view-article-profile"><span class="badge">
+                  <i class="fa fa-user"></i> <?= $article->getUsr()->getUsrName() ?>
+                  </span></a>
+            <?else:?>
+            <i class="fa fa-user"></i> <?=$article?$article->getUsr()->getUsrName():($user?$user->getUsrName():'Author')?>
+            <?endif;?>
+            |
+            <i class="fa fa-tag"></i> <?= $this->translate('Tag')?> - <span id="blog-view-article-articleCategory"><?=ucfirst(array_search($article?$article->getArticleCategory():1, $this->configItem('demodyne.blog.tag')))?></span> |
+            <i class="fa fa-clock-o"></i> <?=$this->dateFormat($article?($article->getArticlePublishedDate()?$article->getArticlePublishedDate():$article->getArticleCreatedDate()):$now, IntlDateFormatter::MEDIUM,  IntlDateFormatter::NONE, $article?$article->getCountry()->getCountryFormat():$user->getCountry()->getCountryFormat())?> |
+            <i class="fa fa-eye"></i> <?=$article?$article->getArticleViews():0?> |
+            <i class="fa fa-comments"></i> <?=$article?count($article->getComments()):0?>
+            <br>
+            <?php if ($article && $article->getUsr()==$user): ?>
+                <br>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <a class="btn btn-orange"
+                                href="<?= $this->url('blog', array('action'=>'edit-article', 'id'=>$article->getArticleUUID()));?>"
+                                id="blog-view-article-edit"
+                                data-dialog-title="<?=$this->translate('Edit Article')?>">
+                            <i class="fa fa-floppy-o"></i> <?= $this->translate('Edit')?></a>
+                        <?php if (!$article->getArticlePublishedDate()):?>
+                            <button type="button" class="btn btn-success"
+                                    id="blog-view-article-publish"
+                                    data-url="<?= $this->url('blog', array('action'=>'publish-article', 'id'=>$article->getArticleSlug()));?>"
+                                    data-dialog-title="Publish Article">
+                                <i class="fa fa-share-square-o"></i> <?= $this->translate('Publish')?></button>
+                        <?php endif;?>
+                        <button type="button" class="btn btn-danger"
+                                id="blog-view-article-delete"
+                                data-dialog-title="Delete Article"
+                                data-url="<?= $this->url('blog', array('action'=>'delete-article', 'id'=>$article->getArticleSlug()));?>">
+                            <i class="fa fa-trash"></i> <?= $this->translate('Delete')?></button>
+                    </div>
+                </div>
+                <hr>
+            <?php endif;?>
+
+            <?php if ($article && $article->getUsr()==$user): ?>
+            <br>
+            <?= $this->partial('partial/social-links.phtml', [
+                'type' => 'article',
+                'url' => $this->url('blog', array('action'=>'article', 'id'=> $article->getArticleSlug()), array('force_canonical' => true)),
+                'title' => $article->getArticleTitle(),
+                'description' => $article->getArticleDescription()
+            ]); ?>
+            <?php endif;?>
+            <hr>
+            <br>
+            <span id="blog-view-article-articleDescription"><?= $article?$article->getArticleDescription():'This article talks about...'?></span>
+            <hr>
+            <?= $this->commentsSection;?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        blogViewArticleHandlers();
+    });
+</script>

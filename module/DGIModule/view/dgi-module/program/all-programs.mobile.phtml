@@ -1,0 +1,168 @@
+<?php
+$level = $_SESSION['level']['level'];
+$levelName = '';
+$levelNameFlag = null;
+if ($level=='city') {
+    $levelName = ($user->getCity()->getFullCity()?$user->getCity()->getFullCity()->getCityName():$user->getCity()->getCityName());
+    $levelName = str_replace('"', '\x22', $levelName);
+}
+elseif ($level=='region') {
+    $levelName = $user->getCity()->getRegion()->getRegionName();
+}
+elseif ($level=='country') {
+    $levelName = $user->getCountry()->getCountryName();
+    $levelNameFlag = '<img src="/img/flags/'.str_replace(' ', '-', $levelName).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$levelName;
+}
+?>
+
+
+<?php $paging = $this->sortingDivPaginationHelper($pagedPrograms, $page, $this->url('program', array('action'=>'all-programs')), 'all-programs', $limit, $sort, $order); ?>
+<div class="jumbotron-mobile" id="program-all-programs"
+	data-url="<?= $this->url('program', array('action'=>'all-programs', 'sort'=>$sort, 'page'=>$page, 'order'=>$order, 'results' => $limit));?>">
+
+
+    <div>
+    <?= $this->aggregatedProgram?>
+   </div>
+
+
+
+
+    <div class="title-mobile">
+      <?= $this->translate('Individual Programs')?><br>
+			<span class="title-mobile nobr" title="<?=$this->translate('Only Programs with included Proposal/Measures')?>"><?= sprintf($this->translate('%d Programs for %s'), $programsCount, $levelNameFlag?$levelNameFlag:$levelName)?></span>
+    </div>
+	<hr>
+
+	<div class="row ">
+		<div class="col-xs-6">
+			<?php if (!$user->isAdministration()):?>
+				<?php if ($myProgram = $user->getProgramForLevel($_SESSION['level']['levelValue'])):?>
+    			<button data-url="<?= $this->url('program', array('action' => 'view-program','id'=>$myProgram->getProgUUID()));?>"
+    				id="program-all-programs-view-my-program"
+					class="btn btn-success">
+    				<i class="fa fa-eye"></i> <?= $this->translate('View my Program')?></button>
+    			<?php else:?>
+    			<?php
+                    if ($user->getUsrId()) :
+                        if ($level=='city') {
+                             $createProgram = sprintf($this->translate('Create my Program for my city, %s'), $levelName);
+                         }
+                         if ($level=='region') {
+                             $createProgram = sprintf($this->translate('Create my Program for my region, %s'), $levelName);
+                         }
+                         if ($level=='country') {
+                             $createProgram = sprintf($this->translate('Create my Program for my country, %s'), $levelName);
+                         }
+
+                        ?>
+                        <button type="button" class="btn btn-orange"
+                            id="program-all-programs-add-new-program"
+                            data-url="<?= $this->url('program', array('action'=>'add-program', 'level'=>$level))?>"
+                            data-dialog-title="<?= $createProgram ?>">
+                            <i class="fa fa-plus-circle"></i> <?= $this->translate('Create my Program')?></button>
+                    <?else:?>
+                        <?= $this->partial('partial/please-register-button.phtml', ['text' => '<i class="fa fa-plus-circle"></i> '.$this->translate('Create my Program')]); ?>
+                    <?endif;?>
+				<?php endif;?>
+			<?php endif;?>
+
+		</div>
+		<!-- /6 -->
+		<div class="col-xs-6">
+			<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-down"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'name', 'page'=>1, 'order'=>'desc', 'results'=>$limit));?>"><?=$this->translate('Name')?></a></li>
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'owner', 'page'=>1, 'order'=>'desc', 'results'=>$limit));?>"><?=$this->translate('Owner')?></a></li>
+							<li class="divider"></li>
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'created_date', 'page'=>1, 'order'=>'desc', 'results'=>$limit));?>"><?=$this->translate('Created date')?></a></li>
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'saved_date', 'page'=>1, 'order'=>'desc', 'results'=>$limit));?>"><?=$this->translate('Update date')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-up"></i> </span>
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'name', 'page'=>1, 'order'=>'asc', 'results'=>$limit));?>"><?=$this->translate('Name')?></a></li>
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'owner', 'page'=>1, 'order'=>'asc', 'results'=>$limit));?>"><?=$this->translate('Owner')?></a></li>
+							<li class="divider"></li>
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'created_date', 'page'=>1, 'order'=>'asc', 'results'=>$limit));?>"><?=$this->translate('Created date')?></a></li>
+							<li><a id="page-all-programs"
+								href="<?= $this->url('program', array('action'=>'all-programs', 'page'=>1, 'sort'=>'saved_date', 'page'=>1, 'order'=>'asc', 'results'=>$limit));?>"><?=$this->translate('Update date')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+
+		</div>
+		<!--/6-->
+	</div>
+	<!-- /row -->
+	<hr>
+	<?php if (count($pagedPrograms)):?>
+		<?php foreach($pagedPrograms as $index => $program): ?>
+
+
+
+   		<div class="row">
+   			<div class="col-xs-12">
+   				        					<?php $programDescription = $this->escapeHtml($program->getProgDescription()); ?>
+        					<a
+        						href="<?= $this->url('program', array('action' => 'view-program','id'=>$program->getProgUUID()));?>"
+        						id="city-program-list-item"
+        						title="<?= (strlen($programDescription) > 150) ? substr($programDescription, 0, 150) . '...' : $programDescription?>"><span
+        						class="big"><?= $this->escapeHtml($program->getProgName())?></span></a> <br />
+        					<!-- user -->
+        					<?= $this->translate('by')?> <a
+        						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$program->getUsr()->getUsrUUID()));?>"
+        						data-title="<?= $program->getUsr()->getUsrName() ?>'s mini profile"
+        						data-id="<?=$program->getUsr()->getUsrUUID()?>"
+        						id="program-all-programs-view-profile" class="mini-profile"> <span class="badge"><?= $this->escapeHtml($program->getUsr()->getUsrName()); ?></span></a>
+        					<i class="fa fa-clock-o"></i> <?= $program->getProgCreatedDate()->format('d/m/Y')?>
+   			</div>
+   		</div>
+
+
+        	<hr />
+
+    	<?php endforeach; ?>
+
+    	<div class="row">
+    		<div class="col-md-12">
+    				<?= $paging; ?>
+    			</div>
+    		<!--/12-->
+    	</div>
+    	<!-- /row -->
+
+	<?php else:?>
+	<div class="row">
+		<div class="col-md-12">
+				<?=$this->translate('Be the first to publish a program.')?>
+			</div>
+		<!--/12-->
+	</div>
+	<!-- /row -->
+	<?php endif;?>
+</div>
+<!-- /jumbotron -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			programAllProgramsHandlers();
+		});
+	</script>

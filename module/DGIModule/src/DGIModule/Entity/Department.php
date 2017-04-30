@@ -1,12 +1,14 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Country;
+use DGIModule\Entity\Region;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -39,9 +41,16 @@ class Department
      * @ORM\Column(name="dep_name", type="string", length=250, nullable=false)
      */
     private $depName;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="region_name", type="string", length=100, nullable=true)
+     */
+    private $regionName; // used in case of region name modication like combination in France
 
     /**
-     * @var \DGIModule\Entity\Country
+     * @var Country
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Country")
      * @ORM\JoinColumns({
@@ -51,7 +60,7 @@ class Department
     private $country;
 
     /**
-     * @var \DGIModule\Entity\Region
+     * @var Region
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Region")
      * @ORM\JoinColumns({
@@ -128,10 +137,10 @@ class Department
     /**
      * Set country
      *
-     * @param \DGIModule\Entity\Country $country
+     * @param Country $country
      * @return Department
      */
-    public function setCountry(\DGIModule\Entity\Country $country = null)
+    public function setCountry(Country $country = null)
     {
         $this->country = $country;
 
@@ -141,7 +150,7 @@ class Department
     /**
      * Get country
      *
-     * @return \DGIModule\Entity\Country 
+     * @return Country
      */
     public function getCountry()
     {
@@ -151,10 +160,10 @@ class Department
     /**
      * Set reg
      *
-     * @param \DGIModule\Entity\Region $reg
+     * @param Region $reg
      * @return Department
      */
-    public function setRegion(\DGIModule\Entity\Region $reg = null)
+    public function setRegion(Region $reg = null)
     {
         $this->reg = $reg;
 
@@ -164,7 +173,7 @@ class Department
     /**
      * Get reg
      *
-     * @return \DGIModule\Entity\Region 
+     * @return Region 
      */
     public function getRegion()
     {

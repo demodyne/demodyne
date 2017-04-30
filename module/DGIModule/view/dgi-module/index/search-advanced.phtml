@@ -1,0 +1,662 @@
+<?php
+    $search = isset($_SESSION['search']);
+?>
+
+
+
+<div id="search-advanced">
+
+
+
+    <form action="<?=$this->url('search', array('action'=>'search-results'))?>" id="searchForm" method="post">
+
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <h5><strong><?= $this->translate('Search by Keywords')?></strong> <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('You can type <strong>multiple words or fragments of sentences</strong> here.<br>If no specific countries, regions or cities are selected, this will search the entire site.')?>"></i></h5>
+
+
+                <div class="row bot10">
+                    <div class="col-md-12 col-xs-12 bot5">
+
+                        <div><div class="fltl input-group">
+                                <input type="text" class="form-control" id="search-keywords" name="searchKeywords" id="" placeholder="<?= $this->translate('Search')?>" style="min-height: 35px!important;" <?=$keywords?'value="'.$keywords.'"':''?>>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-orange" style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;max-height: inherit!important;">
+                                        <i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+                <!--/r-->
+
+
+
+        </div>
+    </div>
+
+
+
+
+    <!-- collapse area begin -->
+    <div id="advanced" class="row collapse in">
+        <div class="col-md-12">
+
+
+            <div class="row bot10">
+                <div class="col-md-12">
+                    <h5><strong><?= $this->translate('Refine by Type:')?></strong>
+                        <div class="btn-group right10 bot5" role="group">
+                            <button type="button" class="btn btn-sm <?=$entityType['proposal']?'btn-success':'btn-default'?>"  id="search-entity-type-button" data-type="proposal"><i class="fa <?=$entityType['proposal']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Proposals')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['measure']?'btn-success':'btn-default'?>"  id="search-entity-type-button" data-type="measure"><i class="fa <?=$entityType['measure']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Measures')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['program']?'btn-success':'btn-default'?>"  id="search-entity-type-button" data-type="program"><i class="fa <?=$entityType['program']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Programs')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['event']?'btn-success':'btn-default'?>"  id="search-entity-type-button" data-type="event"><i class="fa <?=$entityType['event']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Events')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['session']?'btn-success':'btn-default'?>"  id="search-entity-type-button" data-type="session"><i class="fa <?=$entityType['session']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Sessions')?></button>
+                            <button type="button" class="btn btn-sm <?=$entityType['user']?'btn-success':'btn-default'?>"  id="search-entity-type-button" data-type="user"><i class="fa <?=$entityType['user']?'fa-check':'fa-times'?>"></i> <?= $this->translate('Users')?></button>
+                        </div>
+                        <input name="entityType[]" type="checkbox" value="proposal" <?=$entityType['proposal']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="measure" <?=$entityType['measure']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="program" <?=$entityType['program']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="event" <?=$entityType['event']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="session" <?=$entityType['session']?'checked="checked"':''?> style="display: none">
+                        <input name="entityType[]" type="checkbox" value="user" <?=$entityType['user']?'checked="checked"':''?> style="display: none">
+                        <span class="text-right size09em">(<a href="#" id="entityTypeSelectAll">Select all</a> | <a href="#" id="entityTypeDeselectAll">Deselect all</a>)</span>
+                    </h5>
+
+                </div>
+            </div>
+
+            <div class="row bot10" style="display: none" id="search-entity-type-no-selection-error">
+                <div class="col-md-12">
+                    <span class="red"><?=$this->translate('Please select at least one type.')?></span>
+                </div>
+            </div>
+
+            <hr>
+            <div class="row bot10">
+                <div class="col-md-6 col-xs-12">
+
+                        <fieldset>
+
+                            <!-- search by country -->
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <h5><strong><?= $this->translate('Search in National level content')?></strong> <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('Add <strong>countries here to search content</strong> relevant at national scale. <br>For content relevant to local scales, add regions and countries of interests in sections below.')?>"></i></h5>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-8 col-xs-7 ">
+                                    <select name="country-select" class="form-control text-change" id="search-country"
+                                            data-get-regions="<?=$this->url('location', array('action'=>'get-regions-by-country-code'))?>"
+                                            data-get-categories="<?=$this->url('home/category', array('action'=>'get-all-categories'))?>"
+                                            data-all-regions="<?= $this->translate('All regions from $country$')?>">
+                                        <? /** @var \DGIModule\Entity\Country $country */
+                                        foreach ($countries as $country):?>
+                                        <option value="<?=$country->getCountryCode()?>" data-flag="<?=$this->basePath('img/flags/'.str_replace(' ', '-', $country->getCountryName()))?>.png"><?=$country->getCountryName()?></option>
+                                        <?endforeach;?>
+
+                                    </select>
+                                    <span id="search-clear-selected-countries-div" style="display: none">(<a href="#" id="search-clear-selected-countries"><?= $this->translate('Clear selected countries')?></a>)</span><br>
+                                    <span class="text-danger"></span>
+                                </div>
+                                <div class="col-md-4 col-xs-5 text-center">
+                                    <button type="button" class="btn btn-orange" id="search-add-country" data-url=""><i class="fa fa-plus-circle"></i> <?=$this->translate('Add Country')?></button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12" id="search-selected-countries">
+                                    <?if ($user && $_SESSION['level']['level']=='country' && !$search):?>
+                                    <span class="badge badge-default" id="selected-country">
+                                        <?=$user->getCountry()->getCountryName()?>
+                                        <img src="<?=$this->basePath('img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()))?>.png" style="margin-bottom: 4px;" width="18" height="12"> &nbsp;&nbsp;
+                                        <a href="#" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a>
+                                        <input type="hidden" name="country[]" value="<?=$user->getCountry()->getCountryCode()?>">
+                                    </span>
+                                    <?else:?>
+                                        <? foreach ($selectedCountries as $country):?>
+                                            <span class="badge badge-default" id="selected-country">
+                                                <?=$country->getCountryName()?>
+                                                <img src="<?=$this->basePath('img/flags/'.str_replace(' ', '-', $country->getCountryName()))?>.png" style="margin-bottom: 4px;" width="18" height="12"> &nbsp;&nbsp;
+                                                <a href="#" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a>
+                                                <input type="hidden" name="country[]" value="<?=$country->getCountryCode()?>">
+                                            </span>
+                                        <?endforeach?>
+                                    <?endif;?>
+
+
+                                </div>
+                            </div>
+                            <!-- /search by country -->
+
+
+                            <!-- search by region -->
+
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <h5><strong><?= $this->translate('Search in Regional level content')?></strong> <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('Add regions here to search content relevant at regional scale. <strong>You can add all regions from a country at once</strong> (select first a country in the country drop-down list).')?>"></i></h5>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-8 col-xs-7">
+                                    <select name="region-select" required class="form-control text-change" id="search-region">                                    </select>
+                                    <span id="search-clear-selected-region-div" style="display: none">(<a href="#" id="search-clear-selected-region"><?= $this->translate('Clear selected regions')?></a>)</span>
+                                </div>
+                                <div class="col-md-4 col-xs-5 text-center">
+                                    <button type="button" class="btn btn-orange" id="search-add-region"><i class="fa fa-plus-circle"></i> <?=$this->translate('Add Region')?></button>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-12"  id="search-selected-regions">
+                                    <?if ($user && $_SESSION['level']['level']=='region' && !$search):?>
+                                        <span class="badge badge-default" id="selected-region">
+                                        <?=$user->getCity()->getRegion()->getRegionName()?>
+                                            &nbsp;&nbsp;
+                                        <a href="#" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a>
+                                        <input type="hidden" name="region[]" value="<?=$user->getCity()->getRegion()->getRegionId()?>">
+                                    </span>
+                                    <?else:?>
+                                        <? foreach ($selectedRegions as $region):?>
+                                            <span class="badge badge-default" id="selected-region">
+                                                <?=$region['name']?>
+                                                <a href="#" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a>
+                                                <input type="hidden" name="region[]" value="<?=$region['id']?>">
+                                            </span>
+                                        <?endforeach?>
+                                    <?endif;?>
+                                </div>
+                            </div>
+                            <!-- /search by region -->
+
+
+
+                            <!-- search by city -->
+                            <div class="row ">
+                                <div class="col-md-12">
+                                    <h5><strong><?= $this->translate('Search in City level content')?></strong> <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('Add cities here to <strong>search content relevant at municipal scale</strong>. You can add all cities from a region at once (select first a region from the region drop-down list).')?>"></i></h5>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-12 col-xs-7">
+                                    <input name="search-city" type="text" class="form-control text-change" id="city-select" size="10" value="" placeholder="<?=$this->translate('Type city name or postal code and select from the list')?>"> 
+                                    <span id="search-clear-selected-cities-div" style="display: none">(<a href="#" id="search-clear-selected-cities"><?= $this->translate('Clear selected cities')?></a>)</span><br>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row bot10">
+                                <div class="col-md-12"  id="search-selected-cities">
+                                    <?if ($user && $_SESSION['level']['level']=='city' && !$search):?>
+                                        <span class="badge badge-default" id="selected-city">
+                                        <?=$user->getCity()->getCityName()?> <?=$user->getCity()->getDistrictName()?> (<?=$user->getCity()->getCityPostalCode()?>)
+                                            &nbsp;&nbsp;
+                                        <a href="#" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a>
+                                        <input type="hidden" name="city[]" value="<?=$user->getCity()->getCityName()?>">
+                                    </span>
+                                    <?else:?>
+                                        <? foreach ($selectedCities as $city):?>
+                                            <span class="badge badge-default" id="selected-city">
+                                                <?=$city['name']?>&nbsp;&nbsp;
+                                                <a href="#" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a>
+                                                <input type="hidden" name="city[]" value="<?=$city['id']?>">
+                                            </span>
+                                        <?endforeach?>
+                                    <?endif;?>
+
+                                </div>
+                            </div>
+                            <!-- /search by city -->
+                        </fieldset>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div class="row ">
+                        <div class="col-md-12">
+                            <h5><strong><?= $this->translate('Refine by Category')?></strong>  <i class="fa fa-question-circle gray left10" style="font-size: 16px;" title="<?= $this->translate('You can restrain the search to certain categories by adding them here. <strong>If no categories are specified, the search will include all categories</strong>.')?>"></i></h5>
+                        </div>
+                    </div>
+
+                    <div class="row bot10">
+                        <div class="col-md-8 col-xs-12" style="line-height:1.7em;">
+                            <select id="category-select" size=3 MULTIPLE class="form-control big">
+                            </select>
+                            <span id="search-clear-selected-categories-div" style="display: none">(<a href="#" id="search-clear-selected-categories"><?= $this->translate('Clear selected categories')?></a>)</span>
+                        </div>
+                        <div class="col-md-4 col-xs-12">
+                            <button class="btn btn-orange" id="search-add-category" type="button"><i class="fa fa-plus-circle"></i> Add Category
+                            </button>
+                        </div>
+                    </div><!--/r-->
+                    <div class="row bot10">
+                        <div class="col-md-12" id="search-selected-categories">
+                            <? /** @var \DGIModule\Entity\Category $category */
+                            foreach ($selectedCategories as $category):?>
+                                <div class="badge badge-default botm2" id="selected-category">
+                                    <img width="16px" height="16px" src="<?=$this->basePath().'/files/'.$category->getCatImage()?>">
+                                    <?=$category->getCatName()?> &nbsp;&nbsp;
+                                    <a href="#" class="white" id="remove-criteria"><i class="fa fa-times-circle"></i></a>
+                                    <input type="hidden" name="category[]" value="<?=$category->getCatId()?>">
+                                </div>
+                            <?endforeach?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+    </div>
+    <!-- collapse area end -->
+
+
+
+
+        <div class="row">
+            <div class="col-xs-12">
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 text-right">
+
+                <button type="button" class="btn btn-success"
+                        id="search-reset-button">
+                    <i class="fa fa-history"></i>
+                    <span><?= $this->translate('Reset')?></span>
+                </button>
+                <button type="submit" class="btn btn-orange"
+                        id="search-search-button">
+                    <i class="fa fa-search"></i>
+                    <span><?= $this->translate('Search')?></span>
+                </button>
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    <i class="fa fa-ban"></i>
+                    <?= $this->translate('Cancel')?>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <style>
+        .ui-autocomplete-loading {
+            background: white url("<?= $this->basePath('img/ui-anim_basic_16x16.gif') ?>") right center no-repeat;
+        }
+        /*.ui-autocomplete-input {*/
+            /*border: none;*/
+            /*font-size: 14px;*/
+            /*width: 300px;*/
+            /*height: 24px;*/
+            /*margin-bottom: 5px;*/
+            /*padding-top: 2px;*/
+            /*border: 1px solid #DDD !important;*/
+            /*padding-top: 0px !important;*/
+            /*z-index: 1511;*/
+            /*position: relative;*/
+        /*}*/
+        .ui-menu .ui-menu-item a {
+            font-size: 12px;
+        }
+        .ui-autocomplete {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1510 !important;
+            float: left;
+            display: none;
+            min-width: 160px;
+            width: 160px;
+            padding: 4px 0;
+            margin: 2px 0 0 0;
+            list-style: none;
+            background-color: #ffffff;
+            border-color: #ccc;
+            border-color: rgba(0, 0, 0, 0.2);
+            border-style: solid;
+            border-width: 1px;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            border-radius: 2px;
+            -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            -webkit-background-clip: padding-box;
+            -moz-background-clip: padding;
+            background-clip: padding-box;
+            *border-right-width: 2px;
+            *border-bottom-width: 2px;
+            max-height: 200px;
+            overflow-y: auto;
+            /* prevent horizontal scrollbar */
+            overflow-x: hidden;
+        }
+        .ui-menu-item > a.ui-corner-all {
+            display: block;
+            padding: 3px 15px;
+            clear: both;
+            font-weight: normal;
+            line-height: 18px;
+            color: #555555;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .ui-state-hover, .ui-state-active {
+            color: #ffffff;
+            text-decoration: none;
+            background-color: #0088cc;
+            border-radius: 0px;
+            -webkit-border-radius: 0px;
+            -moz-border-radius: 0px;
+            background-image: none;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            var cache = {};
+            var div = $('#search-advanced');
+
+            if ($('#search-advanced-dialog').length) {
+                $('#search-keywords').val($('#layout-search-keywords').val());
+                console.log('from layout');
+            }
+
+            if ($('span#selected-country').length) {
+                $('#search-clear-selected-countries-div').show();
+            }
+            if ($('span#selected-region').length) {
+                $('#search-clear-selected-region-div').show();
+            }
+            if ($('span#selected-city').length) {
+                $('#search-clear-selected-cities-div').show();
+            }
+
+            $( "#city-select" )
+            // don't navigate away from the field on tab when selecting an item
+                .bind( "keydown", function( event ) {
+                    if ( event.keyCode === $.ui.keyCode.TAB &&
+                        $( this ).autocomplete( "instance" ).menu.active ) {
+                        event.preventDefault();
+                    }
+                })
+                .click( function() {
+                    $(this).autocomplete( "search", $(this).val() );
+                })
+                .autocomplete({
+                    source: function( request, response ) {
+                        var term = request.term;
+                        if ( term in cache ) {
+                            response( cache[ term ] );
+                            return;
+                        }
+                        $.getJSON( '<?=$this->url('location', array('action'=>'search-cities-all-regions'))?>', {
+                            city: request.term ,
+                            country: $("#search-country").find(":selected").val(),
+                            region: $("#search-region").find(":selected").val()
+                        }, function( data, status, xhr ) {
+                            cache[ term ] = data;
+                            response( data );
+                        } );
+                    },
+//                    search: function() {
+//                        // custom minLength
+////                        var term = extractLast( this.name );
+//                        if ( this.name.length < 2 ) {
+//                            return false;
+//                        }
+//                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        if ($('span#selected-city').find('input[value="'+ui.item.value+'"]').length || ui.item.value==0) return false;
+                        var span= $('<span class="badge badge-default" id="selected-city">'+ui.item.label+' &nbsp;&nbsp;<a href="#" class="white"><i class="fa fa-times-circle"></i></a> <input type="hidden" name="city[]" value="'+ui.item.value+'"></span>');
+                        span.find('a').click(function(){
+                            removeCriteria($(this));
+                        });
+                        $('#search-selected-cities').append(span).append('&nbsp;');
+                        $('#search-clear-selected-cities-div').show();
+//                        var terms = split( this.value );
+//                        // remove the current input
+//                        terms.pop();
+//                        // add the selected item
+//                        terms.push( ui.item.value );
+//                        // add placeholder to get the comma-and-space at the end
+//                        terms.push( "" );
+//                        this.value = terms.join( ", " );
+//                        this.value = '';
+                        return false;
+                    }
+                });
+
+            $('button#search-entity-type-button').click(function() {
+                var type = $(this).data('type');
+                if ($(this).hasClass('btn-success')) {
+                    $(this).removeClass('btn-success').addClass('btn-default');
+                    //fa-check':'fa-times
+                    $(this).find('i').removeClass('fa-check').addClass('fa-times');
+                    $('input[value="'+type+'"]').prop('checked', false);
+                    if ($('button#search-entity-type-button.btn-success').length==0) {
+                        $('#search-entity-type-no-selection-error').show();
+                    }
+                }
+                else {
+                    $(this).addClass('btn-success').removeClass('btn-default');
+                    $(this).find('i').addClass('fa-check').removeClass('fa-times');
+                    $('input[value="'+type+'"]').prop('checked', true);
+                    $('#search-entity-type-no-selection-error').hide();
+                }
+            });
+
+            $('#entityTypeSelectAll').click(function () {
+                $('input[name="entityType[]"]').prop('checked', true);
+                $('button#search-entity-type-button').addClass('btn-success').removeClass('btn-default');
+                $('button#search-entity-type-button').find('i').addClass('fa-check').removeClass('fa-times');
+                $('#search-entity-type-no-selection-error').hide();
+            });
+
+            $('#search-reset-button').click(function () {
+                $('#entityTypeSelectAll').click();
+                $('#search-keywords').val('');
+            });
+
+            $('#entityTypeDeselectAll').click(function () {
+                $('input[name="entityType[]"]').prop('checked', false);
+                $('button#search-entity-type-button').removeClass('btn-success').addClass('btn-default');
+                $('button#search-entity-type-button').find('i').removeClass('fa-check').addClass('fa-times');
+                $('#search-entity-type-no-selection-error').show();
+            });
+
+            $('#searchForm').submit(function () {
+                if ($('button#search-entity-type-button.btn-success').length==0) {
+                    $('#search-entity-type-no-selection-error').show();
+                    return false;
+                }
+                $('#search-search-button').find('i').removeClass('fa-search').addClass('fa-spinner').addClass('fa-pulse');
+
+            });
+
+            $('#search-add-country').click(function () {
+                var selectedCountry=$("#search-country").find(":selected");
+                if ($('span#selected-country').find('input[value="'+selectedCountry.val()+'"]').length) return;
+                var span= $('<span class="badge badge-default" id="selected-country">'+selectedCountry.text()+' <img src="'+selectedCountry.data('flag')+'" style="margin-bottom: 4px;" width="18" height="12"> &nbsp;&nbsp;<a href="#" class="white"><i class="fa fa-times-circle"></i></a> <input type="hidden" name="country[]" value="'+selectedCountry.val()+'"></span>')
+                span.find('a').click(function(){
+                    removeCriteria($(this));
+                });
+                $('#search-selected-countries').append(span).append('&nbsp;');
+                $('#search-clear-selected-countries-div').show();
+            });
+
+            $('#search-clear-selected-countries').click(function () {
+                $('#search-selected-countries').empty();
+                $('#search-clear-selected-countries-div').hide();
+                return false;
+            });
+
+            $('#search-add-region').click(function () {
+                var selectedRegion=$("#search-region").find(":selected");
+                if ($('span#selected-region').find('input[value="'+selectedRegion.val()+'"]').length) return;
+                var span= $('<span class="badge badge-default" id="selected-region">'+selectedRegion.text()+' &nbsp;&nbsp;<a href="#" class="white"><i class="fa fa-times-circle"></i></a> <input type="hidden" name="region[]" value="'+selectedRegion.val()+'"></span>');
+                span.find('a').click(function(){
+                    removeCriteria($(this));
+                });
+                $('#search-selected-regions').append(span).append('&nbsp;');
+                $('#search-clear-selected-region-div').show();
+            });
+
+            $('#search-clear-selected-region').click(function () {
+                $('#search-selected-regions').empty();
+                $('#search-clear-selected-region-div').hide();
+                return false;
+            });
+
+            $('#search-clear-selected-cities').click(function () {
+                $('#search-selected-cities').empty();
+                $('#search-clear-selected-cities-div').hide();
+                return false;
+            });
+
+            $('#search-add-category').click(function () {
+                var selectedCategory=$("#category-select").find(":selected");
+                selectedCategory.each(function() {
+                    var category = $(this);
+//                    console.log(category);
+                    if ($('span#selected-category').find('input[value="'+category.val()+'"]').length) return;
+                    var imageFile = category.css('background-image');
+                    imageFile = imageFile.substring(4, imageFile.length-1);
+//							console.log(imageFile);
+//                    $('#add-proposal-category-image').html('<img width="32px" height="32px" src='+imageFile+'>');
+                    var span= $('<span class="badge badge-default" id="selected-category"><img width="18px" height="18px" src='+imageFile+'> '+category.text()+' &nbsp;&nbsp;<a href="#" class="white"><i class="fa fa-times-circle"></i></a> <input type="hidden" name="category[]" value="'+category.val()+'"></span>');
+                    span.find('a').click(function(){
+                        removeCriteria($(this));
+                    });
+                    $('#search-selected-categories').append(span).append('&nbsp;');
+                    $('#search-clear-selected-categories-div').show();
+                });
+
+            });
+
+            $('#search-clear-selected-categories').click(function () {
+                $('#search-selected-categories').empty();
+                $('#search-clear-selected-categories-div').hide();
+                return false;
+            });
+
+            getRegions($("#search-country").find(":selected").val(), $("#search-country").find(":selected").text());
+            getCategories($("#search-country").find(":selected").val());
+
+            $("#search-country").on('keyup change paste', function() {
+                getRegions($("#search-country").find(":selected").val(), $("#search-country").find(":selected").text());
+                getCategories($("#search-country").find(":selected").val());
+                cache = {};
+            });
+
+            $("#search-region").on('keyup change paste', function() {
+                cache = {};
+            });
+
+            function getRegions(countryCode, countryName) {
+                $.post($("#search-country").data('get-regions'),
+                    {'country' : countryCode},
+                    function(regions){
+                        $('#search-region').empty();
+                        var option = $('<option></option>');
+                        option.val(countryCode);
+                        option.text($("#search-country").data('all-regions').replace('$country$', countryName));
+                        $("#search-region").append(option);
+                        if (!jQuery.isEmptyObject(regions)) {
+                            $.each(regions, function () {
+                                var option = $('<option></option>');
+                                option.val($(this)[0].id);
+                                option.text($(this)[0].name);
+                                $("#search-region").append(option);
+                            });
+                        }
+                        else {
+//                            	var option = $('<option value>No regions for this country!</option>');
+//                	           option.val(-1);
+//                	           option.text('No regions for this country!');
+                            $("#search-region").append($('<option value>No regions for this country!</option>'));
+                        }
+                        $("#search-region").val($("#search-region option:first").val());
+//                        $('#browse-level-form').submit();
+                    }, 'json');
+            }
+
+            function getCategories(countryCode) {
+                console.log(countryCode);
+                $.post($("#search-country").data('get-categories'),
+                    {'country' : countryCode},
+                    function(mainCategories){
+//                        console.log(mainCategories);
+                        $('#category-select').empty();
+                        $.each(mainCategories, function(index, mainCatItem) {
+//                            var optgroup = $('<optgroup style="padding: 5px 0 10px 0;border-top: #dedede 1px solid;">');
+//                            optgroup.attr('label', mainCatItem['name']);
+//                            $.each(mainCatItem['subCategories'], function(index, subCatItem){
+                                var option = $('<option></option>');
+//                                option.val(subCatItem['id']);
+                                option.val(mainCatItem['id']);
+//                                option.text(subCatItem['name']);
+                                option.text(mainCatItem['name']);
+                                option.css('background', 'url('+mainCatItem['image']+') no-repeat');
+                                option.css('background-size', '24px 24px');
+                                option.css('padding-left', '30px');
+                                option.css('padding-top', '5px');
+                                option.css('height', '27px');
+//                                optgroup.append(option);
+//                            });
+//                            $('#category-select').append(optgroup);
+                            $('#category-select').append(option);
+                        });
+
+
+                        $("#category-select").val($("#search-region option:first").val());
+//                        $('#browse-level-form').submit();
+                    }, 'json');
+            }
+
+            $('a#remove-criteria').click(function(){
+                removeCriteria($(this));
+            });
+
+            function removeCriteria(a) {
+//                a.click(function(){
+                a.parents('span').remove();
+                if ($('span#selected-country').length==0) {
+                    $('#search-clear-selected-countries-div').hide();
+                }
+                if ($('span#selected-region').length==0) {
+                    $('#search-clear-selected-region-div').hide();
+                }
+                if ($('span#selected-city').length==0) {
+                    $('#search-clear-selected-cities-div').hide();
+                }
+                return false;
+//                });
+            }
+
+
+        });
+
+    </script>
+
+
+
+</div>
+<!-- end jumbotron -->

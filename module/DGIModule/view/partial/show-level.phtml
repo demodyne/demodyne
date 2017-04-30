@@ -1,0 +1,41 @@
+<? $email = isset($this->email)?$this->email:false;?>
+
+<? if (!$email): ?>
+<?php if ($this->level==$this->configItem('demodyne.level.city')):?>
+	<a href="<?=$this->url('browse', ['country' => $this->city->getCountry()->getCountryName(),
+	    'region'=> $this->city->getRegion()->getRegionName(),
+	    'postalcode' => $this->city->getCityPostalcode(),
+	    'cityname' => $this->city->getCityName()
+	], array('force_canonical' => true))?>"><span class="dark-violet"><?=$this->city->getCityName()?> (<?=$this->city->getCityPostalcode()?>)</span></a>
+<?php elseif ($this->level==$this->configItem('demodyne.level.region')):?>
+	<a href="<?=$this->url('browse', ['country' => $this->city->getCountry()->getCountryName(),
+	    'region'=> $this->city->getRegion()->getRegionName()
+	], array('force_canonical' => true))?>"><span class="dark-violet"><?=$this->city->getRegion()->getRegionName()?></span></a>
+<?php elseif ($this->level==$this->configItem('demodyne.level.country')):?>
+	<a href="<?=$this->url('browse', ['country' => $this->city->getCountry()->getCountryName()], array('force_canonical' => true))?>">
+		<span class="dark-violet">
+
+            <img src="/img/flags/<?= str_replace(' ', '-', $this->city->getCountry()->getCountryName())?>.png" style="margin-bottom: 4px;" width="18" height="12">
+
+            <?=$this->city->getCountry()->getCountryName() ?></span></a>
+<?php endif;?>
+<?else:?>
+    <?php if ($this->level<=$this->configItem('demodyne.level.city')):?>
+        <a href="<?=$this->url('browse', ['country' => $this->city->getCountry()->getCountryName(),
+            'region'=> $this->city->getRegion()->getRegionName(),
+            'postalcode' => $this->city->getCityPostalcode(),
+            'cityname' => $this->city->getCityName()
+        ], array('force_canonical' => true))?>"><span class="dark-violet"><?=$this->city->getCityName()?> (<?=$this->city->getCityPostalcode()?>),
+                <?=$city->getRegion()->getRegionName()?>,
+                <?=$city->getCountry()->getCountryName()?></span></a>
+    <?php elseif ($this->level<=$this->configItem('demodyne.level.region')):?>
+        <a href="<?=$this->url('browse', ['country' => $this->city->getCountry()->getCountryName(),
+            'region'=> $this->city->getRegion()->getRegionName()
+        ], array('force_canonical' => true))?>"><span class="dark-violet"><?=$this->city->getRegion()->getRegionName()?>, <?=$city->getCountry()->getCountryName()?></span></a>
+    <?php elseif ($this->level<=$this->configItem('demodyne.level.country')):?>
+        <a href="<?=$this->url('browse', ['country' => $this->city->getCountry()->getCountryName()], array('force_canonical' => true))?>">
+		<span class="dark-violet">
+
+            <?=$this->city->getCountry()->getCountryName() ?></span></a>
+    <?php endif;?>
+<?endif;?>

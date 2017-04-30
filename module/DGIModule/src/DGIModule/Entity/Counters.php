@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -29,7 +29,7 @@ class Counters
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="cnt_updated_date", type="datetime", nullable=true)
+     * @ORM\Column(name="cnt_updated_date", type="utcdatetime", nullable=true)
      */
     private $cntUpdatedDate;
 
@@ -38,28 +38,28 @@ class Counters
      *
      * @ORM\Column(name="cnt_total", type="integer", nullable=true)
      */
-    private $cntTotal = 80;
+    private $cntTotal = '80';
 
     /**
      * @var integer
      *
      * @ORM\Column(name="cnt_prop", type="integer", nullable=true)
      */
-    private $cntProp = 0;
+    private $cntProp = '0';
 
     /**
      * @var integer
      *
      * @ORM\Column(name="cnt_vote", type="integer", nullable=true)
      */
-    private $cntVote = 0;
+    private $cntVote = '0';
 
     /**
      * @var integer
      *
      * @ORM\Column(name="cnt_com", type="integer", nullable=true)
      */
-    private $cntCom = 0;
+    private $cntCom = '0';
 
 
 

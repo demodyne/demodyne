@@ -1,21 +1,39 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 use DGIModule\Entity\Inbox;
 use DGIModule\Form\NewMessageForm;
 use DGIModule\Entity\User;
+use Doctrine\ORM\EntityManager;
+use Zend\Mvc\I18n\Translator;
 
 class InboxController extends AbstractActionController
 {
+    protected $entityManager;
+    protected $translator;
+    protected $config;
+
+    public function __construct(
+        array $config,
+        EntityManager $entityManager,
+        Translator $translator
+    )
+    {
+        $this->config = $config;
+        $this->entityManager = $entityManager;
+        $this->translator = $translator;
+    }
+
     public function myInboxAction() {
         $user = $this->identity();
         $viewModel = new ViewModel();
@@ -29,6 +47,11 @@ class InboxController extends AbstractActionController
             $viewModel->addChild($viewReceivedSection, 'viewReceivedSection');
             $viewReceived = true;
         }
+
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/my-inbox.mobile.phtml');
+        }
+
         $viewModel->setVariables([
              'viewReceived' => $viewReceived,
              'user' => $user
@@ -61,24 +84,20 @@ class InboxController extends AbstractActionController
         $limit= $this->params()->fromRoute('results', null);
         if (!$limit) {
             if (!$session->listReceivedResults) {
-                $limit = 5;
+                $limit = 10;
             }
             else {
                 $limit = $session->listReceivedResults;
             }
         }
         $session->listReceivedResults = $limit;
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $config = $this->getServiceLocator()->get('Config');
         $offset = ($page == 0) ? 0 : ($page - 1) * $limit;
         if ($user) {
-            $pagedInbox = $entityManager->getRepository('DGIModule\Entity\Inbox')->getUserPagedReceivedMessages($user, $offset, $limit, $config['demodyne']['inbox']['type'][$filter]);
+            $pagedInbox = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->getUserPagedReceivedMessages($user, $offset, $limit, $this->config['demodyne']['inbox']['type'][$filter]);
             // get unread messages
-            $query = $entityManager->createQuery('SELECT COUNT(distinct i.ibxId) as inboxUnreadMessagesCount
-                                                  FROM DGIModule\Entity\Inbox i
-                                                  WHERE i.toUsr=:user AND i.ibxViewed=0 AND i.ibxToTrashDate IS NULL AND i.ibxToDeletedDate IS NULL')
-                                  ->setParameter('user', $user);
-            $inboxUnreadMessagesCount = $query->getOneOrNullResult();
+            /// @todo Optimize in repository by SQL count
+            $unreadMessages = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['toUsr'=>$user, 'ibxViewed'=>0, 'ibxToTrashDate'=>null, 'ibxToDeletedDate'=>null]);
+            $inboxUnreadMessagesCount = count($unreadMessages);
         }
         else {
             $pagedInbox = [];
@@ -87,20 +106,50 @@ class InboxController extends AbstractActionController
         $viewModel = new ViewModel();
         $ajax = $this->getRequest()->isXmlHttpRequest();
         $viewModel->setTerminal($ajax);
-        $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/list.mobile.phtml');
+        }
+        else {
+            $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        }
         $viewModel->setVariables([
             'pagedInbox' => $pagedInbox,
             'limit' => $limit,
             'page' => $page,
             'filter' => $filter,
             'user' => $user,
-            'inboxUnreadMessagesCount' => $inboxUnreadMessagesCount['inboxUnreadMessagesCount'],
+            'inboxUnreadMessagesCount' => $inboxUnreadMessagesCount,
             'ajax' => $ajax,
             'list' => 'received',
             'uuid' => $session->viewReceived
         ]);
         return $viewModel;
     }
+
+    public function unreadMessagesAction() {
+        $user = $this->identity();
+
+        if ($user) {
+            $unreadMessages = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['toUsr'=>$user, 'ibxViewed'=>0, 'ibxToTrashDate'=>null, 'ibxToDeletedDate'=>null]);
+            $inboxUnreadMessagesCount = count($unreadMessages);
+        }
+        else {
+            $inboxUnreadMessagesCount = 0;
+        }
+        $viewModel = new ViewModel();
+        $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/list.mobile.phtml');
+        }
+        else {
+            $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        }
+        $viewModel->setVariables([
+            'inboxUnreadMessagesCount' => $inboxUnreadMessagesCount,
+        ]);
+        return $viewModel;
+    }
+
     public function listSentAction() {
         $user = $this->identity();
         $session = new Container('inbox');
@@ -127,25 +176,23 @@ class InboxController extends AbstractActionController
         $limit= $this->params()->fromRoute('results', null);
         if (!$limit) {
             if (!$session->listSentResults) {
-                $limit = 5;
+                $limit = 10;
             }
             else {
                 $limit = $session->listSentResults;
             }
         }
         $session->listSentResults = $limit;
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $config = $this->getServiceLocator()->get('Config');
         $offset = ($page == 0) ? 0 : ($page - 1) * $limit;
         if ($user) {
-            $pagedInbox = $entityManager->getRepository('DGIModule\Entity\Inbox')->getUserPagedSentMessages($user, $offset, $limit, $config['demodyne']['inbox']['type'][$filter]);
+            $pagedInbox = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->getUserPagedSentMessages($user, $offset, $limit, $this->config['demodyne']['inbox']['type'][$filter]);
         }
         else {
             $pagedInbox = [];
         }
         $toUsers = array();
         foreach ($pagedInbox as $index => $inboxMessage) {
-            $groupMessages = $entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $inboxMessage->getIbxGroup()]);
+            $groupMessages = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $inboxMessage->getIbxGroup()]);
             $toUsers[$index] = array();
             foreach ($groupMessages as $message) {
                 $toUsers[$index][] = $message->getToUsr();
@@ -154,7 +201,12 @@ class InboxController extends AbstractActionController
         $viewModel = new ViewModel();
         $ajax = $this->getRequest()->isXmlHttpRequest();
         $viewModel->setTerminal($ajax);
-        $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/list.mobile.phtml');
+        }
+        else {
+            $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        }
         $viewModel->setVariables([
             'pagedInbox' => $pagedInbox,
             'toUsers' => $toUsers,
@@ -194,25 +246,23 @@ class InboxController extends AbstractActionController
         $limit= $this->params()->fromRoute('results', null);
         if (!$limit) {
             if (!$session->listTrashResults) {
-                $limit = 5;
+                $limit = 10;
             }
             else {
                 $limit = $session->listTrashResults;
             }
         }
         $session->listTrashResults = $limit;
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $config = $this->getServiceLocator()->get('Config');
         $offset = ($page == 0) ? 0 : ($page - 1) * $limit;
         if ($user) {
-        $pagedInbox = $entityManager->getRepository('DGIModule\Entity\Inbox')->getUserPagedTrashMessages($user, $offset, $limit, $config['demodyne']['inbox']['type'][$filter]);
+        $pagedInbox = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->getUserPagedTrashMessages($user, $offset, $limit, $this->config['demodyne']['inbox']['type'][$filter]);
         }
         else {
             $pagedInbox = [];
         }
         $toUsers = array();
         foreach ($pagedInbox as $index => $inboxMessage) {
-            $groupMessages = $entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $inboxMessage->getIbxGroup()]);
+            $groupMessages = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $inboxMessage->getIbxGroup()]);
             $toUsers[$index] = array();
             foreach ($groupMessages as $message) {
                 $toUsers[$index][] = $message->getToUsr();
@@ -221,7 +271,12 @@ class InboxController extends AbstractActionController
         $viewModel = new ViewModel();
         $ajax = $this->getRequest()->isXmlHttpRequest();
         $viewModel->setTerminal($ajax);
-        $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/list.mobile.phtml');
+        }
+        else {
+            $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        }
         $viewModel->setVariables([
             'pagedInbox' => $pagedInbox,
             'toUsers' => $toUsers,
@@ -239,7 +294,7 @@ class InboxController extends AbstractActionController
         $user = $this->identity();
         $page = $this->params()->fromRoute('page', 1);
         $filter = $this->params()->fromRoute('filter', 'none');
-        $limit= $this->params()->fromRoute('results', 5);
+        $limit= $this->params()->fromRoute('results', 10);
         $searchKeywords = $this->params()->fromRoute('sk', '');
         if ($searchKeywords == '') {
             return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied'));
@@ -248,22 +303,24 @@ class InboxController extends AbstractActionController
         $searchSender = $this->params()->fromRoute('ss', 1);
         $searchSubject = $this->params()->fromRoute('st', 1);
         $searchMessage = $this->params()->fromRoute('sm', 1);
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $config = $this->getServiceLocator()->get('Config');
         $offset = ($page == 0) ? 0 : ($page - 1) * $limit;
         if ($user) {
-        $pagedInbox = $entityManager->getRepository('DGIModule\Entity\Inbox')
+        $pagedInbox = $this->entityManager->getRepository('DGIModule\Entity\Inbox')
                             ->getUserPagedSearchMessages($user, $searchKeywords, $searchReceiver, $searchSender, $searchSubject, $searchMessage, 
-                                $offset, $limit, $config['demodyne']['inbox']['type'][$filter]);
+                                $offset, $limit, $this->config['demodyne']['inbox']['type'][$filter]);
         }
         else {
             $pagedInbox = [];
         }
         $viewModel = new ViewModel();
           $ajax = $this->getRequest()->isXmlHttpRequest();
-          //var_dump($ajax);
           $viewModel->setTerminal($ajax);
-          $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/list.mobile.phtml');
+        }
+        else {
+            $viewModel->setTemplate('dgi-module/inbox/list.phtml');
+        }
           $viewModel->setVariables([
               'pagedInbox' => $pagedInbox,
               'limit' => $limit,
@@ -284,23 +341,25 @@ class InboxController extends AbstractActionController
     public function myContactsAction() {
         $user = $this->identity();
         
-        $guestSession = new Container('guest');
-        if (!$user &&  !$guestSession->country) {
+        $city = $this->layout()->city;
+        if (!$user &&  !$city) {
             return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied'));
         }
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        
         if (!$user) {
             $user = new User();
             $user->setUsrId(0);
-            $user->setCountry($entityManager->getRepository('DGIModule\Entity\Country')->findOneBy(['countryId' => $guestSession->country]));
-            if ($guestSession->city) {
-                $user->setCity($entityManager->getRepository('DGIModule\Entity\City')->findOneBy(['cityId' => $guestSession->city]));
-            }
+        }
+        else {
+            $user = clone($user);
         }
         
-        
-       $session = new Container('inbox');
+        if ($city) {
+            $user->setUsrId(0);
+            $user->setCountry($city->getCountry());
+            $user->setCity($city);
+        }
+
+        $session = new Container('inbox');
         $page = $this->params()->fromRoute('page', null);
         if (!$page) {
             if (!$session->myContactsPage) {
@@ -334,21 +393,25 @@ class InboxController extends AbstractActionController
         $limit= $this->params()->fromRoute('results', null);
         if (!$limit) {
             if (!$session->myContactsResults) {
-                $limit = 5;
+                $limit = 10;
             }
             else {
                 $limit = $session->myContactsResults;
             }
         }
         $session->myContactsResults = $limit;
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-       $totalResults = $user?count($user->getContacts()):0;
-       $page = $limit!='all'? (ceil($totalResults/$limit) < $page ? ceil($totalResults/$limit) : $page) : $page; // @todo Goto last page if page > last page
-       $viewModel = new ViewModel();
-       $offset = ($page == 0) ? 0 : ($page - 1) * $limit;
-        $contacts = $entityManager->getRepository('DGIModule\Entity\User')->getPagedContacts($user, $offset, $limit, $sort, $order);
-       $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
-       $viewModel->setVariables([
+
+        $totalResults = $user?count($user->getContacts()):0;
+        $page = $limit!='all'? (ceil($totalResults/$limit) < $page ? ceil($totalResults/$limit) : $page) : $page; // @todo Goto last page if page > last page
+        $viewModel = new ViewModel();
+        $offset = ($page == 0) ? 0 : ($page - 1) * $limit;
+        $contacts = $this->entityManager->getRepository('DGIModule\Entity\User')->getPagedContacts($user, $offset, $limit, $sort, $order);
+        $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/my-contacts.mobile.phtml');
+        }
+
+        $viewModel->setVariables([
            'contacts' => $contacts,
            'limit' => $limit,
            'page' => $page,
@@ -362,10 +425,9 @@ class InboxController extends AbstractActionController
     public function addRemoveContactAction() {
         $user = $this->identity();
         $uuid = $this->params('id', '0');
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $contact = $entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrUUID' => $uuid, 'usrDeletedDate'=>null]);
+        $contact = $this->entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrUUID' => $uuid, 'usrDeletedDate'=>null]);
         if (!$contact) {
-            return new \Zend\View\Model\JsonModel(array('success' => false));
+            return new JsonModel(['success' => false]);
         }
         if ($user->getContacts()->contains($contact)) {
             $user->removeContact($contact);
@@ -375,23 +437,23 @@ class InboxController extends AbstractActionController
             $user->addContact($contact);
             $added = true;
         }
-        $entityManager->merge($user);
-        $entityManager->flush();
-        return new \Zend\View\Model\JsonModel(array('success' => true, 'added' => $added, 'contact'=>$uuid));
+        $this->entityManager->merge($user);
+        $this->entityManager->flush();
+        return new JsonModel(['success' => true, 'added' => $added, 'contact'=>$uuid]);
     }
     public function deleteOneAction() {
         $user = $this->identity();
         $uuid = $this->params()->fromRoute('id', '0');
         $type = $this->params()->fromRoute('type', 'received');
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $message = $entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
+
+        $message = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
         if (!$message) {
-            return new \Zend\View\Model\JsonModel(array('success' => false));
+            return new JsonModel(['success' => false]);
         }
         if (($type=='received' && $user != $message->getToUsr()) || 
             ($type=='sent' && $user != $message->getFromUsr()) ||
             ($type=='trash' && $user != $message->getToUsr() && $user != $message->getFromUsr())) {
-            return new \Zend\View\Model\JsonModel(array('success' => false));
+            return new JsonModel(['success' => false]);
         }
         $session = new Container('inbox');
         $trash = true;
@@ -414,10 +476,16 @@ class InboxController extends AbstractActionController
             }
             $trash = false;
         }
-        $entityManager->merge($message);
-        $entityManager->flush();
-        return new \Zend\View\Model\JsonModel(array('success' => true, 'trash' => $trash, 'type' => $type));
+        $this->entityManager->merge($message);
+        $this->entityManager->flush();
+        return new JsonModel(['success' => true, 'trash' => $trash, 'type' => $type]);
     }
+
+
+    /**
+     * @todo Delete message permanently after 30 days
+     * @return ViewModel
+     */
     public function deleteSelectedAction() {
         $user = $this->identity();
         $request = $this->getRequest();
@@ -425,12 +493,11 @@ class InboxController extends AbstractActionController
         $type = $this->params()->fromRoute('type', 'received');
         $errors = [];
         $messages = [];
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $messageNotExists = "One or more mails do not exists.";
-        $messageNotOwner = "You are not authorised to delete one or more messages.";
+        $messageNotExists = $this->translator->translate("One or more mails do not exists.", 'DGIModule');
+        $messageNotOwner = $this->translator->translate("You are not authorised to delete one or more messages.", 'DGIModule');
         // verify if messages exist and the user can delete
         foreach ($mails as $mail) {
-            $message = $entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $mail]);
+            $message = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $mail]);
             if (!$message && !$errors.containts($messageNotExists)) {
                 $errors[] = $messageNotExists;
             }
@@ -472,11 +539,10 @@ class InboxController extends AbstractActionController
                     if ($message->getIbxUUID()==$session->viewTrash){
                         $session->viewTrash = null;
                     }
-                    $trash = false;
                 }
-                $entityManager->merge($message);
+                $this->entityManager->merge($message);
             }
-            $entityManager->flush();
+            $this->entityManager->flush();
             $viewModel->setTemplate('dgi-module/inbox/delete-selected-success.phtml');
         }
         $viewModel->setVariables([
@@ -486,6 +552,7 @@ class InboxController extends AbstractActionController
         ]);
         return $viewModel;
     }
+
     public function viewAction() {
         $user = $this->identity();
         $uuid = $this->params()->fromRoute('id', '0');
@@ -498,12 +565,12 @@ class InboxController extends AbstractActionController
             $session->viewSent = $uuid;
         }
         else $session->viewTrash = $uuid;
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $inboxMessage = $entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
+
+        $inboxMessage = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
         if (!$inboxMessage || ($inboxMessage->getToUsr()!=$user && $inboxMessage->getFromUsr()!=$user)) {
             return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied'));
         }
-        $groupMessages = $entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $inboxMessage->getIbxGroup()]);
+        $groupMessages = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $inboxMessage->getIbxGroup()]);
         $toUsers = array();
         foreach ($groupMessages as $message) {
             $toUsers[] = $message->getToUsr();
@@ -511,12 +578,16 @@ class InboxController extends AbstractActionController
         $unreadMessage = false;
         if (!$inboxMessage->getIbxViewed() && $type=='received') {
             $inboxMessage->setIbxViewed(1);
-            $entityManager->merge($inboxMessage);
-            $entityManager->flush();
+            $this->entityManager->merge($inboxMessage);
+            $this->entityManager->flush();
             $unreadMessage = true;
         }
         $viewModel = new ViewModel();
         $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
+        if (isset($_SESSION['mobile']) && $_SESSION['mobile']) {
+            $viewModel->setTemplate('dgi-module/inbox/view.mobile.phtml');
+        }
+
         $viewModel->setVariables([
             'unreadMessage' => $unreadMessage,
             'message' => $inboxMessage,
@@ -526,57 +597,77 @@ class InboxController extends AbstractActionController
         ]);
         return $viewModel;
     }
+
+    public function viewMessageAction() {
+        $user = $this->identity();
+        $uuid = $this->params()->fromRoute('id', '0');
+        $type = $this->params()->fromRoute('type', 'received');
+
+        $inboxMessage = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
+        if (!$inboxMessage || ($inboxMessage->getToUsr()!=$user && $inboxMessage->getFromUsr()!=$user)) {
+            return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied'));
+        }
+        $session = new Container('inbox');
+        if ($type=='received') {
+            $session->viewReceived = $uuid;
+        }
+        elseif ($type=='sent') {
+            $session->viewSent = $uuid;
+        }
+        else $session->viewTrash = $uuid;
+
+        return $this->redirect()->toRoute('country', [], ['fragment' => 'inbox']);
+    }
+
+
     public function createMessageAction() {
         $to = $this->params('to');
         $type = $this->params('type', 0);
         $uuid = $this->params('uuid', '00000000-0000-0000-0000-000000000000');
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $config = $this->getServiceLocator()->get('Config');
-        $toUsr = $entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrName' => $to]);
+
+        $toUsr = $this->entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrName' => $to]);
         $group = uniqid('', true);
         $message = new Inbox();
         $message->setToUsr($toUsr)
                 ->setIbxType($type)
                 ->setIbxGroup($group);
         switch ($type) {
-            case $config['demodyne']['inbox']['type']['new_comment']:
-                $comment = $entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(['comUUID' => $uuid]);
+            case $this->config['demodyne']['inbox']['type']['new_comment']:
+                $comment = $this->entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(['comUUID' => $uuid]);
                 $message->setCom($comment)
                         ->setIbxTitle($comment->getProp()?_('Proposal: ').$comment->getProp()->getPropName():($comment->getProgram()?_('Program: ').$comment->getProgram()->getProgName():'Comment: to add comment ref'))
                         ->setIbxText($comment->getComText())
                         ->setFromUsr($comment->getUsr());
                 break;
-            case $config['demodyne']['inbox']['type']['new_step']:
+            case $this->config['demodyne']['inbox']['type']['new_step']:
                 break;
-            case $config['demodyne']['inbox']['type']['champion_news']:
+            case $this->config['demodyne']['inbox']['type']['champion_news']:
                 break;
         }
-        $entityManager->persist($message);
-        $entityManager->flush();
+        $this->entityManager->persist($message);
+        $this->entityManager->flush();
         return true;
     }
+
     public function getContactsAction() {
         $user = $this->identity();
-        $request = $this->getRequest();
-            $contact = $this->params()->fromQuery('term');
-            $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-            $contacts = $entityManager->getRepository('DGIModule\Entity\User')->getContacts($user, $contact);
-            $contactList = array();
-            foreach ($contacts as $contact) {
-                $contactItem["value"] = $contact->getUsrName();
-                $contactList[] = $contactItem;
-            }
-                return new \Zend\View\Model\JsonModel( $contactList );
+        $contact = $this->params()->fromQuery('term');
+        $contacts = $this->entityManager->getRepository('DGIModule\Entity\User')->getContacts($user, $contact);
+        $contactList = array();
+        foreach ($contacts as $contact) {
+            $contactItem["value"] = $contact->getUsrName();
+            $contactList[] = $contactItem;
+        }
+        return new JsonModel( $contactList );
     }
+
     public function newMessageAction()
     {
         $user = $this->identity();
         $to = $this->params()->fromRoute('to', '');
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         $form = new NewMessageForm();
         $form->get('msgTo')->setValue($to);
         $request = $this->getRequest();
-        $response = $this->getResponse();
         $viewModel = new ViewModel();
         $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
         $msg = $this->params()->fromPost('msgText', '');
@@ -588,13 +679,12 @@ class InboxController extends AbstractActionController
                 $title = $this->params()->fromPost('msgTitle');
                 $msg = $this->params()->fromPost('msgText');
                 $com = $this->params()->fromPost('comment', '');
-                $config = $this->getServiceLocator()->get('Config');
                 $toList = explode(',', preg_replace('/\s+/', '', $to));
                 $messages = array();
                 $toUsrList = array();
                 foreach ($toList as $toValue) { // TODO: max 10 receivers by email
                     if ($toValue=='') continue;
-                    $toUsr = $entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrName' => $toValue]); // @todo check only users from the same city? : pays
+                    $toUsr = $this->entityManager->getRepository('DGIModule\Entity\User')->findOneBy(['usrName' => $toValue]); // @todo check only users from the same city? : pays
                     if (!$toUsr) {
                         $messages[] = 'No user with the name "'.$toValue.'"';
                     }
@@ -614,15 +704,24 @@ class InboxController extends AbstractActionController
                                     ->setFromUsr($user)
                                     ->setIbxTitle($title)
                                     ->setIbxText($msg)
-                                    ->setIbxType($config['demodyne']['inbox']['type']['private_message'])
+                                    ->setIbxType($this->config['demodyne']['inbox']['type']['private_message'])
                                     ->setIbxGroup($group);
-                            $entityManager->persist($message);
-                            // TODO: add receiver to contacts if not 
+                            $this->entityManager->persist($message);
+                            $this->entityManager->flush(); // must do a flush to retrieve message in email controller
+
+                            // TODO: add receiver to contacts if not in contacts
+
+                            if ($toUsr->getDigest()->getDigestAlertPrivate()==$this->config['demodyne']['email']['alert']['instant']) {
+                                $this->forward()->dispatch('DGIModule\Controller\Email', array(
+                                    'action' => 'new-private-message',
+                                    'id' => $message->getIbxUUID(),
+                                    'email' => 'true'
+                                ));
+                            }
                         }
-                        $entityManager->flush();
                     }
                     else {
-                        $comment = $entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(['comUUID' => $com]);
+                        $comment = $this->entityManager->getRepository('DGIModule\Entity\Comment')->findOneBy(['comUUID' => $com]);
                         $this->forward()->dispatch('DGIModule\Controller\Comment', array(
                             'action' => 'create-comment',
                             'type' => $comment->getProp()?'proposal':'program',
@@ -650,10 +749,10 @@ class InboxController extends AbstractActionController
     {
         $user = $this->identity();
         $uuid = $this->params()->fromRoute('id', '0');
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $message = $entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
+
+        $message = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
         if (!$message) {
-            return new \Zend\View\Model\JsonModel(array('success' => false));
+            return new JsonModel(array('success' => false));
         }
         if ($user != $message->getToUsr() || $message->getIbxToDeletedDate()) {
             return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied', 'dialog' => true));
@@ -661,8 +760,10 @@ class InboxController extends AbstractActionController
         $form = new NewMessageForm();
         $form->get('msgTo')->setValue($message->getFromUsr()->getUsrName());
         $form->get('msgTitle')->setValue('Re: '.$message->getIbxTitle());
-        $msg = '<br><br>On '.$message->getIbxCreatedDate()->format("d/m/Y H:i").', <span class="badge">'.$message->getFromUsr()->getUsrName().'</span> '._('wrote:').' <br><blockquote>'.$message->getIbxText().'</blockquote><br>';
-        $config = $this->getServiceLocator()->get('Config');
+        $msg = sprintf($this->translator->translate('<br><br>On %s, <span class="badge">%s</span> wrote: <br><blockquote>%s</blockquote><br>', 'DGIModule'),
+                        $message->getIbxCreatedDate()->format("d/m/Y H:i"),
+                        $message->getFromUsr()->getUsrName(),
+                        $message->getIbxText());
         $viewModel = new ViewModel();
         $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
         $viewModel->setTemplate('dgi-module/inbox/new-message.phtml');
@@ -670,7 +771,7 @@ class InboxController extends AbstractActionController
             'form'=>$form,
             'msg' => $msg
         ]);
-        if ($message->getIbxType() == $config['demodyne']['inbox']['type']['new_comment']) {
+        if ($message->getIbxType() == $this->config['demodyne']['inbox']['type']['new_comment']) {
             $viewModel->setVariable('comment', $message->getCom()->getComUUID());
             $form->get('msgTitle')->setValue($message->getIbxTitle());
         }
@@ -680,16 +781,16 @@ class InboxController extends AbstractActionController
     {
         $user = $this->identity();
         $uuid = $this->params()->fromRoute('id', '0');
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $message = $entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
+
+        $message = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
         if (!$message) {
-            return new \Zend\View\Model\JsonModel(array('success' => false));
+            return new JsonModel(array('success' => false));
         }
         if ($user != $message->getToUsr() || $message->getIbxToDeletedDate()) {
             return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied', 'dialog' => $this->getRequest()->isXmlHttpRequest()));
         }
         $form = new NewMessageForm();
-        $groupMessages = $entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $message->getIbxGroup()]);
+        $groupMessages = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findBy(['ibxGroup' => $message->getIbxGroup()]);
         $toUsers = '';
         foreach ($groupMessages as $msg) {
             $toUsers = $toUsers . $msg->getToUsr()->getUsrName();
@@ -699,7 +800,10 @@ class InboxController extends AbstractActionController
         }
         $form->get('msgTo')->setValue($toUsers);
         $form->get('msgTitle')->setValue('Re: '.$message->getIbxTitle());
-        $msg = '<br><br>On '.$message->getIbxCreatedDate()->format("d/m/Y H:i").', <span class="badge">'.$message->getFromUsr()->getUsrName().'</span> '._('wrote:').' <br><blockquote>'.$message->getIbxText().'</blockquote><br>';
+        $msg = sprintf($this->translator->translate('<br><br>On %s, <span class="badge">%s</span> wrote: <br><blockquote>%s</blockquote><br>', 'DGIModule'),
+            $message->getIbxCreatedDate()->format("d/m/Y H:i"),
+            $message->getFromUsr()->getUsrName(),
+            $message->getIbxText());
         $viewModel = new ViewModel();
         $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
         $viewModel->setTemplate('dgi-module/inbox/new-message.phtml');
@@ -709,22 +813,24 @@ class InboxController extends AbstractActionController
         ]);
         return $viewModel;
     }
+
     public function forwardAction()
     {
         $user = $this->identity();
         $uuid = $this->params()->fromRoute('id', '0');
-        $entityManager = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        $message = $entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
+        $message = $this->entityManager->getRepository('DGIModule\Entity\Inbox')->findOneBy(['ibxUUID' => $uuid]);
         if (!$message) {
-            return new \Zend\View\Model\JsonModel(array('success' => false));
+            return new JsonModel(array('success' => false));
         }
         if ($user != $message->getToUsr() || $message->getIbxToDeletedDate()) {
             return $this->forward()->dispatch('DGIModule\Controller\Error', array('action' => 'access-denied', 'dialog' => true));
         }
         $form = new NewMessageForm();
         $form->get('msgTitle')->setValue('Fwd: '.$message->getIbxTitle());
-        $msg = '<br><br>On '.$message->getIbxCreatedDate()->format("d/m/Y H:i").', <span class="badge">'.$message->getFromUsr()->getUsrName().'</span> '._('wrote:').' <br><blockquote>'.$message->getIbxText().'</blockquote><br>';
-        $config = $this->getServiceLocator()->get('Config');
+        $msg = sprintf($this->translator->translate('<br><br>On %s, <span class="badge">%s</span> wrote: <br><blockquote>%s</blockquote><br>', 'DGIModule'),
+            $message->getIbxCreatedDate()->format("d/m/Y H:i"),
+            $message->getFromUsr()->getUsrName(),
+            $message->getIbxText());
         $viewModel = new ViewModel();
         $viewModel->setTerminal($this->getRequest()->isXmlHttpRequest());
         $viewModel->setTemplate('dgi-module/inbox/new-message.phtml');

@@ -1,85 +1,123 @@
-<!-- user-profile/mini-profile -->
-
-<?php if ($user->getUsrlId()!=$this->configItem('demodyne.account.type.admin') || $user==$me):?>
-<div id="user-profile-mini-profile" data-id="<?=$user->getUsrUUID()?>"
-	data-remove-contact="<?= $this->translate('Remove from Contacts')?>"
-	data-add-contact="<?= $this->translate('Add to Contacts')?>">
-	<div class="row">
-		<div class="col-md-4 text-center">
-			<img src="<?=$this->basePath($user->getUsrPicture()) ?>" width="100%"
-				style="max-width: 100px !important;"
-				alt="<?= $user->getUsrName() ?>" title="<?= $user->getUsrName() ?>"
-				class="img-thumbnail" /><span class="badge small"><?= $user->getUsrName() ?></span>
-				<br>
-				<?php if (!$user->isAdministration() || $user->getAdmin()->getAdminLevel()!=$this->configItem('demodyne.account.admin-level.country')):?>
-                <?= $user->getCity()->getCityName() ?>
+<?php /*if ($user->getUsrlId()!=$this->configItem('demodyne.account.type.admin') || $user!=$me):*/?>
+    <div id="user-profile-mini-profile" data-id="<?=$user->getUsrUUID()?>"
+         data-remove-contact="<?= $this->translate('Remove from Contacts')?>"
+         data-add-contact="<?= $this->translate('Add to Contacts')?>"
+         data-block-user="<?=$this->translate('Block user')?>"
+         data-unblock-user="<?=$this->translate('Unblock user')?>">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="<?=$this->basePath($user->getUsrPicture()) ?>" width="100%"
+                     style="max-width: 100px !important;"
+                     alt="<?= $user->getUsrName() ?>" title="<?= $user->getUsrName() ?>"
+                     class="img-thumbnail" /><br>
+<span class="badge small"><?= $user->getUsrName() ?></span>
+                <br>
+                <?php if (!$user->isAdministration() || $user->getAdmin()->getAdminLevel()!=$this->configItem('demodyne.account.admin-level.country')):?>
+                    <?= $user->getCity()->getCityName() ?>
                 <?php endif;?>
-		</div>
-		<div class="col-md-8">
-			
-<?= $user->getUsrPresentation() ?><br> 
-			<?php if (!$user->isAdministration() || $user->getAdmin()->getAdminLevel()!=$this->configItem('demodyne.account.admin-level.country')):?>
-			<?= $this->userScores?>
-			<?php endif;?>
-		</div>
-	</div>
-	<hr />
-	<div class="row">
-		<div class="col-md-12 text-center">
-<?php if ($user!=$me):?>
-			<a
-				href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()));?>"
-				class="btn btn-orange"> <i class="fa fa-eye" id=""></i> <?= $this->translate('View profile')?></a>
-	<?php if ($me && !$user->isAdministration()):?>
-			<button
-				data-url="<?= $this->url('user/inbox', array('action'=>'new-message', 'to'=>$user->getUsrName()));?>"
-				class="btn btn-orange" id="user-profile-mini-profile-new-message"
-				data-dialog-title="<?=$this->translate('Send New Message')?>"> <i
-				class="fa fa-envelope-o" id=""></i> <?= $this->translate('Send message')?>
-			</button>
-		
-		<?php if ($me->hasContact($user)):?>
-			<a
-				href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
-				class="btn btn-primary"
-				id="user-profile-mini-profile-add-remove-contact"
-				data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-minus-circle"></i> <?= $this->translate('Remove from Contacts')?></a>
-		<?php else: ?>
-			<a
-				href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
-				class="btn btn-orange"
-				id="user-profile-mini-profile-add-remove-contact"
-				data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-plus-circle"></i> <?= $this->translate('Add to Contacts')?></a>
-		<?php endif;?>
-	<?php endif;?>
-<?php else:?>
-			<a
-				href="<?= $this->url('user/profile',  ['action'=>'user-profile']);?>"
-				class="btn btn-orange"><i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit profile')?></a>
-<?php endif;?>
-</div>
-	</div>
-</div>
-<script type="text/javascript">
-	$(function () {
-		userProfileMiniProfileHandlers();
-	});
-</script>
-<?php else:?>
-<div id="user-profile-mini-profile" data-id="<?=$user->getUsrUUID()?>">
-	<div class="row">
-		<div class="col-md-4 text-center">
-			<img src="<?=$this->basePath($user->getUsrPicture()) ?>" width="100%"
-				style="max-width: 100px !important;"
-				alt="<?= $user->getUsrName() ?>" title="<?= $user->getUsrName() ?>"
-				class="img-thumbnail" /><span class="badge small"><?= $user->getUsrName() ?></span>
-                
-		</div>
-		<div class="col-md-8">
-			Demodyne Administrator account
-		</div>
-	</div>
-</div>
-<?php endif;?>
+            </div>
+            <div class="col-md-8">
 
-<!-- /user-profile/mini-profile -->
+                <?php if (!$user->isAdministration()):?>
+                    <?= $user->getUsrPresentation() ?><br>
+                    <?= $this->userScores?>
+                <?php else:
+
+                    if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.city')) {
+                        $levelName = $user->getAdmin()->getAdminCity();
+                    }
+                    else if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.region')) {
+                        $levelName = $user->getAdmin()->getAdminRegion()->getRegionName();
+                    }
+                    else if ($user->getAdmin()->getAdminLevel()==$this->configItem('demodyne.level.country')) {
+                        $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$user->getCountry()->getCountryName() .'</span>';
+                    }
+                    ?>
+                    <?=sprintf($this->translate('Public Administration for: %s'), $levelName)?>
+                    <hr>
+                    <?=$user->getAdmin()->getAdminPresentation()?>
+                    <hr>
+                    <a href="<?= $user->getAdmin()->getAdminWebsite()?>" target="_blank"><?= $user->getAdmin()->getAdminWebsite()?></a>
+                <?php endif;?>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <?php if ($user!=$me):?>
+                    <a
+                            href="<?= $this->url('user/profile', array('action'=>'view', 'id'=>$user->getUsrUUID()));?>"
+                            class="btn btn-orange"> <i class="fa fa-eye" id=""></i> <?= $this->translate('View profile')?></a>
+                    <?php if ($me && $me->getUsrId()):?>
+                        <button
+                                data-url="<?= $this->url('user/inbox', array('action'=>'new-message', 'to'=>$user->getUsrName()));?>"
+                                class="btn btn-orange" id="user-profile-mini-profile-new-message"
+                                data-dialog-title="<?=$this->translate('Send New Message')?>"> <i
+                                    class="fa fa-envelope-o" id=""></i> <?= $this->translate('Send message')?>
+                        </button>
+
+                        <?php if (!$user->isAdministration()):?>
+                            <?php if ($me->hasContact($user) && !$user->isAdministration()):?>
+                                <a
+                                        href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
+                                        class="btn btn-primary white"
+                                        id="user-profile-mini-profile-add-remove-contact"
+                                        data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-minus-circle"></i> <?= $this->translate('Remove from Contacts')?></a>
+                            <?php else: ?>
+                                <a
+                                        href="<?= $this->url('user/inbox', array('action'=>'add-remove-contact', 'id'=>$user->getUsrUUID()));?>"
+                                        class="btn btn-orange"
+                                        id="user-profile-mini-profile-add-remove-contact"
+                                        data-id="<?=$user->getUsrUUID()?>"> <i class="fa fa-plus-circle"></i> <?= $this->translate('Add to Contacts')?></a>
+                            <?php endif;?>
+                        <?php endif;?>
+                    <?php endif;?>
+
+                    <?php if (isset($owner) && $owner==$me):?>
+                        <div class="row">
+                            <div class="col-md-12 text-center">
+                                <hr>
+                                <button
+                                        data-url="<?= $this->url('chat', array('action'=>'block', 'id'=>$context, 'user' => $user->getUsrUUID()));?>"
+                                        class="btn btn-danger" id="block-user"
+                                        data-id="<?=$user->getUsrUUID()?>"
+                                    <?=!$blocked?'':'style="display: none;"'?>>
+                                    <i class="fa fa-ban size15em"></i> <?=$this->translate('Block user')?></button>
+                                <button
+                                        data-url="<?= $this->url('chat', array('action'=>'block', 'id'=>$context, 'user' => $user->getUsrUUID()));?>"
+                                        class="btn btn-success" id="unblock-user"
+                                        data-id="<?=$user->getUsrUUID()?>"
+                                    <?=$blocked?'':'style="display: none;"'?>>
+                                    <i class="fa fa-ban size15em"></i> <?=$this->translate('Unblock user')?></button>
+                            </div>
+                        </div>
+                    <?php endif;?>
+                <?php else:?>
+                    <a
+                            href="<?= $this->url('user/profile',  ['action'=>'user-profile']);?>"
+                            class="btn btn-orange"><i class="fa fa-pencil-square-o"></i> <?= $this->translate('Edit profile')?></a>
+                <?php endif;?>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            userProfileMiniProfileHandlers();
+        });
+    </script>
+<?php /*else:?>
+    <div id="user-profile-mini-profile" data-id="<?=$user->getUsrUUID()?>">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="<?=$this->basePath($user->getUsrPicture()) ?>" width="100%"
+                     style="max-width: 100px !important;"
+                     alt="<?= $user->getUsrName() ?>" title="<?= $user->getUsrName() ?>"
+                     class="img-thumbnail" /><span class="badge small"><?= $user->getUsrName() ?></span>
+
+            </div>
+            <div class="col-md-8">
+                Demodyne Administrator account
+            </div>
+        </div>
+    </div>
+<?php endif;*/?>

@@ -1,0 +1,84 @@
+
+<div id="newsletter-view-newsletter">
+
+<?php $newsletter = $this->newsletter; $user=$this->user;?>
+
+	
+	
+	
+	
+	<div class="row">
+		<div class="col-sm-6 bot5">
+			<img width="100" class="img-thumbnail"
+				id="newsletter-add-newsletter-preview" height="120"
+				src="<?= $newsletter?$newsletter->getNlHeaderImage():''?>">
+		</div>
+		<div class="col-sm-6 bot5 fltr text-right">
+			<img width="100" class="img-thumbnail" height="120"
+				src="<?=$this->basePath($newsletter?$newsletter->getAdmin()->getUser()->getUsrPicture():$user->getUsrPicture())?>">
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-sm-12 bot5">
+			<span class="big">
+								<?=$newsletter?$newsletter->getAdmin()->getAdminName():$user->getAdmin()->getAdminName()?>
+								<?= $this->translate('on')?> <?=($newsletter && $newsletter->getNlSentDate())?$newsletter->getNlSentDate()->format('d/m/Y'):(new \DateTime())->format('d/m/Y')?>
+							</span>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-sm-12 bot5">
+			<span class="big" id="newsletter-add-newsletter-title"><?= $newsletter?$newsletter->getNlSubject():''?></span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 bot5">
+			<span id="newsletter-add-newsletter-message"><?= $newsletter?$newsletter->getNlMessage():''?></span>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-sm-12 bot5">
+						<?= $this->translate('Categories concerned')?>: <br> <span
+				id="newsletter-add-newsletter-category-preview">
+								<?php if ($newsletter && $newsletter->getCategories()->count()):?>
+    								<?php foreach ($newsletter->getCategories() as $category):?>
+    									<span><img width="32" height="32"
+					title="<?=$category->getCatName()?>"
+					src="<?= $this->basePath()?>/files/<?= $category->getCatImage() ?>"></span>
+    								<?php endforeach;?>
+								<?php else:?>
+									<strong><?= $this->translate('No target categories. All user groups are concerned.')?></strong>
+								<?php endif;?>
+							</span>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-sm-12 bot5">
+						<?= $this->translate('Link')?>: <br> <span
+				id="newsletter-add-newsletter-url">
+							<?php if ($newsletter && $newsletter->getNlUrl()!=''):?>
+								<a href="<?=$newsletter->getNlUrl()?>" target="_blank"><?=$newsletter->getNlUrl()?></a>
+							<?php else:?>
+								<strong><?= $this->translate('No url defined.')?></strong>
+							<?php endif;?>
+							</span>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-sm-12 bot5">
+							<?= $this->translate('For more information please contact')?>:<br>
+			<span id="newsletter-add-newsletter-contact">
+									<?php if ($newsletter && $newsletter->getNlContact()!=''):?>
+										<?=$newsletter->getNlContact()?>
+        							<?php else:?>
+        								<strong><?= $this->translate('No contact defined.')?></strong>
+        							<?php endif;?>
+								</span>
+		</div>
+	</div>
+</div>

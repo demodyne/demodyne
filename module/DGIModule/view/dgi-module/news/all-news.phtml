@@ -1,247 +1,386 @@
-<!-- news/all-news -->
-
 <?php $paging = $this->sortingDivPaginationHelper($pagedNews, $page, $this->url('news', array('action'=>'all-news')), 'all-news', $limit, null, null); ?>
+<? $countryFormat = $user->getUsrId()?$user->getCity()->getCountry()->getCountryFormat():'fr_FR';?>
 
 <div id="news-all-news" data-url="<?= $this->url('news', array('action'=>'all-news'), true); ?>">
-  <div class="row">
-    <div class="col-md-9">
+    <div class="row">
+        <div class="col-md-9">
 
-<?php if ($user->getUsrId()):?>
-	<?= sprintf($this->translate('You have <strong>%d News</strong> since previous login on'), $newNews)?> <i class="fa fa-clock-o"></i>
-      <?= $user->getUsrLastLoginDate()->format('d/m/Y H:i') ?>
-<?php endif;?>
+            <?php if ($user->getUsrId()):?>
+                <?= sprintf($this->translate('You have <strong>%d News</strong> since previous login on'), $newNews)?> <i class="fa fa-clock-o"></i>
+                <?=$this->dateFormat(
+                    $user->getUsrLastLoginDate(),
+                    IntlDateFormatter::SHORT, // date
+                    IntlDateFormatter::SHORT, // time
+                    $countryFormat
+                );?>
+            <?php endif;?>
+        </div><!--/9-->
 
-    </div>
-    <!--/9-->
-    <div class="col-md-3">
-      <div class="fltr">
-        <ul class="nav">
-          <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"> <span class="label label-default"><i class="fa fa-caret-down"></i> </span> </a>
-            <ul class="dropdown-menu dropdown-menu-right">
-              <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'none'));?>">
-                <?= ($filter=='none'?' <i class="fa fa-check"></i> ':'')?>
-                <?= $this->translate('Show all')?></a></li>
-              <li class="divider"></li>
-              <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1,'filter' => 'new_proposal'));?>">
-                <?= ($filter=='new_proposal'?' <i class="fa fa-check"></i> ':'')?>
-                <?= $this->translate('New Proposals')?></a></li>
-              <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'new_measure'));?>">
-                <?= ($filter=='new_measure'?' <i class="fa fa-check"></i> ':'')?>
-                <?= $this->translate('New Measures')?></a></li>
-              <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'implementation_phase'));?>">
-                <?= ($filter=='implementation_phase'?' <i class="fa fa-check"></i> ':'')?>
-                <?= $this->translate('Proposal Implementation Phase')?></a></li>
-              <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'completed_proposal'));?>">
-                <?= ($filter=='completed_proposal'?' <i class="fa fa-check"></i> ':'')?>
-                <?= $this->translate('Completed Proposals')?></a></li>
-              <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'deleted_proposal'));?>">
-                <?= ($filter=='deleted_proposal'?' <i class="fa fa-check"></i> ':'')?>
-                <?= $this->translate('Deleted Proposals')?></a></li>
-              <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'task_suggestion'));?>">
-                <?= ($filter=='task_suggestion'?' <i class="fa fa-check"></i> ':'')?>
-                <?= $this->translate('Task suggestion')?></a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="fltr right10 top5"> <?= $this->translate('Filter')?> </div>
-    </div>
-    <!--/3-->
-  </div>
-  <!--/r-->
-
-  <hr />
-  <?php if (count($pagedNews)):?>
-  <?php foreach($pagedNews as $news): ?>
-  <?php
-			     $proposal = $news->getProp()?$news->getProp():null;
-			?>
-  <div class="row">
-    <?php if ($news->getNewsType()==$newsType['new_proposal']): // 1 ?>
-        <?php if ($proposal->isMeasure()): ?>
-        <div class="col-md-1"> <i class="fa fa-university fa-2x gray"></i> </div>
-        <!--/1-->
-        <div class="col-md-11"><span class="big">
-          <?php if ($proposal->getPropDeletedDate()):?>
-          <?= $proposal->getPropSavedName(); ?>
-          (<?= $this->translate('deleted')?>)
-          <?php else:?>
-          <a id="news-all-news-list-item" href="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>">
-          <?= $proposal->getPropSavedName(); ?>
-          </a>
-          <?php endif;?>
-          </span>
-          <br/>
-           <?= $this->translate('New Mesure (unvalidated)')?> <?= $this->translate('in')?>
-          <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
-          <br/>
-          <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
-          <?= $proposal->getUsr()->getUsrName() ?>
-          </span></a> <i class="fa fa-clock-o"></i>
-          <?= $news->getNewsCreatedDate()->format('d/m/Y') ?>
-        </div>
-        <?php else:?>
-        <div class="col-md-1"> <i class="fa fa-bullhorn fa-2x violet"></i> </div>
-        <!--/1-->
-        <div class="col-md-11"> <span class="big">
-          <?php if ($proposal->getPropDeletedDate()):?>
-          <?= $news->getProp()->getPropSavedName(); ?>
-          (<?= $this->translate('deleted')?>)
-          <?php else:?>
-          <a id="news-all-news-list-item" href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>">
-          <?= $news->getProp()->getPropSavedName(); ?>
-          </a>
-          <?php endif;?>
-          </span> <br/>
-          <?= $this->translate('New Proposal')?> <?= $this->translate('in')?>
-          <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
-          <br/>
-          <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
-          <?= $proposal->getUsr()->getUsrName() ?>
-          </span></a> <i class="fa fa-clock-o"></i>
-          <?= $news->getNewsCreatedDate()->format('d/m/Y') ?>
-        </div>
-        <!-- /11 -->
-        <?php endif;?>
-    <?php elseif ($news->getNewsType()==$newsType['new_measure'] || $news->getNewsType()==$newsType['new_measure_citizen'] || $news->getNewsType()==$newsType['measure_validated']): // 5 ?>
-
-    	<?php if ($news->getNewsType()==$newsType['new_measure_citizen']):?>
-            <div class="col-md-1"> <i class="fa fa-university fa-2x gray"></i> </div>
-        <?php else:?>
-    		<div class="col-md-1"> <i class="fa fa-university fa-2x green"></i> </div>
-    	<?php endif;?>
-            <!--/1-->
-            <div class="col-md-11"><span class="big">
-              <?php if ($proposal->getPropDeletedDate()):?>
-              <?= $proposal->getPropSavedName(); ?>
-              (<?= $this->translate('deleted')?>)
-              <?php else:?>
-              <a id="news-all-news-list-item" href="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>">
-              <?= $proposal->getPropSavedName(); ?>
-              </a>
-              <?php endif;?>
-              </span>
-              <br/>
-               <?php if ($news->getNewsType()==$newsType['new_measure_citizen']):?>
-               	<?= $this->translate('New Measure (unvalidated)')?>
-               <?php elseif ($news->getNewsType()==$newsType['new_measure']):?>
-               	<?= $this->translate('New Measure')?>
-               <?php else:?>
-               	<?= $this->translate('Measure validated')?>
-               <?php endif;?>
-               <?= $this->translate('in')?>
-              <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
-              <br/>
-              <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$news->getUsr()->getUsrUUID()));?>" data-title="<?= $news->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$news->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
-              <?= $news->getUsr()->getUsrName() ?>
-              </span></a> <i class="fa fa-clock-o"></i>
-              <?= $news->getNewsCreatedDate()->format('d/m/Y') ?>
+        <div class="col-md-3">
+            <div class="fltr">
+                <ul class="nav">
+                    <li class="dropdown"> <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"> <span class="label label-default"><i class="fa fa-caret-down"></i> </span> </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'none'));?>">
+                                    <?= ($filter=='none'?' <i class="fa fa-check"></i> ':'')?>
+                                    <?= $this->translate('Show all')?></a></li>
+                            <li class="divider"></li>
+                            <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1,'filter' => 'new_proposal'));?>">
+                                    <?= ($filter=='new_proposal'?' <i class="fa fa-check"></i> ':'')?>
+                                    <?= $this->translate('New Proposals')?></a></li>
+                            <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'new_measure'));?>">
+                                    <?= ($filter=='new_measure'?' <i class="fa fa-check"></i> ':'')?>
+                                    <?= $this->translate('New Measures')?></a></li>
+                            <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'implementation_phase'));?>">
+                                    <?= ($filter=='implementation_phase'?' <i class="fa fa-check"></i> ':'')?>
+                                    <?= $this->translate('Proposal Implementation Phase')?></a></li>
+                            <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'completed_proposal'));?>">
+                                    <?= ($filter=='completed_proposal'?' <i class="fa fa-check"></i> ':'')?>
+                                    <?= $this->translate('Completed Proposals')?></a></li>
+                            <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'deleted_proposal'));?>">
+                                    <?= ($filter=='deleted_proposal'?' <i class="fa fa-check"></i> ':'')?>
+                                    <?= $this->translate('Deleted Proposals')?></a></li>
+                            <li><a id="page-all-news" href="<?= $this->url('news', array('action'=>'all-news', 'page'=>1, 'filter' => 'task_suggestion'));?>">
+                                    <?= ($filter=='task_suggestion'?' <i class="fa fa-check"></i> ':'')?>
+                                    <?= $this->translate('Task suggestion')?></a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
+            <div class="fltr right10 top5 hidden-xs"> <?= $this->translate('Filter')?> </div>
+        </div>
+        <!--/3-->
+    </div>
+    <!--/r-->
 
 
-    <?php elseif ($news->getNewsType()==$newsType['implementation_phase']): // 2 ?>
-    <?php // @todo create implementation_phase news ?>
-    <div class="col-md-1"><i class="fa fa-gears fa-2x violet"></i></div>
-    <div class="col-md-11"><?= $this->translate('Implementation phase for Proposal')?>: <br />
-      <a id="news-all-news-list-item" href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>"><span class="big">
-      <?= $proposal->getPropSavedName(); ?>
-      </span></a> <br />
-    </div>
-    <?php elseif ($news->getNewsType()==$newsType['completed_proposal']): // 3 ?>
-    <?php // @todo create completed_proposal news ?>
-    <div class="col-md-1"><i class="fa fa-check-square-o fa-2x violet"></i></div>
-    <div class="col-md-11"><?= $this->translate('Completed Proposal')?>: <br />
-      <a id="news-all-news-list-item" href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>"><span class="big">
-      <?= $proposal->getPropSavedName(); ?>
-      </span></a> <br />
-    </div>
-    <?php elseif ($news->getNewsType()==$newsType['deleted_proposal']): // 4 ?>
-    <?php // @todo create implementation_phase news ?>
-    <div class="col-md-1"><i class="fa fa-trash-o fa-2x red"></i></div>
-    <div class="col-md-11"><?= $this->translate('Deleted Proposal')?>: <br />
-      <span class="big">
-      <?= $proposal->getPropSavedName(); ?>
-      </span> <br/>
-      by <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
-      <?= $proposal->getUsr()->getUsrName() ?>
-      </span></a> <i class="fa fa-clock-o"></i>
-      <?= $news->getNewsCreatedDate()->format('d/m/Y') ?>
-    </div>
-    
-    <?php elseif ($news->getNewsType()==$newsType['task_suggestion']): // 6 ?>
-    <?php // @todo create task_suggestion news ?>
-    <div class="col-md-1"><i class="fa fa-tasks fa-2x violet"></i></div>
-    <div class="col-md-11"><?= $this->translate('Task suggestion for')?>: <a id="news-all-news-list-item" href="<?= $this->url('city/proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>"><span class="big">
+    <hr />
+    <?php if (count($pagedNews)):?>
+        <?php /** @var \DGIModule\Entity\News $news */
+        foreach($pagedNews as $news): ?>
+            <?php
+            $proposal = $news->getProp();
+            $event = $news->getEvent();
+
+            $date = $news->getNewsCreatedDate();
+
+
+            ?>
+
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <?php if ($news->getNewsType()==$newsType['new_public_event']): // 4 ?>
+
+                        <div class="pull-left" style="min-width: 42px!important"> <img src="/img/icon-events-green.svg" width="24"></div>
+                        <!--/1-->
+                        <div style="margin-left: 42px!important"><span class="big">
+
+                                      <a id="news-all-news-list-item" href="<?= $this->url('event', array('action'=>'view-event', 'id'=>$event->getEventUUID()));?>" data-id="<?= $event->getEventUUID()?>">
+                                  <?= $event->getEventName(); ?>
+                                  </a>
+                                  </span>
+                            <br/>
+                            <?= $this->translate('New Public Event')?>
+                            <br/>
+                            <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$event->getUsr()->getUsrUUID()));?>" data-title="<?= $event->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$event->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
+                                  <?= $event->getUsr()->isAdministration()?$event->getUsr()->getAdmin()->getAdminName():$event->getUsr()->getUsrName() ?>
+                                  </span></a> <i class="fa fa-clock-o"></i>
+                            <?=$this->dateFormat(
+                                $date,
+                                IntlDateFormatter::SHORT, // date
+                                IntlDateFormatter::SHORT, // time
+                                $countryFormat
+                            );?>
+                        </div>
+
+
+
+                    <?php elseif ($news->getNewsType()==$newsType['new_public_session']): // 4 ?>
+                        <div class="pull-left" style="min-width: 42px!important"> <img src="/img/icon-sessions-blue.svg" width="24"></div>
+                        <!--/1-->
+                        <div style="margin-left: 42px!important"><span class="big">
+
+                                      <a id="news-all-news-list-item" href="<?= $this->url('session', array('action'=>'view-session', 'id'=>$event->getEventUUID()));?>" data-id="<?= $event->getEventUUID()?>">
+                                  <?= $event->getEventName(); ?>
+                                  </a>
+                                  </span>
+                            <br/>
+                            <?= $this->translate('New Public Session')?>
+                            <br/>
+                            <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$event->getUsr()->getUsrUUID()));?>" data-title="<?= $event->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$event->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
+                                  <?= $event->getUsr()->isAdministration()?$event->getUsr()->getAdmin()->getAdminName():$event->getUsr()->getUsrName() ?>
+                                  </span></a> <i class="fa fa-clock-o"></i>
+                            <?=$this->dateFormat(
+                                $date,
+                                IntlDateFormatter::SHORT, // date
+                                IntlDateFormatter::SHORT, // time
+                                $countryFormat
+                            );?>
+                        </div>
+
+
+
+
+                    <?php elseif ($news->getNewsType()==$newsType['new_proposal']): // 1 ?>
+                        <?php if ($proposal->isMeasure()): ?>
+                            <div class="pull-left" style="min-width: 42px!important"> <img src="/img/icon-official-measures.svg" width="24"></div>
+                            <!--/1-->
+                            <div style="margin-left: 42px!important"><span class="big">
+                                  <?php if ($proposal->getPropDeletedDate()):?>
+                                      <?= $proposal->getPropSavedName(); ?>
+                                      (<?= $this->translate('deleted')?>)
+                                  <?php else:?>
+                                      <a id="news-all-news-list-item" href="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>">
+                                  <?= $proposal->getPropSavedName(); ?>
+                                  </a>
+                                  <?php endif;?>
+                                  </span>
+                                <br/>
+                                <?= $this->translate('New Mesure (unvalidated)')?> <?= $this->translate('in')?>
+                                <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
+                                <br/>
+                                <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
+                                  <?= $proposal->getUsr()->getUsrName() ?>
+                                  </span></a> <i class="fa fa-clock-o"></i>
+                                <?=$this->dateFormat(
+                                    $date,
+                                    IntlDateFormatter::SHORT, // date
+                                    IntlDateFormatter::SHORT, // time
+                                    $countryFormat
+                                );?>
+                            </div>
+                        <?php else:?>
+                            <div class="pull-left" style="min-width: 42px!important"><i class="fa fa-bullhorn fa-2x violet"></i> </div>
+                            <!--/1-->
+                            <div style="margin-left: 42px!important"> <span class="big">
+                                  <?php if ($proposal->getPropDeletedDate()):?>
+                                      <?= $news->getProp()->getPropSavedName(); ?>
+                                      (<?= $this->translate('deleted')?>)
+                                  <?php else:?>
+                                      <a id="news-all-news-list-item" href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>">
+                                  <?= $news->getProp()->getPropSavedName(); ?>
+                                  </a>
+                                  <?php endif;?>
+                                  </span> <br/>
+                                <?= $this->translate('New Proposal')?> <?= $this->translate('in')?>
+                                <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
+                                <br/>
+                                <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
+                                  <?= $proposal->getUsr()->getUsrName() ?>
+                                  </span></a> <i class="fa fa-clock-o"></i>
+                                <?=$this->dateFormat(
+                                    $date,
+                                    IntlDateFormatter::SHORT, // date
+                                    IntlDateFormatter::SHORT, // time
+                                    $countryFormat
+                                );?>
+                            </div>
+                            <!-- /11 -->
+                        <?php endif;?>
+                    <?php elseif ($news->getNewsType()==$newsType['new_measure'] || $news->getNewsType()==$newsType['new_measure_citizen'] || $news->getNewsType()==$newsType['measure_validated']): // 5 ?>
+
+                        <?php if ($news->getNewsType()==$newsType['new_measure_citizen']):?>
+                            <div class="pull-left" style="min-width: 42px!important"><img src="/img/icon-official-measures.svg" width="24"> </div>
+                        <?php else:?>
+                            <div class="pull-left" style="min-width: 42px!important"><img src="/img/icon-official-measures.svg" width="24"> </div>
+                        <?php endif;?>
+                        <!--/1-->
+                        <div style="margin-left: 42px!important"><span class="big">
+                              <?php if ($proposal->getPropDeletedDate()):?>
+                                  <?= $proposal->getPropSavedName(); ?>
+                                  (<?= $this->translate('deleted')?>)
+                              <?php else:?>
+                                  <a id="news-all-news-list-item" href="<?= $this->url('measure', array('action'=>'view-measure', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>">
+                              <?= $proposal->getPropSavedName(); ?>
+                              </a>
+                              <?php endif;?>
+                              </span>
+                            <br/>
+                            <?php if ($news->getNewsType()==$newsType['new_measure_citizen']):?>
+                                <?= $this->translate('New Measure (unvalidated)')?>
+                            <?php elseif ($news->getNewsType()==$newsType['new_measure']):?>
+                                <?= $this->translate('New Measure')?>
+                            <?php else:?>
+                                <?= $this->translate('Measure validated')?>
+                            <?php endif;?>
+                            <?= $this->translate('in')?>
+                            <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
+                            <br/>
+                            <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$news->getUsr()->getUsrUUID()));?>" data-title="<?= $news->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$news->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
+                              <?= $news->getUsr()->getUsrName() ?>
+                              </span></a> <i class="fa fa-clock-o"></i>
+                            <?=$this->dateFormat(
+                                $date,
+                                IntlDateFormatter::SHORT, // date
+                                IntlDateFormatter::NONE, // time
+                                $countryFormat
+                            );?>
+                        </div>
+
+
+                    <?php elseif ($news->getNewsType()==$newsType['implementation_phase']): // 2 ?>
+                        <?php // @todo create implementation_phase news ?>
+                        <div class="pull-left" style="min-width: 42px!important"><i class="fa fa-gears fa-2x violet"></i></div>
+                        <div style="margin-left: 42px!important"><?= $this->translate('Implementation phase for Proposal')?>: <br />
+                            <a id="news-all-news-list-item" href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>"><span class="big">
+                              <?= $proposal->getPropSavedName(); ?>
+                              </span></a> <br />
+                        </div>
+                    <?php elseif ($news->getNewsType()==$newsType['completed_proposal']): // 3 ?>
+                        <?php // @todo create completed_proposal news ?>
+                        <div class="pull-left" style="min-width: 42px!important"><i class="fa fa-check-square-o fa-2x violet"></i></div>
+                        <div style="margin-left: 42px!important"><?= $this->translate('Completed Proposal')?>: <br />
+                            <a id="news-all-news-list-item" href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>"><span class="big">
+                              <?= $proposal->getPropSavedName(); ?>
+                              </span></a> <br />
+                        </div>
+                    <?php elseif ($news->getNewsType()==$newsType['deleted_proposal']): // 4 ?>
+                        <?php // @todo create implementation_phase news ?>
+                        <div class="pull-left" style="min-width: 42px!important"><i class="fa fa-trash-o fa-2x red"></i></div>
+                        <div style="margin-left: 42px!important"><?= $this->translate('Deleted Proposal')?>: <br />
+                            <span class="big">
+                              <?= $proposal->getPropSavedName(); ?>
+                              </span> <br/>
+                            <?=$this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
+                                  <?= $proposal->getUsr()->getUsrName() ?>
+                                  </span></a> <i class="fa fa-clock-o"></i>
+                            <?=$this->dateFormat(
+                                $date,
+                                IntlDateFormatter::SHORT, // date
+                                IntlDateFormatter::NONE, // time
+                                $countryFormat
+                            );?>
+                        </div>
+
+
+
+                    <?php elseif ($news->getNewsType()==$newsType['task_suggestion']): // 6 ?>
+                        <?php // @todo create task_suggestion news ?>
+                        <div class="pull-left" style="min-width: 42px!important"><i class="fa fa-tasks fa-2x violet"></i></div>
+                        <div style="margin-left: 42px!important"><?= $this->translate('Task suggestion for')?>: <a id="news-all-news-list-item" href="<?= $this->url('city/proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>" data-id="<?= $proposal->getPropUUID()?>"><span class="big">
       <?= $news->getProp()->getPropSavedName(); ?>
       </span></a> <br />
-      <?= $this->translate('in')?>
-      <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
-      <br />
-      <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
+                            <?= $this->translate('in')?>
+                            <?= $proposal->getCat()->getCatCat()->getCatName().' / '.$proposal->getCat()->getCatName() ?>
+                            <br />
+                            <?= $this->translate('by')?> <a href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>" data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile" data-id="<?=$proposal->getUsr()->getUsrUUID()?>" id="news-all-news-view-profile"><span class="badge">
       <?= $proposal->getUsr()->getUsrName() ?>
       </span></a> -
-      <?= $proposal->getPropPublishedDate()->format('d/m/Y H:i') ?>
-    </div>
-    
-    <?php endif;?>
-  </div>
-  <!-- /row -->
-  <hr />
-  <?php endforeach; ?>
-  <?php else: // there is no news ?>
-  <div class="row">
-    <?php if ($filter=='new_proposal'): // 1 ?>
-    <div class="col-md-1"> <i class="fa fa-bullhorn fa-2x violet"></i> </div>
-    <div class="col-md-11"> <?= $this->translate('No new proposals')?>. </div>
-    <!-- /11 -->
+                            <?= $proposal->getPropPublishedDate()->format('d/m/Y H:i') ?>
+                        </div>
+                        <?php /* elseif ($news->getNewsType()==$newsType['updated_payement']): // 7 ?>
+								<?php // @todo create updated_payement news ?>
+									<div class="col-md-1"><i class="fa fa-money fa-2x green"></i></div>
+									<div class="col-md-11">Updated payments status for:
+										<br />
+										<a id="news-all-news-list-item" href="<?= $this->url('city/scenario', array('action'=>'view', 'id'=>$scenario->getScnUUID()));?>" data-id="<?= $scenario->getScnUUID()?>"><span class="big"><?= $scenario->getScnName(); ?></span></a>
+										<br />
+									</div>
+<?php */?>
+                    <?php endif;?>
+                </div>
+            </div>
+            <!-- /row -->
+            <hr />
+        <?php endforeach; ?>
 
-    <?php elseif ($filter=='implementation_phase'): // 2 ?>
-    <?php // @todo create implementation_phase news ?>
-    <div class="col-md-1">
-      <!-- <span class="fa-stack fa-lg"> -->
-      <i class="fa fa-gears fa-stack-1x violet"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
-    <div class="col-md-11"><?= $this->translate('No implementation phase')?>. </div>
-    <?php elseif ($filter=='completed_proposal'): // 3 ?>
-    <?php // @todo create completed_proposal news ?>
-    <div class="col-md-1">
-      <!-- <span class="fa-stack fa-lg"> -->
-      <i class="fa fa-check-square-o fa-stack-1x violet"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
-    <div class="col-md-11"><?= $this->translate('No completed proposals')?>. </div>
-    
-    <?php elseif ($filter=='task_suggestion'): // 6 ?>
-    <?php // @todo create task_suggestion news ?>
-    <div class="col-md-1">
-      <!-- <span class="fa-stack fa-lg"> -->
-      <i class="fa fa-tasks fa-stack-1x violet"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
-    <div class="col-md-11"><?= $this->translate('No task suggestions')?>. </div>
-    
-    <?php elseif ($filter=='none'): // 0 ?>
-    <?php // @todo create updated_payement news ?>
-    <div class="col-md-1">
-      <!-- <span class="fa-stack fa-lg"> -->
-      <i class="fa fa-newspaper-o fa-stack-1x green"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
-    <div class="col-md-11"><?= $this->translate('No news')?>. </div>
+
+
+
+
+    <?php else: // there is no news ?>
+
+
+
+
+
+        <div class="row">
+            <?php if ($filter=='new_proposal'): // 1 ?>
+                <div class="col-md-1 col-xs-1"> <i class="fa fa-bullhorn fa-2x violet"></i> </div>
+                <div class="col-md-11 col-xs-11"> <?= $this->translate('No new proposals')?>. </div>
+                <!-- /11 -->
+
+            <?php elseif ($filter=='implementation_phase'): // 2 ?>
+                <?php // @todo create implementation_phase news ?>
+                <div class="col-md-1 col-xs-1">
+                    <!-- <span class="fa-stack fa-lg"> -->
+                    <i class="fa fa-gears fa-stack-1x violet"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
+                <div class="col-md-11 col-xs-11"><?= $this->translate('No implementation phase')?>. </div>
+            <?php elseif ($filter=='completed_proposal'): // 3 ?>
+                <?php // @todo create completed_proposal news ?>
+                <div class="col-md-1 col-xs-1">
+                    <!-- <span class="fa-stack fa-lg"> -->
+                    <i class="fa fa-check-square-o fa-stack-1x violet"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
+                <div class="col-md-11 col-xs-11"><?= $this->translate('No completed proposals')?>. </div>
+                <?php /*elseif ($filter=='new_scenario'): // 4 ?>
+						<?php // @todo create new_scenario news ?>
+							<div class="col-md-1">
+								<!-- <span class="fa-stack fa-lg"> -->
+								<i class="fa fa-bullhorn fa-stack-1x blue"></i>
+								<i class="fa fa-ban fa-stack-2x text-danger"></i>
+								</span>
+							</div>
+							<div class="col-md-11">No new scenarios.
+							</div>
+
+					<?php elseif ($filter=='updated_scenario'): // 5 ?>
+						<?php // @todo create updated_scenario news ?>
+							<div class="col-md-1">
+								<!-- <span class="fa-stack fa-lg"> -->
+								<i class="fa fa-pencil-square-o fa-stack-1x blue"></i>
+								<i class="fa fa-ban fa-stack-2x text-danger"></i>
+								</span>
+							</div>
+							<div class="col-md-11">No updated scenarios.
+							</div>
+							<?php */?>
+            <?php elseif ($filter=='task_suggestion'): // 6 ?>
+                <?php // @todo create task_suggestion news ?>
+                <div class="col-md-1 col-xs-1">
+                    <!-- <span class="fa-stack fa-lg"> -->
+                    <i class="fa fa-tasks fa-stack-1x violet"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
+                <div class="col-md-11 col-xs-11"><?= $this->translate('No task suggestions')?>. </div>
+                <?php /*elseif ($filter=='updated_payement'): // 7 ?>
+						<?php // @todo create updated_payement news ?>
+							<div class="col-md-1">
+								<!-- <span class="fa-stack fa-lg"> -->
+								<i class="fa fa-money fa-stack-1x green"></i>
+								<i class="fa fa-ban fa-stack-2x text-danger"></i>
+								</span>
+							</div>
+							<div class="col-md-11">No updated payements.
+							</div>
+					<?php */?>
+            <?php elseif ($filter=='none'): // 0 ?>
+                <?php // @todo create updated_payement news ?>
+                <div class="col-md-1 col-xs-1">
+                    <!-- <span class="fa-stack fa-lg"> -->
+                    <i class="fa fa-newspaper-o fa-stack-1x green"></i> <i class="fa fa-ban fa-stack-2x text-danger"></i> </span> </div>
+                <div class="col-md-11 col-xs-11"><?= $this->translate('No news')?>. </div>
+            <?php endif;?>
+        </div>
+        <!-- /row -->
+        <hr />
     <?php endif;?>
-  </div>
-  <!-- /row -->
-  <hr />
-  <?php endif;?>
-  <div class="row">
-    <div class="col-md-12">
-      <?= $paging; ?>
+    <div class="row">
+        <div class="col-md-12">
+            <?= $paging; ?>
+        </div>
+        <!--/12-->
     </div>
-    <!--/12-->
-  </div>
-  <!-- /row -->
+    <!-- /row -->
 
 </div>
 <script type="text/javascript">
 
-	$(document).ready(function () {
+    $(document).ready(function () {
 
-		newsAllNewsHandlers();
+        newsAllNewsHandlers();
 
-	});
+    });
 </script>
-
-<!-- /news/all-news -->

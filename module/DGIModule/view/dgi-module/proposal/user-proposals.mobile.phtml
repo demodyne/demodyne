@@ -1,0 +1,149 @@
+<?php $paging = $this->sortingDivPaginationHelper($pagedProposals, $page, $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID())), 'user-proposals', $limit, $sort, $order, $filter); ?>
+
+
+<div id="proposal-user-proposals"
+	class="parent jumbotron" 
+	data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
+	data-add-favorite="<?=$this->translate('Add Favorite')?>"
+	data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
+	
+	
+	
+<div class="title-mobile">
+	                <?if (!$user->isAdministration()):?>
+	                <?= sprintf($this->translate('%s has %d Proposals'), $user->getUsrName(), $noProposals)?>
+                <?else:?>
+                   <?= sprintf($this->translate('%s has %d Measures'), $user->getUsrName(), $noProposals)?>
+                <?endif;?>
+                
+</div>
+	
+
+	
+	<div class="row">
+		<div class="col-md-8">
+            <? if (!$user->isAdministration()):?>
+            <div class="btn-group" role="group" aria-label="...">
+			<a id="page-user-proposals"
+				class="btn btn-sm <?= $filter=='none'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'filter'=>'none'));?>">
+				<?=$this->translate('All proposals')?> (<?=$noProposals?>)</a>
+			<a id="page-user-proposals"
+				class="btn btn-sm <?= $filter=='city'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'sort' => $sort=='level'?'published':$sort, 'filter'=>'city'));?>">
+				<?=$this->translate('City proposals')?> (<?=$cityProposals?>)</a>
+			<a id="page-user-proposals"
+				class="btn btn-sm <?= $filter=='region'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'sort' => $sort=='level'?'published':$sort, 'filter'=>'region'));?>">
+				<?=$this->translate('Region proposals')?> (<?=$regionProposals?>)</a>
+			<a id="page-user-proposals"
+				class="btn btn-sm <?= $filter=='country'?'btn-success':'btn-default'?>"
+				href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'sort' => $sort=='level'?'published':$sort, 'filter'=>'country'));?>">
+				<?=$this->translate('Country proposals')?> (<?=$countryProposals?>)</a>
+            </div>
+            <?endif;?>
+		</div>
+		<!-- /6 -->
+		<div class="col-md-4">
+			<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-down"></i> </span>
+							<!--  by <span class="caret"></span> -->
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'name', 'page'=>1, 'order'=>'desc'));?>"><?= $this->translate('Name')?></a></li>
+							<?php if ($filter=='none'):?>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'sort'=>'level', 'order'=>'desc'));?>"><?= $this->translate('Level')?></a></li>
+							<?php endif;?>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'category', 'page'=>1, 'order'=>'desc'));?>"><?= $this->translate('Category')?></a></li>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'status', 'page'=>1, 'order'=>'desc'));?>"><?= $this->translate('Status')?></a></li>
+							<li class="divider"></li>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'published', 'page'=>1, 'order'=>'desc'));?>"><?= $this->translate('Published date')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+			<div class="fltr">
+				<ul class="nav">
+					<li class="dropdown"><a class="dropdown-toggle"
+						data-toggle="dropdown" href="#" aria-expanded="false"> <span
+							class="label label-default"><i class="fa fa-caret-up"></i> </span>
+							<!-- by <span class="caret"></span> -->
+					</a>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'name', 'page'=>1, 'order'=>'asc'));?>"><?= $this->translate('Name')?></a></li>
+							<?php if ($filter=='none'):?>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'page'=>1, 'sort'=>'level', 'order'=>'desc'));?>"><?= $this->translate('Level')?></a></li>
+							<?php endif;?>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'category', 'page'=>1, 'order'=>'asc'));?>"><?= $this->translate('Category')?></a></li>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'status', 'page'=>1, 'order'=>'asc'));?>"><?= $this->translate('Status')?></a></li>
+							<li class="divider"></li>
+							<li><a id="page-user-proposals"
+								href="<?= $this->url('proposal', array('action'=>'user-proposals', 'id'=>$user->getUsrUUID(), 'sort'=>'published', 'page'=>1, 'order'=>'asc'));?>"><?= $this->translate('Published date')?></a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- /row -->
+	<hr />
+            <?php if(count($pagedProposals)>0):?>
+                <?php foreach($pagedProposals as $index => $proposal): ?>
+                
+                
+<div>
+<div class="pull-left" style="min-width: 42px!important">
+<img src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>" height="34">
+</div>
+		<?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription()); 
+
+      $proposalDescription = (strlen($proposalDescription) > 200) ? substr($proposalDescription, 0, 200) . '...' : $proposalDescription;?>
+	
+	<div style="margin-left: 42px!important">
+	<a
+				href="<?= $this->url('proposal', array('action'=>'view', 'id'=>$proposal->getPropUUID()));?>"
+				title="<?=$proposalDescription?>" id="city-proposal-item"
+				data-id="<?= $proposal->getPropUUID()?>"> <span class="big"><?= $proposal->getPropSavedName() ?></span>
+			</a> <br />
+			<?= $this->translate('Created')?> <i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()->format('d/m/Y') ?>
+			<br>
+			<?=$this->translate('for')?> 
+			<?= $this->partial('partial/show-level.phtml', ['level' => $proposal->getPropLevel(), 'city'=>$proposal->getCity()]); ?>
+</div>
+	
+
+</div>
+                
+	<hr />
+                        <?php endforeach; ?>
+                    <?php else:?>
+                        <div class="row">
+                       	 <div class="col-md-12">
+                        	<?php if ($filter=='none'):?>
+                    			<?= sprintf($this->translate("User %s don't have any proposals."),$user->getUsrName())?>
+                    		<?php else:?>
+                    			<?= sprintf($this->translate("User %s doesn't have any proposals for his/her %s."), $user->getUsrName(), ucfirst($this->translate($filter)))?>
+                    		<?php endif;?>
+                    		</div>
+                    	</div>
+
+                    <?php endif;?>
+<?= $paging; ?>
+        </div>
+<!-- /jumbotron -->
+<script type="text/javascript">
+        	$(function () {
+        		proposalUserProposalsHandlers();
+            });
+        </script>

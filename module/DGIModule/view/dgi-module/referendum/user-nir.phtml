@@ -1,0 +1,103 @@
+<div style="border-top-left-radius: 0px; border-top-right-radius: 0px;"
+	id="user-name">
+
+	
+	<div class="row">
+		<div class="col-md-4 center">
+				<img
+						src="<?=$this->basePath($user->getUsrPicture()) ?>" width="100"
+						alt="<?= $user->getUsrName() ?>"
+						title="<?= $user->getUsrName() ?>" class="round5"
+						id="" />
+			
+		</div>
+	
+		<div class="col-md-8">
+            <p>Dans la cadre de cette expérimentation, notre partenaire <a href="http://rectangleblanc.zici.fr/" target="_blank">Rectangle Blanc</a> qui organise ce référendum a souhaité introduire un élément supplémentaire d’identification.</p>
+            <p>Pour participer au référendum, merci de taper votre numéro de sécurité sociale (15 chiffres). Celui-ci sera maintenu strictement confidentiel et ne sera communiqué à aucun tiers.</p>
+            <p>Cette donnée sera supprimée de notre base de données à l’issue du processus.</p>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+		<!-- /6 -->
+	</div>
+	<!-- end row -->
+	
+	
+	
+	<?php
+    $form->prepare();
+    $form->setAttribute('method', 'post'); 
+    $form->setAttribute('action', $this->url('e-referendum', ['action'=>'user-nir'])); ?>
+      
+    <?=$this->form()->openTag($form);?>
+	<fieldset>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('Username'); ?></label>
+					<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrName'));?>
+						<span class="text-danger"><?= $this->formElementErrors($form->get('usrName'));?></span>
+					</div>
+				</div>
+				
+				
+			</div>
+			<!-- /6 -->
+		</div>
+		<!-- end row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="form-group">
+					<label class="col-md-4 control-label text-right"><?= $this->translate('N° de Sécurité Sociale'); ?></label>
+					<div class="col-md-8 bot5">
+						<?= $this->formElement($form->get('usrNIR'));?>
+						 <span class="text-danger"><?= $this->formElementErrors($form->get('usrNIR'));?></span></div>
+							
+							
+					<!-- /8 -->
+				</div>
+			</div>
+		</div>
+
+
+	</fieldset>
+
+
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-right">
+			
+			<button type="submit" class="btn btn-orange"
+				id="user-name-submit">
+				<i class="fa fa-save" aria-hidden="true"></i> <?= $this->translate('Save')?></button>
+            <a href="/" class="btn btn-default">
+                <i class="fa fa-ban size15em"></i> <?= $this->translate('Cancel')?></a>
+		</div>
+	</div>
+	<!-- /r -->
+
+
+	<?=  $this->form()->closeTag();?> 
+</div>
+
+
+
+<script type="text/javascript">
+
+$(function() {
+    userRegistrationUserNirHandlers();
+});    
+
+</script>

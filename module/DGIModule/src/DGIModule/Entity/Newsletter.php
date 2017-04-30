@@ -1,12 +1,16 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
-
+ 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Administration;
+use DGIModule\Entity\City;
+use DGIModule\Entity\Country;
+use DGIModule\Entity\Region;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -53,7 +57,7 @@ class Newsletter
      *
      * @ORM\Column(name="nl_send_to", type="integer", nullable=true)
      */
-    private $nlSendTo = '0';
+    private $nlSendTo = 0;
 
     /**
      * @var string
@@ -79,21 +83,21 @@ class Newsletter
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nl_created_date", type="datetime", nullable=true)
+     * @ORM\Column(name="nl_created_date", type="utcdatetime", nullable=true)
      */
     private $nlCreatedDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nl_sent_date", type="datetime", nullable=true)
+     * @ORM\Column(name="nl_sent_date", type="utcdatetime", nullable=true)
      */
     private $nlSentDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nl_uuid", type="string", length=36, nullable=true)
+     * @ORM\Column(name="nl_uuid", type="uuid", length=36, nullable=true)
      */
     private $nlUUID;
 
@@ -102,7 +106,7 @@ class Newsletter
      *
      * @ORM\Column(name="nl_reply", type="integer", nullable=true)
      */
-    private $nlReply = '0';
+    private $nlReply = 0;
 
     /**
      * @var string
@@ -116,12 +120,12 @@ class Newsletter
      *
      * @ORM\Column(name="nl_is_sent", type="integer", nullable=true)
      */
-    private $nlIsSent = '0';
+    private $nlIsSent = 0;
 
     /**
-     * @var \DGIModule\Entity\Administration
+     * @var Administration
      *
-     * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Administration", cascade={"persist", "merge","remove"})
+     * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Administration", cascade={"persist", "merge"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="admin_id", referencedColumnName="admin_id")
      * })
@@ -131,7 +135,7 @@ class Newsletter
     /**
      * @var \Doctrine\Common\Collections\Collection|Category[]
      *
-     * @ORM\ManyToMany(targetEntity="DGIModule\Entity\Category", cascade={"persist", "merge","remove"})
+     * @ORM\ManyToMany(targetEntity="DGIModule\Entity\Category", cascade={"persist", "merge"})
      * @ORM\JoinTable(
      *  name="dgi_newsletters_categories",
      *  joinColumns={
@@ -145,7 +149,7 @@ class Newsletter
     private $categories;
     
     /**
-     * @var \DGIModule\Entity\City
+     * @var City
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\City")
      * @ORM\JoinColumns({
@@ -155,7 +159,7 @@ class Newsletter
     private $city;
     
     /**
-     * @var \DGIModule\Entity\Country
+     * @var Country
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Country")
      * @ORM\JoinColumns({
@@ -165,7 +169,7 @@ class Newsletter
     private $country;
     
     /**
-     * @var \DGIModule\Entity\Region
+     * @var Region
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Region")
      * @ORM\JoinColumns({
@@ -490,11 +494,11 @@ class Newsletter
     /**
      * Set admin
      *
-     * @param \DGIModule\Entity\Administration $admin
+     * @param Administration $admin
      *
      * @return Newsletter
      */
-    public function setAdmin(\DGIModule\Entity\Administration $admin = null)
+    public function setAdmin(Administration $admin = null)
     {
         $this->admin = $admin;
 
@@ -504,7 +508,7 @@ class Newsletter
     /**
      * Get admin
      *
-     * @return \DGIModule\Entity\Administration
+     * @return Administration
      */
     public function getAdmin()
     {
@@ -518,18 +522,19 @@ class Newsletter
     public function addCategory(Category $category)
     {
         if ($this->categories->contains($category)) {
-            return;
+            return $this;
         }
     
         $this->categories->add($category);
     
         return $this;
+        //$proposition->addUser($this);
     }
     
     public function removeCategory(Category $category)
     {
         if (!$this->categories->contains($category)) {
-            return;
+            return $this;
         }
     
         $this->categories->remove($category);
@@ -545,11 +550,11 @@ class Newsletter
     /**
      * Set city
      *
-     * @param \DGIModule\Entity\City $city
+     * @param City $city
      *
      * @return Newsletter
      */
-    public function setCity(\DGIModule\Entity\City $city = null)
+    public function setCity(City $city = null)
     {
         $this->city = $city;
     
@@ -559,7 +564,7 @@ class Newsletter
     /**
      * Get city
      *
-     * @return \DGIModule\Entity\City
+     * @return City
      */
     public function getCity()
     {
@@ -569,11 +574,11 @@ class Newsletter
     /**
      * Set country
      *
-     * @param \DGIModule\Entity\Country $country
+     * @param Country $country
      *
      * @return Newsletter
      */
-    public function setCountry(\DGIModule\Entity\Country $country = null)
+    public function setCountry(Country $country = null)
     {
         $this->country = $country;
     
@@ -583,7 +588,7 @@ class Newsletter
     /**
      * Get country
      *
-     * @return \DGIModule\Entity\Country
+     * @return Country
      */
     public function getCountry()
     {
@@ -593,11 +598,11 @@ class Newsletter
     /**
      * Set region
      *
-     * @param \DGIModule\Entity\Region $region
+     * @param Region $region
      *
      * @return Newsletter
      */
-    public function setRegion(\DGIModule\Entity\Region $region = null)
+    public function setRegion(Region $region = null)
     {
         $this->region = $region;
         
@@ -607,10 +612,20 @@ class Newsletter
     /**
      * Get region
      *
-     * @return \DGIModule\Entity\Region
+     * @return Region
      */
     public function getRegion()
     {
         return $this->region;
     }
+    /**
+     * @param string $nlUUID
+     * @return Newsletter
+     */
+    public function setNlUUID($nlUUID)
+    {
+        $this->nlUUID = $nlUUID;
+        return $this;
+    }
+
 }

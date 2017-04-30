@@ -1,0 +1,162 @@
+<?php
+
+    $level = $_SESSION['level']['level'];
+    if ($level=='city') {
+        $levelName = ($user->getCity()->getFullCity()?$user->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$user->getCity()->getDistrictName().'</i></span>':$user->getCity()->getCityName());
+    }
+    else if ($level=='region') {
+        $levelName = $user->getCity()->getRegion()->getRegionName();
+    }
+    else if ($level=='country') {
+        $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $user->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$user->getCountry()->getCountryName() .'</span>';
+    }
+
+?>
+
+
+
+<div <?= $limit?'class="panel panel-default panel-body parent orangebackground"':'class="jumbotron parent" style="border-top-left-radius: 0px; border-top-right-radius: 0px;"' ?>
+	id="program-view-aggregated-program"
+	data-url="<?= $this->url('program', array('action'=>'view-aggregated-program', 'ajax' => true));?>"
+	data-add-to-my-program="<?=$this->translate('Add to my Program')?>"
+	data-add-favorite="<?=$this->translate('Add Favorite')?>"
+	data-remove-favorite="<?=$this->translate('Remove Favorite')?>">
+
+<?php if ($limit):?>
+<div class="title-mobile"><?= $this->translate('Aggregated Program')?></div><hr style="border-top: 2px solid #887c70;">
+<?php else:?>
+<div class="panel panel-default panel-body orangebackground">
+
+<?=sprintf($this->translate('This program for %s is aggregated based on three major elements:'), $levelName)?><br>
+<ul>
+<li>
+	<?=$this->translate('The number and value of <strong>Votes</strong> for each citizen proposal or official measure (<i>Acceptance</i> criterion)')?>
+</li>
+<li>
+	<?=$this->translate('The number of times a proposal/measure has been <strong>included</strong> by a Citizen in her/his <strong>ideal program</strong>. (<i>Prevalence</i> criterion)')?>
+</li>
+<li>
+<?=$this->translate('The mean <strong>Priority rank</strong> allocated by the Citizens to a proposal/measure in their individual program (<i>Importance</i> criterion)')?>
+</li>
+</ul>
+<?=$this->translate('With the aggregated program, a transparent and concrete expression of the citizens will is available to elaborate policies.')?>
+
+</div>
+<?php endif;?>
+
+<?php if(count($aggregatedProposals)>0):?>
+
+                <?php foreach($aggregatedProposals as $index => $proposal): ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+
+  <div class="col-xs-12 col-sm-12 col-md-4">
+
+			<div class="pull-left" style="min-width: 15px!important">
+			<span class="big"><?=$index+1?></span>
+			</div>
+			<div class="pull-left" style="min-width: 42px!important">
+			<img
+				src="<?= $this->basePath()?>/files/<?= $proposal->getCat()->getCatImage() ?>"
+				height="34" width="34" class="round5"><br>
+			<?php if ($proposal->getMeasure()):?>
+			<span style="font-size: 1.2em;line-height: 2em;"
+				title="<?= $this->translate('Measure')?>"><i
+				class="fa fa-university size15em"></i></span>
+			<?php else:?>
+			<span style="font-size: 1.2em;line-height: 2em;"
+				title="<?= $this->translate('Proposal')?>"><i
+				class="fa fa-bullhorn size15em"></i></span>
+			<?php endif;?>
+	  </div>
+
+	  <div style="margin-left: 57px!important">
+	  <?php $proposalDescription = preg_replace('/<[^>]*>/', ' ', $proposal->getPropDescription());
+
+      $proposalDescription = (strlen($proposalDescription) > 200) ? substr($proposalDescription, 0, 200) . '...' : $proposalDescription;?>
+
+
+
+<a
+						href="<?= $this->url($proposal->isMeasure()?'measure':'proposal', array('id'=>$proposal->getPropUUID()));?>"
+						title="<?= $proposalDescription ?>" id="country-proposal-item"
+						data-id="<?= $proposal->getPropUUID()?>"><span class="big"><?= $proposal->getPropSavedName() ?></span></a>
+
+					<br />
+					<!-- user -->
+
+					<?= $this->translate('by')?> <a
+						href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$proposal->getUsr()->getUsrUUID()));?>"
+						data-title="<?= $proposal->getUsr()->getUsrName() ?>'s mini profile"
+						data-id="<?=$proposal->getUsr()->getUsrUUID()?>"
+						id="view-profile"> <span class="badge"><?= $proposal->getUsr()->getUsrName() ?></span></a><br>
+					<?= $this->translate('Created')?> <i class="fa fa-clock-o"></i> <?= $proposal->getPropPublishedDate()->format('d/m/Y') ?>
+	  </div>
+
+	  </div>
+
+
+</div>
+
+
+
+
+
+
+	<hr style="border-top: 1px solid #CCC;">
+
+
+
+                        <?php endforeach; ?>
+
+                    <?php else:?>
+
+<div class="row">
+		<div class="col-md-12">
+				<?= sprintf($this->translate('There are no proposals in the aggregated program for %s.'), $levelName)?> <?= $user->isAdministration()?'':$this->translate('Be the first to create a program and to populate it with proposals and official measures')?>.
+			</div>
+		<!--/12-->
+	</div>
+	<!-- /row -->
+
+
+
+
+
+                    <?php endif;?>
+
+
+<?php if ($limit):?>
+<div class="row">
+<div class="col-md-12 text-right">
+				<a href="<?= $this->url('program', array( 'action'=>'view-aggregated-program'));?>" class="btn btn-orange"> <i
+					class="fa fa-eye"></i> <?= $this->translate('View full Program')?></a>
+
+			</div>
+</div>
+<?php endif;?>
+</div>
+
+
+
+        <script type="text/javascript">
+
+            $(function () {
+
+            	programViewAggregatedProgramHandlers();
+
+            });
+
+        </script>

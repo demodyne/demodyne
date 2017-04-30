@@ -1,0 +1,255 @@
+<? $this->headLink()->appendStylesheet($this->basePath() . '/js/jsgrid/jsgrid.css')
+                     ->appendStylesheet($this->basePath() . '/js/jsgrid/jsgrid-theme.css')
+;
+?>
+
+<!-- Scripts -->
+<? $this->inlineScript()
+    ->appendFile($this->basePath() . '/js/jsgrid/jsgrid.js')
+    ->appendFile($this->basePath() . '/js/jsgrid.types.js')
+; ?>
+<?php $lang = $this->plugin('translate')->getTranslator()->getLocale()?>
+
+<?php
+$levelName = '';
+/** @var \DGIModule\Entity\Event $event */
+$level=$event->getEventLevel();
+if ($level==$this->configItem('demodyne.level.city')) {
+    $levelName = ($event->getCity()->getFullCity()?($event->getPropFullCity()?$event->getCity()->getFullCity()->getCityName().' ('._('Full city').')':$event->getCity()->getFullCity()->getCityName().' <span class="small"><i>'.$event->getCity()->getDistrictName().'</i></span>'):$event->getCity()->getCityName().($event->getCity()->isFullCity()?' ('._('Full city').')':''));
+}
+elseif ($level==$this->configItem('demodyne.level.region')) {
+    $levelName = $event->getCity()->getRegion()->getRegionName();
+}
+else {
+    $levelName = '<img src="/img/flags/'.str_replace(' ', '-', $event->getCity()->getCountry()->getCountryName()).'.png" style="margin-bottom: 4px;" width="20" height="14"> '.$event->getCity()->getCountry()->getCountryName() .'</span>';
+}
+
+$title = $event->getEventPublishedDate()?$this->translate('Completed Public Session for %s: %s'):$this->translate('Completed Private Session for %s: <i>%s</i>');
+?>
+
+<?= $this->partial('partial/page-header.phtml', ['title' => '<i class="fa fa-users size15em"></i> '.sprintf($title, $levelName, $event->getEventName())])?>
+
+<div class="container-fluid">
+
+
+    <div class="row">
+        <div class="col-md-12 light-demodyne top10"><a data-toggle="collapse" href="#session-details" aria-expanded="true" class="">View / Hide Session Details</a>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12 light-demodyne">
+            <div class="bot10 top10">
+
+                <div id="session-details" class="panel-collapse collapse in" aria-expanded="true">
+
+                    <div class="row">
+                        <div class="col-md-7">
+
+
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+
+
+                                    <div class="row">
+                                        <div class="col-md-12 col-xs-12">
+                                            <?=$event->getEventDescription()?>
+                                        </div>
+<!--                                        <div class="col-md-4 col-xs-12">-->
+<!--                                            <button type="button" class="btn btn-orange" id="view-atendees">-->
+<!--                                                <i class="fa fa-eye size15em"></i>-->
+<!--                                                <span>View Atendees</span>-->
+<!--                                            </button>-->
+<!---->
+<!--                                        </div>-->
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--/7-->
+
+                        <div class="col-md-5">
+
+
+                            <div class="table-layout">
+                                <div class="table-cell fixed-width-40">
+                                     <img src="<?=$this->basePath($event->getUsr()->getUsrPicture()) ?>" width="32" height="32" class="round5">
+                                </div>
+                                <div class="table-cell">
+                                    <?=$this->translate('Organized by')?>
+                                    <a
+                                            href="<?= $this->url('user/profile', array('action'=>'mini-profile', 'id'=>$event->getUsr()->getUsrUUID()));?>"
+                                            data-title="<?=sprintf($this->translate("%s's mini profile"), $event->getUsr()->getUsrName())?>"
+                                            data-id="<?=$event->getUsr()->getUsrUUID()?>"
+                                            id="session-view-session-view-profile"> <span class="badge">
+                                  <?= $event->getUsr()->getUsrName() ?>
+                                  </span></a>
+                                    </div>
+                            </div>
+
+                            <hr>
+
+                            <?php
+                            $eventStartDate = $event->getEventStartDate();//->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+                            $eventEndDate = $event->getEventEndDate();//->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+                            $countryFormat = $user?$user->getCity()->getCountry()->getCountryFormat():'en_US';
+                            ?>
+
+                            <span class="glyphicon glyphicon-calendar"></span>
+                            <?=$this->dateFormat(
+                                $eventStartDate,
+                                IntlDateFormatter::SHORT, // date
+                                IntlDateFormatter::SHORT, // time
+                                $countryFormat
+                            );?>
+                            <i class="fa fa-arrow-right"></i>
+                            <?=$eventEndDate->format('d/m/Y') == $event->getEventStartDate()->format('d/m/Y')?
+                                $this->dateFormat(
+                                    $eventEndDate,
+                                    IntlDateFormatter::NONE, // date
+                                    IntlDateFormatter::SHORT, // time
+                                    $countryFormat
+                                )
+                                :
+                                $this->dateFormat(
+                                    $eventEndDate,
+                                    IntlDateFormatter::SHORT, // date
+                                    IntlDateFormatter::SHORT, // time
+                                    $countryFormat
+                                )?><br>
+                            <i class="fa fa-map-marker size15em"></i> <?=$event->getEventLocation()?> - <?=$event->getCity()->getCityName()?> (<?=$event->getCity()->getCityPostalcode()?>)
+                            <?php if ($event->getEventLink()!=''):?>
+                                <hr>
+                                <i class="fa fa-globe size15em"></i> <a
+                                        href="<?=$this->escapeHtml($event->getEventLink())?>"
+                                        target="_blank"><?=$this->escapeHtml($event->getEventLink())?></a>
+                            <?php endif;?>
+
+
+                        </div>
+                        <!--/5-->
+                    </div>
+                    <!--/r-->
+
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="jumbotron"
+     style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
+    <div class="row">
+        <div class="col-md-7">
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div class="row top10">
+                        <div class="col-md-9">
+
+                        </div>
+
+
+
+
+                        <div class="col-md-3 text-right">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+
+                            <div class="panel panel-default">
+                                <div class="panel-body"
+                                     data-idea-list="<?= $this->url('session', array('action'=>'idea-list', 'id'=> $event->getEventUUID()));?>"
+                                     data-owner="<?=$event->getUsr()->getUsrUUID()?>"
+                                     data-suggested-by="<?=$this->translate('Suggested by $user$')?>"
+                                     data-mini-profile-title="<?=$this->translate('%username%\'s mini profile')?>"
+                                     data-no-validated-ideas="<?=$this->translate('No validated ideas yet. Use the form below to suggest an Idea.')?>"
+                                     data-validated-idea-header="<?=$this->translate('Validated Ideas')?>"
+                                     data-comment-idea="<?=$this->translate('Comment this idea')?>"
+                                     data-import-idea="<?=$this->translate('Import this idea')?>">
+
+                                    <div id="idea-list" style="z-index: 1 !important"
+                                         data-view-imported-proposal="<?=$this->translate('View imported proposals')?>"
+                                         data-import-idea-url="<?= $user?$this->url('proposal', ['action'=>'add-proposal']):$this->url('home/user-register', array('action'=>'please-register'))?>"
+                                         data-add-new-proposal-title="<?=$this->translate('Import Idea as my Proposal')?>"
+                                         data-view-imported-proposals-title="<?=$this->translate('Imported Proposals')?>"
+                                         data-view-imported-proposals-url="<?= $this->url('proposal', array('action'=>'idea-imported-proposals'));?>"
+                                    ></div>
+
+
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+                <!--/7-->
+
+
+            </div>
+            <!--/r-->
+
+
+
+
+
+
+        </div>
+        <div class="col-md-5">
+            <?=$this->chat?>
+        </div>
+    </div>
+
+
+
+
+
+
+
+</div>
+<!-- endrow -->
+
+
+
+
+<?php
+//$eventStartDate = $event->getEventStartDate()->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+//$eventEndDate = $event->getEventEndDate()->setTimezone(new DateTimeZone($user->getCity()->getRegion()->getRegionTimezone()));
+?>
+
+
+<!-- /container -->
+
+
+
+
+<script type="text/javascript">
+
+    $(function () {
+
+        sessionEndedHandlers("<?= $user?$user->getUsrUUID():'0'?>");
+// 			sessionIdeaListHandlers();
+
+    });
+
+</script>
+
+	

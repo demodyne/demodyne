@@ -1,0 +1,364 @@
+<?php 
+$title = 'Partner registration';
+$this->headTitle($title);
+$this->headLink()->prependStylesheet($this->basePath() . '/jqueryUI/themes/smoothness/jquery-ui.css');
+$this->headScript()->appendFile($this->basePath() . '/jqueryUI/jquery-ui.min.js');
+?>
+
+
+<div class="modal-header-soft round5top ui-draggable-handle topm20">
+<a type="button" class="close" id="history-back"><i class="fa fa-arrow-circle-left w right10"></i></a>
+<a class="close" href="pages/help#partner-registration" id="partner-registration"><i class="fa fa-question-circle w right10"></i></a>&nbsp;
+  <span class="big" id="modal-dialog-title"><a href="../"><img src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30" alt="DEMODYNE - Shape your Society"/></a> - <strong><?= $this->translate('Partner Registration')?></strong></span>
+</div>
+
+      
+<div class="jumbotron" style="border-top-left-radius: 0px;border-top-right-radius: 0px;">
+
+
+
+ 
+
+
+
+
+
+
+
+
+<div class="row top10">
+
+<div class="col-md-6">
+
+
+<?php
+// $form = $this->form;
+$form->prepare();
+// Assuming the "contact/process" route exists...
+// Set the method attribute for the form
+$form->setAttribute('method', 'post');
+echo $this->form()->openTag($form);
+$partner=  $form->get('partner');
+?>
+
+<fieldset>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Partner name')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($partner->get('partName'));?>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partName'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Activity')?></label>
+<div class="col-md-8 bot5"><input name="partner[partName]" required="required" class="form-control text-change" type="text" value="">
+<span class="text-danger"></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Image')?></label>
+<div class="col-md-8 bot5">
+<img src="<?= $this->basePath('img/cine.jpg') ?>" valign="middle" width="150" height="150" class="img-thumbnail"/> <a href=""><?= $this->translate('browse')?></a>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partName'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Presentation')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($partner->get('partPresentation'));?>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partPresentation'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('VAT #')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($partner->get('partSiret'));?>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partSiret'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('N&#176; employees')?></label>
+<div class="col-md-8 bot5"><div style="width:45%"><?= $this->formElement($partner->get('partEmployees'));?></div>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partEmployees'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Gain')?></label>
+<div class="col-md-8 bot5"><div style="width:45%"><?= $this->formElement($partner->get('partGain'));?></div>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partGain'));?></span></div>
+</div>
+
+</fieldset>
+
+</div><!-- /6 -->
+<div class="col-md-6">
+
+<fieldset>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Contact first name')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrFirstname'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrFirstname'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Contact last name')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrLastname'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrLastname'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Address')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($partner->get('partAddress'));?>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partAddress'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('City')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('city'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('city'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"> </label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrCity'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrCity'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Postal code')?></label>
+<div class="col-md-8 bot5"><div style="width:45%"><?= $this->formElement($form->get('usrPostalcode'));?></div>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrPostalcode'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Country')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('country'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('country'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Phone')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPhone'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrPhone'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right">Fax</label>
+<div class="col-md-8 bot5"><?= $this->formElement($partner->get('partFax'));?>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partFax'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Website')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($partner->get('partWebsite'));?>
+<span class="text-danger"><?= $this->formElementErrors($partner->get('partWebsite'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('E-mail')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrEmail'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrEmail'));?></span></div>
+</div>
+
+</fieldset>
+<hr />
+
+</div><!-- /6 -->
+</div><!-- /r -->
+
+<div class="row"><div class="col-md-12 bot20"><hr /></div></div>
+
+<div class="row">
+<div class="col-md-6">
+
+<fieldset>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Username')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrName'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrName'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Password')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPassword'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrPassword'));?></span></div>
+</div>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"><?= $this->translate('Confirm password')?></label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('usrPasswordConfirm'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('usrPasswordConfirm'));?></span></div>
+</div>
+
+</fieldset>
+
+</div><!-- /6 -->
+<div class="col-md-6">
+
+<fieldset>
+
+<div class="form-group">
+<label class="col-md-4 control-label text-right"> </label>
+<div class="col-md-8 bot5"><?= $this->formElement($form->get('captcha'));?>
+<span class="text-danger"><?= $this->formElementErrors($form->get('captcha'));?></span></div>
+</div>
+
+<div class="form-group">
+
+<label class="col-md-4 control-label text-right"> </label>
+
+<div class="col-md-8">
+
+        <button type="reset" class="btn btn-default"><?= $this->translate('Cancel')?></button>
+
+        <button type="submit" class="btn btn-orange"><?= $this->translate('Submit')?></button>
+
+</div>
+
+</div>
+
+<div class="form-group"><label class="col-md-4 control-label text-right"> </label>
+
+<div class="col-md-8"><?= $this->formHidden($form->get('userCSRF'));?> <br /></div>
+
+</div>
+
+</fieldset>
+
+</div><!-- /6 -->
+
+
+<?=  $this->form()->closeTag();?> 
+
+</div><!-- end row -->
+
+
+
+
+
+</div><!-- end jumbotron -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+	//$('.element_usrDepartment').hide();
+
+	//$('.element_usrCity').hide();
+
+    
+
+	getCities();
+
+
+
+    $( "#usrPostalcode" ).on('keyup change', getCities);
+
+
+
+    $("#city").on('change', updateCity);
+
+  	
+
+});    
+
+
+
+function getCities() {
+
+	var code = $('#usrPostalcode').val();
+
+	var country = $('#country').find(":selected").val();
+
+    console.log(code);
+
+    if (code.length==5) {
+
+    	$.post('<?= $this->url('location', array('controller'=>'City', 'action'=>'get-cities')); ?>',
+
+                { 'country' : country,  'postalcode' : code }, 
+
+                 function(cities){
+
+                    console.log(cities);
+
+                    updateCityList(cities);
+
+          }, 'json');
+
+    }
+
+}
+
+
+
+function updateCityList(names, ids){
+
+    $('#city').empty();
+
+    if (!jQuery.isEmptyObject(cities)) {
+    	$.each(cities, function (index) {
+//        	console.log($(this)[0]);
+           var option = $('<option></option>');
+           option.val($(this)[0].id);
+           option.text($(this)[0].name);
+           $("#city").append(option);
+        });
+    }
+    else {
+    	var option = $('<option></option>');
+       option.val(-1);
+       option.text('No cities for this postal code!');
+       $("#city").append(option);
+    }
+
+    $("#city").val($("#city option:first").val());
+
+    updateCity();
+
+}
+
+
+
+function updateCity() {
+
+	var selCityId = $("#city").find(":selected").val();
+
+	var selCityName = $("#city").find(":selected").text();
+
+	if (selCityId!=0) {
+
+		   $('#usrCity').attr('readonly', 'readonly');
+
+		   $('#usrCity').val(selCityName);
+
+	}
+
+	else {
+
+		   $('#usrCity').removeAttr('readonly');
+
+		   $('#usrCity').val('');
+
+	}
+
+	console.log( $('#usrCity').val());
+
+}
+
+
+
+</script>
+

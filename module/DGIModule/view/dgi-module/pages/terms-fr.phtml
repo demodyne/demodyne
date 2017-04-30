@@ -1,42 +1,111 @@
-<!-- pages/terms-fr -->
+<?= $this->partial('partial/page-header.phtml', ['title' => $this->translate('Terms & Conditions')])?>
 
-<?php if ($user = $this->identity()):?>
-<div class="modal-header-soft round5top ui-draggable-handle">
-<button type="button" class="close">
-        <?php if ($_SESSION['level']['level']=='city'):?>
-        <a href="<?= $this->url('city');?>"><i class="fa fa-home w"></i></a>
-        <?php elseif ($_SESSION['level']['level']=='country'):?>
-        <a href="<?= $this->url('country');?>"><i class="fa fa-home w"></i></a>
-        <?php endif;?>
-    </button>
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title"><strong><?= $this->translate('Terms & Conditions')?></strong></span>
-</div>
-<?php else:?>
-<div class="modal-header-soft round5top ui-draggable-handle topm20">
-	<button type="button" class="close" id="history-back">
-		<i class="fa fa-arrow-circle-left w right10"></i>
-	</button>
-	<span class="big" id="modal-dialog-title">
-<!--
-    <a href="../"><img
-			src="<?= $this->basePath('img/logo30.png') ?>" valign="middle" width="140" height="30"
-			alt="DEMODYNE - Shape your Society" /></a> -
--->
-      <strong><?= $this->translate('Terms & Conditions')?></strong></span>
-</div>
-<?php endif;?>
+
 <div class="jumbotron" style="border-top-left-radius: 0px; border-top-right-radius: 0px;">
-	<div class="row">
-		<div class="col-md-12 text-center">
-			<img src="<?= $this->basePath('img/uc.png') ?>">
-			<p>La page <span class="orange big">DEMODYNE / <?= $this->translate('Terms & Conditions')?></span> <?= $this->translate('is under construction')?>.<br />
-<?= $this->translate('Please come back later. Thank you')?>!</p>
-			<p>&nbsp;</p>
-		</div>
-	</div>
-</div><!-- end jumbotron -->
 
-<!-- /pages/terms-fr -->
+
+
+
+
+
+
+
+
+	<div class="row">
+
+	  <div class="col-md-12">
+
+
+
+<h3>1. Introduction</h3><hr>
+
+<p><span class="label">1.1</span><strong> Ces Conditions d'Utilisation s'appliquent à tout usage de la plateforme en ligne DEMODYNE (demodyne.org) et services associés.</strong></p>
+
+<p>En utilisant le site et les services, vous exprimez votre acceptation complète de ces conditions d'utilisation.
+Lors de votre inscription et de la création de votre compte utilisateur sur DEMODYNE, nous vous demanderons d'accepter explicitement ces conditions.</p>
+
+<p><span class="label">1.2</span> <strong>Le site internet demodyne.org utilise des cookies pour l'identification et le bon fonctionnement des sessions utilisateur.</strong></p>
+			
+<p>Ces cookies ne seront pas utilisés pour extraire des données personnelles ou a des fins commerciales. En naviguant sur ce site, vous acceptez l'utilisation des cookies en accord avec cette politique de confidentialité.</p>
+
+<h3>&nbsp;</h3>
+<h3>2. Copyright et Licence</h3><hr>
+
+<p><span class="label">1.2</span> <strong>Le site internet demodyne.org (et tous ses sous-domaines), son interface visuelle et fonctionnelle, son design, ainsi que tout contenu ou élément graphique sont soumis à la législation française et internationale sur le droit d'auteur/copyright.</strong></p>
+			
+<p>Tous les droits sont réservés à l'association Direct Governance Initiative, éditeur du site, à l'exception des contenus créés ou déposés sur le site par ses utilisateurs.</p>
+
+<p><span class="label">2.2</span> <strong>Le code informatique du site demodyne.org est Open Source, sous licence AGPLv3 (http://www.gnu.org/licenses/agpl-3.0.fr.html).</strong></p>
+
+<p><span class="label">2.3</span> <strong>Les utilisateurs s'engagent à respecter les droits de propriété intellectuelle des auteurs originaux des textes et des images qu'ils publient sur la plateforme sous leur responsabilité.</strong> </p>
+		<p>En publiant un contenu créé par eux-mêmes sur la plateforme demodyne.org, les utilisateurs octroient de fait à l'éditeur du site demodyne.org et à ses autres utilisateurs les droits de reproduction pour ce contenu au sein du site lui-même et de ses sous-domaines (*.demodyne.org, * étant variable).
+		</p>
+
+
+<h3>&nbsp;</h3>
+<h3>3. Création de compte et usage correct</h3><hr>
+
+
+			<p><span class="label">3.1</span> <strong>Compte Citoyen</strong></p>
+
+<p>Pour la création d'un compte Citoyen, les utilisateurs doivent renseigner leur vrai nom (état civil) et leur vraie commune de résidence actuelle. Une personne physique ne peut détenir qu'un seul compte Citoyen DEMODYNE. Une personne morale n'est pas autorisée à créer un compte Citoyen.<br>
+Le vrai nom de l'utilisateur est maintenu confidentiel sauf si celui-ci décide de lui-même de le rendre public sur son profil.<br>
+Il faut garder à l'esprit que DEMODYNE a été conçue pour permettre la pleine expression des droits et privilèges du Citoyen, lesquels sont rattachés à son identité, sa citoyenneté et son lieu de résidence. 
+</p>
+<p>L'usage de fausses identités, l'usurpation d'identité, la création de comptes multiples ou le renseignement de fausses informations de citoyenneté sont considérés comme des violations graves des conditions d'utilisation. <br>
+Des audits réguliers seront conduits pour comparer confidentiellement les inscrits sur une ville donnée avec les données publiques de citoyens y vivant. C'est le seul moyen de garantir la crédibilité et la réalité des propositions et du niveau de soutien par la communauté.
+</p>
+
+			<p><span class="label">3.2</span> <strong>Comptes Administration</strong></p>
+<p>Les Comptes Administration sont strictement réservés aux administrations publiques en charge d'une ville, région ou pays. Toute demande d'activation d'un compte Administration ainsi que les informations de contact utilisées feront l'objet d'une vérification directe par l'équipe DEMODYNE.
+</p>
+
+			<p><span class="label">3.3</span> <strong>Usage correct</strong></p>
+<p>Tous les utilisateurs de la plateforme DEMODYNE s'engagent à faire preuve de civilité les uns envers les autres et à éviter toute forme d'aggression, menace ou insulte. Les propos haineux, discriminatoires ou diffamatoires entraîneront une fermeture du compte et pourront donner lieux à des poursuites.<br>
+Nous précisons, pour la forme, que DEMODYNE constitue une agora virtuelle de débat citoyen ainsi q'un espace de co-création et coopération sérieux. Il est donc demandé aux contributeurs d'apporter un soin particulier à l'orthographe et là a clarté de leur publications.
+</p>
+
+
+
+
+<h3>&nbsp;</h3>
+<h3>4. Données des Comptes</h3><hr>
+
+<p>Ce que vous publiez sur la plateforme DEMODYNE est considéré comme une information publique. Une partie de votre profil est toujours publique : votre alias (nom d'utilisateur), votre ville de résidence, votre présentation, votre avatar ou image de profil.<br>
+Certaines de vos données sont privées et confidentielles par défaut, et vous pouvez décider de les rendre publiques sur votre profil : votre véritable nom, année de naissance et genre.<br>
+Enfin certaines de vos données sont toujours privées et confidentielles : votre email, téléphone, mot de passe.
+</p>
+
+<p>DEMODYNE, l'association DirGovIn ou les Opérateurs nationaux de la plateforme (voir Charte) ne partageront jamais vos données personnelles avec des tiers (sauf contraints par la réglementation ou une décision de justice). Nous ne fournirons à des tiers, via le site ou des services associés, que des statistiques ou données agrégées sans aucune information individuelle.
+</p>
+
+
+		<p>&nbsp;</p>
+
+		</div>
+
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div><!-- end jumbotron -->

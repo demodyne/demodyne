@@ -1,0 +1,32 @@
+<?php 
+
+$user = $this->user;
+$program = $this->program;
+
+$levelName = '';
+if ($program->getProgLevel()==$this->configItem('demodyne.level.city')) {
+    $levelName = $program->getCity()->getCityName();
+}
+elseif ($program->getProgLevel()==$this->configItem('demodyne.level.region')) {
+    $levelName = $program->getCity()->getRegion()->getRegionName();
+}
+elseif ($program->getProgLevel()==$this->configItem('demodyne.level.country')) {
+    $levelName = $program->getCity()->getCountry()->getCountryName();
+}
+
+
+?>
+
+
+    <span class="right5"><a target="_parent" href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>" title="<?= $this->translate('Linked Proposals / Official Measures')?>"><i class="fa fa-list-ul size15em"></i></a> <?= count($program->getProposals())?>
+                    </span>
+
+    <? if ($program->getUsr()===$user):?>
+    <span class="right5"><a	href="<?= $this->url('program', array('action'=>'add-proposals-from-city', 'id' => $program->getProgUUID()));?>" id="program-my-programs-add-remove-proposals"
+                               title="<?=$this->translate('Add/Remove Proposals and Measures')?>" data-dialog-title="<?=sprintf($this->translate('Add/Remove Proposals/Measures in your Program for %s'), $levelName)?>"><i	class="fa fa-plus-circle size15em"></i></a>
+                    </span>
+    <?endif;?>
+
+    <a href="<?= $this->url('program', array('action' => 'view-program', 'id'=>$program->getProgUUID()));?>#comment-list" title="<?= count($program->getComments())?> <?= $this->translate('Comments')?>"><i class="fa fa-comments size15em"></i></a> <?= count($program->getComments())?>
+
+

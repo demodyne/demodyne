@@ -1,0 +1,130 @@
+<div class="jumbotron" id="article-list">
+
+<div class="title-mobile"><?= $this->translate('DEMODYNE Blog')?></div>
+    
+    
+
+        <div>
+            <div class="fltl top10 right10 bot5"><?= $this->translate('View Articles from')?>: </div>
+            <div class="fltl bot5 right10">
+                <select name="country" required class="form-control text-change" id="country">
+                    <?php foreach ($countries as $country):?>
+                        <option value="<?= $this->url('blog', array('action' => 'articles', 'country'=>$country->getCountryCode())) ?>" <?= ($country==$selectedCountry)?'selected="selected"':'' ?>><?= $country->getCountryName() ?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+            <!--<div class="btn-group fltl top10 right10 left10">Select Articles by Tags:</div>
+            <div class="fltl right10">
+                <select name="tags" required class="form-control text-change" id="tags">
+                    <option value="0" ><?= $this->translate('All')?></option>
+                    <option value="1" ><?= $this->translate('Features')?></option>
+                    <option value="2" ><?= $this->translate('News')?></option>
+                </select>
+            </div>-->
+
+
+
+        </div>
+        <form
+                action="<?=$this->url('blog', array('action'=>'list', 'page'=>1))?>"
+                method="post" id="article-list-search-form">
+
+            <div>
+                <div class="form-group input-group">
+                    <input style="height: 37px!important;" type="text"
+                           class="form-control"
+                           placeholder="<?= $this->translate('Search')?>" required="required"
+                           name="searchTerms" <?=$searchTerms?'value="'.$searchTerms.'"':''?>>
+                    <span class="input-group-btn">
+                        <button type="submit"
+                                class="btn <?=$searchTerms?'btn-success':'btn-default'?>">
+                            <i class="fa fa-search fa-fw"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+        </form>
+
+
+
+
+    <?php if ($user && $user->getUsrId() && $user->getUsrlId()==$this->configItem('demodyne.account.type.admin')):?>
+
+<div class="btn-group fltl right10" role="group" aria-label="...">
+
+<button type="button"
+class="btn btn-sm btn-success"
+id="article-list-see-published"><?= $this->translate('Published')?></button>
+
+<button type="button"
+class="btn btn-sm btn-default"
+id="article-list-see-draft"><?= $this->translate('Draft')?></button>
+
+</div>
+
+
+<div>
+<a
+href="<?= $this->url('blog', array('action'=>'add-article'));?>"
+id="add-new-article"
+class="btn btn-orange">
+<i class="fa fa-plus-circle"></i> <?= $this->translate('Create New Article')?>
+
+</a>
+</div>
+
+<hr>
+    
+<?php endif;?>
+
+<div><?= $this->translate('BLOG Tags')?>:
+<a href="<?=$this->url('blog', array('action'=>'list', 'country'=> $countryCode, 'tag'=>'all', 'page'=>1))?>" id="articles-tag"><?= $this->translate('All tags')?></a> &nbsp;|
+<a href="<?=$this->url('blog', array('action'=>'list', 'country'=> $countryCode, 'tag'=>'features', 'page'=>1))?>" id="articles-tag"><?= $this->translate('New Features')?></a> &nbsp;|
+<a href="<?=$this->url('blog', array('action'=>'list', 'country'=> $countryCode, 'tag'=>'news', 'page'=>1))?>" id="articles-tag"><?= $this->translate('Articles')?></a>
+</div>
+            
+<hr>
+
+
+<div><?=$this->publishedArticles?></div>
+<div style="display: none"><?=$this->draftArticles?></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+
+        $(function() {
+
+            $('#country').on('change', function () {
+                var url = $(this).val(); // get selected value
+                if (url) { // require a URL
+                    window.location = url; // redirect
+                }
+                return false;
+            });
+
+            blogListHandlers();
+
+        });
+
+
+
+    </script>
+
+
+
+
+</div>

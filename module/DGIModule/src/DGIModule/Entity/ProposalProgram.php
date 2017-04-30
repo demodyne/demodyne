@@ -1,16 +1,18 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Program;
+use DGIModule\Entity\Proposal;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ProposalPrograms
+ * ProposalProgram
  *
  * @ORM\Table(name="dgi_proposals_programs", indexes={@ORM\Index(name="scn_prop_id_fk1", columns={"prop_id"}), @ORM\Index(name="prop_scn_id_fk1_idx", columns={"prog_id"})})
  * @ORM\Entity(repositoryClass="DGIModule\Entity\Repository\ProposalProgramRepository")
@@ -31,10 +33,10 @@ class ProposalProgram
      *
      * @ORM\Column(name="sort_position", type="integer", nullable=true)
      */
-    private $sortPosition = 1000;
+    private $sortPosition = '1000';
 
     /**
-     * @var \DGIModule\Entity\Program
+     * @var Program
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Program")
      * @ORM\JoinColumns({
@@ -44,7 +46,7 @@ class ProposalProgram
     private $prog;
 
     /**
-     * @var \DGIModule\Entity\Proposal
+     * @var Proposal
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Proposal")
      * @ORM\JoinColumns({
@@ -70,7 +72,7 @@ class ProposalProgram
      *
      * @param integer $sortPosition
      *
-     * @return ProposalPrograms
+     * @return ProposalProgram
      */
     public function setSortPosition($sortPosition)
     {
@@ -92,11 +94,11 @@ class ProposalProgram
     /**
      * Set prog
      *
-     * @param \DGIModule\Entity\Program $prog
+     * @param Program $prog
      *
-     * @return ProposalPrograms
+     * @return ProposalProgram
      */
-    public function setProg(\DGIModule\Entity\Program $prog = null)
+    public function setProg(Program $prog = null)
     {
         $this->prog = $prog;
 
@@ -106,7 +108,7 @@ class ProposalProgram
     /**
      * Get prog
      *
-     * @return \DGIModule\Entity\Program
+     * @return Program
      */
     public function getProg()
     {
@@ -116,11 +118,11 @@ class ProposalProgram
     /**
      * Set prop
      *
-     * @param \DGIModule\Entity\Proposal $prop
+     * @param Proposal $prop
      *
-     * @return ProposalPrograms
+     * @return ProposalProgram
      */
-    public function setProp(\DGIModule\Entity\Proposal $prop = null)
+    public function setProp(Proposal $prop = null)
     {
         $this->prop = $prop;
 
@@ -130,7 +132,7 @@ class ProposalProgram
     /**
      * Get prop
      *
-     * @return \DGIModule\Entity\Proposal
+     * @return Proposal
      */
     public function getProp()
     {

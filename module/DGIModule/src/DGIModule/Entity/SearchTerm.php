@@ -1,12 +1,15 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
 namespace DGIModule\Entity;
 
+use DGIModule\Entity\Category;
+use DGIModule\Entity\Department;
+use DGIModule\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,7 +37,7 @@ class SearchTerm
     private $searchKeywords;
 
     /**
-     * @var \DGIModule\Entity\Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Category")
      * @ORM\JoinColumns({
@@ -44,7 +47,7 @@ class SearchTerm
     private $cat;
 
     /**
-     * @var \DGIModule\Entity\Department
+     * @var Department
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\Department")
      * @ORM\JoinColumns({
@@ -54,7 +57,7 @@ class SearchTerm
     private $dep;
 
     /**
-     * @var \DGIModule\Entity\User
+     * @var User
      *
      * @ORM\ManyToOne(targetEntity="DGIModule\Entity\User")
      * @ORM\JoinColumns({
@@ -102,11 +105,11 @@ class SearchTerm
     /**
      * Set cat
      *
-     * @param \DGIModule\Entity\Category $cat
+     * @param Category $cat
      *
      * @return SearchTerm
      */
-    public function setCat(\DGIModule\Entity\Category $cat = null)
+    public function setCat(Category $cat = null)
     {
         $this->cat = $cat;
 
@@ -116,7 +119,7 @@ class SearchTerm
     /**
      * Get cat
      *
-     * @return \DGIModule\Entity\Category
+     * @return Category
      */
     public function getCat()
     {
@@ -126,11 +129,11 @@ class SearchTerm
     /**
      * Set dep
      *
-     * @param \DGIModule\Entity\Department $dep
+     * @param Department $dep
      *
      * @return SearchTerm
      */
-    public function setDep(\DGIModule\Entity\Department $dep = null)
+    public function setDep(Department $dep = null)
     {
         $this->dep = $dep;
 
@@ -140,7 +143,7 @@ class SearchTerm
     /**
      * Get dep
      *
-     * @return \DGIModule\Entity\Department
+     * @return Department
      */
     public function getDep()
     {
@@ -150,11 +153,11 @@ class SearchTerm
     /**
      * Set usr
      *
-     * @param \DGIModule\Entity\User $usr
+     * @param User $usr
      *
      * @return SearchTerm
      */
-    public function setUsr(\DGIModule\Entity\User $usr = null)
+    public function setUsr(User $usr = null)
     {
         $this->usr = $usr;
 
@@ -164,7 +167,7 @@ class SearchTerm
     /**
      * Get usr
      *
-     * @return \DGIModule\Entity\User
+     * @return User
      */
     public function getUsr()
     {

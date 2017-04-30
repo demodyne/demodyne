@@ -1,1 +1,73 @@
-<!-- inbox/inbox-partial-menu --><div id="inbox-partial-menu">	<div class="row bot10">		<div class="col-lg-12 bot10">			<?php if ($this->user):?>			<button				data-url="<?= $this->url('user/inbox', array('action'=>'new-message'));?>"				class="btn btn-orange" id="inbox-partial-menu-new-message"				title="<?= $this->translate('Write New Messages')?>"				data-dialog-title="<?=$this->translate('Send New Message')?>"> <i				class="fa fa-envelope-o" id=""></i> <?= $this->translate('New')?></button>			<?php else:?>			<button type="button" class="btn btn-orange"				data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"				data-dialog-title="<?=$this->translate('Please register')?>"				id="please-register-button">				<i class="fa fa-envelope-o"></i> <?= $this->translate('New')?></button>			<?php endif;?>			<a href="#inbox" class="btn btn-success"				id="inbox-partial-menu-refresh"				title="<?= $this->translate('Refresh Inbox')?>"> <i				class="fa fa-refresh white" id="inbox-partial-menu-refresh-icon"></i></a>		</div>		<div class="col-lg-12">			<form				action="<?= $this->url('user/inbox', array('action'=>'list-search'));?>"				id="inbox-partial-menu-search-form" method="post">				<div class="input-group">					<input type="text" class="form-control" aria-label="Search email"						name="searchKeywords" id="inbox-partial-menu-search-keywords"						required="required">					<div class="input-group-btn">						<button type="submit" class="btn btn-default"							id="inbox-partial-menu-search-submit">							<i class="fa fa-search"></i> <?= $this->translate('Search')?></button>						<button type="button" class="btn btn-default"							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"							style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;">							<span class="caret"></span> <span class="sr-only">Toggle Dropdown</span>						</button>						<ul class="dropdown-menu dropdown-menu-right">							<li><a href="#" id="inbox-partial-menu-search-receiver"><i									class="fa fa-check"></i> <?= $this->translate('Search in receiver')?></a></li>							<li><a href="#" id="inbox-partial-menu-search-sender"><i									class="fa fa-check"></i> <?= $this->translate('Search in sender')?></a></li>							<li><a href="#" id="inbox-partial-menu-search-subject"><i									class="fa fa-check"></i> <?= $this->translate('Search in subject')?></a></li>							<li><a href="#" id="inbox-partial-menu-search-message"><i									class="fa fa-check"></i> <?= $this->translate('Search in message')?></a></li>							<li role="separator" class="divider"></li>							<li><a href="#" id="inbox-partial-menu-search-all"><?= $this->translate('Search all')?></a></li>						</ul>					</div>				</div>				<input type="hidden" name="searchReceiver" value="1"					id="inbox-partial-menu-search-receiver-input"> <input type="hidden"					name="searchSender" value="1"					id="inbox-partial-menu-search-sender-input"> <input type="hidden"					name="searchSubject" value="1"					id="inbox-partial-menu-search-subject-input"> <input type="hidden"					name="searchMessage" value="1"					id="inbox-partial-menu-search-message-input">			</form>		</div>	</div>	<!--/r--></div><script type="text/javascript">  $(function(){	  inboxPartialMenuHandlers();	  });</script><!-- /inbox/inbox-partial-menu -->
+<div id="inbox-partial-menu">
+	<div class="row">
+		<div class="col-md-12 bot10">
+			<?php if ($this->user):?>
+			<button
+				data-url="<?= $this->url('user/inbox', array('action'=>'new-message'));?>"
+				class="btn btn-orange" id="inbox-partial-menu-new-message"
+				title="<?= $this->translate('Write New Messages')?>"
+				data-dialog-title="<?=$this->translate('Send New Message')?>"> <i
+				class="fa fa-envelope-o" id=""></i> <?= $this->translate('New')?></button>
+			<?php else:?>
+			<button type="button" class="btn btn-orange"
+				data-url="<?=$this->url('home/user-register', array('action'=>'please-register'))?>"
+				data-dialog-title="<?=$this->translate('Please register')?>"
+				id="please-register-button">
+				<i class="fa fa-envelope-o"></i> <?= $this->translate('New')?></button>
+			<?php endif;?>
+			<a href="#inbox" class="btn btn-success"
+				id="inbox-partial-menu-refresh"
+				title="<?= $this->translate('Refresh Inbox')?>"> <i
+				class="fa fa-refresh white" id="inbox-partial-menu-refresh-icon"></i></a>
+		</div>
+	</div>
+		<div class="row bot10">
+		<div class="col-md-12">
+			<form
+				action="<?= $this->url('user/inbox', array('action'=>'list-search'));?>"
+				id="inbox-partial-menu-search-form" method="post">
+				<div class="input-group">
+					<input type="text" class="form-control" aria-label="Search email"
+						name="searchKeywords" id="inbox-partial-menu-search-keywords"
+						required="required" placeholder="<?= $this->translate('Search')?>" style="max-height: 37px !important;">
+					<div class="input-group-btn">
+						<button type="submit" class="btn btn-default"
+							id="inbox-partial-menu-search-submit" style="max-height: inherit!important;">
+							<i class="fa fa-search"></i></button>
+						<button type="button" class="btn btn-default"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+							style="border-bottom-right-radius: 5px; border-top-right-radius: 5px;max-height: inherit!important;">
+							<span class="caret"></span> <span class="sr-only">Toggle Dropdown</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a href="#" id="inbox-partial-menu-search-receiver"><i
+									class="fa fa-check"></i> <?= $this->translate('Search in receiver')?></a></li>
+							<li><a href="#" id="inbox-partial-menu-search-sender"><i
+									class="fa fa-check"></i> <?= $this->translate('Search in sender')?></a></li>
+							<li><a href="#" id="inbox-partial-menu-search-subject"><i
+									class="fa fa-check"></i> <?= $this->translate('Search in subject')?></a></li>
+							<li><a href="#" id="inbox-partial-menu-search-message"><i
+									class="fa fa-check"></i> <?= $this->translate('Search in message')?></a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="#" id="inbox-partial-menu-search-all"><?= $this->translate('Search all')?></a></li>
+						</ul>
+					</div>
+				</div>
+				<input type="hidden" name="searchReceiver" value="1"
+					id="inbox-partial-menu-search-receiver-input"> <input type="hidden"
+					name="searchSender" value="1"
+					id="inbox-partial-menu-search-sender-input"> <input type="hidden"
+					name="searchSubject" value="1"
+					id="inbox-partial-menu-search-subject-input"> <input type="hidden"
+					name="searchMessage" value="1"
+					id="inbox-partial-menu-search-message-input">
+			</form>
+		</div>
+	</div>
+	<!--/r-->
+</div>
+<script type="text/javascript">
+  $(function(){
+	  inboxPartialMenuHandlers();
+	  });
+</script>

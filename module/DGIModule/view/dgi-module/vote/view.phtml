@@ -1,5 +1,3 @@
-<!-- vote/view -->
-
 <?php
 
 $proposal->setPropSavedName(str_replace('"', '&rdquo;', $proposal->getPropSavedName()) );
@@ -11,6 +9,9 @@ $favourable = $voteValue['favourable'];
 $veryfavourable = $voteValue['veryfavourable'];
 $totalvotes = $voteValue['totalvotes'];
 $totalpoints = ((5+$voteValue['totalpoints'])/10)*100;
+//$idUniq = uniqid();
+//$totalpoints = $voteValue['totalpoints'];
+//echo $totalpoints;
 ?>
 
 
@@ -24,31 +25,40 @@ $totalpoints = ((5+$voteValue['totalpoints'])/10)*100;
 	<div class="<?= $text?'col-md-9 col-xs-8':'col-md-12 col-xs-12'?>">
 
 
+<?php 
+    $popoverTitle = '<strong>'. $proposal->getPropSavedName().'</strong> <br> '.$this->translate('Breakdown of votes');
+?>
 
 
+		<a href="#" id="vote-popover"
+			data-popover-content="#myPopover<?=$proposal->getPropUUID()?>"
+			rel="popover" data-placement="bottom"
+			data-original-title="<?=$popoverTitle?>"
+			>
 
-<a href="#" data-popover-content="#myPopover<?=$proposal->getPropUUID()?>" rel="popover" data-placement="bottom" data-original-title="<strong><?= $proposal->getPropSavedName() ?></strong> <br> <?= $this->translate('Breakdown of votes')?>">
-
-		<div class="progress" style="width: 100%; height:15px; background: -moz-linear-gradient(left,  #d81515 0%, #ffd400 50%, #2d7200 100%);
-    background: -webkit-linear-gradient(left,  #d81515 0%,#ffd400 50%,#2d7200 100%);
-    background: linear-gradient(to right,  #d81515 0%,#ffd400 50%,#2d7200 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d81515', endColorstr='#2d7200',GradientType=1 );">
+			<div class="progress"
+				style="width: 100%; height: 15px; background: -moz-linear-gradient(left, #d81515 0%, #ffd400 50%, #2d7200 100%); background: -webkit-linear-gradient(left, #d81515 0%, #ffd400 50%, #2d7200 100%); background: linear-gradient(to right, #d81515 0%, #ffd400 50%, #2d7200 100%); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d81515', endColorstr='#2d7200', GradientType=1);">
 
 			<?php if (!$proposal->isMeasure()):?>
-			<div style="padding-left: 70%; color:#000; position:absolute; z-index:1;"><img src="<?= $this->basePath('img/line.png')?>"></div>
+			<div
+					style="padding-left: 70%; color: #000; position: absolute; z-index: 1;">
+					<img src="<?= $this->basePath('img/line.png')?>">
+				</div>
 			<?php endif;?>
 
-			 <div style="padding-left: calc((<?=$totalpoints?>% + 1.2%) - 8px); color:#000; position:relative; z-index:1;"><img src="<?= $this->basePath('img/square.png')?>"></div>
+			 <div style="padding-left: calc((<?=$totalpoints?>% + 1.2%) - 8px); color:#000; position:relative; z-index:1;">
+					<img src="<?= $this->basePath('img/square.png')?>">
+				</div>
 
-            <div class="progress-bar progress-bar-degrade" style=" width: 100%" ></div>
+				<div class="progress-bar progress-bar-degrade" style="width: 100%"></div>
 
-		</div>
+			</div>
 
-</a>
+		</a>
 
 
 
-<div id="myPopover<?=$proposal->getPropUUID()?>" class="hide" style="width:250px !important;">
+		<div id="myPopover<?=$proposal->getPropUUID()?>" class="hide" style="width:250px !important;">
 
 
 
@@ -116,8 +126,8 @@ $totalpoints = ((5+$voteValue['totalpoints'])/10)*100;
 <?php else:?>
 <?php $dDiff = $proposal->getPropCheckTimer()->diff(new \DateTime());
       $dDiff->format('%R');?>
-      <?= sprintf($this->translate("Ratio of positive votes reached. Implementation starts in %d days"), 14-$dDiff->days)?>
-
+      <?= ''/*sprintf($this->translate("Ratio of positive votes reached. Implementation starts in %d days"), 14-$dDiff->days)*/?>
+	 <?= $this->translate("Ratio of positive votes reached")?>
 <?php endif;?>
 </div>
 
@@ -155,7 +165,7 @@ $totalpoints = ((5+$voteValue['totalpoints'])/10)*100;
 
 <?php if ($text):?>
 
-<div class="row">
+<div class="row hidden-xs">
 
 <div class="col-md-12 small">
 
@@ -168,7 +178,8 @@ $totalpoints = ((5+$voteValue['totalpoints'])/10)*100;
 <?php else:?>
 <?php $dDiff = $proposal->getPropCheckTimer()->diff(new \DateTime());
       $dDiff->format('%R');?>
-      <?= sprintf($this->translate("Ratio of positive votes reached. Implementation starts in %d days"), 14-$dDiff->days)?>
+      <?= ''/*sprintf($this->translate("Ratio of positive votes reached. Implementation starts in %d days"), 14-$dDiff->days)*/?>
+	 <?= $this->translate("Ratio of positive votes reached")?>
 
 <?php endif;?>
 
@@ -182,6 +193,36 @@ $totalpoints = ((5+$voteValue['totalpoints'])/10)*100;
 
 
 
-<script>$(function(){    $('[rel="popover"]').popover({		trigger: "hover" ,        container: 'body',		width: '25px',        html: true,        content: function () {            var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');            return clone;        }    }).click(function(e) {        e.preventDefault();    });});    </script>
-<!-- /vote/view -->
-    
+<script>
+
+$(function(){
+
+
+
+
+
+    $('[rel="popover"]').popover({
+
+		trigger: "hover" ,
+
+        container: 'body',
+
+		width: '25px',
+
+        html: true,
+
+        content: function () {
+
+            var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');
+
+            return clone;
+
+        }
+
+    });
+
+});
+
+
+
+    </script>
