@@ -1,7 +1,7 @@
 <?php
 /**
  * @link      https://github.com/demodyne/demodyne
- * @copyright Copyright (c) 2015-2016 Demodyne (https://www.demodyne.org)
+ * @copyright Copyright (c) 2015-2017 Demodyne (https://www.demodyne.org)
  * @license   http://www.gnu.org/licenses/agpl.html GNU Affero General Public License
  */
 
@@ -74,10 +74,6 @@ return array(
                     'all'	=> 'guest',
                 ),
                 'DGIModule\Controller\Email' => array(
-//                    'email-validation'	=> 'guest',
-//                    'change-password' => 'guest',
-//                    'admin-digest' => 'guest',
-//                    'index' => 'admin'
                     'all' => 'guest',
                 ),
                 'DGIModule\Controller\Event' => array(
@@ -109,7 +105,6 @@ return array(
                     'claim-ownership'   => 'administration',
                     'view-measure'      => 'guest',
                     'view-history'      => 'guest',
-//                    'country-measures'  => 'guest',
                     'all-measures'      => 'guest'
                 ),
                 'DGIModule\Controller\News' => array(

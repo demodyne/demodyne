@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Measure
  *
- * @ORM\Table(name="dgi_Measures", indexes={@ORM\Index(name="mes_last_usr_fk_idx", columns={"last_usr_id"})})
+ * @ORM\Table(name="dgi_mesures", indexes={@ORM\Index(name="mes_last_usr_fk_idx", columns={"last_usr_id"})})
  * @ORM\Entity
  */
 class Measure
@@ -53,7 +53,7 @@ class Measure
      *
      * @ORM\ManyToMany(targetEntity="DGIModule\Entity\Link", cascade={"persist", "merge","remove"})
      * @ORM\JoinTable(
-     *  name="dgi_Measures_links",
+     *  name="dgi_mesure_links",
      *  joinColumns={
      *      @ORM\JoinColumn(name="mes_id", referencedColumnName="mes_id")
      *  },
@@ -69,7 +69,7 @@ class Measure
      *
      * @ORM\ManyToMany(targetEntity="DGIModule\Entity\History", cascade={"persist", "merge","remove"})
      * @ORM\JoinTable(
-     *  name="dgi_Measures_history",
+     *  name="dgi_mesures_history",
      *  joinColumns={
      *      @ORM\JoinColumn(name="mes_id", referencedColumnName="mes_id")
      *  },

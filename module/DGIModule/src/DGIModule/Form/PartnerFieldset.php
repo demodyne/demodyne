@@ -107,10 +107,10 @@ namespace DGIModule\Form;
                  'label' => 'Gain: ',
                  'value_options' => [
                      //0 => '--- please select your gendre ---',
-                     1 => "<200k�",
-                     2 => "200k�-2M�",
-                     3 => "2M�-10M�",
-                     4 => ">10M�",
+                     1 => "<200k",
+                     2 => "200k-2M",
+                     3 => "2M-10M",
+                     4 => ">10M",
                  ],
              ),
              'attributes' => [
